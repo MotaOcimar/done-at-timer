@@ -1,4 +1,4 @@
-import { Task } from '../types';
+import type { Task } from '../types';
 
 export const calculateArrivalTime = (tasks: Task[], currentTime: Date): Date => {
   const totalDuration = tasks
