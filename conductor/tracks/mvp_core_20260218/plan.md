@@ -73,13 +73,13 @@
 
     - [x] Write unit tests for timer hook
 
-- [~] Task: Active Task View
+- [x] Task: Active Task View [8c74eba]
 
-    - [ ] Create `ActiveTask` component (Big Countdown)
+    - [x] Create `ActiveTask` component (Big Countdown)
 
-    - [ ] Integrate `useTimer` with the current active task
+    - [x] Integrate `useTimer` with the current active task
 
-    - [ ] Implement "Mark as Done" button
+    - [x] Implement "Mark as Done" button
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: "Done-At" Display & Timer Logic' (Protocol in workflow.md)
 
 ## Phase 4: Integration & Polish
