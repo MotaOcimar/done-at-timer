@@ -11,15 +11,15 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Reliability & Logic Refactor' (Protocol in workflow.md)
 
 ## Phase 2: Playlist UI Model
-- [ ] Task: Playlist-style Task Items
-    - [ ] Update `TaskItem` to show a "Play" button
-    - [ ] Implement `startTask(id)` in store that handles logic:
+- [x] Task: Playlist-style Task Items (3014730)
+    - [x] Update `TaskItem` to show a "Play" button
+    - [x] Implement `startTask(id)` in store that handles logic:
         - If another task was running, pause it or mark as pending.
         - Set the new task as `IN_PROGRESS` and calculate its `targetEndTime`.
-- [ ] Task: Remove Legacy Controls
-    - [ ] Remove `RoutineControls` (Start Routine button) as it's now redundant
-    - [ ] Update `ActiveTask` to reflect the playlist selection
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Playlist UI Model' (Protocol in workflow.md)
+- [x] Task: Remove Legacy Controls (3014730)
+    - [x] Remove `RoutineControls` (Start Routine button) as it's now redundant
+    - [x] Update `ActiveTask` to reflect the playlist selection
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Playlist UI Model' (Protocol in workflow.md)
 
 ## Phase 3: Visual Calmness & Polish
 - [ ] Task: Progress Bar Component
