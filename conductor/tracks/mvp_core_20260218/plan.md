@@ -28,18 +28,23 @@
 
     - [x] Apply "Minimalist" background and font styles
 
-- [~] Task: Task Input Component
+- [x] Task: Task Input Component [21df34f]
 
-    - [ ] Create `TaskInput` component (Name + Duration fields)
+    - [x] Create `TaskInput` component (Name + Duration fields)
 
-    - [ ] Write tests for input validation and submission
+    - [x] Write tests for input validation and submission
 
-    - [ ] Integrate with `useTaskStore` to add tasks
-- [ ] Task: Task List Component
-  - [ ] Create `TaskList` component to render list of tasks
-  - [ ] Create `TaskItem` component (display title, duration)
-  - [ ] Implement Delete/Edit actions in UI
-  - [ ] Write tests for rendering list and interactions
+    - [x] Integrate with `useTaskStore` to add tasks
+
+- [~] Task: Task List Component
+
+    - [ ] Create `TaskList` component to render list of tasks
+
+    - [ ] Create `TaskItem` component (display title, duration)
+
+    - [ ] Implement Delete/Edit actions in UI
+
+    - [ ] Write tests for rendering list and interactions
 - [ ] Task: Persist to Local Storage
   - [ ] Enable Zustand persist middleware
   - [ ] Verify data persistence manually (reload page)
