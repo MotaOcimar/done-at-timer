@@ -15,9 +15,8 @@
     - [x] Define `Task` interface (id, title, duration, status)
     - [x] Create `useTaskStore` with Zustand (add, remove, update actions)
     - [x] Write unit tests for store logic (adding/removing tasks)
-- [ ] Task: Implement Arrival Time Logic
-  - [ ] Write utility function `calculateArrivalTime(tasks: Task[], currentTime: Date): Date`
-  - [ ] Write unit tests for time calculation (various durations, crossing midnight, etc.)
+- [~] Task: Implement Arrival Time Logic
+    - [ ] Write utility function `calculateArrivalTime(tasks: Task[], currentTime: Date): Date`  - [ ] Write unit tests for time calculation (various durations, crossing midnight, etc.)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Setup & Core Logic' (Protocol in workflow.md)
 
 ## Phase 2: Task List Management (UI)
