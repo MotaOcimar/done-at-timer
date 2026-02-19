@@ -36,18 +36,21 @@
 
     - [x] Integrate with `useTaskStore` to add tasks
 
-- [~] Task: Task List Component
+- [x] Task: Task List Component [a7c8e63]
 
-    - [ ] Create `TaskList` component to render list of tasks
+    - [x] Create `TaskList` component to render list of tasks
 
-    - [ ] Create `TaskItem` component (display title, duration)
+    - [x] Create `TaskItem` component (display title, duration)
 
-    - [ ] Implement Delete/Edit actions in UI
+    - [x] Implement Delete/Edit actions in UI
 
-    - [ ] Write tests for rendering list and interactions
-- [ ] Task: Persist to Local Storage
-  - [ ] Enable Zustand persist middleware
-  - [ ] Verify data persistence manually (reload page)
+    - [x] Write tests for rendering list and interactions
+
+- [~] Task: Persist to Local Storage
+
+    - [ ] Enable Zustand persist middleware
+
+    - [ ] Verify data persistence manually (reload page)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Task List Management (UI)' (Protocol in workflow.md)
 
 ## Phase 3: "Done-At" Display & Timer Logic
