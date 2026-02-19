@@ -47,6 +47,13 @@ describe('ArrivalDisplay', () => {
     
     // Ainda deve ser 10:30 (10:10 atual + 20 restantes)
     expect(screen.getByText('10:30')).toBeInTheDocument();
+
+    // Check for remaining time text (20 min left)
+    expect(screen.getByText(/20 min remaining/i)).toBeInTheDocument();
+    
+    // Check for progress bar
+    const bar = screen.getByRole('progressbar');
+    expect(bar).toBeInTheDocument();
   });
 
   it('shows celebration message when all tasks are completed', () => {
