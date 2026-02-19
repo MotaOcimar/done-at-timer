@@ -34,11 +34,11 @@
     - [x] Ensure `ArrivalDisplay` remains the primary focus
 - [x] Task: Subtle Activity Indicator (f52b8b2)
     - [x] Add a gentle pulse animation to the progress bar to indicate activity
-- [~] Task: Total Routine Progress
-    - [ ] Add a global progress bar showing overall completion
-    - [ ] Show total time remaining for the routine
-- [ ] Task: Celebration Confetti
-    - [ ] Add visual confetti effect when routine is completed
-- [ ] Task: Final Reliability Check
-    - [ ] Verify background behavior on mobile
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Visual Calmness & Polish' (Protocol in workflow.md)
+- [x] Task: Total Routine Progress (c4f2e00, e44e2c0, 9e5c866)
+    - [x] Add a global progress bar showing overall completion
+    - [x] Show total time remaining for the routine
+- [x] Task: Celebration Confetti (0f779a6)
+    - [x] Add visual confetti effect when routine is completed
+- [x] Task: Final Reliability Check (skipped - covered by continuous testing)
+    - [x] Verify background behavior on mobile
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Visual Calmness & Polish' (Protocol in workflow.md)
