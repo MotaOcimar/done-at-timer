@@ -92,16 +92,19 @@
 
     - [x] Update store status (PENDING -> IN_PROGRESS -> COMPLETED)
 
-- [~] Task: Styling & UX Refinement
+- [x] Task: Styling & UX Refinement [dcc702c]
 
-    - [ ] Apply "Playful" colors (Tailwind config)
+    - [x] Apply "Playful" colors (Tailwind config)
 
-    - [ ] Add transitions for adding/removing tasks
+    - [x] Add transitions for adding/removing tasks
 
-    - [ ] Style the "Arrival Time" to be prominent
-- [ ] Task: Mobile Responsiveness Check
-  - [ ] Verify layout on mobile viewports
-  - [ ] Adjust touch targets (buttons)
+    - [x] Style the "Arrival Time" to be prominent
+
+- [~] Task: Mobile Responsiveness Check
+
+    - [ ] Verify layout on mobile viewports
+
+    - [ ] Adjust touch targets (buttons)
 - [ ] Task: Final Polish
   - [ ] clear console logs
   - [ ] Check accessibility (contrast, labels)
