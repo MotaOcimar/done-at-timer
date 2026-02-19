@@ -1,6 +1,6 @@
 # Implementation Plan - UX Refinement & Reliability
 
-## Phase 1: Reliability & Logic Refactor
+## Phase 1: Reliability & Logic Refactor [checkpoint: a4c49c4]
 - [x] Task: Refactor Store for Timestamps (c67151f)
     - [x] Add `activeTaskId` and `targetEndTime` (timestamp) to `useTaskStore`
     - [x] Add `totalElapsedBeforePause` to handle pausing/resuming without drift
