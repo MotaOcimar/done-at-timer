@@ -100,12 +100,15 @@
 
     - [x] Style the "Arrival Time" to be prominent
 
-- [~] Task: Mobile Responsiveness Check
+- [x] Task: Mobile Responsiveness Check [3fa6080]
 
-    - [ ] Verify layout on mobile viewports
+    - [x] Verify layout on mobile viewports
 
-    - [ ] Adjust touch targets (buttons)
-- [ ] Task: Final Polish
-  - [ ] clear console logs
-  - [ ] Check accessibility (contrast, labels)
+    - [x] Adjust touch targets (buttons)
+
+- [~] Task: Final Polish
+
+    - [ ] clear console logs
+
+    - [ ] Check accessibility (contrast, labels)
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Integration & Polish' (Protocol in workflow.md)
