@@ -11,9 +11,10 @@
     - [x] Configure ESLint/Prettier
 
     - [x] Setup Vitest & React Testing Library
-- [~] Task: Implement Task Domain Model
-    - [ ] Define `Task` interface (id, title, duration, status)  - [ ] Create `useTaskStore` with Zustand (add, remove, update actions)
-  - [ ] Write unit tests for store logic (adding/removing tasks)
+- [x] Task: Implement Task Domain Model [a8eefb9]
+    - [x] Define `Task` interface (id, title, duration, status)
+    - [x] Create `useTaskStore` with Zustand (add, remove, update actions)
+    - [x] Write unit tests for store logic (adding/removing tasks)
 - [ ] Task: Implement Arrival Time Logic
   - [ ] Write utility function `calculateArrivalTime(tasks: Task[], currentTime: Date): Date`
   - [ ] Write unit tests for time calculation (various durations, crossing midnight, etc.)
