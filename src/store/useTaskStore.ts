@@ -12,6 +12,9 @@ const generateId = () => {
 interface TaskState {
   tasks: Task[];
   activeTaskTimeLeft: number | null; // em segundos
+  activeTaskId: string | null;
+  targetEndTime: number | null; // timestamp
+  totalElapsedBeforePause: number; // segundos
   addTask: (title: string, duration: number) => void;
   removeTask: (id: string) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
@@ -25,6 +28,9 @@ export const useTaskStore = create<TaskState>()(
     (set) => ({
       tasks: [],
       activeTaskTimeLeft: null,
+      activeTaskId: null,
+      targetEndTime: null,
+      totalElapsedBeforePause: 0,
       addTask: (title, duration) =>
         set((state) => ({
           tasks: [
@@ -40,6 +46,7 @@ export const useTaskStore = create<TaskState>()(
       removeTask: (id) =>
         set((state) => ({
           tasks: state.tasks.filter((task) => task.id !== id),
+          activeTaskId: state.activeTaskId === id ? null : state.activeTaskId,
         })),
       updateTask: (id, updates) =>
         set((state) => ({
@@ -52,8 +59,18 @@ export const useTaskStore = create<TaskState>()(
         set((state) => ({
           tasks: state.tasks.map((task) => ({ ...task, status: 'PENDING' })),
           activeTaskTimeLeft: null,
+          activeTaskId: null,
+          targetEndTime: null,
+          totalElapsedBeforePause: 0,
         })),
-      clearTasks: () => set({ tasks: [], activeTaskTimeLeft: null }),
+      clearTasks: () =>
+        set({
+          tasks: [],
+          activeTaskTimeLeft: null,
+          activeTaskId: null,
+          targetEndTime: null,
+          totalElapsedBeforePause: 0,
+        }),
     }),
     {
       name: 'done-at-timer-storage',
