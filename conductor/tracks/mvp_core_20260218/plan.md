@@ -55,16 +55,23 @@
 
 ## Phase 3: "Done-At" Display & Timer Logic
 
-- [~] Task: Arrival Time Display Component
+- [x] Task: Arrival Time Display Component [614884e]
 
-    - [ ] Create `ArrivalDisplay` component
-  - [ ] Connect to store to get total remaining time
-  - [ ] Implement live clock update (useEffect interval)
-  - [ ] Write tests for correct time formatting and updates
-- [ ] Task: Timer Hook & Logic
-  - [ ] Create `useTimer` hook (start, pause, reset, tick)
-  - [ ] Implement countdown logic
-  - [ ] Write unit tests for timer hook
+    - [x] Create `ArrivalDisplay` component
+
+    - [x] Connect to store to get total remaining time
+
+    - [x] Implement live clock update (useEffect interval)
+
+    - [x] Write tests for correct time formatting and updates
+
+- [~] Task: Timer Hook & Logic
+
+    - [ ] Create `useTimer` hook (start, pause, reset, tick)
+
+    - [ ] Implement countdown logic
+
+    - [ ] Write unit tests for timer hook
 - [ ] Task: Active Task View
   - [ ] Create `ActiveTask` component (Big Countdown)
   - [ ] Integrate `useTimer` with the current active task
