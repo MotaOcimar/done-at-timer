@@ -2,11 +2,15 @@
 
 ## Phase 1: Project Setup & Core Logic
 
-- [~] Task: Initialize Project (Vite + React + TS)
-  - [~] Create Vite project
-  - [ ] Install Tailwind CSS
-  - [ ] Configure ESLint/Prettier
-  - [ ] Setup Vitest & React Testing Library
+- [x] Task: Initialize Project (Vite + React + TS) [b8e0e47]
+
+    - [x] Create Vite project
+
+    - [x] Install Tailwind CSS
+
+    - [x] Configure ESLint/Prettier
+
+    - [x] Setup Vitest & React Testing Library
 - [ ] Task: Implement Task Domain Model
   - [ ] Define `Task` interface (id, title, duration, status)
   - [ ] Create `useTaskStore` with Zustand (add, remove, update actions)
