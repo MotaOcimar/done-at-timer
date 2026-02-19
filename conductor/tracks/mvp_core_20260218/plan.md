@@ -22,15 +22,19 @@
 
 ## Phase 2: Task List Management (UI)
 
-- [~] Task: Create Basic Layout
+- [x] Task: Create Basic Layout [4bcd416]
 
-    - [ ] Create `Layout` component with responsive container
+    - [x] Create `Layout` component with responsive container
 
-    - [ ] Apply "Minimalist" background and font styles
-- [ ] Task: Task Input Component
-  - [ ] Create `TaskInput` component (Name + Duration fields)
-  - [ ] Write tests for input validation and submission
-  - [ ] Integrate with `useTaskStore` to add tasks
+    - [x] Apply "Minimalist" background and font styles
+
+- [~] Task: Task Input Component
+
+    - [ ] Create `TaskInput` component (Name + Duration fields)
+
+    - [ ] Write tests for input validation and submission
+
+    - [ ] Integrate with `useTaskStore` to add tasks
 - [ ] Task: Task List Component
   - [ ] Create `TaskList` component to render list of tasks
   - [ ] Create `TaskItem` component (display title, duration)
