@@ -10,7 +10,7 @@
     - [x] Remove `setInterval` dependency for accuracy (use it only for UI refreshes)
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Reliability & Logic Refactor' (Protocol in workflow.md)
 
-## Phase 2: Playlist UI Model
+## Phase 2: Playlist UI Model [checkpoint: 8d547e1]
 - [x] Task: Playlist-style Task Items (3014730)
     - [x] Update `TaskItem` to show a "Play" button
     - [x] Implement `startTask(id)` in store that handles logic:
