@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
@@ -30,6 +31,17 @@ const ArrivalDisplay = () => {
 
   const allCompleted =
     tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
+
+  useEffect(() => {
+    if (allCompleted) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#22c55e', '#3b82f6', '#fbbf24', '#f87171'],
+      });
+    }
+  }, [allCompleted]);
 
   if (allCompleted) {
     return (
@@ -99,15 +111,15 @@ const ArrivalDisplay = () => {
         {formatTime(arrivalTime)}
       </div>
 
-      <div className="bg-blue-800/30 rounded-2xl p-4 backdrop-blur-sm">
-        <div className="h-2 w-full bg-blue-900/40 rounded-full overflow-hidden mb-2">
+      <div className="mt-8 px-4">
+        <div className="h-1.5 w-full bg-blue-900/30 rounded-full overflow-hidden mb-2">
           <div
             className={`h-full bg-white/90 rounded-full transition-all duration-1000 ease-linear ${activeTaskId ? 'animate-pulse' : ''}`}
             style={{ width: `${progressPercentage}%` }}
             role="progressbar"
           ></div>
         </div>
-        <div className="flex justify-end text-blue-100 text-xs font-bold uppercase tracking-widest opacity-90">
+        <div className="flex justify-end text-blue-100 text-xs font-bold uppercase tracking-widest opacity-80">
           <span>{remainingMinutes} min left</span>
         </div>
       </div>
