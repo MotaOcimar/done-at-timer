@@ -20,7 +20,7 @@
     - [x] Write unit tests for time calculation (various durations, crossing midnight, etc.)  - [ ] Write unit tests for time calculation (various durations, crossing midnight, etc.)
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Setup & Core Logic' (Protocol in workflow.md)
 
-## Phase 2: Task List Management (UI)
+## Phase 2: Task List Management (UI) [checkpoint: 70987e5]
 
 - [x] Task: Create Basic Layout [4bcd416]
 
