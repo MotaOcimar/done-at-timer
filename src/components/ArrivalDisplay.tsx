@@ -8,11 +8,12 @@ const ArrivalDisplay = () => {
   const tasks = useTaskStore((state) => state.tasks);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
+  const totalElapsedBeforePause = useTaskStore((state) => state.totalElapsedBeforePause);
 
   const activeTask = tasks.find(t => t.id === activeTaskId);
 
   const { timeLeft } = useTimer(
-    activeTask ? activeTask.duration * 60 : 0,
+    activeTask ? (activeTask.duration * 60 - totalElapsedBeforePause) : 0,
     undefined,
     targetEndTime
   );
@@ -25,10 +26,9 @@ const ArrivalDisplay = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Se não houver tarefa ativa, o timeLeft do hook será baseado na duração inicial.
-  // Mas para o cálculo de chegada, se não há nada em progresso, o tempo total é a soma das durações.
-  const effectiveTimeLeft = targetEndTime ? timeLeft : null;
-  const arrivalTime = calculateArrivalTime(tasks, effectiveTimeLeft, now);
+  // Se houver tarefa ativa (mesmo pausada), o timeLeft do hook é o que conta.
+  // Caso contrário, passamos null para que a função some as durações completas.
+  const arrivalTime = calculateArrivalTime(tasks, activeTaskId ? timeLeft : null, now);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], {

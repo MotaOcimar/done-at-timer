@@ -33,4 +33,19 @@ describe('ArrivalDisplay', () => {
     // 10:10 (current time) + 20 mins = 10:30
     expect(screen.getByText('10:30')).toBeInTheDocument();
   });
+
+  it('maintains arrival time when task is paused', () => {
+    useTaskStore.getState().addTask('T1', 30);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    
+    useTaskStore.getState().startTask(taskId);
+    vi.advanceTimersByTime(600000); // 10 mins passed
+    
+    useTaskStore.getState().pauseTask();
+    
+    render(<ArrivalDisplay />);
+    
+    // Ainda deve ser 10:30 (10:10 atual + 20 restantes)
+    expect(screen.getByText('10:30')).toBeInTheDocument();
+  });
 });

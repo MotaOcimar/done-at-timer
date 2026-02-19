@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 const ActiveTask = () => {
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
+  const totalElapsedBeforePause = useTaskStore((state) => state.totalElapsedBeforePause);
   const tasks = useTaskStore((state) => state.tasks);
   const updateTask = useTaskStore((state) => state.updateTask);
   const pauseTask = useTaskStore((state) => state.pauseTask);
@@ -30,7 +31,7 @@ const ActiveTask = () => {
   };
 
   const { timeLeft, isPaused } = useTimer(
-    activeTask ? activeTask.duration * 60 : 0,
+    activeTask ? (activeTask.duration * 60 - totalElapsedBeforePause) : 0,
     onComplete,
     targetEndTime,
   );
