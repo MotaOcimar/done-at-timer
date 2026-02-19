@@ -32,6 +32,11 @@
 - [x] Task: Discrete Time Remaining (6be4c44)
     - [x] Update UI to show "X min left" instead of "MM:SS"
     - [x] Ensure `ArrivalDisplay` remains the primary focus
+- [x] Task: Subtle Activity Indicator (f52b8b2)
+    - [x] Add a gentle pulse animation to the progress bar to indicate activity
+- [~] Task: Total Routine Progress
+    - [ ] Add a global progress bar showing overall completion
+    - [ ] Show total time remaining for the routine
 - [ ] Task: Celebration Confetti
     - [ ] Add visual confetti effect when routine is completed
 - [ ] Task: Final Reliability Check
