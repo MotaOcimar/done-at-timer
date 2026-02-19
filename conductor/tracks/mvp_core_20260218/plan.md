@@ -65,17 +65,21 @@
 
     - [x] Write tests for correct time formatting and updates
 
-- [~] Task: Timer Hook & Logic
+- [x] Task: Timer Hook & Logic [5c08846]
 
-    - [ ] Create `useTimer` hook (start, pause, reset, tick)
+    - [x] Create `useTimer` hook (start, pause, reset, tick)
 
-    - [ ] Implement countdown logic
+    - [x] Implement countdown logic
 
-    - [ ] Write unit tests for timer hook
-- [ ] Task: Active Task View
-  - [ ] Create `ActiveTask` component (Big Countdown)
-  - [ ] Integrate `useTimer` with the current active task
-  - [ ] Implement "Mark as Done" button
+    - [x] Write unit tests for timer hook
+
+- [~] Task: Active Task View
+
+    - [ ] Create `ActiveTask` component (Big Countdown)
+
+    - [ ] Integrate `useTimer` with the current active task
+
+    - [ ] Implement "Mark as Done" button
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: "Done-At" Display & Timer Logic' (Protocol in workflow.md)
 
 ## Phase 4: Integration & Polish
