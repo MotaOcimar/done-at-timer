@@ -1,6 +1,6 @@
 # Implementation Plan - MVP Core
 
-## Phase 1: Project Setup & Core Logic
+## Phase 1: Project Setup & Core Logic [checkpoint: 9c524e8]
 
 - [x] Task: Initialize Project (Vite + React + TS) [b8e0e47]
 
