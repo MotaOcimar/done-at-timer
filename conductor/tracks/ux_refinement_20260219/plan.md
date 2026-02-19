@@ -2,13 +2,13 @@
 
 ## Phase 1: Reliability & Logic Refactor
 - [x] Task: Refactor Store for Timestamps (c67151f)
-    - [ ] Add `activeTaskId` and `targetEndTime` (timestamp) to `useTaskStore`
-    - [ ] Add `totalElapsedBeforePause` to handle pausing/resuming without drift
-    - [ ] Update `setActiveTaskTimeLeft` to be derived from timestamps
-- [ ] Task: Reliable `useTimer` Hook
-    - [ ] Refactor hook to calculate `timeLeft` based on `Date.now()` vs `targetEndTime`
-    - [ ] Remove `setInterval` dependency for accuracy (use it only for UI refreshes)
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Reliability & Logic Refactor' (Protocol in workflow.md)
+    - [x] Add `activeTaskId` and `targetEndTime` (timestamp) to `useTaskStore`
+    - [x] Add `totalElapsedBeforePause` to handle pausing/resuming without drift
+    - [x] Update `setActiveTaskTimeLeft` to be derived from timestamps
+- [x] Task: Reliable `useTimer` Hook (de5722d)
+    - [x] Refactor hook to calculate `timeLeft` based on `Date.now()` vs `targetEndTime`
+    - [x] Remove `setInterval` dependency for accuracy (use it only for UI refreshes)
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Reliability & Logic Refactor' (Protocol in workflow.md)
 
 ## Phase 2: Playlist UI Model
 - [ ] Task: Playlist-style Task Items
