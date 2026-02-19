@@ -26,12 +26,14 @@
     - [x] Create a "All Tasks Done" view in `ArrivalDisplay` or `ActiveTask`
     - [x] Add a visual reward (e.g., "Routine Complete!" with a nice icon)
     - [x] Add a "Reset Routine" button in this view
-- [ ] Task: Progress Bar Component
-    - [ ] Create a `ProgressBar` component with smooth transitions
-    - [ ] Replace ticking seconds in `ActiveTask` with the progress bar
-- [ ] Task: Discrete Time Remaining
-    - [ ] Update UI to show "X min left" instead of "MM:SS"
-    - [ ] Ensure `ArrivalDisplay` remains the primary focus
+- [x] Task: Progress Bar Component (6be4c44)
+    - [x] Create a `ProgressBar` component with smooth transitions
+    - [x] Replace ticking seconds in `ActiveTask` with the progress bar
+- [x] Task: Discrete Time Remaining (6be4c44)
+    - [x] Update UI to show "X min left" instead of "MM:SS"
+    - [x] Ensure `ArrivalDisplay` remains the primary focus
+- [ ] Task: Celebration Confetti
+    - [ ] Add visual confetti effect when routine is completed
 - [ ] Task: Final Reliability Check
     - [ ] Verify background behavior on mobile
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Visual Calmness & Polish' (Protocol in workflow.md)
