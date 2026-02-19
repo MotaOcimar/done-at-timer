@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-export const useTimer = (initialSeconds: number, onComplete?: () => void) => {
+export const useTimer = (
+  initialSeconds: number,
+  onComplete?: () => void,
+  targetEndTime?: number | null
+) => {
   const [timeLeft, setTimeLeft] = useState(initialSeconds);
   const [isPaused, setIsPaused] = useState(true);
   const onCompleteRef = useRef(onComplete);
@@ -9,8 +13,27 @@ export const useTimer = (initialSeconds: number, onComplete?: () => void) => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
 
+  // Se tivermos um targetEndTime, calculamos o timeLeft baseado nele
   useEffect(() => {
-    if (isPaused) return;
+    if (targetEndTime) {
+      const calculateTimeLeft = () => {
+        const remaining = Math.max(0, Math.ceil((targetEndTime - Date.now()) / 1000));
+        setTimeLeft(remaining);
+        if (remaining === 0) {
+          setIsPaused(true);
+          onCompleteRef.current?.();
+        }
+      };
+
+      calculateTimeLeft();
+      const interval = setInterval(calculateTimeLeft, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [targetEndTime]);
+
+  // Lógica legada para quando não há targetEndTime (fallback ou modo manual)
+  useEffect(() => {
+    if (targetEndTime || isPaused) return;
 
     if (timeLeft <= 0) {
       setIsPaused(true);
@@ -23,7 +46,7 @@ export const useTimer = (initialSeconds: number, onComplete?: () => void) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, timeLeft]);
+  }, [isPaused, timeLeft, targetEndTime]);
 
   const start = useCallback(() => {
     setIsPaused(false);
