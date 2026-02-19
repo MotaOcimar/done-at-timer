@@ -1,0 +1,35 @@
+# Product Definition
+
+## 1. Initial Concept
+O usuário quer construir um aplicativo de timer focado na *previsão de término*.
+**Funcionalidades Principais:**
+*   **Foco no Horário de Término:** O destaque principal do timer é mostrar a hora exata em que ele vai acabar (ex: "Termina às 14:30"), ao invés de apenas uma contagem regressiva.
+*   **Plataforma Web:** Inicialmente um app web para facilitar testes locais.
+*   **Listas de Tarefas (Timers Consecutivos):**
+    *   O usuário pode criar listas de tarefas (ex: "Rotina Matinal").
+    *   Cada tarefa tem uma duração definida (ex: "Tomar banho - 20 min").
+    *   **Previsão Total:** O app soma todos os tempos da lista e mostra, com destaque, o *horário previsto para terminar toda a lista*.
+*   **Execução Flexível:**
+    *   O usuário inicia (dá play) em cada tarefa individualmente.
+    *   A ordem de execução é livre; o usuário pode dar play em qualquer timer da lista, não necessariamente na ordem criada.
+
+## 2. Core Value Proposition
+The primary value of this application is to solve the problem of **lateness due to time blindness** or poor estimation of task duration. By shifting the focus from "time remaining" (duration) to **"arrival time" (predicted completion time)**, the app mimics the utility of a GPS ETA for everyday tasks.
+*   **Problem Solved:** Users often underestimate the cumulative time required for a sequence of tasks or delay starting until it's too late, failing to realize that "20 minutes" for a shower plus "15 minutes" for breakfast means they will be ready at a specific *future time*, not just "in 35 minutes".
+*   **Solution:** A "Real-time Arrival Clock" that dynamically calculates and displays the exact time the user will be "free" or "done" if they start the remaining tasks *right now*. This provides a concrete, actionable data point (e.g., "If I start now, I'm done at 08:15") rather than an abstract duration.
+
+## 3. Target Audience
+*   **Primary:** Individuals with **ADHD or time blindness** who struggle to visualize the passage of time and the cumulative effect of tasks.
+*   **Secondary:** Anyone who performs routine sequences of tasks (e.g., morning routines, cooking, getting ready for an event) and wants to avoid lateness or optimize their departure time.
+
+## 4. Key Features
+*   **Real-time "Arrival" Clock:** A prominent, dynamic display showing the exact wall-clock time when the *remaining* tasks in the current list will be completed if started immediately. This is the central feature.
+*   **Dynamic Update:** As tasks are completed or time passes, the "Arrival Clock" updates to reflect the new reality.
+*   **Task Lists:** Users can create lists of tasks with defined durations (e.g., "Morning Routine").
+*   **Flexible Execution:** Users can start any timer in the list in any order.
+*   **Web-Based:** Accessible via a web browser for easy local testing and usage.
+
+## 5. Success Metrics
+*   **User Confidence:** Users report feeling more in control of their time and less anxious about lateness.
+*   **Reduced Lateness:** Users are able to arrive at appointments or finish routines on time more consistently.
+*   **Engagement:** Frequent use of the app for daily routines.
