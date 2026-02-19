@@ -22,9 +22,11 @@
 
 ## Phase 2: Task List Management (UI)
 
-- [ ] Task: Create Basic Layout
-  - [ ] Create `Layout` component with responsive container
-  - [ ] Apply "Minimalist" background and font styles
+- [~] Task: Create Basic Layout
+
+    - [ ] Create `Layout` component with responsive container
+
+    - [ ] Apply "Minimalist" background and font styles
 - [ ] Task: Task Input Component
   - [ ] Create `TaskInput` component (Name + Duration fields)
   - [ ] Write tests for input validation and submission
