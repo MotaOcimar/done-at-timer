@@ -1,11 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
+import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
 
 const ArrivalDisplay = () => {
   const [now, setNow] = useState(new Date());
   const tasks = useTaskStore((state) => state.tasks);
-  const activeTaskTimeLeft = useTaskStore((state) => state.activeTaskTimeLeft);
+  const targetEndTime = useTaskStore((state) => state.targetEndTime);
+  const activeTaskId = useTaskStore((state) => state.activeTaskId);
+
+  const activeTask = tasks.find(t => t.id === activeTaskId);
+
+  const { timeLeft } = useTimer(
+    activeTask ? activeTask.duration * 60 : 0,
+    undefined,
+    targetEndTime
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,7 +25,10 @@ const ArrivalDisplay = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const arrivalTime = calculateArrivalTime(tasks, activeTaskTimeLeft, now);
+  // Se não houver tarefa ativa, o timeLeft do hook será baseado na duração inicial.
+  // Mas para o cálculo de chegada, se não há nada em progresso, o tempo total é a soma das durações.
+  const effectiveTimeLeft = targetEndTime ? timeLeft : null;
+  const arrivalTime = calculateArrivalTime(tasks, effectiveTimeLeft, now);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], {
@@ -34,7 +47,7 @@ const ArrivalDisplay = () => {
         {formatTime(arrivalTime)}
       </div>
       <p className="text-blue-200 text-lg mt-4 font-medium opacity-80">
-        If you start right now
+        {targetEndTime ? 'ETA based on current pace' : 'If you start right now'}
       </p>
     </div>
   );

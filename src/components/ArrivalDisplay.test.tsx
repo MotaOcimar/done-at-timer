@@ -1,48 +1,36 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import ArrivalDisplay from './ArrivalDisplay';
 import { useTaskStore } from '../store/useTaskStore';
 
 describe('ArrivalDisplay', () => {
   beforeEach(() => {
-    useTaskStore.setState({ tasks: [] });
+    useTaskStore.getState().clearTasks();
     vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
   });
 
-  it('renders the arrival time correctly', () => {
-    const now = new Date('2024-01-01T10:00:00');
-    vi.setSystemTime(now);
-
-    useTaskStore.setState({
-      tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
-      ],
-    });
+  it('calculates arrival time correctly based on tasks and now', () => {
+    useTaskStore.getState().addTask('T1', 30);
+    useTaskStore.getState().addTask('T2', 30);
 
     render(<ArrivalDisplay />);
-    
-    // 10 + 20 = 30 mins from 10:00 -> 10:30
-    expect(screen.getByText(/10:30/)).toBeInTheDocument();
+
+    // 10:00 + 60 mins = 11:00
+    expect(screen.getByText('11:00')).toBeInTheDocument();
   });
 
-  it('updates arrival time as time passes', () => {
-    const now = new Date('2024-01-01T10:00:00');
-    vi.setSystemTime(now);
+  it('updates arrival time when a task is in progress', () => {
+    useTaskStore.getState().addTask('T1', 30);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().startTask(taskId);
 
-    useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
-    });
+    vi.advanceTimersByTime(600000); // 10 mins passed
 
     render(<ArrivalDisplay />);
-    expect(screen.getByText(/10:10/)).toBeInTheDocument();
 
-    // Advance time by 5 minutes
-    act(() => {
-      vi.advanceTimersByTime(5 * 60 * 1000);
-    });
-
-    // 10:05 + 10 mins = 10:15
-    expect(screen.getByText(/10:15/)).toBeInTheDocument();
+    // Total duration was 30 mins. 10 passed. 20 left.
+    // 10:10 (current time) + 20 mins = 10:30
+    expect(screen.getByText('10:30')).toBeInTheDocument();
   });
 });

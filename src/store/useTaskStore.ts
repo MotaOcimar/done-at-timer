@@ -19,13 +19,16 @@ interface TaskState {
   removeTask: (id: string) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
   setActiveTaskTimeLeft: (seconds: number | null) => void;
+  startTask: (id: string) => void;
+  pauseTask: () => void;
+  resumeTask: () => void;
   resetTasks: () => void;
   clearTasks: () => void;
 }
 
 export const useTaskStore = create<TaskState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       tasks: [],
       activeTaskTimeLeft: null,
       activeTaskId: null,
@@ -47,6 +50,7 @@ export const useTaskStore = create<TaskState>()(
         set((state) => ({
           tasks: state.tasks.filter((task) => task.id !== id),
           activeTaskId: state.activeTaskId === id ? null : state.activeTaskId,
+          targetEndTime: state.activeTaskId === id ? null : state.targetEndTime,
         })),
       updateTask: (id, updates) =>
         set((state) => {
@@ -58,7 +62,6 @@ export const useTaskStore = create<TaskState>()(
           let targetEndTime = state.targetEndTime;
           let totalElapsedBeforePause = state.totalElapsedBeforePause;
 
-          // Se a tarefa foi movida para IN_PROGRESS
           if (updates.status === 'IN_PROGRESS') {
             activeTaskId = id;
             const task = newTasks.find(t => t.id === id);
@@ -66,9 +69,7 @@ export const useTaskStore = create<TaskState>()(
               targetEndTime = Date.now() + (task.duration * 60 * 1000);
               totalElapsedBeforePause = 0;
             }
-          } 
-          // Se a tarefa ativa foi movida para outro estado (ex: COMPLETED)
-          else if (id === state.activeTaskId && updates.status && updates.status !== 'IN_PROGRESS') {
+          } else if (id === state.activeTaskId && updates.status && updates.status !== 'IN_PROGRESS') {
             activeTaskId = null;
             targetEndTime = null;
             totalElapsedBeforePause = 0;
@@ -82,6 +83,57 @@ export const useTaskStore = create<TaskState>()(
           };
         }),
       setActiveTaskTimeLeft: (seconds) => set({ activeTaskTimeLeft: seconds }),
+      startTask: (id) => {
+        const state = get();
+        const task = state.tasks.find((t) => t.id === id);
+        if (!task) return;
+
+        // Se já houver uma tarefa ativa, marcamos como PENDING (ou pausada se preferir)
+        // Por enquanto, seguimos o modelo de playlist: iniciar uma nova substitui a atual.
+        const newTasks = state.tasks.map((t) => {
+          if (t.id === id) return { ...t, status: 'IN_PROGRESS' as const };
+          if (t.status === 'IN_PROGRESS') return { ...t, status: 'PENDING' as const };
+          return t;
+        });
+
+        set({
+          tasks: newTasks,
+          activeTaskId: id,
+          targetEndTime: Date.now() + task.duration * 60 * 1000,
+          totalElapsedBeforePause: 0,
+        });
+      },
+      pauseTask: () => {
+        const state = get();
+        if (!state.targetEndTime) return;
+
+        const elapsedSeconds = Math.floor((Date.now() - (state.targetEndTime - (state.tasks.find(t => t.id === state.activeTaskId)?.duration || 0) * 60 * 1000)) / 1000);
+        
+        // Forma mais simples: calcular quanto tempo RESTA e subtrair da duração total
+        const task = state.tasks.find(t => t.id === state.activeTaskId);
+        if (!task) return;
+
+        const remainingMs = Math.max(0, state.targetEndTime - Date.now());
+        const elapsedMs = (task.duration * 60 * 1000) - remainingMs;
+
+        set({
+          targetEndTime: null,
+          totalElapsedBeforePause: elapsedMs / 1000,
+        });
+      },
+      resumeTask: () => {
+        const state = get();
+        if (!state.activeTaskId || state.targetEndTime) return;
+
+        const task = state.tasks.find(t => t.id === state.activeTaskId);
+        if (!task) return;
+
+        const remainingSeconds = (task.duration * 60) - state.totalElapsedBeforePause;
+        
+        set({
+          targetEndTime: Date.now() + (remainingSeconds * 1000),
+        });
+      },
       resetTasks: () =>
         set((state) => ({
           tasks: state.tasks.map((task) => ({ ...task, status: 'PENDING' })),

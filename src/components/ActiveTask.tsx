@@ -7,6 +7,8 @@ const ActiveTask = () => {
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const tasks = useTaskStore((state) => state.tasks);
   const updateTask = useTaskStore((state) => state.updateTask);
+  const pauseTask = useTaskStore((state) => state.pauseTask);
+  const resumeTask = useTaskStore((state) => state.resumeTask);
   const setActiveTaskTimeLeft = useTaskStore(
     (state) => state.setActiveTaskTimeLeft,
   );
@@ -22,16 +24,24 @@ const ActiveTask = () => {
         (t) => t.status === 'PENDING' && t.id !== activeTask.id,
       );
       if (nextTask) {
-        updateTask(nextTask.id, { status: 'IN_PROGRESS' });
+        useTaskStore.getState().startTask(nextTask.id);
       }
     }
   };
 
-  const { timeLeft, isPaused, start, pause, reset } = useTimer(
+  const { timeLeft, isPaused } = useTimer(
     activeTask ? activeTask.duration * 60 : 0,
     onComplete,
     targetEndTime,
   );
+
+  const handlePlayPause = () => {
+    if (targetEndTime) {
+      pauseTask();
+    } else {
+      resumeTask();
+    }
+  };
 
   // Sync timeLeft with Store for Arrival Time calculation
   useEffect(() => {
@@ -43,6 +53,8 @@ const ActiveTask = () => {
   }, [activeTask, timeLeft, setActiveTaskTimeLeft]);
 
   if (!activeTask) return null;
+
+  const isActuallyPaused = !targetEndTime;
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -66,11 +78,11 @@ const ActiveTask = () => {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={isPaused ? start : pause}
+            onClick={handlePlayPause}
             className="p-2 rounded-full bg-white border-2 border-gray-300 text-gray-500 hover:border-gray-400 hover:text-gray-700 transition-colors shadow-sm"
-            title={isPaused ? 'Resume' : 'Pause'}
+            title={isActuallyPaused ? 'Resume' : 'Pause'}
           >
-            {isPaused ? (
+            {isActuallyPaused ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
