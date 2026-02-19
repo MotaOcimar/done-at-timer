@@ -46,11 +46,11 @@
 
     - [x] Write tests for rendering list and interactions
 
-- [~] Task: Persist to Local Storage
+- [x] Task: Persist to Local Storage [f25a92d]
 
-    - [ ] Enable Zustand persist middleware
+    - [x] Enable Zustand persist middleware
 
-    - [ ] Verify data persistence manually (reload page)
+    - [x] Verify data persistence manually (reload page)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Task List Management (UI)' (Protocol in workflow.md)
 
 ## Phase 3: "Done-At" Display & Timer Logic
