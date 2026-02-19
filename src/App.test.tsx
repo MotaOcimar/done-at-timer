@@ -3,9 +3,14 @@ import { describe, it, expect } from 'vitest';
 import App from './App';
 
 describe('App', () => {
-  it('renders headline', () => {
+  it('renders headline and main components', () => {
     render(<App />);
-    const headline = screen.getByText(/Done-At Timer/i);
-    expect(headline).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /Done-At Timer/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /^Done-At$/i }),
+    ).toBeInTheDocument(); // ArrivalDisplay
+    expect(screen.getByPlaceholderText(/Task name/i)).toBeInTheDocument(); // TaskInput
   });
 });

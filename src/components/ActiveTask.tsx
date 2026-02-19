@@ -11,6 +11,14 @@ const ActiveTask = () => {
   const onComplete = () => {
     if (activeTask) {
       updateTask(activeTask.id, { status: 'COMPLETED' });
+
+      // Automatically start the next task
+      const nextTask = tasks.find(
+        (t) => t.status === 'PENDING' && t.id !== activeTask.id,
+      );
+      if (nextTask) {
+        updateTask(nextTask.id, { status: 'IN_PROGRESS' });
+      }
     }
   };
 

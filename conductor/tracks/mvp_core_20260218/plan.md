@@ -84,8 +84,9 @@
 
 ## Phase 4: Integration & Polish
 
-- [ ] Task: Sequential Execution Logic
-  - [ ] Implement "Start Routine" button
+- [~] Task: Sequential Execution Logic
+
+    - [ ] Implement "Start Routine" button
   - [ ] Handle transition: Task Complete -> Start Next Task
   - [ ] Update store status (PENDING -> IN_PROGRESS -> COMPLETED)
 - [ ] Task: Styling & UX Refinement

@@ -3,6 +3,7 @@ import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
 import ArrivalDisplay from './components/ArrivalDisplay';
 import ActiveTask from './components/ActiveTask';
+import RoutineControls from './components/RoutineControls';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         Done-At Timer
       </h1>
       <ActiveTask />
+      <RoutineControls />
       <ArrivalDisplay />
       <TaskInput />
       <TaskList />
