@@ -24,8 +24,12 @@ describe('ActiveTask', () => {
     
     render(<ActiveTask />);
     expect(screen.getByText('Running Task')).toBeInTheDocument();
-    // 10 mins = 600 seconds. Initial display should be 10:00 or similar
-    expect(screen.getByText(/10:00/)).toBeInTheDocument();
+    
+    // Check for progress bar
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    
+    // Check for discrete time display (10 min left)
+    expect(screen.getByText(/10 min left/)).toBeInTheDocument();
   });
 
   it('allows marking a task as done', () => {
