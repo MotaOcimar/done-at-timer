@@ -27,4 +27,14 @@ describe('ProgressBar', () => {
     expect(bar).toHaveAttribute('aria-valuemin', '0');
     expect(bar).toHaveAttribute('aria-valuemax', '100');
   });
+
+  it('renders pulse animation when active', () => {
+    const { rerender } = render(<ProgressBar progress={0.5} isActive={true} />);
+    const bar = screen.getByRole('progressbar').firstChild;
+    expect(bar).toHaveClass('animate-pulse');
+
+    rerender(<ProgressBar progress={0.5} isActive={false} />);
+    const inactiveBar = screen.getByRole('progressbar').firstChild;
+    expect(inactiveBar).not.toHaveClass('animate-pulse');
+  });
 });

@@ -123,7 +123,7 @@ const ActiveTask = () => {
         </div>
       </div>
       
-      <ProgressBar progress={progress} />
+      <ProgressBar progress={progress} isActive={!!targetEndTime} />
       
       <div className="flex justify-end mt-1">
         <span className="text-sm font-medium text-gray-400 tabular-nums">
