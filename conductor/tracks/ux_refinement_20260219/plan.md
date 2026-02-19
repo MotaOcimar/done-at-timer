@@ -19,9 +19,13 @@
 - [x] Task: Remove Legacy Controls (3014730)
     - [x] Remove `RoutineControls` (Start Routine button) as it's now redundant
     - [x] Update `ActiveTask` to reflect the playlist selection
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Playlist UI Model' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Playlist UI Model' (Protocol in workflow.md)
 
 ## Phase 3: Visual Calmness & Polish
+- [ ] Task: Completion & Celebration State
+    - [ ] Create a "All Tasks Done" view in `ArrivalDisplay` or `ActiveTask`
+    - [ ] Add a visual reward (e.g., "Routine Complete!" with a nice icon)
+    - [ ] Add a "Reset Routine" button in this view
 - [ ] Task: Progress Bar Component
     - [ ] Create a `ProgressBar` component with smooth transitions
     - [ ] Replace ticking seconds in `ActiveTask` with the progress bar
