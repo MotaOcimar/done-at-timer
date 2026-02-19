@@ -3,13 +3,15 @@ import { useTimer } from '../hooks/useTimer';
 import { useEffect } from 'react';
 
 const ActiveTask = () => {
+  const activeTaskId = useTaskStore((state) => state.activeTaskId);
+  const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const tasks = useTaskStore((state) => state.tasks);
   const updateTask = useTaskStore((state) => state.updateTask);
   const setActiveTaskTimeLeft = useTaskStore(
     (state) => state.setActiveTaskTimeLeft,
   );
 
-  const activeTask = tasks.find((t) => t.status === 'IN_PROGRESS');
+  const activeTask = tasks.find((t) => t.id === activeTaskId);
 
   const onComplete = () => {
     if (activeTask) {
@@ -28,6 +30,7 @@ const ActiveTask = () => {
   const { timeLeft, isPaused, start, pause, reset } = useTimer(
     activeTask ? activeTask.duration * 60 : 0,
     onComplete,
+    targetEndTime,
   );
 
   // Sync timeLeft with Store for Arrival Time calculation
@@ -38,13 +41,6 @@ const ActiveTask = () => {
       setActiveTaskTimeLeft(null);
     }
   }, [activeTask, timeLeft, setActiveTaskTimeLeft]);
-
-  useEffect(() => {
-    if (activeTask) {
-      reset(activeTask.duration * 60);
-      start();
-    }
-  }, [activeTask?.id, reset, start]);
 
   if (!activeTask) return null;
 

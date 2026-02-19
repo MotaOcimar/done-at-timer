@@ -5,22 +5,22 @@ import { useTaskStore } from '../store/useTaskStore';
 
 describe('ActiveTask', () => {
   beforeEach(() => {
-    useTaskStore.setState({ tasks: [] });
+    useTaskStore.getState().clearTasks();
     vi.useFakeTimers();
   });
 
   it('renders nothing if no task is in progress', () => {
-    useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Pending Task', duration: 10, status: 'PENDING' }],
-    });
+    useTaskStore.getState().addTask('Pending Task', 10);
     const { container } = render(<ActiveTask />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it('renders the active task details and countdown', () => {
-    useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Running Task', duration: 10, status: 'IN_PROGRESS' }],
-    });
+    useTaskStore.getState().addTask('Running Task', 10);
+    const task = useTaskStore.getState().tasks[0];
+    
+    // Simula o início da tarefa através da lógica da store
+    useTaskStore.getState().updateTask(task.id, { status: 'IN_PROGRESS' });
     
     render(<ActiveTask />);
     expect(screen.getByText('Running Task')).toBeInTheDocument();
@@ -29,9 +29,9 @@ describe('ActiveTask', () => {
   });
 
   it('allows marking a task as done', () => {
-    useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Running Task', duration: 10, status: 'IN_PROGRESS' }],
-    });
+    useTaskStore.getState().addTask('Running Task', 10);
+    const task = useTaskStore.getState().tasks[0];
+    useTaskStore.getState().updateTask(task.id, { status: 'IN_PROGRESS' });
     
     render(<ActiveTask />);
     fireEvent.click(screen.getByRole('button', { name: /Done/i }));

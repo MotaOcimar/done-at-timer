@@ -49,11 +49,38 @@ export const useTaskStore = create<TaskState>()(
           activeTaskId: state.activeTaskId === id ? null : state.activeTaskId,
         })),
       updateTask: (id, updates) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
+        set((state) => {
+          const newTasks = state.tasks.map((task) =>
             task.id === id ? { ...task, ...updates } : task
-          ),
-        })),
+          );
+          
+          let activeTaskId = state.activeTaskId;
+          let targetEndTime = state.targetEndTime;
+          let totalElapsedBeforePause = state.totalElapsedBeforePause;
+
+          // Se a tarefa foi movida para IN_PROGRESS
+          if (updates.status === 'IN_PROGRESS') {
+            activeTaskId = id;
+            const task = newTasks.find(t => t.id === id);
+            if (task) {
+              targetEndTime = Date.now() + (task.duration * 60 * 1000);
+              totalElapsedBeforePause = 0;
+            }
+          } 
+          // Se a tarefa ativa foi movida para outro estado (ex: COMPLETED)
+          else if (id === state.activeTaskId && updates.status && updates.status !== 'IN_PROGRESS') {
+            activeTaskId = null;
+            targetEndTime = null;
+            totalElapsedBeforePause = 0;
+          }
+
+          return {
+            tasks: newTasks,
+            activeTaskId,
+            targetEndTime,
+            totalElapsedBeforePause
+          };
+        }),
       setActiveTaskTimeLeft: (seconds) => set({ activeTaskTimeLeft: seconds }),
       resetTasks: () =>
         set((state) => ({
