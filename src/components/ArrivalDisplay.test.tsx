@@ -49,7 +49,7 @@ describe('ArrivalDisplay', () => {
     expect(screen.getByText('10:30')).toBeInTheDocument();
 
     // Check for remaining time text (20 min left)
-    expect(screen.getByText(/20 min remaining/i)).toBeInTheDocument();
+    expect(screen.getByText(/20 min left/i)).toBeInTheDocument();
     
     // Check for progress bar
     const bar = screen.getByRole('progressbar');

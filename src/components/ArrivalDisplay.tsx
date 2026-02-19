@@ -100,16 +100,15 @@ const ArrivalDisplay = () => {
       </div>
 
       <div className="bg-blue-800/30 rounded-2xl p-4 backdrop-blur-sm">
-        <div className="flex justify-between items-end mb-2 text-blue-100 text-xs font-bold uppercase tracking-widest opacity-90">
-          <span>Overall Progress</span>
-          <span>{remainingMinutes} min remaining</span>
-        </div>
-        <div className="h-2 w-full bg-blue-900/40 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-blue-900/40 rounded-full overflow-hidden mb-2">
           <div
             className={`h-full bg-white/90 rounded-full transition-all duration-1000 ease-linear ${activeTaskId ? 'animate-pulse' : ''}`}
             style={{ width: `${progressPercentage}%` }}
             role="progressbar"
           ></div>
+        </div>
+        <div className="flex justify-end text-blue-100 text-xs font-bold uppercase tracking-widest opacity-90">
+          <span>{remainingMinutes} min left</span>
         </div>
       </div>
     </div>
