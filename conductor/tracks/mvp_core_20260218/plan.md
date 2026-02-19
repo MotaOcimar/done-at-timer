@@ -82,7 +82,7 @@
     - [x] Implement "Mark as Done" button
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: "Done-At" Display & Timer Logic' (Protocol in workflow.md)
 
-## Phase 4: Integration & Polish
+## Phase 4: Integration & Polish [checkpoint: 1fbe238]
 
 - [x] Task: Sequential Execution Logic [cfeb41a]
 
@@ -111,4 +111,5 @@
     - [x] clear console logs
 
     - [x] Check accessibility (contrast, labels)
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Integration & Polish' (Protocol in workflow.md)
+
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Integration & Polish' (Protocol in workflow.md)
