@@ -55,8 +55,9 @@
 
 ## Phase 3: "Done-At" Display & Timer Logic
 
-- [ ] Task: Arrival Time Display Component
-  - [ ] Create `ArrivalDisplay` component
+- [~] Task: Arrival Time Display Component
+
+    - [ ] Create `ArrivalDisplay` component
   - [ ] Connect to store to get total remaining time
   - [ ] Implement live clock update (useEffect interval)
   - [ ] Write tests for correct time formatting and updates
