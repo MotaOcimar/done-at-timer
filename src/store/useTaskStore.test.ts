@@ -3,7 +3,7 @@ import { useTaskStore } from './useTaskStore';
 
 describe('useTaskStore', () => {
   beforeEach(() => {
-    useTaskStore.setState({ tasks: [] });
+    useTaskStore.getState().clearTasks();
   });
 
   it('should add a task', () => {
@@ -16,26 +16,27 @@ describe('useTaskStore', () => {
     expect(tasks[0].status).toBe('PENDING');
   });
 
-  it('should remove a task', () => {
-    // Manually add a task first since addTask is broken
+  it('should reset progress of all tasks', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 15, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'T1', duration: 10, status: 'COMPLETED' },
+        { id: '2', title: 'T2', duration: 10, status: 'IN_PROGRESS' },
+      ],
     });
 
-    useTaskStore.getState().removeTask('1');
+    useTaskStore.getState().resetTasks();
 
     const { tasks } = useTaskStore.getState();
-    expect(tasks).toHaveLength(0);
+    expect(tasks.every((t) => t.status === 'PENDING')).toBe(true);
   });
 
-  it('should update a task', () => {
+  it('should clear all tasks', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Original Title', duration: 10, status: 'PENDING' }],
+      tasks: [{ id: '1', title: 'T1', duration: 10, status: 'PENDING' }],
     });
 
-    useTaskStore.getState().updateTask('1', { title: 'Updated Title' });
+    useTaskStore.getState().clearTasks();
 
-    const { tasks } = useTaskStore.getState();
-    expect(tasks[0].title).toBe('Updated Title');
+    expect(useTaskStore.getState().tasks).toHaveLength(0);
   });
 });

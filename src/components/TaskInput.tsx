@@ -19,30 +19,45 @@ const TaskInput = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 space-y-4">
-      <div className="flex flex-col sm:flex-row gap-2">
+    <form onSubmit={handleSubmit} className="mb-6">
+      <div className="flex items-center gap-2">
         <input
           type="text"
-          placeholder="Task name"
+          placeholder="What's next?"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-0 p-3 bg-white border-2 border-gray-100 rounded-xl focus:outline-none focus:border-blue-500 transition-colors text-base"
         />
-        <div className="flex gap-2">
+        <div className="flex items-center gap-1 bg-white border-2 border-gray-100 rounded-xl px-2 focus-within:border-blue-500 transition-colors">
           <input
             type="number"
-            placeholder="Duration (min)"
+            placeholder="0"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
-            className="w-24 sm:w-32 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-10 p-3 bg-transparent focus:outline-none text-base text-center"
           />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-bold whitespace-nowrap"
-          >
-            Add
-          </button>
+          <span className="text-gray-300 text-xs font-bold uppercase mr-1">
+            min
+          </span>
         </div>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors font-bold flex-shrink-0 shadow-lg shadow-blue-100"
+          aria-label="Add task"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
       </div>
     </form>
   );

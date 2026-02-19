@@ -3,14 +3,14 @@ import { describe, it, expect } from 'vitest';
 import App from './App';
 
 describe('App', () => {
-  it('renders headline and main components', () => {
+  it('renders main sections', () => {
     render(<App />);
     expect(
-      screen.getByRole('heading', { name: /Done-At Timer/i }),
+      screen.getByRole('heading', { name: /You will be done at/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /^Done-At$/i }),
-    ).toBeInTheDocument(); // ArrivalDisplay
-    expect(screen.getByPlaceholderText(/Task name/i)).toBeInTheDocument(); // TaskInput
+      screen.getByRole('heading', { name: /Plan your routine/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/What's next?/i)).toBeInTheDocument();
   });
 });

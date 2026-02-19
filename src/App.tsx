@@ -8,14 +8,19 @@ import RoutineControls from './components/RoutineControls';
 function App() {
   return (
     <Layout>
-      <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-        Done-At Timer
-      </h1>
-      <ActiveTask />
-      <RoutineControls />
-      <ArrivalDisplay />
-      <TaskInput />
-      <TaskList />
+      <div className="flex flex-col">
+        <ArrivalDisplay />
+        <ActiveTask />
+        <RoutineControls />
+
+        <div className="mt-8 pt-8 border-t border-gray-100">
+          <h2 className="text-xs font-black text-gray-300 uppercase tracking-[0.2em] mb-6 text-center">
+            Plan your routine
+          </h2>
+          <TaskInput />
+          <TaskList />
+        </div>
+      </div>
     </Layout>
   );
 }
