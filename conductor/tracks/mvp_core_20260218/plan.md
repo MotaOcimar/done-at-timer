@@ -84,15 +84,21 @@
 
 ## Phase 4: Integration & Polish
 
-- [~] Task: Sequential Execution Logic
+- [x] Task: Sequential Execution Logic [cfeb41a]
 
-    - [ ] Implement "Start Routine" button
-  - [ ] Handle transition: Task Complete -> Start Next Task
-  - [ ] Update store status (PENDING -> IN_PROGRESS -> COMPLETED)
-- [ ] Task: Styling & UX Refinement
-  - [ ] Apply "Playful" colors (Tailwind config)
-  - [ ] Add transitions for adding/removing tasks
-  - [ ] Style the "Arrival Time" to be prominent
+    - [x] Implement "Start Routine" button
+
+    - [x] Handle transition: Task Complete -> Start Next Task
+
+    - [x] Update store status (PENDING -> IN_PROGRESS -> COMPLETED)
+
+- [~] Task: Styling & UX Refinement
+
+    - [ ] Apply "Playful" colors (Tailwind config)
+
+    - [ ] Add transitions for adding/removing tasks
+
+    - [ ] Style the "Arrival Time" to be prominent
 - [ ] Task: Mobile Responsiveness Check
   - [ ] Verify layout on mobile viewports
   - [ ] Adjust touch targets (buttons)
