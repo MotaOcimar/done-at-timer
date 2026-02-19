@@ -53,7 +53,7 @@
     - [x] Verify data persistence manually (reload page)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Task List Management (UI)' (Protocol in workflow.md)
 
-## Phase 3: "Done-At" Display & Timer Logic
+## Phase 3: "Done-At" Display & Timer Logic [checkpoint: 463d9be]
 
 - [x] Task: Arrival Time Display Component [614884e]
 
