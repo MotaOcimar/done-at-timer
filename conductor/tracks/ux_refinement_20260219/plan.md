@@ -8,7 +8,7 @@
 - [x] Task: Reliable `useTimer` Hook (de5722d)
     - [x] Refactor hook to calculate `timeLeft` based on `Date.now()` vs `targetEndTime`
     - [x] Remove `setInterval` dependency for accuracy (use it only for UI refreshes)
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Reliability & Logic Refactor' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Reliability & Logic Refactor' (Protocol in workflow.md)
 
 ## Phase 2: Playlist UI Model
 - [ ] Task: Playlist-style Task Items
