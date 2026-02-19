@@ -8,14 +8,16 @@ const ArrivalDisplay = () => {
   const tasks = useTaskStore((state) => state.tasks);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
-  const totalElapsedBeforePause = useTaskStore((state) => state.totalElapsedBeforePause);
+  const totalElapsedBeforePause = useTaskStore(
+    (state) => state.totalElapsedBeforePause,
+  );
 
-  const activeTask = tasks.find(t => t.id === activeTaskId);
+  const activeTask = tasks.find((t) => t.id === activeTaskId);
 
   const { timeLeft } = useTimer(
-    activeTask ? (activeTask.duration * 60 - totalElapsedBeforePause) : 0,
+    activeTask ? activeTask.duration * 60 - totalElapsedBeforePause : 0,
     undefined,
-    targetEndTime
+    targetEndTime,
   );
 
   useEffect(() => {
@@ -25,6 +27,37 @@ const ArrivalDisplay = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const allCompleted =
+    tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
+
+  if (allCompleted) {
+    return (
+      <div className="text-center py-12 px-6 mb-10 bg-green-500 text-white rounded-3xl shadow-2xl shadow-green-200 animate-in zoom-in duration-500">
+        <div className="flex justify-center mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-16 w-16 text-green-100"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <h2 className="text-green-100 text-sm font-bold uppercase tracking-[0.2em] mb-2">
+          Routine Complete!
+        </h2>
+        <div className="text-5xl font-black tracking-tight">Well Done.</div>
+        <p className="text-green-100 text-lg mt-4 font-medium opacity-80">
+          All tasks finished successfully.
+        </p>
+      </div>
+    );
+  }
 
   // Se houver tarefa ativa (mesmo pausada), o timeLeft do hook é o que conta.
   // Caso contrário, passamos null para que a função some as durações completas.
@@ -39,7 +72,7 @@ const ArrivalDisplay = () => {
   };
 
   return (
-    <div className="text-center py-12 px-6 mb-10 bg-blue-600 text-white rounded-3xl shadow-2xl shadow-blue-200">
+    <div className="text-center py-12 px-6 mb-10 bg-blue-600 text-white rounded-3xl shadow-2xl shadow-blue-200 transition-colors duration-500">
       <h2 className="text-blue-200 text-sm font-bold uppercase tracking-[0.2em] mb-4">
         You will be done at
       </h2>

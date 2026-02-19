@@ -39,4 +39,14 @@ describe('ActiveTask', () => {
     const tasks = useTaskStore.getState().tasks;
     expect(tasks[0].status).toBe('COMPLETED');
   });
+
+  it('shows restart button when all tasks are complete', () => {
+    useTaskStore.getState().addTask('T1', 10);
+    const task = useTaskStore.getState().tasks[0];
+    useTaskStore.getState().updateTask(task.id, { status: 'COMPLETED' });
+    
+    render(<ActiveTask />);
+    
+    expect(screen.getByRole('button', { name: /Restart Routine/i })).toBeInTheDocument();
+  });
 });

@@ -48,4 +48,15 @@ describe('ArrivalDisplay', () => {
     // Ainda deve ser 10:30 (10:10 atual + 20 restantes)
     expect(screen.getByText('10:30')).toBeInTheDocument();
   });
+
+  it('shows celebration message when all tasks are completed', () => {
+    useTaskStore.getState().addTask('T1', 10);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().updateTask(taskId, { status: 'COMPLETED' });
+
+    render(<ArrivalDisplay />);
+
+    expect(screen.getByText(/Routine Complete/i)).toBeInTheDocument();
+    expect(screen.getByText(/All tasks finished/i)).toBeInTheDocument();
+  });
 });
