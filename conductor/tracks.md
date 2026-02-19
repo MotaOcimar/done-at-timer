@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: MVP Core - "Done-At" Timer**
+- [x] **Track: MVP Core - "Done-At" Timer**
   _Link: [./conductor/tracks/mvp_core_20260218/](./conductor/tracks/mvp_core_20260218/)_
