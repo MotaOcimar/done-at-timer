@@ -6,3 +6,12 @@ export interface Task {
   duration: number; // in minutes
   status: TaskStatus;
 }
+
+export interface Routine {
+  id: string;
+  name: string;
+  tasks: {
+    title: string;
+    duration: number;
+  }[];
+}

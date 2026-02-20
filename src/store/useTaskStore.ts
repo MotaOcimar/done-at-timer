@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Task } from '../types';
+import type { Task, Routine } from '../types';
 
 const generateId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -15,6 +15,7 @@ interface TaskState {
   activeTaskId: string | null;
   targetEndTime: number | null; // timestamp
   totalElapsedBeforePause: number; // segundos
+  routines: Routine[];
   addTask: (title: string, duration: number) => void;
   removeTask: (id: string) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
@@ -24,6 +25,9 @@ interface TaskState {
   resumeTask: () => void;
   resetTasks: () => void;
   clearTasks: () => void;
+  saveRoutine: (name: string) => void;
+  loadRoutine: (id: string) => void;
+  deleteRoutine: (id: string) => void;
 }
 
 export const useTaskStore = create<TaskState>()(
@@ -34,6 +38,7 @@ export const useTaskStore = create<TaskState>()(
       activeTaskId: null,
       targetEndTime: null,
       totalElapsedBeforePause: 0,
+      routines: [],
       addTask: (title, duration) =>
         set((state) => ({
           tasks: [
@@ -148,6 +153,42 @@ export const useTaskStore = create<TaskState>()(
           targetEndTime: null,
           totalElapsedBeforePause: 0,
         }),
+      saveRoutine: (name) => {
+        const state = get();
+        if (state.tasks.length === 0) return;
+
+        const newRoutine: Routine = {
+          id: generateId(),
+          name,
+          tasks: state.tasks.map(({ title, duration }) => ({ title, duration })),
+        };
+
+        set({ routines: [...state.routines, newRoutine] });
+      },
+      loadRoutine: (id) => {
+        const state = get();
+        const routine = state.routines.find((r) => r.id === id);
+        if (!routine) return;
+
+        const newTasks: Task[] = routine.tasks.map((t) => ({
+          ...t,
+          id: generateId(),
+          status: 'PENDING',
+        }));
+
+        set({
+          tasks: newTasks,
+          activeTaskTimeLeft: null,
+          activeTaskId: null,
+          targetEndTime: null,
+          totalElapsedBeforePause: 0,
+        });
+      },
+      deleteRoutine: (id) => {
+        set((state) => ({
+          routines: state.routines.filter((r) => r.id !== id),
+        }));
+      },
     }),
     {
       name: 'done-at-timer-storage',

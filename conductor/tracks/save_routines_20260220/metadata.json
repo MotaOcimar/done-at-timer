@@ -1,0 +1,9 @@
+{
+  "id": "save_routines_20260220",
+  "name": "Save and Reuse Routines",
+  "description": "Allow users to save their current task list as a named routine and reload it later, persisting across sessions.",
+  "type": "feature",
+  "status": "todo",
+  "created_at": "2026-02-20",
+  "updated_at": "2026-02-20"
+}
