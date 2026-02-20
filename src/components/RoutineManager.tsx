@@ -15,25 +15,20 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
   const loadRoutine = useTaskStore((state) => state.loadRoutine);
   const deleteRoutine = useTaskStore((state) => state.deleteRoutine);
 
-  const [isSavingInternal, setIsSavingInternal] = useState(false);
   const [routineName, setRoutineName] = useState('');
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-
-  const isActuallySaving = isSavingExternal || isSavingInternal;
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (routineName.trim()) {
       saveRoutine(routineName.trim());
       setRoutineName('');
-      setIsSavingInternal(false);
       if (onSaveComplete) onSaveComplete();
     }
   };
 
   const handleCancelSave = () => {
-    setIsSavingInternal(false);
     setRoutineName('');
     if (onSaveComplete) onSaveComplete();
   };

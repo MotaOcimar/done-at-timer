@@ -14,7 +14,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const resetTasks = useTaskStore((state) => state.resetTasks);
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
-  const [clearTimeoutId, setClearTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const allCompleted =
     tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
