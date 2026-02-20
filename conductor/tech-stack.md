@@ -31,3 +31,5 @@
   - _Reasoning:_ Ensures code quality and consistent formatting automatically.
 - **Testing:** **Vitest** + **React Testing Library**
   - _Reasoning:_ Fast unit testing framework compatible with Vite.
+- **Hosting:** **GitHub Pages**
+  - _Reasoning:_ Free hosting for static sites, integrated with GitHub workflow.

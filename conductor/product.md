@@ -6,7 +6,7 @@ O usuário quer construir um aplicativo de timer focado na _previsão de términ
 **Funcionalidades Principais:**
 
 - **Foco no Horário de Término:** O destaque principal do timer é mostrar a hora exata em que ele vai acabar (ex: "Termina às 14:30"), ao invés de apenas uma contagem regressiva.
-- **Plataforma Web:** Inicialmente um app web para facilitar testes locais.
+- **Plataforma Web:** App web acessível via navegador e deployado publicamente no GitHub Pages.
 - **Listas de Tarefas (Timers Consecutivos):**
   - O usuário pode criar listas de tarefas (ex: "Rotina Matinal").
   - Cada tarefa tem uma duração definida (ex: "Tomar banho - 20 min").
@@ -45,7 +45,6 @@ The primary value of this application is to solve the problem of **lateness due 
 
 Based on user feedback and planned improvements:
 
-- **Deployment:** Deploy the application (e.g., GitHub Pages, Vercel) to make it accessible from any device.
 - **Visual Feedback for Completed Tasks:** Completed tasks should be visually distinct (e.g., dimmed, strikethrough, checkmark icon) to clearly indicate progress.
 - **Inline Editing:** Allow users to edit task names and durations by simply clicking on them in the list.
 - **Drag & Drop Reordering:** Enable drag-and-drop functionality to easily reorder tasks in the list.
