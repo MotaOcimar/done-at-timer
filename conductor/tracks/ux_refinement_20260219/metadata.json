@@ -1,8 +1,0 @@
-{
-  "track_id": "ux_refinement_20260219",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-19T14:00:00Z",
-  "updated_at": "2026-02-19T14:00:00Z",
-  "description": "Improve timer reliability for background/locked screens, implement playlist-style execution, and reduce visual distraction by using progress bars instead of countdown seconds."
-}

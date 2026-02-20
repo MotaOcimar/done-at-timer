@@ -14,7 +14,6 @@ describe('useTaskStore Refactor', () => {
   });
 
   it('should update activeTaskId and targetEndTime', () => {
-    const store = useTaskStore.getState();
     const now = Date.now();
     const target = now + 10000;
 

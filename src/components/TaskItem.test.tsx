@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import TaskItem from './TaskItem';
-import { Task } from '../types';
+import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 
 describe('TaskItem', () => {

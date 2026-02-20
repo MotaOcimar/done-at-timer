@@ -1,0 +1,9 @@
+{
+  "id": "deployment_setup_20260220",
+  "name": "Deployment Setup",
+  "description": "Setup deployment pipeline for GitHub Pages",
+  "type": "infrastructure",
+  "status": "todo",
+  "created_at": "2026-02-20",
+  "updated_at": "2026-02-20"
+}

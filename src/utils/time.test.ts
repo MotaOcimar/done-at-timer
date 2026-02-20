@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateArrivalTime } from './time';
-import { Task } from '../types';
+import type { Task } from '../types';
 
 describe('calculateArrivalTime', () => {
   const tasks: Task[] = [

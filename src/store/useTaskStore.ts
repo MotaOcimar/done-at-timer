@@ -69,7 +69,7 @@ export const useTaskStore = create<TaskState>()(
               targetEndTime = Date.now() + (task.duration * 60 * 1000);
               totalElapsedBeforePause = 0;
             }
-          } else if (id === state.activeTaskId && updates.status && updates.status !== 'IN_PROGRESS') {
+          } else if (id === state.activeTaskId && updates.status) {
             activeTaskId = null;
             targetEndTime = null;
             totalElapsedBeforePause = 0;
@@ -106,8 +106,6 @@ export const useTaskStore = create<TaskState>()(
       pauseTask: () => {
         const state = get();
         if (!state.targetEndTime) return;
-
-        const elapsedSeconds = Math.floor((Date.now() - (state.targetEndTime - (state.tasks.find(t => t.id === state.activeTaskId)?.duration || 0) * 60 * 1000)) / 1000);
         
         // Forma mais simples: calcular quanto tempo RESTA e subtrair da duração total
         const task = state.tasks.find(t => t.id === state.activeTaskId);
