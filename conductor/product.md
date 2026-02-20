@@ -46,6 +46,9 @@ The primary value of this application is to solve the problem of **lateness due 
 Based on user feedback and planned improvements:
 
 - **Dark Mode:** Implementation of a dark theme with a manual toggle for user preference.
+- **Save Routines:** Allow users to save groups of tasks (e.g., "Morning Routine") to be reused and loaded later.
+- **Quick Complete:** Add a button to tasks in the list to mark them as completed even if they haven't been started.
+- **Swipe to Delete:** Implement a mobile-friendly "swipe to the side" gesture to delete tasks from the list.
 - **Inline Editing:** Allow users to edit task names and durations by simply clicking on them in the list.
 - **Drag & Drop Reordering:** Enable drag-and-drop functionality to easily reorder tasks in the list.
 - **Completion Checkpoint:**
