@@ -21,7 +21,7 @@
     - [x] Update `ActiveTask` to reflect the playlist selection
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Playlist UI Model' (Protocol in workflow.md)
 
-## Phase 3: Visual Calmness & Polish
+## Phase 3: Visual Calmness & Polish [checkpoint: c853b20]
 - [x] Task: Completion & Celebration State (1920eb8)
     - [x] Create a "All Tasks Done" view in `ArrivalDisplay` or `ActiveTask`
     - [x] Add a visual reward (e.g., "Routine Complete!" with a nice icon)
