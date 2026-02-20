@@ -12,6 +12,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Save and Reuse Routines**
   _Link: [./conductor/tracks/save_routines_20260220/](./conductor/tracks/save_routines_20260220/)_
-
-- [x] **Track: Backlog Refinement**
-  _Link: [./conductor/tracks/backlog_refinement_20240524/](./conductor/tracks/backlog_refinement_20240524/)_
