@@ -49,7 +49,62 @@ describe('TaskItem', () => {
     expect(screen.getByTestId('checkmark-icon')).toBeInTheDocument();
     
     // Container should be dimmed
-    const container = title.closest('div.flex.items-center.justify-between');
-    expect(container).toHaveClass('opacity-80');
+    const container = title.closest('div.flex.flex-col');
+    expect(container).toHaveClass('opacity-70');
+  });
+
+  it('renders ProgressBar and timer when task is active', () => {
+    useTaskStore.setState({
+      activeTaskId: '1',
+      tasks: [
+        { id: '1', title: 'Active Task', duration: 10, status: 'IN_PROGRESS' }
+      ],
+      targetEndTime: Date.now() + 10 * 60 * 1000,
+      totalElapsedBeforePause: 0,
+    });
+    
+    const activeTask = useTaskStore.getState().tasks[0];
+    render(<TaskItem task={activeTask} onDelete={vi.fn()} />);
+    
+    // Should show progress bar (or a placeholder for it)
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    // Should show "min left"
+    expect(screen.getByText(/min left/i)).toBeInTheDocument();
+    // Should show Pause button
+    expect(screen.getByRole('button', { name: /pause/i })).toBeInTheDocument();
+    // Should show Done button
+    expect(screen.getByRole('button', { name: /done/i })).toBeInTheDocument();
+  });
+
+  it('maintains consistent status icon container across states', () => {
+    // Test Pending State
+    const { rerender } = render(<TaskItem task={{ ...task, status: 'PENDING' }} onDelete={vi.fn()} />);
+    const pendingIcon = screen.getByLabelText(/play/i).parentElement;
+    expect(pendingIcon).toHaveClass('w-10', 'h-10');
+
+    // Test Active State (Running)
+    useTaskStore.setState({ activeTaskId: task.id, targetEndTime: Date.now() + 10000 });
+    rerender(<TaskItem task={{ ...task, status: 'IN_PROGRESS' }} onDelete={vi.fn()} />);
+    const activeIcon = screen.getByLabelText(/pause/i).parentElement;
+    expect(activeIcon).toHaveClass('w-10', 'h-10');
+
+    // Test Active State (Paused)
+    useTaskStore.setState({ activeTaskId: task.id, targetEndTime: null });
+    rerender(<TaskItem task={{ ...task, status: 'IN_PROGRESS' }} onDelete={vi.fn()} />);
+    const pausedIcon = screen.getByLabelText(/resume/i).parentElement;
+    expect(pausedIcon).toHaveClass('w-10', 'h-10');
+
+    // Test Completed State
+    rerender(<TaskItem task={{ ...task, status: 'COMPLETED' }} onDelete={vi.fn()} />);
+    const completedIcon = screen.getByTestId('checkmark-icon');
+    expect(completedIcon).toHaveClass('w-10', 'h-10');
+  });
+
+  it('uses consistent duration text styling across states', () => {
+    const { rerender } = render(<TaskItem task={{ ...task, status: 'PENDING' }} onDelete={vi.fn()} />);
+    expect(screen.getByText('30 min')).toHaveClass('text-xs', 'font-bold', 'uppercase');
+
+    rerender(<TaskItem task={{ ...task, status: 'COMPLETED' }} onDelete={vi.fn()} />);
+    expect(screen.getByText('30 min')).toHaveClass('text-xs', 'font-bold', 'uppercase');
   });
 });

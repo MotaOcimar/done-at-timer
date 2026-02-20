@@ -11,9 +11,13 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const tasks = useTaskStore((state) => state.tasks);
   const removeTask = useTaskStore((state) => state.removeTask);
   const clearTasks = useTaskStore((state) => state.clearTasks);
+  const resetTasks = useTaskStore((state) => state.resetTasks);
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const allCompleted =
+    tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
 
   const handleClearClick = () => {
     if (isConfirmingClear) {
@@ -82,6 +86,21 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
           )}
         </div>
       </div>
+      
+      {allCompleted && (
+        <div className="mb-6 animate-in fade-in zoom-in duration-500">
+          <button
+            onClick={() => resetTasks()}
+            className="w-full bg-white border-2 border-green-500 text-green-600 py-4 rounded-2xl font-bold text-lg hover:bg-green-50 transition-all shadow-lg shadow-green-50 flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Restart Routine
+          </button>
+        </div>
+      )}
+
       {tasks.length > 0 ? (
         tasks.map((task) => (
           <TaskItem key={task.id} task={task} onDelete={removeTask} />

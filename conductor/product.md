@@ -41,23 +41,6 @@ The primary value of this application is to solve the problem of **lateness due 
 - **Reduced Lateness:** Users are able to arrive at appointments or finish routines on time more consistently.
 - **Engagement:** Frequent use of the app for daily routines.
 
-## 6. Future Roadmap & Feedback
+## 6. Project Roadmap & Backlog
 
-Based on user feedback and planned improvements:
-
-- **Dark Mode:** Implementation of a dark theme with a manual toggle for user preference.
-- **Unified Animations:** Integrate an animation library (e.g., Framer Motion) to handle all entry/exit transitions for menus and modals.
-- **Save Routines:** Allow users to save groups of tasks (e.g., "Morning Routine") to be reused and loaded later.
-- **Quick Complete:** Add a button to tasks in the list to mark them as completed even if they haven't been started.
-- **Swipe to Delete:** Implement a mobile-friendly "swipe to the side" gesture to delete tasks from the list.
-- **Inline Editing:** Allow users to edit task names and durations by simply clicking on them in the list.
-- **Drag & Drop Reordering:** Enable drag-and-drop functionality to easily reorder tasks in the list.
-- **Completion Checkpoint:**
-    - Add an optional confirmation step when a task timer ends ("Did you actually finish?").
-    - Include a toggle setting to enable/disable this manual confirmation (auto-advance vs. manual advance).
-- **Refined Animations:** Change the "pulse" animation on progress bars to a "shimmer/wave" effect (left-to-right) to better convey forward momentum.
-
-## 7. Technical Debt
-
-- **Code Comments:** Translate Portuguese comments in `src/hooks/useTimer.ts` to English for consistency.
-- **Cleanup:** Remove unused `elapsedSeconds` variable in `src/store/useTaskStore.ts` inside the `pauseTask` action.
+All future ideas, requested improvements, and technical debt are tracked in the centralized [Backlog](./backlog.md) file.

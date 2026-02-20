@@ -16,6 +16,16 @@ describe('useTaskStore', () => {
     expect(tasks[0].status).toBe('PENDING');
   });
 
+  it('should add new tasks to the end of the list', () => {
+    useTaskStore.getState().addTask('First Task', 10);
+    useTaskStore.getState().addTask('Second Task', 20);
+
+    const { tasks } = useTaskStore.getState();
+    expect(tasks).toHaveLength(2);
+    expect(tasks[0].title).toBe('First Task');
+    expect(tasks[1].title).toBe('Second Task');
+  });
+
   it('should reset progress of all tasks', () => {
     useTaskStore.setState({
       tasks: [

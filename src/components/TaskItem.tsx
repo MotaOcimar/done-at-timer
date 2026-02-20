@@ -1,66 +1,198 @@
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
+import { useTimer } from '../hooks/useTimer';
+import { useEffect } from 'react';
+import ProgressBar from './ProgressBar';
 
 interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
 }
 
+/**
+ * Sub-component for the Status/Action Icon (Play, Pause, Checkmark)
+ * Ensuring consistent sizing and alignment (SOLID: Single Responsibility).
+ */
+const StatusIcon = ({ 
+  status, 
+  isActive, 
+  isPaused, 
+  onToggle 
+}: { 
+  status: Task['status'], 
+  isActive: boolean, 
+  isPaused: boolean, 
+  onToggle: (e: React.MouseEvent) => void 
+}) => {
+  const baseClasses = "flex items-center justify-center w-10 h-10 rounded-full transition-colors";
+  
+  if (status === 'COMPLETED') {
+    return (
+      <div className={`${baseClasses} text-green-500`} data-testid="checkmark-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (isActive) {
+    return (
+      <div className={baseClasses}>
+        <button
+          onClick={onToggle}
+          className="flex items-center justify-center w-full h-full rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
+          aria-label={isPaused ? 'Resume' : 'Pause'}
+        >
+          {isPaused ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+          )}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={baseClasses}>
+      <button
+        onClick={onToggle}
+        className="flex items-center justify-center w-full h-full rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 group transition-colors"
+        aria-label="Play task"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" />
+        </svg>
+      </button>
+    </div>
+  );
+};
+
 const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   const startTask = useTaskStore((state) => state.startTask);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
+  const targetEndTime = useTaskStore((state) => state.targetEndTime);
+  const totalElapsedBeforePause = useTaskStore((state) => state.totalElapsedBeforePause);
+  const updateTask = useTaskStore((state) => state.updateTask);
+  const pauseTask = useTaskStore((state) => state.pauseTask);
+  const resumeTask = useTaskStore((state) => state.resumeTask);
+  const setActiveTaskTimeLeft = useTaskStore((state) => state.setActiveTaskTimeLeft);
+  const tasks = useTaskStore((state) => state.tasks);
   
   const isActive = activeTaskId === task.id;
   const isCompleted = task.status === 'COMPLETED';
 
+  const onComplete = () => {
+    updateTask(task.id, { status: 'COMPLETED' });
+    setActiveTaskTimeLeft(null);
+
+    const nextTask = tasks.find(
+      (t) => t.status === 'PENDING' && t.id !== task.id,
+    );
+    if (nextTask) {
+      useTaskStore.getState().startTask(nextTask.id);
+    }
+  };
+
+  const { timeLeft } = useTimer(
+    isActive ? (task.duration * 60 - totalElapsedBeforePause) : 0,
+    onComplete,
+    isActive ? targetEndTime : null,
+  );
+
+  useEffect(() => {
+    if (isActive) {
+      setActiveTaskTimeLeft(timeLeft);
+    }
+  }, [isActive, timeLeft, setActiveTaskTimeLeft]);
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isActive) {
+      if (targetEndTime) pauseTask();
+      else resumeTask();
+    } else if (!isCompleted) {
+      startTask(task.id);
+    }
+  };
+
+  const isActuallyPaused = isActive && !targetEndTime;
+  const totalDurationSecs = task.duration * 60;
+  const progress = Math.max(0, Math.min(1, 1 - (timeLeft / totalDurationSecs)));
+  const minsLeft = Math.ceil(timeLeft / 60);
+  const timeDisplay = minsLeft > 0 ? `${minsLeft} min left` : '< 1 min left';
+
   return (
     <div 
-      className={`flex items-center justify-between p-3 mb-2 rounded-lg shadow-sm border transition-all duration-300 ${
-        isActive ? 'border-blue-500 bg-blue-50' : isCompleted ? 'border-green-200 bg-green-100/80' : 'border-gray-100 bg-white'
-      } ${isCompleted ? 'opacity-80' : ''}`}
+      className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
+        isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' : isCompleted ? 'border-green-100 bg-green-50/50' : 'border-gray-100 bg-white'
+      } ${isCompleted ? 'opacity-70' : ''}`}
     >
-      <div className="flex-1">
-        <h3 className={`font-medium transition-all ${
-          isActive ? 'text-blue-700' : 'text-gray-800'
-        } ${isCompleted ? 'line-through text-gray-500' : ''}`}>
-          {task.title}
-        </h3>
-        <p className="text-sm text-gray-500">{task.duration} min</p>
+      <div className="flex items-center gap-4">
+        {/* Consistent Status Icon Area */}
+        <div className="flex-shrink-0">
+          <StatusIcon 
+            status={task.status} 
+            isActive={isActive} 
+            isPaused={isActuallyPaused} 
+            onToggle={handleToggle}
+          />
+        </div>
+
+        {/* Task Info Area */}
+        <div className="flex-1 min-w-0">
+          <h3 className={`font-bold transition-all truncate ${
+            isActive ? 'text-blue-700 text-lg' : 'text-gray-800'
+          } ${isCompleted ? 'line-through text-gray-400 font-medium' : ''}`}>
+            {task.title}
+          </h3>
+          <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+            isActive ? 'text-blue-400' : 'text-gray-400'
+          }`}>
+            {task.duration} min {isActive ? 'total' : ''}
+          </p>
+        </div>
+
+        {/* Action Buttons Area */}
+        <div className="flex items-center gap-1">
+          {isActive && (
+            <button
+              onClick={(e) => { e.stopPropagation(); onComplete(); }}
+              className="px-4 py-2 rounded-xl bg-green-500 text-white text-xs font-black uppercase tracking-widest hover:bg-green-600 transition-colors shadow-lg shadow-green-200"
+              aria-label="Done"
+            >
+              Done
+            </button>
+          )}
+          {!isActive && (
+            <button
+              onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
+              className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+              aria-label="Delete task"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        {isCompleted ? (
-          <span className="text-green-500 p-2" data-testid="checkmark-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-          </span>
-        ) : !isActive ? (
-          <button
-            onClick={() => startTask(task.id)}
-            className="text-blue-500 hover:text-blue-700 p-2"
-            aria-label="Play task"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v5.832a1 1 0 001.555.832l3-2.916a1 1 0 000-1.664l-3-2.916z" clipRule="evenodd" />
-            </svg>
-          </button>
-        ) : (
-          <span className="text-blue-500 p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-          </span>
-        )}
-        <button
-          onClick={() => onDelete(task.id)}
-          className="text-red-500 hover:text-red-700 p-2"
-          aria-label="Delete task"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
-        </button>
-      </div>
+
+      {isActive && (
+        <div className="mt-4 pt-4 border-t border-blue-100/50 animate-in fade-in slide-in-from-top-2 duration-500">
+          <ProgressBar progress={progress} isActive={!!targetEndTime} />
+          <div className="flex justify-end mt-2">
+            <span className="text-sm font-black text-blue-600 tabular-nums tracking-tight">
+              {timeDisplay}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

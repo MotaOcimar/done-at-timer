@@ -38,4 +38,15 @@ describe('TaskList', () => {
     render(<TaskList />);
     expect(screen.getByText(/No tasks yet/i)).toBeInTheDocument();
   });
+
+  it('shows Restart Routine when all tasks are completed', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'COMPLETED' },
+      ],
+    });
+
+    render(<TaskList />);
+    expect(screen.getByRole('button', { name: /restart routine/i })).toBeInTheDocument();
+  });
 });
