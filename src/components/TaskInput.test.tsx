@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import TaskInput from './TaskInput';
+import { TaskInput } from './TaskInput';
 import { useTaskStore } from '../store/useTaskStore';
 
 describe('TaskInput', () => {

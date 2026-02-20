@@ -249,4 +249,4 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
   );
 };
 
-export default RoutineManager;
+export { RoutineManager };

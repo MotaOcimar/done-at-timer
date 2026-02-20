@@ -127,4 +127,4 @@ const ArrivalDisplay = () => {
   );
 };
 
-export default ArrivalDisplay;
+export { ArrivalDisplay };

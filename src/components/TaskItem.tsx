@@ -2,7 +2,7 @@ import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { useEffect } from 'react';
-import ProgressBar from './ProgressBar';
+import { ProgressBar } from './ProgressBar';
 
 interface TaskItemProps {
   task: Task;
@@ -197,4 +197,4 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   );
 };
 
-export default TaskItem;
+export { TaskItem };

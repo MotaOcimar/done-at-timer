@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import ArrivalDisplay from './ArrivalDisplay';
+import { ArrivalDisplay } from './ArrivalDisplay';
 import { useTaskStore } from '../store/useTaskStore';
 
 describe('ArrivalDisplay', () => {

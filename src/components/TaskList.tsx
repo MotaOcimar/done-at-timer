@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
-import TaskItem from './TaskItem';
+import { TaskItem } from './TaskItem';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
@@ -114,4 +114,4 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   );
 };
 
-export default TaskList;
+export { TaskList };

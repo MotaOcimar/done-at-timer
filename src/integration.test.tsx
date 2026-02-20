@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import App from './App';
+import { App } from './App';
 import { useTaskStore } from './store/useTaskStore';
 
 describe('Playlist Execution Integration', () => {

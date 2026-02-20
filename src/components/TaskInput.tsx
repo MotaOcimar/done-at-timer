@@ -63,4 +63,4 @@ const TaskInput = () => {
   );
 };
 
-export default TaskInput;
+export { TaskInput };

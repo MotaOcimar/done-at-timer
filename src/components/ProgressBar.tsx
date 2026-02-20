@@ -22,4 +22,4 @@ const ProgressBar = ({ progress, isActive = false }: ProgressBarProps) => {
   );
 };
 
-export default ProgressBar;
+export { ProgressBar };
