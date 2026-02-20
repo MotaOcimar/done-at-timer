@@ -13,5 +13,5 @@
 
 ## Phase 3: UX Refinement
 
-- [~] Task: Add confirmation when loading a routine if the current list is not empty (54273cd)
-- [ ] Task: Final polish and responsive check
+- [x] Task: Add confirmation when loading a routine if the current list is not empty (268efee)
+- [~] Task: Final polish and responsive check (268efee)

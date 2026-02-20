@@ -79,10 +79,10 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
 
       {/* Save Routine Modal (External Trigger) */}
       {isSavingExternal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <form 
             onSubmit={handleSave} 
-            className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-green-100 max-w-sm w-full animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-green-100 max-w-sm w-full"
           >
             <div className="bg-green-50 w-12 h-12 rounded-2xl flex items-center justify-center text-green-500 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,52 +138,6 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
 
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-6">
-            {/* Save Current Section (Inside Drawer) */}
-            {tasks.length > 0 && (
-              <div className="mb-8">
-                {!isSavingInternal ? (
-                  <button
-                    onClick={() => setIsSavingInternal(true)}
-                    className="w-full bg-blue-50 text-blue-600 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-100 transition-all border border-blue-100"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Save Current List
-                  </button>
-                ) : (
-                  <form onSubmit={handleSave} className="bg-blue-50 border border-blue-100 p-4 rounded-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-                    <label className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">
-                      Routine Name
-                    </label>
-                    <input
-                      autoFocus
-                      type="text"
-                      value={routineName}
-                      onChange={(e) => setRoutineName(e.target.value)}
-                      placeholder="e.g., Morning Focus"
-                      className="w-full bg-white border border-blue-100 rounded-xl px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        type="submit"
-                        className="flex-1 bg-blue-500 text-white py-2 rounded-xl text-sm font-bold hover:bg-blue-600 transition-colors"
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsSavingInternal(false)}
-                        className="flex-1 bg-white text-gray-400 py-2 rounded-xl text-sm font-bold hover:text-gray-600 transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
-
             {/* List Section */}
             <div className="space-y-4">
               <h3 className="text-xs font-black text-gray-300 uppercase tracking-widest">Saved Libraries</h3>
@@ -233,7 +187,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
       {confirmLoadId && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmLoadId(null)} />
-          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-blue-100 max-w-sm w-full relative z-[70] animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-blue-100 max-w-sm w-full relative z-[70]">
             <div className="bg-blue-50 w-12 h-12 rounded-2xl flex items-center justify-center text-blue-500 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -264,7 +218,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
       {confirmDeleteId && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmDeleteId(null)} />
-          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70] animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70]">
             <div className="bg-red-50 w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

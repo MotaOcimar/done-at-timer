@@ -60,7 +60,7 @@ const ActiveTask = () => {
 
   if (allCompleted) {
     return (
-      <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+      <div className="mb-10">
         <button
           onClick={() => resetTasks()}
           className="w-full bg-white border-2 border-green-500 text-green-600 py-4 rounded-2xl font-bold text-lg hover:bg-green-50 transition-all shadow-lg shadow-green-50 flex items-center justify-center gap-2"
