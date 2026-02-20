@@ -1,0 +1,9 @@
+{
+  "id": "visual_feedback_20260220",
+  "name": "Visual Feedback for Completed Tasks",
+  "description": "Make completed tasks visually distinct (dimmed, strikethrough, checkmark icon) to clearly indicate progress.",
+  "type": "feature",
+  "status": "todo",
+  "created_at": "2026-02-20",
+  "updated_at": "2026-02-20"
+}

@@ -35,4 +35,21 @@ describe('TaskItem', () => {
     
     expect(useTaskStore.getState().activeTaskId).toBe(taskFromStore.id);
   });
+
+  it('renders correctly when task is completed', () => {
+    const completedTask: Task = { ...task, status: 'COMPLETED' };
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    
+    // Title should have line-through
+    const title = screen.getByText('Test Task');
+    expect(title).toHaveClass('line-through');
+    
+    // Should have a checkmark icon instead of play button
+    expect(screen.queryByRole('button', { name: /play/i })).not.toBeInTheDocument();
+    expect(screen.getByTestId('checkmark-icon')).toBeInTheDocument();
+    
+    // Container should be dimmed
+    const container = title.closest('div.flex.items-center.justify-between');
+    expect(container).toHaveClass('opacity-50');
+  });
 });
