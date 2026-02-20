@@ -7,11 +7,11 @@
 
 ## Phase 2: UI Implementation
 
-- [~] Task: Create a `RoutineManager` component to display and manage saved routines
-- [ ] Task: Integrate `RoutineManager` into the main `App` layout
-- [ ] Task: Add a "Save Current" button/form near the task list
+- [x] Task: Create a `RoutineManager` component to display and manage saved routines (54273cd)
+- [x] Task: Integrate `RoutineManager` into the main `App` layout (54273cd)
+- [x] Task: Add a "Save Current" button/form near the task list (54273cd)
 
 ## Phase 3: UX Refinement
 
-- [ ] Task: Add confirmation when loading a routine if the current list is not empty
+- [~] Task: Add confirmation when loading a routine if the current list is not empty (54273cd)
 - [ ] Task: Final polish and responsive check
