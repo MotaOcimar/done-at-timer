@@ -53,3 +53,8 @@ Based on user feedback and planned improvements:
     - Add an optional confirmation step when a task timer ends ("Did you actually finish?").
     - Include a toggle setting to enable/disable this manual confirmation (auto-advance vs. manual advance).
 - **Refined Animations:** Change the "pulse" animation on progress bars to a "shimmer/wave" effect (left-to-right) to better convey forward momentum.
+
+## 7. Technical Debt
+
+- **Code Comments:** Translate Portuguese comments in `src/hooks/useTimer.ts` to English for consistency.
+- **Cleanup:** Remove unused `elapsedSeconds` variable in `src/store/useTaskStore.ts` inside the `pauseTask` action.
