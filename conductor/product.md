@@ -45,7 +45,7 @@ The primary value of this application is to solve the problem of **lateness due 
 
 Based on user feedback and planned improvements:
 
-- **Visual Feedback for Completed Tasks:** Completed tasks should be visually distinct (e.g., dimmed, strikethrough, checkmark icon) to clearly indicate progress.
+- **Dark Mode:** Implementation of a dark theme with a manual toggle for user preference.
 - **Inline Editing:** Allow users to edit task names and durations by simply clicking on them in the list.
 - **Drag & Drop Reordering:** Enable drag-and-drop functionality to easily reorder tasks in the list.
 - **Completion Checkpoint:**
