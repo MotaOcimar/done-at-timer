@@ -2,8 +2,8 @@
 
 ## Phase 1: Data Layer (Store)
 
-- [x] Task: Update `useTaskStore.ts` to include `routines` state and actions (`saveRoutine`, `loadRoutine`, `deleteRoutine`) (1378805)
-- [x] Task: Add unit tests for routine management in a new store test file (1378805)
+- [x] Task: Update `useTaskStore.ts` to include `routines` state and actions (`saveRoutine`, `loadRoutine`, `deleteRoutine`) (a022fb2)
+- [x] Task: Add unit tests for routine management in a new store test file (a022fb2)
 
 ## Phase 2: UI Implementation
 
