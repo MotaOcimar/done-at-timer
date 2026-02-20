@@ -50,6 +50,6 @@ describe('TaskItem', () => {
     
     // Container should be dimmed
     const container = title.closest('div.flex.items-center.justify-between');
-    expect(container).toHaveClass('opacity-50');
+    expect(container).toHaveClass('opacity-80');
   });
 });
