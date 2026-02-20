@@ -7,5 +7,5 @@
 
 ## Phase 2: Deployment
 
-- [~] Task: Build and Deploy to GitHub Pages
-- [ ] Task: Manual Verification of Live Site
+- [x] Task: Build and Deploy to GitHub Pages
+- [x] Task: Manual Verification of Live Site
