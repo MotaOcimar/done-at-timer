@@ -40,3 +40,16 @@ The primary value of this application is to solve the problem of **lateness due 
 - **User Confidence:** Users report feeling more in control of their time and less anxious about lateness.
 - **Reduced Lateness:** Users are able to arrive at appointments or finish routines on time more consistently.
 - **Engagement:** Frequent use of the app for daily routines.
+
+## 6. Future Roadmap & Feedback
+
+Based on user feedback and planned improvements:
+
+- **Deployment:** Deploy the application (e.g., GitHub Pages, Vercel) to make it accessible from any device.
+- **Visual Feedback for Completed Tasks:** Completed tasks should be visually distinct (e.g., dimmed, strikethrough, checkmark icon) to clearly indicate progress.
+- **Inline Editing:** Allow users to edit task names and durations by simply clicking on them in the list.
+- **Drag & Drop Reordering:** Enable drag-and-drop functionality to easily reorder tasks in the list.
+- **Completion Checkpoint:**
+    - Add an optional confirmation step when a task timer ends ("Did you actually finish?").
+    - Include a toggle setting to enable/disable this manual confirmation (auto-advance vs. manual advance).
+- **Refined Animations:** Change the "pulse" animation on progress bars to a "shimmer/wave" effect (left-to-right) to better convey forward momentum.

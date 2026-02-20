@@ -8,7 +8,7 @@ const ProgressBar = ({ progress, isActive = false }: ProgressBarProps) => {
 
   return (
     <div 
-      className="w-full bg-gray-100 rounded-full h-3 mb-1 overflow-hidden" 
+      className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden" 
       role="progressbar" 
       aria-valuenow={percentage} 
       aria-valuemin={0} 

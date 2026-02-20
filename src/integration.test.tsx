@@ -14,8 +14,8 @@ describe('Playlist Execution Integration', () => {
 
     render(<App />);
 
-    // Check if Routine Progress is present
-    expect(screen.getByText('Routine Progress')).toBeInTheDocument();
+    // Check if Arrival Display is present
+    expect(screen.getByText('You will be done at')).toBeInTheDocument();
 
     // Deve haver botões de Play para as tarefas
     const playButtons = screen.getAllByRole('button', { name: /Play task/i });
