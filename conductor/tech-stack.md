@@ -14,6 +14,8 @@
   - _Reasoning:_ Lightweight, simple, and effective state management for React apps.
 - **Icons:** **Lucide React** or **Heroicons**
   - _Reasoning:_ Clean, modern SVG icons that work perfectly with React and Tailwind.
+- **Effects:** **canvas-confetti**
+  - _Reasoning:_ Lightweight library for celebration animations.
 
 ## 2. Backend (Optional for MVP, likely Local Storage initially)
 
