@@ -1,7 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TaskList } from './TaskList';
 import { useTaskStore } from '../store/useTaskStore';
+
+vi.mock('@dnd-kit/core', async (importOriginal) => {
+  const actual = await importOriginal() as any;
+  return {
+    ...actual,
+    DndContext: vi.fn(({ children }) => <div data-testid="dnd-context">{children}</div>),
+  };
+});
+
+vi.mock('@dnd-kit/sortable', async (importOriginal) => {
+  const actual = await importOriginal() as any;
+  return {
+    ...actual,
+    SortableContext: vi.fn(({ children }) => <div data-testid="sortable-context">{children}</div>),
+  };
+});
 
 describe('TaskList', () => {
   beforeEach(() => {
@@ -48,5 +64,16 @@ describe('TaskList', () => {
 
     render(<TaskList />);
     expect(screen.getByRole('button', { name: /restart routine/i })).toBeInTheDocument();
+  });
+
+  it('renders sortable tasks within a DndContext and SortableContext', () => {
+    useTaskStore.setState({
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+    });
+
+    render(<TaskList />);
+    
+    expect(screen.getByTestId('dnd-context')).toBeInTheDocument();
+    expect(screen.getByTestId('sortable-context')).toBeInTheDocument();
   });
 });

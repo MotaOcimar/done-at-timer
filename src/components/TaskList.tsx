@@ -1,4 +1,18 @@
 import { useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { useTaskStore } from '../store/useTaskStore';
 import { TaskItem } from './TaskItem';
 
@@ -12,6 +26,17 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const removeTask = useTaskStore((state) => state.removeTask);
   const clearTasks = useTaskStore((state) => state.clearTasks);
   const resetTasks = useTaskStore((state) => state.resetTasks);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
@@ -102,9 +127,17 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
       )}
 
       {tasks.length > 0 ? (
-        tasks.map((task) => (
-          <TaskItem key={task.id} task={task} onDelete={removeTask} />
-        ))
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={() => {}}
+        >
+          <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
+            {tasks.map((task) => (
+              <TaskItem key={task.id} task={task} onDelete={removeTask} />
+            ))}
+          </SortableContext>
+        </DndContext>
       ) : (
         <div className="text-center py-8 text-gray-400">
           No tasks yet. Add one above or load a routine!
