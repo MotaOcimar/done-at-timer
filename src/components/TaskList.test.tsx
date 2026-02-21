@@ -7,7 +7,11 @@ vi.mock('@dnd-kit/core', async (importOriginal) => {
   const actual = await importOriginal() as any;
   return {
     ...actual,
-    DndContext: vi.fn(({ children }) => <div data-testid="dnd-context">{children}</div>),
+    DndContext: vi.fn(({ children, onDragEnd }) => (
+      <div data-testid="dnd-context" onClick={() => onDragEnd && onDragEnd({ active: { id: '1' }, over: { id: '2' } })}>
+        {children}
+      </div>
+    )),
   };
 });
 
@@ -75,5 +79,23 @@ describe('TaskList', () => {
     
     expect(screen.getByTestId('dnd-context')).toBeInTheDocument();
     expect(screen.getByTestId('sortable-context')).toBeInTheDocument();
+  });
+
+  it('updates store on drag end', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+      ],
+    });
+
+    render(<TaskList />);
+    
+    // Trigger the mock drag end by clicking the dnd-context div
+    fireEvent.click(screen.getByTestId('dnd-context'));
+    
+    const { tasks } = useTaskStore.getState();
+    expect(tasks[0].id).toBe('2');
+    expect(tasks[1].id).toBe('1');
   });
 });

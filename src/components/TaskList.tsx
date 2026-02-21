@@ -26,6 +26,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const removeTask = useTaskStore((state) => state.removeTask);
   const clearTasks = useTaskStore((state) => state.clearTasks);
   const resetTasks = useTaskStore((state) => state.resetTasks);
+  const reorderTasks = useTaskStore((state) => state.reorderTasks);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -40,6 +41,14 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      reorderTasks(active.id.toString(), over.id.toString());
+    }
+  };
 
   const allCompleted =
     tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
@@ -130,7 +139,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragEnd={() => {}}
+          onDragEnd={handleDragEnd}
         >
           <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
             {tasks.map((task) => (
