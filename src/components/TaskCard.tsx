@@ -108,9 +108,9 @@ const TaskCard = ({
     <div 
       ref={setNodeRef}
       style={style}
-      className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
+      className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border ${
         isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' : isCompleted ? 'border-green-100 bg-green-50/50' : 'border-gray-100 bg-white'
-      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50' : ''}`}
+      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 transition-none select-none' : 'transition-all duration-300'}`}
     >
       <div className="flex items-center gap-4">
         {/* Drag Handle */}

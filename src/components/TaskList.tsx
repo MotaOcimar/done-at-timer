@@ -54,10 +54,11 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeTask, setActiveTask] = useState<any | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id.toString());
+    const task = tasks.find((t) => t.id === event.active.id);
+    if (task) setActiveTask(task);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -67,10 +68,8 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
       reorderTasks(active.id.toString(), over.id.toString());
     }
 
-    setActiveId(null);
+    setActiveTask(null);
   };
-
-  const activeTask = activeId ? tasks.find((t) => t.id === activeId) : null;
 
   const allCompleted =
     tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
@@ -169,9 +168,9 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
               <TaskItem key={task.id} task={task} onDelete={removeTask} />
             ))}
           </SortableContext>
-          <DragOverlay adjustScale={true}>
+          <DragOverlay adjustScale={false}>
             {activeTask ? (
-              <div className="w-full opacity-80 scale-105 transition-transform">
+              <div className="w-full opacity-90 shadow-2xl transition-none pointer-events-none">
                 <TaskCard 
                   task={activeTask} 
                   isActive={activeTask.id === activeTaskIdFromStore}
