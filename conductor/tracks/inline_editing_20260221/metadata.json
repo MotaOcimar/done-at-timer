@@ -1,0 +1,8 @@
+{
+  "track_id": "inline_editing_20260221",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-21T00:00:00Z",
+  "updated_at": "2026-02-21T00:00:00Z",
+  "description": "Allow users to edit task names and durations inline within the task list."
+}
