@@ -4,6 +4,21 @@ import { TaskItem } from './TaskItem';
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 
+vi.mock('@dnd-kit/sortable', async (importOriginal) => {
+  const actual = await importOriginal() as any;
+  return {
+    ...actual,
+    useSortable: vi.fn(() => ({
+      attributes: { 'data-testid': 'sortable-attributes' },
+      listeners: {},
+      setNodeRef: vi.fn(),
+      transform: null,
+      transition: null,
+      isDragging: false,
+    })),
+  };
+});
+
 describe('TaskItem', () => {
   const task: Task = { id: '1', title: 'Test Task', duration: 30, status: 'PENDING' };
 
@@ -106,5 +121,13 @@ describe('TaskItem', () => {
     expect(updatedTask.title).toBe('Test Task');
     expect(screen.getByText('Test Task')).toBeInTheDocument();
     expect(screen.queryByDisplayValue('Cancelled Change')).not.toBeInTheDocument();
+  });
+
+  it('is sortable', () => {
+    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    
+    // The main container should have the attributes from useSortable mock
+    const container = screen.getByText('Test Task').closest('.flex.flex-col');
+    expect(container).toHaveAttribute('data-testid', 'sortable-attributes');
   });
 });

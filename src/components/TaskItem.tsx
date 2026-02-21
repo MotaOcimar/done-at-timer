@@ -2,6 +2,8 @@ import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { useEffect } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
 
@@ -75,6 +77,21 @@ const StatusIcon = ({
 };
 
 const TaskItem = ({ task, onDelete }: TaskItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: task.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+  };
+
   const startTask = useTaskStore((state) => state.startTask);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
@@ -143,9 +160,13 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
 
   return (
     <div 
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
         isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' : isCompleted ? 'border-green-100 bg-green-50/50' : 'border-gray-100 bg-white'
-      } ${isCompleted ? 'opacity-70' : ''}`}
+      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 cursor-grabbing' : 'cursor-grab'}`}
     >
       <div className="flex items-center gap-4">
         {/* Consistent Status Icon Area */}
