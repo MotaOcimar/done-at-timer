@@ -3,7 +3,7 @@
 This plan outlines the steps to integrate `dnd-kit` for task reordering, following the TDD methodology defined in the project workflow.
 
 ## Phase 1: Store & Core Logic
-- [ ] Task: Install `dnd-kit` dependencies
+- [x] Task: Install `dnd-kit` dependencies 67a2e6f
 - [ ] Task: Extend `useTaskStore` with reordering logic
     - [ ] Red: Write test for `reorderTasks(activeId, overId)` action in `useTaskStore.test.ts`.
     - [ ] Green: Implement the `reorderTasks` action using `arrayMove` from `dnd-kit`.
