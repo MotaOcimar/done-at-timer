@@ -45,23 +45,24 @@ describe('useTaskStore', () => {
       tasks: [{ id: '1', title: 'T1', duration: 10, status: 'PENDING' }],
     });
 
-        useTaskStore.getState().clearTasks();
-        expect(useTaskStore.getState().tasks).toHaveLength(0);
-      });
-    
-      it('should reorder tasks', () => {
-        useTaskStore.setState({
-          tasks: [
-            { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-            { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
-            { id: '3', title: 'Task 3', duration: 30, status: 'PENDING' },
-                ],
-              });
-          
-              useTaskStore.getState().reorderTasks('1', '2');
-          
-              const { tasks } = useTaskStore.getState();        expect(tasks[0].id).toBe('2');
-        expect(tasks[1].id).toBe('1');
-        expect(tasks[2].id).toBe('3');
-      });
+    useTaskStore.getState().clearTasks();
+    expect(useTaskStore.getState().tasks).toHaveLength(0);
+  });
+
+  it('should reorder tasks', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        { id: '3', title: 'Task 3', duration: 30, status: 'PENDING' },
+      ],
     });
+
+    useTaskStore.getState().reorderTasks('1', '2');
+
+    const { tasks } = useTaskStore.getState();
+    expect(tasks[0].id).toBe('2');
+    expect(tasks[1].id).toBe('1');
+    expect(tasks[2].id).toBe('3');
+  });
+});
