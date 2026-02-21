@@ -8,7 +8,7 @@
     - Add logic to recalculate `targetEndTime` if the active task's duration is modified.
 - [x] Task: Conductor - User Manual Verification 'Store Logic Updates' (Protocol in workflow.md) 90bab79
 
-## Phase 2: UI Implementation
+## Phase 2: UI Implementation [checkpoint: c9008d9]
 - [x] Task: Create `InlineEdit` component logic in `src/components/TaskItem.tsx` 0d5afe0
     - Implement toggle state (view/edit).
     - Handle `autoFocus`, `onBlur` (save), `onKeyDown` (Enter=save, Escape=cancel).
@@ -17,4 +17,4 @@
     - Connect to `updateTask` store action.
 - [x] Task: Update `src/components/TaskItem.test.tsx` 0d5afe0
     - Add tests for entering edit mode, saving changes, and cancelling.
-- [ ] Task: Conductor - User Manual Verification 'UI Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'UI Implementation' (Protocol in workflow.md) c9008d9
