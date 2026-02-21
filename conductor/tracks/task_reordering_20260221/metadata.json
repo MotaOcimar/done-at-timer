@@ -1,0 +1,8 @@
+{
+  "track_id": "task_reordering_20260221",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-21T10:00:00Z",
+  "updated_at": "2026-02-21T10:00:00Z",
+  "description": "Implement task reordering using drag and drop (dnd-kit)."
+}
