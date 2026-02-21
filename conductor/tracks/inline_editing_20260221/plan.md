@@ -9,12 +9,12 @@
 - [x] Task: Conductor - User Manual Verification 'Store Logic Updates' (Protocol in workflow.md) 90bab79
 
 ## Phase 2: UI Implementation
-- [ ] Task: Create `InlineEdit` component logic in `src/components/TaskItem.tsx`
+- [x] Task: Create `InlineEdit` component logic in `src/components/TaskItem.tsx` 0d5afe0
     - Implement toggle state (view/edit).
     - Handle `autoFocus`, `onBlur` (save), `onKeyDown` (Enter=save, Escape=cancel).
-- [ ] Task: Integrate Inline Editing into `TaskItem`
+- [x] Task: Integrate Inline Editing into `TaskItem` 0d5afe0
     - Replace Task Name and Duration text with the editable component.
     - Connect to `updateTask` store action.
-- [ ] Task: Update `src/components/TaskItem.test.tsx`
+- [x] Task: Update `src/components/TaskItem.test.tsx` 0d5afe0
     - Add tests for entering edit mode, saving changes, and cancelling.
 - [ ] Task: Conductor - User Manual Verification 'UI Implementation' (Protocol in workflow.md)
