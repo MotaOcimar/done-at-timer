@@ -6,8 +6,10 @@ import {
   PointerSensor,
   MouseSensor,
   TouchSensor,
+  DragOverlay,
   useSensor,
   useSensors,
+  type DragStartEvent,
   type DragEndEvent,
 } from '@dnd-kit/core';
 import {
@@ -49,6 +51,11 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id.toString());
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -56,7 +63,11 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
     if (over && active.id !== over.id) {
       reorderTasks(active.id.toString(), over.id.toString());
     }
+
+    setActiveId(null);
   };
+
+  const activeTask = activeId ? tasks.find((t) => t.id === activeId) : null;
 
   const allCompleted =
     tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
@@ -147,6 +158,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
@@ -154,6 +166,13 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
               <TaskItem key={task.id} task={task} onDelete={removeTask} />
             ))}
           </SortableContext>
+          <DragOverlay adjustScale={true}>
+            {activeTask ? (
+              <div className="w-full opacity-80 scale-105 transition-transform">
+                <TaskItem task={activeTask} onDelete={() => {}} />
+              </div>
+            ) : null}
+          </DragOverlay>
         </DndContext>
       ) : (
         <div className="text-center py-8 text-gray-400">
