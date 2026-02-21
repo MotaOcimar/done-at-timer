@@ -126,8 +126,8 @@ describe('TaskItem', () => {
   it('is sortable', () => {
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
-    // The main container should have the attributes from useSortable mock
-    const container = screen.getByText('Test Task').closest('.flex.flex-col');
-    expect(container).toHaveAttribute('data-testid', 'sortable-attributes');
+    // The handle should have the attributes from useSortable mock
+    const handle = screen.getByLabelText(/drag to reorder/i);
+    expect(handle).toHaveAttribute('data-testid', 'sortable-attributes');
   });
 });

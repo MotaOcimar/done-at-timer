@@ -163,13 +163,23 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
     <div 
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
       className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
         isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' : isCompleted ? 'border-green-100 bg-green-50/50' : 'border-gray-100 bg-white'
-      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 cursor-grabbing' : 'cursor-grab'}`}
+      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50' : ''}`}
     >
       <div className="flex items-center gap-4">
+        {/* Drag Handle */}
+        <div 
+          {...attributes} 
+          {...listeners}
+          className={`flex-shrink-0 cursor-grab active:cursor-grabbing p-1 -ml-1 text-gray-300 hover:text-gray-500 transition-colors ${isDragging ? 'cursor-grabbing' : ''}`}
+          aria-label="Drag to reorder"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+          </svg>
+        </div>
+
         {/* Consistent Status Icon Area */}
         <div className="flex-shrink-0">
           <StatusIcon 

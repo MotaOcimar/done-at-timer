@@ -10,16 +10,16 @@ This plan outlines the steps to integrate `dnd-kit` for task reordering, followi
 - [x] Task: Conductor - User Manual Verification 'Store & Core Logic' (Protocol in workflow.md) 531b9b3
 
 ## Phase 2: UI Integration (TaskList & TaskItem)
-- [ ] Task: Integrate `DndContext` and `SortableContext` into `TaskList`
-    - [ ] Red: Write test for `TaskList` to ensure it renders with a sortable wrapper.
-    - [ ] Green: Wrap the list in `DndContext` and `SortableContext`.
-- [ ] Task: Make `TaskItem` sortable
-    - [ ] Red: Write test in `TaskItem.test.tsx` to verify it uses the `useSortable` hook (checking for attributes/listeners).
-    - [ ] Green: Implement `useSortable` in `TaskItem` and apply styles for transformation and opacity.
-- [ ] Task: Handle the `onDragEnd` event in `TaskList`
-    - [ ] Red: Write integration test verifying that dragging an item triggers the store update.
-    - [ ] Green: Implement the `handleDragEnd` function in `TaskList`.
-- [ ] Task: Conductor - User Manual Verification 'UI Integration' (Protocol in workflow.md)
+- [x] Task: Integrate `DndContext` and `SortableContext` into `TaskList` d0bbeab
+    - [x] Red: Write test for `TaskList` to ensure it renders with a sortable wrapper.
+    - [x] Green: Wrap the list in `DndContext` and `SortableContext`.
+- [x] Task: Make `TaskItem` sortable af3bb0e
+    - [x] Red: Write test in `TaskItem.test.tsx` to verify it uses the `useSortable` hook (checking for attributes/listeners).
+    - [x] Green: Implement `useSortable` in `TaskItem` and apply styles for transformation and opacity.
+- [x] Task: Handle the `onDragEnd` event in `TaskList` 0029e1d
+    - [x] Red: Write integration test verifying that dragging an item triggers the store update.
+    - [x] Green: Implement the `handleDragEnd` function in `TaskList`.
+- [~] Task: Conductor - User Manual Verification 'UI Integration' (Protocol in workflow.md)
 
 ## Phase 3: UX Refinement & Polish
 - [ ] Task: Add Drag Handle and Visual Styles
