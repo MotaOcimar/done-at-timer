@@ -19,13 +19,17 @@ This plan outlines the steps to integrate `dnd-kit` for task reordering, followi
 - [x] Task: Handle the `onDragEnd` event in `TaskList` 0029e1d
     - [x] Red: Write integration test verifying that dragging an item triggers the store update.
     - [x] Green: Implement the `handleDragEnd` function in `TaskList`.
-- [~] Task: Conductor - User Manual Verification 'UI Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'UI Integration' (Protocol in workflow.md) 7355e33
 
-## Phase 3: UX Refinement & Polish
-- [ ] Task: Add Drag Handle and Visual Styles
-    - [ ] Red: Write test to ensure the drag handle is present and interactive.
-    - [ ] Green: Style the dragging state (active item) and add a specific drag handle icon if needed.
-- [ ] Task: Verify persistence and timer stability
+## Phase 3: UX Refinement & Polish [checkpoint: 7355e33]
+- [x] Task: Add Drag Handle and Visual Styles fe1c64c
+    - [x] Red: Write test to ensure the drag handle is present and interactive.
+    - [x] Green: Style the dragging state (active item) and add a specific drag handle icon if needed.
+- [x] Task: SOLID Refactoring - Extract TaskCard from TaskItem a71cf48
+    - [x] Red: Create `TaskCard.test.tsx` to define visual states independently.
+    - [x] Green: Extract visual logic to `TaskCard.tsx` and refactor `TaskItem.tsx` to use it.
+    - [x] Green: Update `DragOverlay` in `TaskList.tsx` to use the pure `TaskCard`.
+- [~] Task: Verify persistence and timer stability
     - [ ] Red: Test that reordering during an active timer does not reset the state.
     - [ ] Green: Ensure the store updates are reflected in Local Storage and the `Arrival Clock` remains accurate.
 - [ ] Task: Conductor - User Manual Verification 'UX Refinement & Polish' (Protocol in workflow.md)

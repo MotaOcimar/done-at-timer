@@ -170,7 +170,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
           </SortableContext>
           <DragOverlay adjustScale={false}>
             {activeTask ? (
-              <div className="w-full opacity-90 shadow-2xl transition-none pointer-events-none">
+              <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
                 <TaskCard 
                   task={activeTask} 
                   isActive={activeTask.id === activeTaskIdFromStore}
