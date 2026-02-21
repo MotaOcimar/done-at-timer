@@ -18,3 +18,6 @@
 - [x] Task: Update `src/components/TaskItem.test.tsx` 0d5afe0
     - Add tests for entering edit mode, saving changes, and cancelling.
 - [x] Task: Conductor - User Manual Verification 'UI Implementation' (Protocol in workflow.md) c9008d9
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions c65ff39
