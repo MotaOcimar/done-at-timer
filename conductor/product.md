@@ -13,7 +13,8 @@ O usuário quer construir um aplicativo de timer focado na _previsão de términ
   - **Previsão Total:** O app soma todos os tempos da lista e mostra, com destaque, o _horário previsto para terminar toda a lista_.
 - **Execução Flexível:**
   - O usuário inicia (dá play) em cada tarefa individualmente.
-  - A ordem de execução é livre; o usuário pode dar play em qualquer timer da lista, não necessariamente na ordem criada.
+  - A ordem de execução é livre; o usuário pode dar play em qualquer timer da lista.
+  - **Reordenação Intuitiva:** O usuário pode reorganizar a ordem das tarefas arrastando-as (Drag and Drop), facilitando o planejamento da rotina.
 
 ## 2. Core Value Proposition
 

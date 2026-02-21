@@ -14,6 +14,8 @@
   - _Reasoning:_ Lightweight, simple, and effective state management for React apps.
 - **Icons:** **Lucide React** or **Heroicons**
   - _Reasoning:_ Clean, modern SVG icons that work perfectly with React and Tailwind.
+- **Drag and Drop:** **@dnd-kit/core** and **@dnd-kit/sortable**
+  - _Reasoning:_ Modern, lightweight, and highly accessible toolkit for drag and drop in React.
 - **Effects:** **canvas-confetti**
   - _Reasoning:_ Lightweight library for celebration animations.
 
