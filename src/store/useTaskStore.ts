@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { arrayMove } from '@dnd-kit/sortable';
 import type { Task, Routine } from '../types';
 
 const generateId = () => {
@@ -28,6 +29,7 @@ interface TaskState {
   saveRoutine: (name: string) => void;
   loadRoutine: (id: string) => void;
   deleteRoutine: (id: string) => void;
+  reorderTasks: (activeId: string, overId: string) => void;
 }
 
 export const useTaskStore = create<TaskState>()(
@@ -201,6 +203,20 @@ export const useTaskStore = create<TaskState>()(
         set((state) => ({
           routines: state.routines.filter((r) => r.id !== id),
         }));
+      },
+      reorderTasks: (activeId, overId) => {
+        set((state) => {
+          const oldIndex = state.tasks.findIndex((t) => t.id === activeId);
+          const newIndex = state.tasks.findIndex((t) => t.id === overId);
+
+          if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+            return {
+              tasks: arrayMove(state.tasks, oldIndex, newIndex),
+            };
+          }
+
+          return state;
+        });
       },
     }),
     {
