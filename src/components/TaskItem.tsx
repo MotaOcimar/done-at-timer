@@ -3,6 +3,7 @@ import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { useEffect } from 'react';
 import { ProgressBar } from './ProgressBar';
+import { InlineEdit } from './InlineEdit';
 
 interface TaskItemProps {
   task: Task;
@@ -121,6 +122,19 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
     }
   };
 
+  const handleTitleSave = (newTitle: string) => {
+    if (newTitle !== task.title) {
+      updateTask(task.id, { title: newTitle });
+    }
+  };
+
+  const handleDurationSave = (newDuration: string) => {
+    const duration = parseInt(newDuration, 10);
+    if (!isNaN(duration) && duration > 0 && duration !== task.duration) {
+      updateTask(task.id, { duration });
+    }
+  };
+
   const isActuallyPaused = isActive && !targetEndTime;
   const totalDurationSecs = task.duration * 60;
   const progress = Math.max(0, Math.min(1, 1 - (timeLeft / totalDurationSecs)));
@@ -149,12 +163,23 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
           <h3 className={`font-bold transition-all truncate ${
             isActive ? 'text-blue-700 text-lg' : 'text-gray-800'
           } ${isCompleted ? 'line-through text-gray-400 font-medium' : ''}`}>
-            {task.title}
+            <InlineEdit
+              value={task.title}
+              onSave={handleTitleSave}
+              ariaLabel="Task title"
+              className="w-full"
+            />
           </h3>
           <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${
             isActive ? 'text-blue-400' : 'text-gray-400'
           }`}>
-            {task.duration} min {isActive ? 'total' : ''}
+            <InlineEdit
+              value={task.duration}
+              onSave={handleDurationSave}
+              type="number"
+              ariaLabel="Task duration"
+              className="inline-block w-12 text-center"
+            /> min {isActive ? 'total' : ''}
           </p>
         </div>
 

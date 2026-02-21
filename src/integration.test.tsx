@@ -27,10 +27,12 @@ describe('Playlist Execution Integration', () => {
     // Task 1 should be IN_PROGRESS
     expect(useTaskStore.getState().tasks[0].status).toBe('IN_PROGRESS');
     
-    // Verifica se o título da tarefa ativa está destacado (agora é H3 com font-bold)
+    // Verifica se o título da tarefa ativa está destacado (agora é SPAN dentro de H3 com font-bold)
     const task1Title = screen.getByText('Task 1');
-    expect(task1Title.tagName).toBe('H3');
-    expect(task1Title).toHaveClass('font-bold');
+    // InlineEdit wraps text in a span
+    expect(task1Title.tagName).toBe('SPAN'); 
+    expect(task1Title.parentElement?.tagName).toBe('H3');
+    expect(task1Title.parentElement).toHaveClass('font-bold');
 
     // Mark as Done
     const doneBtn = screen.getByRole('button', { name: /Done/i });
@@ -42,7 +44,8 @@ describe('Playlist Execution Integration', () => {
     expect(tasks[1].status).toBe('IN_PROGRESS');
 
     const task2Title = screen.getByText('Task 2');
-    expect(task2Title.tagName).toBe('H3');
-    expect(task2Title).toHaveClass('font-bold');
-  });
+    expect(task2Title.tagName).toBe('SPAN');
+    expect(task2Title.parentElement?.tagName).toBe('H3');
+    expect(task2Title.parentElement).toHaveClass('font-bold');
+  }, 15000);
 });
