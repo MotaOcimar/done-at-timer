@@ -167,7 +167,6 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
               value={task.title}
               onSave={handleTitleSave}
               ariaLabel="Task title"
-              className="w-full"
             />
           </h3>
           <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${
@@ -178,7 +177,7 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
               onSave={handleDurationSave}
               type="number"
               ariaLabel="Task duration"
-              className="inline-block w-12 text-center"
+              className="mr-0"
             /> min {isActive ? 'total' : ''}
           </p>
         </div>
