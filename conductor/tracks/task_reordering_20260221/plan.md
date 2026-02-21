@@ -33,3 +33,6 @@ This plan outlines the steps to integrate `dnd-kit` for task reordering, followi
     - [x] Red: Test that reordering during an active timer does not reset the state.
     - [x] Green: Ensure the store updates are reflected in Local Storage and the `Arrival Clock` remains accurate.
 - [x] Task: Conductor - User Manual Verification 'UX Refinement & Polish' (Protocol in workflow.md) 6d42572
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions dee790f
