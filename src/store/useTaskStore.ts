@@ -59,13 +59,26 @@ export const useTaskStore = create<TaskState>()(
         })),
       updateTask: (id, updates) =>
         set((state) => {
-          const newTasks = state.tasks.map((task) =>
-            task.id === id ? { ...task, ...updates } : task
-          );
-          
           let activeTaskId = state.activeTaskId;
           let targetEndTime = state.targetEndTime;
           let totalElapsedBeforePause = state.totalElapsedBeforePause;
+
+          // If updating duration of the currently active task, adjust the target end time
+          if (
+            id === activeTaskId &&
+            typeof updates.duration === 'number' &&
+            targetEndTime
+          ) {
+            const oldTask = state.tasks.find((t) => t.id === id);
+            if (oldTask) {
+              const durationDiff = updates.duration - oldTask.duration;
+              targetEndTime += durationDiff * 60 * 1000;
+            }
+          }
+
+          const newTasks = state.tasks.map((task) =>
+            task.id === id ? { ...task, ...updates } : task
+          );
 
           if (updates.status === 'IN_PROGRESS') {
             activeTaskId = id;
