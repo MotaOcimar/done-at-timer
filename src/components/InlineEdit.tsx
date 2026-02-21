@@ -71,18 +71,25 @@ export const InlineEdit = ({
 
   if (isEditing) {
     return (
-      <input
-        ref={inputRef}
-        type={type}
-        value={currentValue}
-        onChange={(e) => setCurrentValue(e.target.value)}
-        onBlur={handleSave}
-        onKeyDown={handleKeyDown}
-        onClick={(e) => e.stopPropagation()}
-        className={`bg-white text-gray-900 border border-blue-300 rounded px-1 -mx-1 outline-none ring-2 ring-blue-200 w-full ${className}`}
-        aria-label={ariaLabel}
-        min={type === 'number' ? 1 : undefined}
-      />
+      <span className="inline-grid items-center align-bottom">
+        <span className="invisible row-start-1 col-start-1 px-1 -mx-1 whitespace-pre font-[inherit] text-inherit">
+          {currentValue || ' '}
+        </span>
+        <input
+          ref={inputRef}
+          type={type === 'number' ? 'text' : type}
+          inputMode={type === 'number' ? 'numeric' : undefined}
+          pattern={type === 'number' ? '[0-9]*' : undefined}
+          size={1}
+          value={currentValue}
+          onChange={(e) => setCurrentValue(e.target.value)}
+          onBlur={handleSave}
+          onKeyDown={handleKeyDown}
+          onClick={(e) => e.stopPropagation()}
+          className={`row-start-1 col-start-1 bg-transparent text-inherit border-b border-blue-500/30 focus:border-blue-500/60 outline-none px-1 -mx-1 min-w-0 transition-colors font-[inherit] ${className}`}
+          aria-label={ariaLabel}
+        />
+      </span>
     );
   }
 
