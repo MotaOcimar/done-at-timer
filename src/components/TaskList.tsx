@@ -19,6 +19,7 @@ import {
 } from '@dnd-kit/sortable';
 import { useTaskStore } from '../store/useTaskStore';
 import { TaskItem } from './TaskItem';
+import { TaskCard } from './TaskCard';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
@@ -31,6 +32,8 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const clearTasks = useTaskStore((state) => state.clearTasks);
   const resetTasks = useTaskStore((state) => state.resetTasks);
   const reorderTasks = useTaskStore((state) => state.reorderTasks);
+  const activeTaskTimeLeft = useTaskStore((state) => state.activeTaskTimeLeft);
+  const activeTaskIdFromStore = useTaskStore((state) => state.activeTaskId);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -169,7 +172,19 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
           <DragOverlay adjustScale={true}>
             {activeTask ? (
               <div className="w-full opacity-80 scale-105 transition-transform">
-                <TaskItem task={activeTask} onDelete={() => {}} />
+                <TaskCard 
+                  task={activeTask} 
+                  isActive={activeTask.id === activeTaskIdFromStore}
+                  isCompleted={activeTask.status === 'COMPLETED'}
+                  isDragging={true}
+                  timeLeft={activeTask.id === activeTaskIdFromStore ? (activeTaskTimeLeft ?? 0) : 0}
+                  progress={activeTask.id === activeTaskIdFromStore ? (1 - ((activeTaskTimeLeft ?? 0) / (activeTask.duration * 60))) : 0}
+                  onDelete={() => {}}
+                  onToggle={() => {}}
+                  onTitleSave={() => {}}
+                  onDurationSave={() => {}}
+                  onComplete={() => {}}
+                />
               </div>
             ) : null}
           </DragOverlay>
