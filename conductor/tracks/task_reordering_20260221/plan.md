@@ -21,7 +21,7 @@ This plan outlines the steps to integrate `dnd-kit` for task reordering, followi
     - [x] Green: Implement the `handleDragEnd` function in `TaskList`.
 - [x] Task: Conductor - User Manual Verification 'UI Integration' (Protocol in workflow.md) 7355e33
 
-## Phase 3: UX Refinement & Polish [checkpoint: 7355e33]
+## Phase 3: UX Refinement & Polish [checkpoint: 6d42572]
 - [x] Task: Add Drag Handle and Visual Styles fe1c64c
     - [x] Red: Write test to ensure the drag handle is present and interactive.
     - [x] Green: Style the dragging state (active item) and add a specific drag handle icon if needed.
@@ -29,7 +29,7 @@ This plan outlines the steps to integrate `dnd-kit` for task reordering, followi
     - [x] Red: Create `TaskCard.test.tsx` to define visual states independently.
     - [x] Green: Extract visual logic to `TaskCard.tsx` and refactor `TaskItem.tsx` to use it.
     - [x] Green: Update `DragOverlay` in `TaskList.tsx` to use the pure `TaskCard`.
-- [~] Task: Verify persistence and timer stability
-    - [ ] Red: Test that reordering during an active timer does not reset the state.
-    - [ ] Green: Ensure the store updates are reflected in Local Storage and the `Arrival Clock` remains accurate.
-- [ ] Task: Conductor - User Manual Verification 'UX Refinement & Polish' (Protocol in workflow.md)
+- [x] Task: Verify persistence and timer stability 6d42572
+    - [x] Red: Test that reordering during an active timer does not reset the state.
+    - [x] Green: Ensure the store updates are reflected in Local Storage and the `Arrival Clock` remains accurate.
+- [x] Task: Conductor - User Manual Verification 'UX Refinement & Polish' (Protocol in workflow.md) 6d42572
