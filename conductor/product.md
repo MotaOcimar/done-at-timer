@@ -33,6 +33,7 @@ The primary value of this application is to solve the problem of **lateness due 
 - **Dynamic Update:** As tasks are completed or time passes, the "Arrival Clock" updates to reflect the new reality.
 - **Task Lists:** Users can create lists of tasks with defined durations (e.g., "Morning Routine").
 - **Flexible Execution:** Users can start any timer in the list in any order.
+- **Inline Editing:** Ability to update task names and durations directly within the list by clicking on them.
 - **Web-Based:** Accessible via a web browser for easy local testing and usage.
 
 ## 5. Success Metrics
