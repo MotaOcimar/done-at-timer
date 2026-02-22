@@ -7,6 +7,7 @@ export const useTimer = (
 ) => {
   const [timeLeft, setTimeLeft] = useState(initialSeconds);
   const [isPaused, setIsPaused] = useState(true);
+  const [hasNotifiedComplete, setHasNotifiedComplete] = useState(false);
   const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
@@ -17,10 +18,12 @@ export const useTimer = (
   useEffect(() => {
     if (targetEndTime) {
       const calculateTimeLeft = () => {
-        const remaining = Math.max(0, Math.ceil((targetEndTime - Date.now()) / 1000));
+        // Allow it to go negative for overtime
+        const remaining = Math.ceil((targetEndTime - Date.now()) / 1000);
         setTimeLeft(remaining);
-        if (remaining === 0) {
-          setIsPaused(true);
+        
+        if (remaining <= 0 && !hasNotifiedComplete) {
+          setHasNotifiedComplete(true);
           onCompleteRef.current?.();
         }
       };
@@ -29,19 +32,16 @@ export const useTimer = (
       const interval = setInterval(calculateTimeLeft, 1000);
       return () => clearInterval(interval);
     }
-  }, [targetEndTime]);
+  }, [targetEndTime, hasNotifiedComplete]);
 
   // Lógica legada para quando não há targetEndTime (fallback ou modo manual)
   useEffect(() => {
     if (targetEndTime || isPaused) return;
 
-    if (timeLeft <= 0) {
-      // Avoid calling setState synchronously during effect
-      Promise.resolve().then(() => {
-        setIsPaused(true);
-        onCompleteRef.current?.();
-      });
-      return;
+    if (timeLeft <= 0 && !hasNotifiedComplete) {
+      setHasNotifiedComplete(true);
+      onCompleteRef.current?.();
+      // Continue the timer even after time is up
     }
 
     const interval = setInterval(() => {
@@ -49,7 +49,7 @@ export const useTimer = (
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, timeLeft, targetEndTime]);
+  }, [isPaused, timeLeft, targetEndTime, hasNotifiedComplete]);
 
   const start = useCallback(() => {
     setIsPaused(false);
@@ -62,6 +62,7 @@ export const useTimer = (
   const reset = useCallback((seconds: number) => {
     setIsPaused(true);
     setTimeLeft(seconds);
+    setHasNotifiedComplete(false);
   }, []);
 
   return {
