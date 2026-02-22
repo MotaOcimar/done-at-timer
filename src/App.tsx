@@ -12,18 +12,10 @@ function App() {
   return (
     <Layout>
       <div className="flex flex-col relative">
-        <div className="sticky top-0 z-50 -mx-4 pointer-events-none">
-          {/* Camada de fundo (Máscara) - Parte sólida e gradiente de alta opacidade */}
-          <div className="absolute inset-x-0 top-0 h-full pointer-events-none z-0">
-            <div className="bg-gray-50 h-[calc(100%-112px)]" />
-            <div className="h-28 bg-gradient-to-b from-gray-50 via-gray-50/90 to-transparent" />
-          </div>
-          
-          {/* Camada do Timer - Padding estendido para a zona de fade, compensado por margem negativa */}
-          <div className="relative z-10 px-4 pt-3 pb-28 -mb-28">
-            <div className="pointer-events-auto">
-              <ArrivalDisplay />
-            </div>
+        {/* Sticky Header - Simples e Limpo */}
+        <div className="sticky top-0 z-50 bg-gray-50 -mx-4 px-4 pt-3 pb-6 pointer-events-none">
+          <div className="pointer-events-auto">
+            <ArrivalDisplay />
           </div>
         </div>
 

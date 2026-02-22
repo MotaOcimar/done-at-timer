@@ -27,4 +27,5 @@ Goal: Ensure the feature works perfectly across different screen sizes and state
 - [x] Task: Verify sticky behavior on mobile viewports (Confirmed via manual feedback and touch-action fix) 549bd5c
 - [x] Task: Verify "All Completed" state (confetti) doesn't cause layout issues with sticky position 549bd5c
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md) 549bd5c
+- [~] Task: Refactor Sticky Header to remove neblina and simplify implementation for better maintainability
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md)
