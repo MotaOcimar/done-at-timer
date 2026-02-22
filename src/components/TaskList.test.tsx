@@ -4,7 +4,7 @@ import { TaskList } from './TaskList';
 import { useTaskStore } from '../store/useTaskStore';
 
 vi.mock('@dnd-kit/core', async (importOriginal) => {
-  const actual = await importOriginal() as any;
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     DndContext: vi.fn(({ children, onDragEnd }) => (
@@ -16,7 +16,7 @@ vi.mock('@dnd-kit/core', async (importOriginal) => {
 });
 
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {
-  const actual = await importOriginal() as any;
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     SortableContext: vi.fn(({ children }) => <div data-testid="sortable-context">{children}</div>),

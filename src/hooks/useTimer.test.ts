@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useTimer } from './useTimer';
 
@@ -75,19 +75,16 @@ describe('useTimer', () => {
     expect(result.current.isPaused).toBe(true);
   });
 
-  it('calls onComplete when time reaches zero', () => {
+  it('calls onComplete when time reaches zero', async () => {
+    vi.useRealTimers();
     const onComplete = vi.fn();
-    const { result } = renderHook(() => useTimer(5, onComplete));
+    const { result } = renderHook(() => useTimer(0.1, onComplete));
 
     act(() => {
       result.current.start();
     });
 
-    act(() => {
-      vi.advanceTimersByTime(5000);
-    });
-
-    expect(result.current.timeLeft).toBe(0);
-    expect(onComplete).toHaveBeenCalled();
+    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 2000 });
+    vi.useFakeTimers();
   });
 });

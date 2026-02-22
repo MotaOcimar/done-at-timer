@@ -5,7 +5,7 @@ import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {
-  const actual = await importOriginal() as any;
+  const actual = await importOriginal() as Record<string, unknown>;
   return {
     ...actual,
     useSortable: vi.fn(() => ({

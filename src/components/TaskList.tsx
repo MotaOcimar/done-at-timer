@@ -3,7 +3,6 @@ import {
   DndContext,
   closestCenter,
   KeyboardSensor,
-  PointerSensor,
   MouseSensor,
   TouchSensor,
   DragOverlay,
@@ -20,6 +19,7 @@ import {
 import { useTaskStore } from '../store/useTaskStore';
 import { TaskItem } from './TaskItem';
 import { TaskCard } from './TaskCard';
+import type { Task } from '../types';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
@@ -54,7 +54,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [activeTask, setActiveTask] = useState<any | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = tasks.find((t) => t.id === event.active.id);

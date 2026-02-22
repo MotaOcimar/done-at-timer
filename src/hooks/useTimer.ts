@@ -36,8 +36,11 @@ export const useTimer = (
     if (targetEndTime || isPaused) return;
 
     if (timeLeft <= 0) {
-      setIsPaused(true);
-      onCompleteRef.current?.();
+      // Avoid calling setState synchronously during effect
+      Promise.resolve().then(() => {
+        setIsPaused(true);
+        onCompleteRef.current?.();
+      });
       return;
     }
 

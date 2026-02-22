@@ -1,6 +1,8 @@
 import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
+import type { DraggableAttributes } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
 interface TaskCardProps {
   task: Task;
@@ -13,8 +15,8 @@ interface TaskCardProps {
   // Drag-and-drop props (optional for overlay)
   setNodeRef?: (node: HTMLElement | null) => void;
   style?: React.CSSProperties;
-  attributes?: any;
-  listeners?: any;
+  attributes?: DraggableAttributes;
+  listeners?: SyntheticListenerMap;
   // Callbacks
   onDelete: (id: string) => void;
   onToggle: (e: React.MouseEvent) => void;
