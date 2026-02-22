@@ -39,8 +39,10 @@ export const useTimer = (
     if (targetEndTime || isPaused) return;
 
     if (timeLeft <= 0 && !hasNotifiedComplete) {
-      setHasNotifiedComplete(true);
-      onCompleteRef.current?.();
+      Promise.resolve().then(() => {
+        setHasNotifiedComplete(true);
+        onCompleteRef.current?.();
+      });
       // Continue the timer even after time is up
     }
 

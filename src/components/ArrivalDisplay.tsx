@@ -16,7 +16,7 @@ const ArrivalDisplay = () => {
 
   const activeTask = tasks.find((t) => t.id === activeTaskId);
 
-  const { timeLeft, isPaused } = useTimer(
+  const { timeLeft } = useTimer(
     activeTask ? activeTask.duration * 60 - totalElapsedBeforePause : 0,
     undefined,
     targetEndTime,

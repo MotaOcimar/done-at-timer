@@ -38,6 +38,7 @@ describe('useTimer Reliability', () => {
     
     const { result } = renderHook(() => useTimer(30, undefined, target));
     
-    expect(result.current.timeLeft).toBe(0);
+    // Updated behavior: Timer continues into negative (overtime)
+    expect(result.current.timeLeft).toBe(-5);
   });
 });
