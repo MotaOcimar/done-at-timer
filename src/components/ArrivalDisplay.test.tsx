@@ -66,4 +66,49 @@ describe('ArrivalDisplay', () => {
     expect(screen.getByText(/Routine Complete/i)).toBeInTheDocument();
     expect(screen.getByText(/All tasks finished/i)).toBeInTheDocument();
   });
+
+  it('shows amber color and drifting text when paused', () => {
+    useTaskStore.getState().addTask('T1', 30);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().startTask(taskId);
+    useTaskStore.getState().pauseTask();
+
+    const { container } = render(<ArrivalDisplay />);
+    
+    expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
+    expect(container.firstChild).toHaveClass('bg-amber-500');
+  });
+
+  it('shows amber color and drifting text when time is up', () => {
+    useTaskStore.getState().addTask('T1', 30);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().startTask(taskId);
+    
+    // Simulate time up
+    useTaskStore.getState().onTimeUp();
+
+    const { container } = render(<ArrivalDisplay />);
+    
+    expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
+    expect(container.firstChild).toHaveClass('bg-amber-500');
+  });
+
+  it('calculates ETA correctly during overtime (no past ETA)', () => {
+    // Current Time: 10:00
+    useTaskStore.getState().addTask('T1', 1); // 1 min task
+    useTaskStore.getState().addTask('T2', 10); // 10 min task
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().startTask(taskId);
+
+    // Fast forward 5 minutes (4 mins past T1's estimate)
+    // Clock is now 10:05. T1 is in overtime.
+    vi.advanceTimersByTime(300000); 
+    useTaskStore.getState().onTimeUp();
+
+    render(<ArrivalDisplay />);
+
+    // T1 is done at 10:05 (Now) + T2 (10 mins) = 10:15
+    // BEFORE fix, it would show 10:00 + 1 + 10 = 10:11 (which is in the past relative to 10:05)
+    expect(screen.getByText('10:15')).toBeInTheDocument();
+  });
 });

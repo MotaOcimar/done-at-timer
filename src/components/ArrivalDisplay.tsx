@@ -9,17 +9,22 @@ const ArrivalDisplay = () => {
   const tasks = useTaskStore((state) => state.tasks);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
+  const isTimeUp = useTaskStore((state) => state.isTimeUp);
   const totalElapsedBeforePause = useTaskStore(
     (state) => state.totalElapsedBeforePause,
   );
 
   const activeTask = tasks.find((t) => t.id === activeTaskId);
 
-  const { timeLeft } = useTimer(
+  const { timeLeft, isPaused } = useTimer(
     activeTask ? activeTask.duration * 60 - totalElapsedBeforePause : 0,
     undefined,
     targetEndTime,
   );
+
+  // isDrifting means the arrival time is moving forward in real-time (not progress is being made)
+  // This happens when the timer is paused OR when time is up and we're waiting for confirmation.
+  const isDrifting = (activeTaskId && !targetEndTime) || isTimeUp;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -72,8 +77,10 @@ const ArrivalDisplay = () => {
   }
 
   // Se houver tarefa ativa (mesmo pausada), o timeLeft do hook é o que conta.
-  // Caso contrário, passamos null para que a função some as durações completas.
-  const arrivalTime = calculateArrivalTime(tasks, activeTaskId ? timeLeft : null, now);
+  // IMPORTANTE: Se o tempo acabou (timeLeft <= 0), usamos 0 para o cálculo do ETA,
+  // pois as próximas tarefas começarão a partir de "Agora".
+  const effectiveTimeLeft = activeTaskId ? Math.max(0, timeLeft) : null;
+  const arrivalTime = calculateArrivalTime(tasks, effectiveTimeLeft, now);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], {
@@ -91,7 +98,7 @@ const ArrivalDisplay = () => {
   let activeElapsed = 0;
   if (activeTask) {
     const activeTotalSecs = activeTask.duration * 60;
-    activeElapsed = Math.max(0, (activeTotalSecs - timeLeft) / 60);
+    activeElapsed = Math.max(0, (activeTotalSecs - Math.max(0, timeLeft)) / 60);
   }
 
   const totalCompleted = completedDuration + activeElapsed;
@@ -103,23 +110,33 @@ const ArrivalDisplay = () => {
   const progressPercentage = Math.min(100, Math.round(progress * 100));
 
   return (
-    <div className="text-center py-8 px-6 mb-10 bg-blue-600 text-white rounded-3xl shadow-2xl shadow-blue-200 transition-colors duration-500">
-      <h2 className="text-blue-200 text-sm font-bold uppercase tracking-[0.2em] mb-4">
-        You will be done at
+    <div className={`text-center py-8 px-6 mb-10 text-white rounded-3xl shadow-2xl transition-all duration-700 ${
+      isDrifting 
+        ? 'bg-amber-500 shadow-amber-200' 
+        : 'bg-blue-600 shadow-blue-200'
+    }`}>
+      <h2 className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 transition-colors duration-700 ${
+        isDrifting ? 'text-amber-100' : 'text-blue-200'
+      }`}>
+        {isDrifting ? 'Arrival time is drifting' : 'You will be done at'}
       </h2>
       <div className="text-7xl sm:text-8xl font-black tabular-nums tracking-tighter mb-8">
         {formatTime(arrivalTime)}
       </div>
 
       <div className="mt-8 px-4">
-        <div className="h-1.5 w-full bg-blue-900/30 rounded-full overflow-hidden mb-2">
+        <div className={`h-1.5 w-full rounded-full overflow-hidden mb-2 transition-colors duration-700 ${
+          isDrifting ? 'bg-amber-900/30' : 'bg-blue-900/30'
+        }`}>
           <div
-            className={`h-full bg-white/90 rounded-full transition-all duration-1000 ease-linear ${activeTaskId ? 'animate-pulse' : ''}`}
+            className={`h-full bg-white/90 rounded-full transition-all duration-1000 ease-linear ${activeTaskId && !isDrifting ? 'animate-pulse' : ''}`}
             style={{ width: `${progressPercentage}%` }}
             role="progressbar"
           ></div>
         </div>
-        <div className="flex justify-end text-blue-100 text-xs font-bold uppercase tracking-widest opacity-80">
+        <div className={`flex justify-end text-xs font-bold uppercase tracking-widest opacity-80 transition-colors duration-700 ${
+          isDrifting ? 'text-amber-50' : 'text-blue-100'
+        }`}>
           <span>{remainingMinutes} min left</span>
         </div>
       </div>

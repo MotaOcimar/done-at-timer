@@ -22,3 +22,6 @@ This plan introduces a manual confirmation step when a task timer expires, ensur
 - [x] Task: Ensure the next task starts automatically ONLY after confirmation. 56bd5a6
     - [x] Red: Integration test for `TaskList` to verify the flow: Task 1 finishes -> UI asks for confirmation -> User clicks "Done" -> Task 1 is completed -> Task 2 starts.
     - [x] Green: Final UI/Store synchronization.
+- [x] Task: Fix Arrival Clock drifting and ETA calculation during overtime.
+    - [x] Red: Write tests for `ArrivalDisplay` to verify amber color during drifting and correct ETA when overtime occurs.
+    - [x] Green: Update `ArrivalDisplay` logic to handle `isDrifting` state and sanitize `effectiveTimeLeft` for ETA calculation.
