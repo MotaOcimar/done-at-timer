@@ -4,7 +4,10 @@ This file tracks all ideas, requested improvements, and roadmap items for future
 
 ## Priority Improvements (Current Focus)
 - [ ] **Sticky Arrival Time**: The Arrival Time display should remain fixed/sticky at the top of the screen when scrolling through a long list of tasks.
-- [ ] **Paused State Visual Cues**: Use different colors (e.g., amber or gray) when the timer is paused to clearly indicate that the arrival time is "drifting" forward (since no progress is being made).
+- [ ] **Arrival Status Icons**: 
+    - Replace or augment the "drifting" text with meaningful icons next to the Arrival Clock.
+    - **GPS Pin**: Show a static Map/GPS Pin when the timer is running, indicating the arrival time is "locked" or "guaranteed" based on current progress.
+    - **Rotating Clock**: Show an animated/rotating clock icon when the timer is paused or in overtime, indicating the arrival time is "drifting" forward in real-time.
 - [x] **Task Input Order**: New tasks should be added to the bottom of the list to reduce visual clutter and maintain natural chronological order.
 - [x] **Play Icon Alignment**: Center the play icon within its circular button/container in `TaskItem`.
 - [x] **Task/Active Merge**: Simplify the UI by transforming the task item itself into the "Active Task" view when played, instead of showing a separate box at the top.
