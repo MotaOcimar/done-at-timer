@@ -3,12 +3,12 @@
 This plan introduces a manual confirmation step when a task timer expires, ensuring the user confirms completion before moving to the next task.
 
 ## Phase 1: Store & Core Logic [checkpoint: ]
-- [ ] Task: Extend `TaskState` to track if the current task has finished its allotted time but not yet been confirmed as completed.
-    - [ ] Red: Write test for `useTaskStore` ensuring that a task does NOT auto-complete when its duration expires.
-    - [ ] Green: Update the store to separate "time expired" from "task completed".
-- [ ] Task: Update the `completeTask` action to also start the next task (if any) and reset the timer for the new active task.
-    - [ ] Red: Test that completing an active task with a manual action starts the next pending task automatically.
-    - [ ] Green: Implement the `completeActiveTask` action in `useTaskStore`.
+- [x] Task: Extend `TaskState` to track if the current task has finished its allotted time but not yet been confirmed as completed. e8e1f85
+    - [x] Red: Write test for `useTaskStore` ensuring that a task does NOT auto-complete when its duration expires.
+    - [x] Green: Update the store to separate "time expired" from "task completed".
+- [x] Task: Update the `completeTask` action to also start the next task (if any) and reset the timer for the new active task. e8e1f85
+    - [x] Red: Test that completing an active task with a manual action starts the next pending task automatically.
+    - [x] Green: Implement the `completeActiveTask` action in `useTaskStore`.
 
 ## Phase 2: Timer & Hook Refactor
 - [ ] Task: Refactor `useTimer` to allow the timer to reach 0 (or negative) without forcing an external state change in the store.
