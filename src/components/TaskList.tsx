@@ -34,6 +34,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const reorderTasks = useTaskStore((state) => state.reorderTasks);
   const activeTaskTimeLeft = useTaskStore((state) => state.activeTaskTimeLeft);
   const activeTaskIdFromStore = useTaskStore((state) => state.activeTaskId);
+  const isTimeUpGlobal = useTaskStore((state) => state.isTimeUp);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -176,6 +177,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
                   isActive={activeTask.id === activeTaskIdFromStore}
                   isCompleted={activeTask.status === 'COMPLETED'}
                   isDragging={true}
+                  isTimeUp={activeTask.id === activeTaskIdFromStore && isTimeUpGlobal}
                   timeLeft={activeTask.id === activeTaskIdFromStore ? (activeTaskTimeLeft ?? 0) : 0}
                   progress={activeTask.id === activeTaskIdFromStore ? (1 - ((activeTaskTimeLeft ?? 0) / (activeTask.duration * 60))) : 0}
                   onDelete={() => {}}

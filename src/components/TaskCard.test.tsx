@@ -78,4 +78,22 @@ describe('TaskCard (Pure Visual)', () => {
     // Should have opacity class for dragging
     expect(container.firstChild).toHaveClass('opacity-50');
   });
+
+  it('shows Done button when isTimeUp is true', () => {
+    render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={true} 
+        isCompleted={false} 
+        isTimeUp={true}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    // The "Done" button should be visible and prominent
+    expect(screen.getByRole('button', { name: /Done/i })).toBeInTheDocument();
+  });
 });

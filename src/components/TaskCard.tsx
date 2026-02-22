@@ -9,6 +9,7 @@ interface TaskCardProps {
   isActive: boolean;
   isCompleted: boolean;
   isDragging?: boolean;
+  isTimeUp?: boolean;
   timeLeft?: number;
   progress?: number;
   isActuallyPaused?: boolean;
@@ -29,11 +30,13 @@ const StatusIcon = ({
   isCompleted, 
   isActive, 
   isPaused, 
+  isTimeUp,
   onToggle 
 }: { 
   isCompleted: boolean, 
   isActive: boolean, 
   isPaused: boolean, 
+  isTimeUp?: boolean,
   onToggle: (e: React.MouseEvent) => void 
 }) => {
   const baseClasses = "flex items-center justify-center w-10 h-10 rounded-full transition-colors";
@@ -49,6 +52,15 @@ const StatusIcon = ({
   }
 
   if (isActive) {
+    if (isTimeUp) {
+      return (
+        <div className={`${baseClasses} bg-red-100 text-red-600`}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+          </svg>
+        </div>
+      );
+    }
     return (
       <div className={baseClasses}>
         <button
@@ -90,6 +102,7 @@ const TaskCard = ({
   isActive, 
   isCompleted, 
   isDragging, 
+  isTimeUp,
   timeLeft = 0, 
   progress = 0, 
   isActuallyPaused = false,
@@ -103,16 +116,25 @@ const TaskCard = ({
   onDurationSave,
   onComplete
 }: TaskCardProps) => {
-  const minsLeft = Math.ceil(timeLeft / 60);
-  const timeDisplay = minsLeft > 0 ? `${minsLeft} min left` : '< 1 min left';
+  const isOvertime = timeLeft < 0;
+  const absSeconds = Math.abs(timeLeft);
+  const mins = Math.ceil(absSeconds / 60);
+  
+  const timeDisplay = isOvertime 
+    ? `${mins} min over`
+    : mins > 0 ? `${mins} min left` : '< 1 min left';
 
   return (
     <div 
       ref={setNodeRef}
       style={style}
-      className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border ${
-        isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' : isCompleted ? 'border-green-100 bg-green-50/50' : 'border-gray-100 bg-white'
-      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 transition-none select-none' : 'transition-colors duration-300'}`}
+      className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
+        isTimeUp 
+          ? 'border-red-500 bg-red-50 ring-2 ring-red-500/20' 
+          : isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' 
+          : isCompleted ? 'border-green-100 bg-green-50/50' 
+          : 'border-gray-100 bg-white'
+      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
     >
       <div className="flex items-center gap-4">
         {/* Drag Handle */}
@@ -133,6 +155,7 @@ const TaskCard = ({
             isCompleted={isCompleted} 
             isActive={isActive} 
             isPaused={isActuallyPaused} 
+            isTimeUp={isTimeUp}
             onToggle={onToggle}
           />
         </div>
@@ -140,7 +163,7 @@ const TaskCard = ({
         {/* Task Info Area */}
         <div className="flex-1 min-w-0">
           <h3 className={`font-bold transition-all truncate ${
-            isActive ? 'text-blue-700 text-lg' : 'text-gray-800'
+            isTimeUp ? 'text-red-700' : isActive ? 'text-blue-700 text-lg' : 'text-gray-800'
           } ${isCompleted ? 'line-through text-gray-400 font-medium' : ''}`}>
             <InlineEdit
               value={task.title}
@@ -149,7 +172,7 @@ const TaskCard = ({
             />
           </h3>
           <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-            isActive ? 'text-blue-400' : 'text-gray-400'
+            isTimeUp ? 'text-red-400' : isActive ? 'text-blue-400' : 'text-gray-400'
           }`}>
             <InlineEdit
               value={task.duration}
@@ -166,7 +189,11 @@ const TaskCard = ({
           {isActive && (
             <button
               onClick={(e) => { e.stopPropagation(); onComplete(); }}
-              className="px-4 py-2 rounded-xl bg-green-500 text-white text-xs font-black uppercase tracking-widest hover:bg-green-600 transition-colors shadow-lg shadow-green-200"
+              className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg ${
+                isTimeUp 
+                  ? 'bg-red-500 hover:bg-red-600 shadow-red-200 scale-110' 
+                  : 'bg-green-500 hover:bg-green-600 shadow-green-200'
+              }`}
               aria-label="Done"
             >
               Done
@@ -188,9 +215,11 @@ const TaskCard = ({
 
       {isActive && (
         <div className="mt-4 pt-4 border-t border-blue-100/50 animate-in fade-in slide-in-from-top-2 duration-500">
-          <ProgressBar progress={progress} isActive={!isActuallyPaused} />
+          <ProgressBar progress={progress} isActive={!isActuallyPaused && !isTimeUp} />
           <div className="flex justify-end mt-2">
-            <span className="text-sm font-black text-blue-600 tabular-nums tracking-tight">
+            <span className={`text-sm font-black tabular-nums tracking-tight ${
+              isTimeUp ? 'text-red-600 animate-pulse' : 'text-blue-600'
+            }`}>
               {timeDisplay}
             </span>
           </div>

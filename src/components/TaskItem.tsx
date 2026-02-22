@@ -36,26 +36,25 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   const pauseTask = useTaskStore((state) => state.pauseTask);
   const resumeTask = useTaskStore((state) => state.resumeTask);
   const setActiveTaskTimeLeft = useTaskStore((state) => state.setActiveTaskTimeLeft);
-  const tasks = useTaskStore((state) => state.tasks);
+  const onTimeUpAction = useTaskStore((state) => state.onTimeUp);
+  const completeActiveTask = useTaskStore((state) => state.completeActiveTask);
+  const isTimeUpGlobal = useTaskStore((state) => state.isTimeUp);
   
   const isActive = activeTaskId === task.id;
   const isCompleted = task.status === 'COMPLETED';
+  const isTimeUp = isActive && isTimeUpGlobal;
 
-  const onComplete = () => {
-    updateTask(task.id, { status: 'COMPLETED' });
-    setActiveTaskTimeLeft(null);
+  const onTimeUp = () => {
+    onTimeUpAction();
+  };
 
-    const nextTask = tasks.find(
-      (t) => t.status === 'PENDING' && t.id !== task.id,
-    );
-    if (nextTask) {
-      useTaskStore.getState().startTask(nextTask.id);
-    }
+  const onManualComplete = () => {
+    completeActiveTask();
   };
 
   const { timeLeft } = useTimer(
     isActive ? (task.duration * 60 - totalElapsedBeforePause) : 0,
-    onComplete,
+    onTimeUp,
     isActive ? targetEndTime : null,
   );
 
@@ -98,6 +97,7 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
       isActive={isActive}
       isCompleted={isCompleted}
       isDragging={isDragging}
+      isTimeUp={isTimeUp}
       timeLeft={timeLeft}
       progress={progress}
       isActuallyPaused={isActuallyPaused}
@@ -109,7 +109,7 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
       onToggle={handleToggle}
       onTitleSave={handleTitleSave}
       onDurationSave={handleDurationSave}
-      onComplete={onComplete}
+      onComplete={onManualComplete}
     />
   );
 };
