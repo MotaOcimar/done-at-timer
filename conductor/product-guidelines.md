@@ -7,7 +7,11 @@
   - **Elements:** Use distinct, "chunky" or tactile-looking buttons and progress bars that feel satisfying to interact with. Think of high-quality productivity games or habit trackers.
   - **Color Palette:**
     - **Primary:** A strong, motivating color for the "Action" button (Start/Play).
-    - **Secondary:** Distinct colors for different task states (e.g., active, completed, pending) to provide immediate visual feedback.
+    - **Secondary:** Distinct colors for different task states:
+      - **Pending/Idle:** Gray/Neutral.
+      - **Active:** Blue (Focus).
+      - **Overtime/Waiting Confirmation:** Amber (Supportive nudge, not a warning).
+      - **Completed:** Green (Success).
     - **Background:** Clean, neutral background to let the colorful elements pop.
   - **Typography:** Clear, large, and legible fonts for the "Arrival Time" display. It should be readable at a glance.
 
