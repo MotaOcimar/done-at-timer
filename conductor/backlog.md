@@ -24,6 +24,9 @@ This file tracks all ideas, requested improvements, and roadmap items for future
 - [ ] **Completion Checkpoint**:
     - Add an optional confirmation step when a task timer ends ("Did you actually finish?").
     - Include a toggle setting to enable/disable this manual confirmation (auto-advance vs. manual advance).
+- [ ] **Automated Visual Documentation**: 
+    - Implement a script (e.g., using Puppeteer or Playwright) to automatically generate screenshots of the application in different states (Active, Paused, Completed, Reordering).
+    - Integrate these assets into a revitalized `README.md` and a new `FEATURES.md` to ensure the visual documentation stays in sync with UI changes without manual effort.
 - [ ] **Refined Animations**: Change the "pulse" animation on progress bars to a "shimmer/wave" effect (left-to-right) to better convey forward momentum.
 
 ## Technical Debt
