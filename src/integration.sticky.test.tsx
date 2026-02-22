@@ -26,15 +26,20 @@ describe('Sticky Arrival Display Integration', () => {
     render(<App />);
 
     const arrivalDisplayText = screen.getByText(/You will be done at/i);
-    const stickyContainer = arrivalDisplayText.closest('.sticky');
+    const stickyHeader = arrivalDisplayText.closest('.sticky');
 
-    // Check for increased padding to accommodate shadow
-    expect(stickyContainer).toHaveClass('pb-12');
-    expect(stickyContainer).toHaveClass('-mb-12');
+    // Check for the layered structure
+    const mask = stickyHeader?.querySelector('.absolute');
+    expect(mask).toBeInTheDocument();
+
+    const timerLayer = stickyHeader?.querySelector('.relative.z-10');
+    expect(timerLayer).toBeInTheDocument();
+    expect(timerLayer).toHaveClass('pb-28');
+    expect(timerLayer).toHaveClass('-mb-28');
 
     // Check for neblina (gradient fade)
-    const neblina = stickyContainer?.querySelector('.bg-gradient-to-t');
+    const neblina = stickyHeader?.querySelector('.bg-gradient-to-b');
     expect(neblina).toBeInTheDocument();
-    expect(neblina).toHaveClass('h-24');
+    expect(neblina).toHaveClass('h-28');
   });
 });
