@@ -25,7 +25,7 @@ The primary value of this application is to solve the problem of **lateness due 
 
 ## 3. Target Audience
 
-- **Primary:** Individuals with **ADHD or time blindness** who struggle to visualize the passage of time and the cumulative effect of tasks.
+- **Primary:** Individuals who experience **time blindness** and struggle to visualize the passage of time or the cumulative effect of sequences of tasks.
 - **Secondary:** Anyone who performs routine sequences of tasks (e.g., morning routines, cooking, getting ready for an event) and wants to avoid lateness or optimize their departure time.
 
 ## 4. Key Features

@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+# ⏱️ Done-At Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Know exactly when you'll be done. Stop racing against the clock and start arriving on time.**
 
-Currently, two official plugins are available:
+Most timers tell you how much time is *left*. **Done-At Timer** tells you when you will *arrive*. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Whether it's your morning routine, a focused work session, or getting ready for a night out, we often suffer from **Time Blindness**—the inability to sense how long a sequence of tasks will actually take. We see "20 minutes for a shower" and "15 minutes for breakfast" as abstract numbers, failing to realize that if we start *now*, we won't be out the door until 8:35 AM.
 
-## React Compiler
+**Done-At Timer is your GPS for daily life.** It calculates your "ETA" (Estimated Time of Arrival) for your entire list of tasks in real-time.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🌟 Why use Done-At Timer?
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Eliminate Guesswork**: Stop doing mental math. See your exact completion time update instantly as you add, remove, or reorder tasks.
+- **Beat Time Blindness**: By shifting the focus from *duration* to *wall-clock time*, the app provides a concrete anchor for your day.
+- **Stay Flexible**: Life doesn't happen in a straight line. Start any task in your list, in any order. The "Arrival Clock" adjusts to your pace.
+- **Visual Clarity**: A minimalist, high-contrast interface designed to keep you focused on the current task and the finish line.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ✨ Key Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+- **🕒 Dynamic Arrival Clock**: The heart of the app. It shows you exactly what time you'll finish everything on your list if you keep moving.
+- **🔄 Smart Reordering**: Drag and drop tasks to prioritize your flow. The schedule updates as you move items.
+- **✍️ Instant Editing**: Change task names or durations on the fly with simple inline editing.
+- **⏸️ Drift Management**: Pause a task and see your arrival time "drift" forward, giving you immediate feedback on how a delay affects your whole schedule.
+- **💾 Auto-Save**: Your routines and tasks are saved in your browser, ready for you whenever you return.
+- **🎉 Celebrate Progress**: Enjoy a satisfying burst of confetti when you cross the finish line of your routine.
+
+---
+
+## 🛠️ For Developers
+
+Built with a focus on modern web standards, performance, and a robust testing suite.
+
+### Tech Stack
+- **Framework**: React 19 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **Drag & Drop**: dnd-kit
+- **Icons**: Lucide React
+- **Testing**: Vitest + React Testing Library
+
+### Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Run tests
+npm test
+
+# Build for production
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+*Designed for clarity. Built for focus. Your time, visualized.*
