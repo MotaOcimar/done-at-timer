@@ -11,9 +11,9 @@ This plan introduces a manual confirmation step when a task timer expires, ensur
     - [x] Green: Implement the `completeActiveTask` action in `useTaskStore`.
 
 ## Phase 2: Timer & Hook Refactor
-- [ ] Task: Refactor `useTimer` to allow the timer to reach 0 (or negative) without forcing an external state change in the store.
-    - [ ] Red: Write test for `useTimer` verifying that it can signal "completion" but stay at 0 or continue counting.
-    - [ ] Green: Modify the `useTimer` to signal "time up" while remaining active.
+- [x] Task: Refactor `useTimer` to allow the timer to reach 0 (or negative) without forcing an external state change in the store. 3c43eb0
+    - [x] Red: Write test for `useTimer` verifying that it can signal "completion" but stay at 0 or continue counting.
+    - [x] Green: Modify the `useTimer` to signal "time up" while remaining active.
 
 ## Phase 3: UI Implementation & UX Polish
 - [ ] Task: Implement the "Confirm Completion" button in `TaskCard`.
