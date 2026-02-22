@@ -16,9 +16,9 @@ This plan introduces a manual confirmation step when a task timer expires, ensur
     - [x] Green: Modify the `useTimer` to signal "time up" while remaining active.
 
 ## Phase 3: UI Implementation & UX Polish
-- [ ] Task: Implement the "Confirm Completion" button in `TaskCard`.
-    - [ ] Red: Write test for `TaskCard` ensuring it displays a "Did you finish?" or "Done" button when the time is up.
-    - [ ] Green: Add a conditional UI state for "Time Up" in `TaskCard` with a prominent completion button.
+- [x] Task: Implement the "Confirm Completion" button in `TaskCard`. 6ce8acc
+    - [x] Red: Write test for `TaskCard` ensuring it displays a "Did you finish?" or "Done" button when the time is up.
+    - [x] Green: Add a conditional UI state for "Time Up" in `TaskCard` with a prominent completion button.
 - [ ] Task: Ensure the next task starts automatically ONLY after confirmation.
     - [ ] Red: Integration test for `TaskList` to verify the flow: Task 1 finishes -> UI asks for confirmation -> User clicks "Done" -> Task 1 is completed -> Task 2 starts.
     - [ ] Green: Final UI/Store synchronization.
