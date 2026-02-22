@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Sticky Arrival Time at the top of the screen**
+- [x] **Track: Sticky Arrival Time at the top of the screen**
 *Link: [./tracks/sticky_arrival_20260222/](./tracks/sticky_arrival_20260222/)*
