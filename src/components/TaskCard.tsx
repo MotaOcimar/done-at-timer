@@ -141,6 +141,7 @@ const TaskCard = ({
         <div 
           {...attributes} 
           {...listeners}
+          style={{ touchAction: 'none' }}
           className={`flex-shrink-0 cursor-grab active:cursor-grabbing p-1 -ml-1 text-gray-300 hover:text-gray-500 transition-colors ${isDragging ? 'cursor-grabbing' : ''}`}
           aria-label="Drag to reorder"
         >

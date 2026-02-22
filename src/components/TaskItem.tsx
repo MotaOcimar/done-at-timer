@@ -25,7 +25,6 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : 'auto',
-    touchAction: 'none',
   };
 
   const startTask = useTaskStore((state) => state.startTask);

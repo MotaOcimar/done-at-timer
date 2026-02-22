@@ -50,7 +50,7 @@ const ArrivalDisplay = () => {
 
   if (allCompleted) {
     return (
-      <div className="text-center py-12 px-6 mb-10 bg-green-500 text-white rounded-3xl shadow-2xl shadow-green-200 animate-in zoom-in duration-500">
+      <div className="text-center py-12 px-6 bg-green-500 text-white rounded-3xl shadow-2xl shadow-green-200 animate-in zoom-in duration-500">
         <div className="flex justify-center mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +110,7 @@ const ArrivalDisplay = () => {
   const progressPercentage = Math.min(100, Math.round(progress * 100));
 
   return (
-    <div className={`text-center py-8 px-6 mb-10 text-white rounded-3xl shadow-2xl transition-all duration-700 ${
+    <div className={`text-center py-8 px-6 text-white rounded-3xl shadow-2xl transition-all duration-700 ${
       isDrifting 
         ? 'bg-amber-500 shadow-amber-200' 
         : 'bg-blue-600 shadow-blue-200'

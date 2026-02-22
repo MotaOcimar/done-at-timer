@@ -12,9 +12,15 @@ function App() {
   return (
     <Layout>
       <div className="flex flex-col relative">
-        <ArrivalDisplay />
+        <div className="sticky top-0 z-50 bg-gray-50 -mx-4 px-4 pt-3 pb-12 -mb-12 pointer-events-none">
+          <div className="pointer-events-auto">
+            <ArrivalDisplay />
+          </div>
+          {/* Neblina / Gradient Fade */}
+          <div className="absolute left-0 right-0 bottom-0 h-24 bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent pointer-events-none" />
+        </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-100">
+        <div className="mt-12 pt-8 border-t border-gray-100">
           <TaskList 
             onSaveRoutine={() => setIsSavingActive(true)} 
             onLoadRoutine={() => setIsLibraryOpen(true)}
