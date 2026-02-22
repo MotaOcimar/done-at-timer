@@ -96,4 +96,21 @@ describe('TaskCard (Pure Visual)', () => {
     // The "Done" button should be visible and prominent
     expect(screen.getByRole('button', { name: /Done/i })).toBeInTheDocument();
   });
+
+  it('shows actual duration when completed', () => {
+    const completedTask: Task = { ...mockTask, status: 'COMPLETED', actualDuration: 15 };
+    render(
+      <TaskCard 
+        task={completedTask} 
+        isActive={false} 
+        isCompleted={true}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.getByText('(took 15 min)')).toBeInTheDocument();
+  });
 });

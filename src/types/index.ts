@@ -4,6 +4,7 @@ export interface Task {
   id: string;
   title: string;
   duration: number; // in minutes
+  actualDuration?: number; // in minutes
   status: TaskStatus;
 }
 

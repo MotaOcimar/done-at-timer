@@ -25,3 +25,7 @@ This plan introduces a manual confirmation step when a task timer expires, ensur
 - [x] Task: Fix Arrival Clock drifting and ETA calculation during overtime.
     - [x] Red: Write tests for `ArrivalDisplay` to verify amber color during drifting and correct ETA when overtime occurs.
     - [x] Green: Update `ArrivalDisplay` logic to handle `isDrifting` state and sanitize `effectiveTimeLeft` for ETA calculation.
+- [x] Task: Track and display actual duration taken vs estimate.
+    - [x] Red: Update `useTaskStore` tests to check for `actualDuration` calculation.
+    - [x] Green: Update `Task` type and `completeActiveTask` logic.
+    - [x] Green: Update `TaskCard` to display the real time taken next to the estimate.

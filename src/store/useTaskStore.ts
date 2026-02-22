@@ -26,7 +26,7 @@ interface TaskState {
   pauseTask: () => void;
   resumeTask: () => void;
   onTimeUp: () => void;
-  completeActiveTask: () => void;
+  completeActiveTask: (timeLeftSeconds: number) => void;
   resetTasks: () => void;
   clearTasks: () => void;
   saveRoutine: (name: string) => void;
@@ -165,14 +165,24 @@ export const useTaskStore = create<TaskState>()(
       onTimeUp: () => {
         set({ isTimeUp: true });
       },
-      completeActiveTask: () => {
+      completeActiveTask: (timeLeftSeconds) => {
         const state = get();
         const { activeTaskId, tasks } = state;
         if (!activeTaskId) return;
 
-        // 1. Mark current task as COMPLETED
+        const activeTaskOriginal = tasks.find(t => t.id === activeTaskId);
+        if (!activeTaskOriginal) return;
+
+        // Calculate actual duration in minutes
+        // actualSeconds = originalDurationSeconds - timeLeftSeconds (timeLeft is negative if overtime)
+        const actualSeconds = (activeTaskOriginal.duration * 60) - timeLeftSeconds;
+        const actualDurationMinutes = Math.ceil(Math.max(0, actualSeconds) / 60);
+
+        // 1. Mark current task as COMPLETED and store actualDuration
         const newTasks = tasks.map((t) =>
-          t.id === activeTaskId ? { ...t, status: 'COMPLETED' as const } : t
+          t.id === activeTaskId 
+            ? { ...t, status: 'COMPLETED' as const, actualDuration: actualDurationMinutes } 
+            : t
         );
 
         // 2. Find next PENDING task

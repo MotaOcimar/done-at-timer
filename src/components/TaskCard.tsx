@@ -181,6 +181,11 @@ const TaskCard = ({
               ariaLabel="Task duration"
               className="mr-0"
             /> min {isActive ? 'total' : ''}
+            {isCompleted && task.actualDuration !== undefined && (
+              <span className="ml-2 text-gray-500 lowercase font-medium">
+                (took {task.actualDuration} min)
+              </span>
+            )}
           </p>
         </div>
 

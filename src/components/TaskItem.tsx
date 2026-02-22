@@ -49,7 +49,7 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   };
 
   const onManualComplete = () => {
-    completeActiveTask();
+    completeActiveTask(timeLeft);
   };
 
   const { timeLeft } = useTimer(
