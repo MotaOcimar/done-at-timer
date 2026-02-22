@@ -31,6 +31,7 @@ The primary value of this application is to solve the problem of **lateness due 
 ## 4. Key Features
 
 - **Real-time "Arrival" Clock:** A prominent, dynamic display showing the exact wall-clock time when the _remaining_ tasks in the current list will be completed if started immediately. This is the central feature.
+- **Sticky Arrival Header:** The core Arrival Clock remains fixed at the top of the screen during scrolling, ensuring the predicted completion time is always visible while managing long task lists.
 - **Manual Completion Confirmation:** Tasks do not auto-advance when time expires. Users must manually confirm completion, ensuring the Arrival Clock remains accurate even when tasks take longer than estimated.
 - **Actual vs Estimated Tracking:** When a task is completed, the app records and displays the real time taken side-by-side with the original estimate.
 - **Dynamic Update:** As tasks are completed or time passes, the "Arrival Clock" updates to reflect the new reality.
