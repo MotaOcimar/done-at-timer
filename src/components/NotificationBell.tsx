@@ -1,7 +1,7 @@
 import { useNotification } from '../hooks/useNotification';
 
 const NotificationBell = () => {
-  const { permission, requestPermission, notifyTaskComplete } = useNotification();
+  const { permission, requestPermission } = useNotification();
 
   if (permission === 'unsupported') {
     return null;
@@ -10,14 +10,11 @@ const NotificationBell = () => {
   const handleClick = () => {
     if (permission === 'default') {
       requestPermission();
-    } else if (permission === 'granted') {
-      // Allow users to test notifications by clicking the bell when already granted
-      notifyTaskComplete('Test Notification');
     }
   };
 
   const getTitle = () => {
-    if (permission === 'granted') return 'Test Notification';
+    if (permission === 'granted') return 'Notifications Enabled';
     if (permission === 'denied') return 'Notifications Blocked';
     return 'Enable Notifications';
   };

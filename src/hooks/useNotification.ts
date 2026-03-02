@@ -1,10 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
-import { NotificationService } from '../utils/notificationService';
+import { useNotificationService } from '../NotificationContext';
 import type { NotificationPermissionStatus } from '../utils/notificationService';
 
-const notificationService = new NotificationService();
-
 export function useNotification() {
+  const notificationService = useNotificationService();
   const [permission, setPermission] = useState<NotificationPermissionStatus>(
     typeof window !== 'undefined' && 'Notification' in window
       ? window.Notification.permission
@@ -15,7 +14,7 @@ export function useNotification() {
     const result = await notificationService.requestPermission();
     setPermission(result);
     return result;
-  }, []);
+  }, [notificationService]);
 
   const notifyTaskComplete = useCallback(async (taskTitle: string) => {
     await notificationService.notify('Task Complete!', {
@@ -26,7 +25,7 @@ export function useNotification() {
       requireInteraction: true,
       tag: 'task-complete',
     });
-  }, []);
+  }, [notificationService]);
 
   // Update permission status on mount
   useEffect(() => {

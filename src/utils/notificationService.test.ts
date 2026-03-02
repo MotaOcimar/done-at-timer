@@ -26,13 +26,11 @@ describe('BrowserNotifier', () => {
       },
     });
 
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     await browserNotifier.notify('Test Title', { body: 'Test Body' });
 
     expect(MockNotification).toHaveBeenCalledWith('Test Title', {
       body: 'Test Body',
     });
-    consoleSpy.mockRestore();
   });
 
   it('should use service worker if available', async () => {
@@ -46,11 +44,9 @@ describe('BrowserNotifier', () => {
       },
     });
 
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     await browserNotifier.notify('SW Title');
 
     expect(mockShowNotification).toHaveBeenCalledWith('SW Title', undefined);
-    consoleSpy.mockRestore();
   });
 
   it('should not create a notification if permission is denied', async () => {
@@ -58,11 +54,9 @@ describe('BrowserNotifier', () => {
     vi.stubGlobal('Notification', MockNotification);
     (window.Notification as any).permission = 'denied';
 
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     await browserNotifier.notify('Test Title');
 
     expect(MockNotification).not.toHaveBeenCalled();
-    consoleSpy.mockRestore();
   });
 });
 
@@ -149,12 +143,10 @@ describe('NotificationService', () => {
         },
       });
 
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const service = new NotificationService();
       await service.notify('Test Default');
 
       expect(MockNotification).toHaveBeenCalledWith('Test Default', undefined);
-      consoleSpy.mockRestore();
     });
   });
 });
