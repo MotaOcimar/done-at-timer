@@ -1,7 +1,7 @@
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { TaskCard } from './TaskCard';
@@ -46,12 +46,12 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   const isCompleted = task.status === 'COMPLETED';
   const isTimeUp = isActive && isTimeUpGlobal;
 
-  const onTimeUp = useCallback(async () => {
+  const onTimeUp = async () => {
     onTimeUpAction();
     if (permission === 'granted') {
       await notifyTaskComplete(task.title);
     }
-  }, [onTimeUpAction, permission, notifyTaskComplete, task.title]);
+  };
 
   const onManualComplete = () => {
     completeActiveTask(timeLeft);

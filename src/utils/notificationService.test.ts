@@ -19,6 +19,12 @@ describe('BrowserNotifier', () => {
     const MockNotification = vi.fn();
     vi.stubGlobal('Notification', MockNotification);
     (window.Notification as any).permission = 'granted';
+    // Mock navigator.serviceWorker.getRegistration
+    vi.stubGlobal('navigator', {
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue(null),
+      },
+    });
 
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     await browserNotifier.notify('Test Title', { body: 'Test Body' });
@@ -26,6 +32,24 @@ describe('BrowserNotifier', () => {
     expect(MockNotification).toHaveBeenCalledWith('Test Title', {
       body: 'Test Body',
     });
+    consoleSpy.mockRestore();
+  });
+
+  it('should use service worker if available', async () => {
+    const mockShowNotification = vi.fn();
+    vi.stubGlobal('Notification', { permission: 'granted' });
+    vi.stubGlobal('navigator', {
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          showNotification: mockShowNotification,
+        }),
+      },
+    });
+
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await browserNotifier.notify('SW Title');
+
+    expect(mockShowNotification).toHaveBeenCalledWith('SW Title', undefined);
     consoleSpy.mockRestore();
   });
 
@@ -104,8 +128,8 @@ describe('NotificationService', () => {
 
   describe('notify', () => {
     it('should call all registered notifiers', async () => {
-      const mockNotifier1 = { notify: vi.fn() };
-      const mockNotifier2 = { notify: vi.fn() };
+      const mockNotifier1 = { notify: vi.fn().mockResolvedValue(undefined) };
+      const mockNotifier2 = { notify: vi.fn().mockResolvedValue(undefined) };
       const service = new NotificationService([mockNotifier1]);
       service.addNotifier(mockNotifier2);
 
@@ -119,6 +143,11 @@ describe('NotificationService', () => {
       const MockNotification = vi.fn();
       vi.stubGlobal('Notification', MockNotification);
       (window.Notification as any).permission = 'granted';
+      vi.stubGlobal('navigator', {
+        serviceWorker: {
+          getRegistration: vi.fn().mockResolvedValue(null),
+        },
+      });
 
       const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const service = new NotificationService();

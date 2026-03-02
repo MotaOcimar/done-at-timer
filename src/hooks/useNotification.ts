@@ -21,6 +21,10 @@ export function useNotification() {
     await notificationService.notify('Task Complete!', {
       body: `"${taskTitle}" has finished.`,
       icon: `${import.meta.env.BASE_URL}icon.svg`,
+      vibrate: [200, 100, 200],
+      silent: false,
+      requireInteraction: true,
+      tag: 'task-complete',
     });
   }, []);
 
