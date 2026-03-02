@@ -6,15 +6,18 @@ export interface INotifier {
 
 export class BrowserNotifier implements INotifier {
   notify(title: string, options?: NotificationOptions): void {
+    console.log('BrowserNotifier.notify called', { title, options, permission: window.Notification?.permission });
     if (
       typeof window === 'undefined' ||
       !window.Notification ||
       window.Notification.permission !== 'granted'
     ) {
+      console.log('BrowserNotifier.notify skipped - missing window, Notification or permission');
       return;
     }
 
     try {
+      console.log('Creating new Notification', title);
       new window.Notification(title, options);
     } catch (error) {
       console.error('Error showing browser notification:', error);

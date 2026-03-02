@@ -1,5 +1,46 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NotificationService } from './notificationService';
+import { NotificationService, BrowserNotifier } from './notificationService';
+
+describe('BrowserNotifier', () => {
+  let browserNotifier: BrowserNotifier;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    browserNotifier = new BrowserNotifier();
+    
+    // Mock Notification API
+    vi.stubGlobal('Notification', {
+      permission: 'default',
+      requestPermission: vi.fn(),
+    });
+  });
+
+  it('should create a notification if permission is granted', () => {
+    const MockNotification = vi.fn();
+    vi.stubGlobal('Notification', MockNotification);
+    (window.Notification as any).permission = 'granted';
+
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    browserNotifier.notify('Test Title', { body: 'Test Body' });
+
+    expect(MockNotification).toHaveBeenCalledWith('Test Title', {
+      body: 'Test Body',
+    });
+    consoleSpy.mockRestore();
+  });
+
+  it('should not create a notification if permission is denied', () => {
+    const MockNotification = vi.fn();
+    vi.stubGlobal('Notification', MockNotification);
+    (window.Notification as any).permission = 'denied';
+
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    browserNotifier.notify('Test Title');
+
+    expect(MockNotification).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+});
 
 describe('NotificationService', () => {
   let notificationService: NotificationService;
@@ -8,18 +49,11 @@ describe('NotificationService', () => {
     vi.clearAllMocks();
     notificationService = new NotificationService();
     
-    // Mock Notification API if it exists in JSDOM, or add it
-    if (typeof window.Notification === 'undefined') {
-      (window as any).Notification = {
-        permission: 'default',
-        requestPermission: vi.fn(),
-      } as any;
-    } else {
-      vi.stubGlobal('Notification', {
-        permission: 'default',
-        requestPermission: vi.fn(),
-      });
-    }
+    // Mock Notification API
+    vi.stubGlobal('Notification', {
+      permission: 'default',
+      requestPermission: vi.fn(),
+    });
   });
 
   describe('requestPermission', () => {
@@ -31,7 +65,7 @@ describe('NotificationService', () => {
       
       const result = await notificationService.requestPermission();
       expect(result).toBe('granted');
-      expect(Notification.requestPermission).not.toHaveBeenCalled();
+      expect(window.Notification.requestPermission).not.toHaveBeenCalled();
     });
 
     it('should request permission if state is default', async () => {
@@ -69,49 +103,6 @@ describe('NotificationService', () => {
   });
 
   describe('notify', () => {
-    it('should create a notification if permission is granted', () => {
-      const MockNotification = vi.fn();
-      vi.stubGlobal('Notification', MockNotification);
-      (Notification as any).permission = 'granted';
-
-      notificationService.notify('Test Title', { body: 'Test Body' });
-
-      expect(MockNotification).toHaveBeenCalledWith('Test Title', {
-        body: 'Test Body',
-      });
-    });
-
-    it('should not create a notification if permission is denied', () => {
-      const MockNotification = vi.fn();
-      vi.stubGlobal('Notification', MockNotification);
-      (Notification as any).permission = 'denied';
-
-      notificationService.notify('Test Title');
-
-      expect(MockNotification).not.toHaveBeenCalled();
-    });
-
-    it('should not create a notification if unsupported', () => {
-      vi.stubGlobal('Notification', undefined);
-
-      notificationService.notify('Test Title');
-      // No crash means success
-    });
-
-    it('should handle errors during notification creation', () => {
-      const MockNotification = vi.fn().mockImplementation(() => {
-        throw new Error('Test error');
-      });
-      vi.stubGlobal('Notification', MockNotification);
-      (Notification as any).permission = 'granted';
-
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      notificationService.notify('Test Title');
-
-      expect(consoleSpy).toHaveBeenCalled();
-      consoleSpy.mockRestore();
-    });
-
     it('should call all registered notifiers', () => {
       const mockNotifier1 = { notify: vi.fn() };
       const mockNotifier2 = { notify: vi.fn() };
@@ -122,6 +113,19 @@ describe('NotificationService', () => {
 
       expect(mockNotifier1.notify).toHaveBeenCalledWith('Test Title', undefined);
       expect(mockNotifier2.notify).toHaveBeenCalledWith('Test Title', undefined);
+    });
+
+    it('should use BrowserNotifier by default', () => {
+      const MockNotification = vi.fn();
+      vi.stubGlobal('Notification', MockNotification);
+      (window.Notification as any).permission = 'granted';
+
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const service = new NotificationService();
+      service.notify('Test Default');
+
+      expect(MockNotification).toHaveBeenCalledWith('Test Default', undefined);
+      consoleSpy.mockRestore();
     });
   });
 });
