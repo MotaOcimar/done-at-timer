@@ -38,7 +38,6 @@ export const useInstallPrompt = () => {
       // Clear the deferredPrompt so it can be garbage collected
       setDeferredPrompt(null);
       setIsInstallable(false);
-      console.log('PWA was installed');
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);

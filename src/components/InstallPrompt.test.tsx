@@ -1,11 +1,10 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { InstallPrompt } from './InstallPrompt';
 
 describe('InstallPrompt', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset window event listeners if needed
   });
 
   it('should not render when beforeinstallprompt has not fired', () => {
@@ -13,14 +12,16 @@ describe('InstallPrompt', () => {
     expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
   });
 
-  it('should render when beforeinstallprompt fires', () => {
+  it('should render when beforeinstallprompt fires', async () => {
     render(<InstallPrompt />);
     
     const event = new Event('beforeinstallprompt') as any;
     event.prompt = vi.fn();
     event.userChoice = Promise.resolve({ outcome: 'accepted' });
     
-    fireEvent(window, event);
+    await act(async () => {
+      window.dispatchEvent(event);
+    });
     
     expect(screen.getByRole('button', { name: /install/i })).toBeInTheDocument();
   });
@@ -29,36 +30,78 @@ describe('InstallPrompt', () => {
     render(<InstallPrompt />);
     
     const event = new Event('beforeinstallprompt') as any;
-    event.prompt = vi.fn();
+    event.prompt = vi.fn().mockResolvedValue(undefined);
     event.userChoice = Promise.resolve({ outcome: 'accepted' });
     
-    fireEvent(window, event);
+    await act(async () => {
+      window.dispatchEvent(event);
+    });
     
     const installBtn = screen.getByRole('button', { name: /install/i });
-    fireEvent.click(installBtn);
+    await act(async () => {
+      fireEvent.click(installBtn);
+    });
     
     expect(event.prompt).toHaveBeenCalled();
   });
 
-  it('should hide the button after successful installation', async () => {
+  it('should hide the banner when user rejects the installation', async () => {
+    render(<InstallPrompt />);
+    
+    const event = new Event('beforeinstallprompt') as any;
+    event.prompt = vi.fn().mockResolvedValue(undefined);
+    event.userChoice = Promise.resolve({ outcome: 'dismissed' });
+    
+    await act(async () => {
+      window.dispatchEvent(event);
+    });
+    
+    const installBtn = screen.getByRole('button', { name: /install/i });
+    await act(async () => {
+      fireEvent.click(installBtn);
+    });
+    
+    expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
+  });
+
+  it('should hide the banner when close button is clicked', async () => {
     render(<InstallPrompt />);
     
     const event = new Event('beforeinstallprompt') as any;
     event.prompt = vi.fn();
     event.userChoice = Promise.resolve({ outcome: 'accepted' });
     
-    fireEvent(window, event);
+    await act(async () => {
+      window.dispatchEvent(event);
+    });
     
-    const installBtn = screen.getByRole('button', { name: /install/i });
-    fireEvent.click(installBtn);
-    
-    // Simulate appinstalled event
-    fireEvent(window, new Event('appinstalled'));
+    const closeBtn = screen.getByLabelText(/close/i);
+    await act(async () => {
+      fireEvent.click(closeBtn);
+    });
     
     expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
   });
 
-  it('should render iOS instructions on iOS', () => {
+  it('should hide the banner after successful installation (appinstalled event)', async () => {
+    render(<InstallPrompt />);
+    
+    const event = new Event('beforeinstallprompt') as any;
+    event.prompt = vi.fn();
+    event.userChoice = Promise.resolve({ outcome: 'accepted' });
+    
+    await act(async () => {
+      window.dispatchEvent(event);
+    });
+    
+    await act(async () => {
+      window.dispatchEvent(new Event('appinstalled'));
+    });
+    
+    expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
+  });
+
+  it('should render iOS instructions on iOS', async () => {
     // Mock iOS user agent
     const originalUserAgent = navigator.userAgent;
     Object.defineProperty(navigator, 'userAgent', {
@@ -67,6 +110,7 @@ describe('InstallPrompt', () => {
     });
 
     render(<InstallPrompt />);
+    
     expect(screen.getByText(/Tap/i)).toBeInTheDocument();
     expect(screen.getByText(/Share and then "Add to Home Screen"/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
@@ -76,5 +120,15 @@ describe('InstallPrompt', () => {
       value: originalUserAgent,
       configurable: true,
     });
+  });
+
+  it('should remove event listeners on unmount', () => {
+    const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+    const { unmount } = render(<InstallPrompt />);
+    
+    unmount();
+    
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('beforeinstallprompt', expect.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('appinstalled', expect.any(Function));
   });
 });

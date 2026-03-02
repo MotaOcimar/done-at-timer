@@ -7,10 +7,7 @@ export const InstallPrompt: React.FC = () => {
   if (!isInstallable) return null;
 
   const handleInstallClick = async () => {
-    const outcome = await promptInstall();
-    if (outcome) {
-      console.log(`User response to the install prompt: ${outcome}`);
-    }
+    await promptInstall();
   };
 
   return (
