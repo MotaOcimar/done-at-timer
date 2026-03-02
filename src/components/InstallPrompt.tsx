@@ -2,13 +2,15 @@ import React from 'react';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 export const InstallPrompt: React.FC = () => {
-  const { isInstallable, promptInstall, hideInstall } = useInstallPrompt();
+  const { isInstallable, isIOS, promptInstall, hideInstall } = useInstallPrompt();
 
   if (!isInstallable) return null;
 
   const handleInstallClick = async () => {
     const outcome = await promptInstall();
-    console.log(`User response to the install prompt: ${outcome}`);
+    if (outcome) {
+      console.log(`User response to the install prompt: ${outcome}`);
+    }
   };
 
   return (
@@ -19,14 +21,20 @@ export const InstallPrompt: React.FC = () => {
         </div>
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Install App</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Add to home screen for quick access.</p>
+          {isIOS ? (
+            <p className="text-xs text-slate-500 dark:text-slate-400">Tap <span className="inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-[-4px]"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Share and then "Add to Home Screen".</p>
+          ) : (
+            <p className="text-xs text-slate-500 dark:text-slate-400">Add to home screen for quick access.</p>
+          )}
         </div>
-        <button
-          onClick={handleInstallClick}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-lg shadow-blue-500/30 active:scale-95"
-        >
-          Install
-        </button>
+        {!isIOS && (
+          <button
+            onClick={handleInstallClick}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-lg shadow-blue-500/30 active:scale-95"
+          >
+            Install
+          </button>
+        )}
         <button
           onClick={hideInstall}
           className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1"

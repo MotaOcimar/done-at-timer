@@ -12,8 +12,18 @@ export interface BeforeInstallPromptEvent extends Event {
 export const useInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
+    // Detect iOS
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    
+    if (isIOSDevice && !isStandalone) {
+      setIsIOS(true);
+      setIsInstallable(true); // Show iOS specific instructions
+    }
+
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
@@ -21,6 +31,7 @@ export const useInstallPrompt = () => {
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       // Update UI notify the user they can install the PWA
       setIsInstallable(true);
+      setIsIOS(false);
     };
 
     const handleAppInstalled = () => {
@@ -59,5 +70,5 @@ export const useInstallPrompt = () => {
     setIsInstallable(false);
   };
 
-  return { isInstallable, promptInstall, hideInstall };
+  return { isInstallable, isIOS, promptInstall, hideInstall };
 };

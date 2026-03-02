@@ -57,4 +57,24 @@ describe('InstallPrompt', () => {
     
     expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
   });
+
+  it('should render iOS instructions on iOS', () => {
+    // Mock iOS user agent
+    const originalUserAgent = navigator.userAgent;
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1',
+      configurable: true,
+    });
+
+    render(<InstallPrompt />);
+    expect(screen.getByText(/Tap/i)).toBeInTheDocument();
+    expect(screen.getByText(/Share and then "Add to Home Screen"/i)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /install/i })).not.toBeInTheDocument();
+
+    // Reset user agent
+    Object.defineProperty(navigator, 'userAgent', {
+      value: originalUserAgent,
+      configurable: true,
+    });
+  });
 });
