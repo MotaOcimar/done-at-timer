@@ -37,9 +37,9 @@
 - [x] Task: **GREEN** — Implement `useNotification` hook consuming `NotificationService` [cb52708]
 - [x] Task: **RED** — Write tests: when a task completes and permission is granted, a notification fires with the task title; when denied, no notification and no error [9f806a5]
 - [x] Task: **GREEN** — Integrate notification trigger in the task completion flow (in the store's `completeTask` action or `useTimer` hook) [9f806a5]
-- [ ] Task: **RED** — Write tests for a UI element (bell icon/toggle) that requests notification permission on click
-- [ ] Task: **GREEN** — Implement the permission request UI element
-- [ ] Task: **REFACTOR** — Review all notification code for Single Responsibility and clean interfaces
+- [x] Task: **RED** — Write tests for a UI element (bell icon/toggle) that requests notification permission on click [a0168f9]
+- [x] Task: **GREEN** — Implement the permission request UI element [a0168f9]
+- [x] Task: **REFACTOR** — Review all notification code for Single Responsibility and clean interfaces [a0168f9]
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Notifications' (Protocol in workflow.md)
 
 ## Phase 4: Quality & Cross-Platform Verification
