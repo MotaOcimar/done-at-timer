@@ -35,8 +35,8 @@
 - [x] Task: **REFACTOR** — Ensure the service follows Open/Closed principle — extendable for future notification types without modifying existing code [7fff5ed]
 - [x] Task: **RED** — Write tests for a `useNotification` hook: exposes `permission` state, `requestPermission()`, and `notifyTaskComplete(taskTitle)` [cb52708]
 - [x] Task: **GREEN** — Implement `useNotification` hook consuming `NotificationService` [cb52708]
-- [ ] Task: **RED** — Write tests: when a task completes and permission is granted, a notification fires with the task title; when denied, no notification and no error
-- [ ] Task: **GREEN** — Integrate notification trigger in the task completion flow (in the store's `completeTask` action or `useTimer` hook)
+- [x] Task: **RED** — Write tests: when a task completes and permission is granted, a notification fires with the task title; when denied, no notification and no error [9f806a5]
+- [x] Task: **GREEN** — Integrate notification trigger in the task completion flow (in the store's `completeTask` action or `useTimer` hook) [9f806a5]
 - [ ] Task: **RED** — Write tests for a UI element (bell icon/toggle) that requests notification permission on click
 - [ ] Task: **GREEN** — Implement the permission request UI element
 - [ ] Task: **REFACTOR** — Review all notification code for Single Responsibility and clean interfaces
