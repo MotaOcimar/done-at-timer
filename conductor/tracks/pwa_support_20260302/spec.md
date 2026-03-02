@@ -1,37 +1,49 @@
 # Specification: PWA Support
 
 ## 1. Overview
-Implement Progressive Web App (PWA) capabilities for the "Done At Timer" application. This track aims to enhance the user experience by providing offline access, installability on mobile and desktop devices, and a native-like feel.
+Transform the Done-At Timer into an installable Progressive Web App. The app already stores all data in localStorage (via Zustand persist) and has no backend — making it an ideal PWA candidate. The focus is on **installability**, **offline asset caching**, and **local timer notifications**.
 
 ## 2. Functional Requirements
-- **Web App Manifest:** Create and configure a `manifest.json` file with appropriate metadata (name, short name, start URL, display mode, theme color).
-- **Service Worker Implementation:**
-  - Implement a service worker using a "Stale-While-Revalidate" strategy for assets to ensure fast loads and offline availability.
-  - Cache core application files (HTML, JS, CSS, assets).
-- **Installability (A2HS):**
-  - Ensure the app meets PWA installation criteria.
-  - Provide a way for users to be prompted or manually trigger the "Add to Home Screen" installation.
-- **Offline Support:** The application should be fully functional without an internet connection (using local storage for data and service worker for assets).
-- **Theming & Display:**
-  - Set `display: standalone` for a native app feel.
-  - Configure theme colors and background colors to match the app's visual identity.
-- **Push Notifications (Proof of Concept):**
-  - Implement basic infrastructure for push notifications.
-  - Allow triggering a local notification when a timer completes (if possible within browser constraints).
+
+### Web App Manifest
+- Name: "Done-At Timer", short name: "Done-At"
+- `display: standalone`, orientation: `any`
+- Theme color and background color matching the app's existing palette
+- Start URL: `/done-at-timer/` (GitHub Pages base path)
+- PWA icons in required sizes (192×192, 512×512) — generated programmatically or as simple SVG/PNG placeholders
+
+### Offline Support (Service Worker via vite-plugin-pwa)
+- Use `vite-plugin-pwa` with Workbox for automatic service worker generation
+- **Precache** all build assets (HTML, JS, CSS, fonts, icons)
+- Strategy: `generateSW` mode (no custom service worker logic needed)
+- The app is already fully functional offline for data (localStorage) — only asset caching is needed
+
+### Installability
+- Meet Chromium PWA install criteria (manifest + service worker + HTTPS)
+- Optional: "Install App" prompt/button in the UI to surface the `beforeinstallprompt` event
+- iOS: Add `apple-touch-icon` and `apple-mobile-web-app-capable` meta tags
+
+### Local Notifications (Timer Completion)
+- Use the **Notification API** (not Push API — no server needed) to alert the user when a task's timer completes
+- Request notification permission via a UI affordance (not on page load)
+- Graceful degradation: if permission is denied or unsupported, the app works normally without notifications
 
 ## 3. Non-Functional Requirements
-- **Compatibility:** Must work across iOS (Safari), Android (Chrome), and Desktop browsers.
-- **Performance:** Service worker should not negatively impact initial load times.
-- **Security:** Ensure all PWA features work correctly over HTTPS (GitHub Pages).
+- **Base path awareness**: All PWA assets (manifest, icons, service worker scope) must work under `/done-at-timer/`
+- **Build integration**: Service worker is generated as part of `npm run build` via vite-plugin-pwa
+- **No impact on dev**: Service worker is disabled in development mode by default
+- **Lighthouse PWA score**: Must pass all "Installable" checks
 
 ## 4. Acceptance Criteria
-- [ ] The app can be installed as a standalone application on mobile and desktop.
-- [ ] The app remains functional (UI loads and timers can be interacted with) when offline.
-- [ ] Lighthouse (or similar tool) confirms the app is a valid PWA.
-- [ ] Placeholder icons and splash screens are correctly displayed.
-- [ ] Basic push notification functionality is demonstrated.
+- [ ] App can be installed on Android (Chrome), iOS (Safari), and Desktop (Chrome/Edge)
+- [ ] App loads and is fully functional when offline (after first visit)
+- [ ] `npm run build` generates a valid service worker and manifest
+- [ ] Lighthouse PWA audit passes all "Installable" criteria
+- [ ] Icons display correctly on home screen and splash screen
+- [ ] Local notification fires when a task timer completes (if permission granted)
 
 ## 5. Out of Scope
-- **Advanced Push Notification Server:** Backend infrastructure for remote push notifications is out of scope for this initial PWA track.
-- **Custom Icon Design:** Professional icon creation; placeholders will be used.
-- **App Store/Play Store Submission:** This track focuses on the web-based PWA installation.
+- Push notifications (server-side) — no backend exists
+- Custom icon design — simple placeholders are fine
+- App Store / Play Store submission
+- Background sync or periodic sync
