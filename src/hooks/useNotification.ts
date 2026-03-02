@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { NotificationService, NotificationPermissionStatus } from '../utils/notificationService';
+import { NotificationService } from '../utils/notificationService';
+import type { NotificationPermissionStatus } from '../utils/notificationService';
 
 const notificationService = new NotificationService();
 
