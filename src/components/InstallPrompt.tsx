@@ -1,60 +1,15 @@
-import React, { useState, useEffect } from 'react';
-
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
-}
+import React from 'react';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 export const InstallPrompt: React.FC = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const { isInstallable, promptInstall, hideInstall } = useInstallPrompt();
 
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Update UI notify the user they can install the PWA
-      setIsVisible(true);
-    };
-
-    const handleAppInstalled = () => {
-      // Clear the deferredPrompt so it can be garbage collected
-      setDeferredPrompt(null);
-      setIsVisible(false);
-      console.log('PWA was installed');
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
+  if (!isInstallable) return null;
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    // Show the install prompt
-    await deferredPrompt.prompt();
-
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
+    const outcome = await promptInstall();
     console.log(`User response to the install prompt: ${outcome}`);
-
-    // We've used the prompt, and can't use it again, throw it away
-    setDeferredPrompt(null);
-    setIsVisible(false);
   };
-
-  if (!isVisible) return null;
 
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -73,7 +28,7 @@ export const InstallPrompt: React.FC = () => {
           Install
         </button>
         <button
-          onClick={() => setIsVisible(false)}
+          onClick={hideInstall}
           className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1"
           aria-label="Close"
         >
