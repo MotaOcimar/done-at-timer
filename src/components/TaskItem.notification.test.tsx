@@ -51,7 +51,7 @@ describe('TaskItem Notifications', () => {
     });
 
     // Advance time to completion
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(60000);
     });
 

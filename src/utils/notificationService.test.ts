@@ -15,13 +15,13 @@ describe('BrowserNotifier', () => {
     });
   });
 
-  it('should create a notification if permission is granted', () => {
+  it('should create a notification if permission is granted', async () => {
     const MockNotification = vi.fn();
     vi.stubGlobal('Notification', MockNotification);
     (window.Notification as any).permission = 'granted';
 
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    browserNotifier.notify('Test Title', { body: 'Test Body' });
+    await browserNotifier.notify('Test Title', { body: 'Test Body' });
 
     expect(MockNotification).toHaveBeenCalledWith('Test Title', {
       body: 'Test Body',
@@ -29,13 +29,13 @@ describe('BrowserNotifier', () => {
     consoleSpy.mockRestore();
   });
 
-  it('should not create a notification if permission is denied', () => {
+  it('should not create a notification if permission is denied', async () => {
     const MockNotification = vi.fn();
     vi.stubGlobal('Notification', MockNotification);
     (window.Notification as any).permission = 'denied';
 
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    browserNotifier.notify('Test Title');
+    await browserNotifier.notify('Test Title');
 
     expect(MockNotification).not.toHaveBeenCalled();
     consoleSpy.mockRestore();
@@ -103,26 +103,26 @@ describe('NotificationService', () => {
   });
 
   describe('notify', () => {
-    it('should call all registered notifiers', () => {
+    it('should call all registered notifiers', async () => {
       const mockNotifier1 = { notify: vi.fn() };
       const mockNotifier2 = { notify: vi.fn() };
       const service = new NotificationService([mockNotifier1]);
       service.addNotifier(mockNotifier2);
 
-      service.notify('Test Title');
+      await service.notify('Test Title');
 
       expect(mockNotifier1.notify).toHaveBeenCalledWith('Test Title', undefined);
       expect(mockNotifier2.notify).toHaveBeenCalledWith('Test Title', undefined);
     });
 
-    it('should use BrowserNotifier by default', () => {
+    it('should use BrowserNotifier by default', async () => {
       const MockNotification = vi.fn();
       vi.stubGlobal('Notification', MockNotification);
       (window.Notification as any).permission = 'granted';
 
       const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const service = new NotificationService();
-      service.notify('Test Default');
+      await service.notify('Test Default');
 
       expect(MockNotification).toHaveBeenCalledWith('Test Default', undefined);
       consoleSpy.mockRestore();

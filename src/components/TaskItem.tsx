@@ -46,15 +46,10 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   const isCompleted = task.status === 'COMPLETED';
   const isTimeUp = isActive && isTimeUpGlobal;
 
-  const onTimeUp = () => {
-    console.log('TaskItem.onTimeUp called for task:', task.title);
+  const onTimeUp = async () => {
     onTimeUpAction();
-    console.log('TaskItem.onTimeUp - current permission:', permission);
     if (permission === 'granted') {
-      console.log('TaskItem.onTimeUp - calling notifyTaskComplete');
-      notifyTaskComplete(task.title);
-    } else {
-      console.log('TaskItem.onTimeUp - permission not granted, skipped notification');
+      await notifyTaskComplete(task.title);
     }
   };
 

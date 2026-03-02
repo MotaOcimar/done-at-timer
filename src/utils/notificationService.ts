@@ -1,23 +1,27 @@
 export type NotificationPermissionStatus = NotificationPermission | 'unsupported';
 
 export interface INotifier {
-  notify(title: string, options?: NotificationOptions): void;
+  notify(title: string, options?: NotificationOptions): void | Promise<void>;
 }
 
 export class BrowserNotifier implements INotifier {
-  notify(title: string, options?: NotificationOptions): void {
-    console.log('BrowserNotifier.notify called', { title, options, permission: window.Notification?.permission });
+  async notify(title: string, options?: NotificationOptions): Promise<void> {
     if (
       typeof window === 'undefined' ||
       !window.Notification ||
       window.Notification.permission !== 'granted'
     ) {
-      console.log('BrowserNotifier.notify skipped - missing window, Notification or permission');
       return;
     }
 
     try {
-      console.log('Creating new Notification', title);
+      // Prefer service worker for PWA notifications (more reliable in background/standalone)
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification(title, options);
+        return;
+      }
+
       new window.Notification(title, options);
     } catch (error) {
       console.error('Error showing browser notification:', error);
@@ -56,8 +60,8 @@ export class NotificationService {
   /**
    * Show a notification using all registered notifiers.
    */
-  notify(title: string, options?: NotificationOptions): void {
-    this.notifiers.forEach((notifier) => notifier.notify(title, options));
+  async notify(title: string, options?: NotificationOptions): Promise<void> {
+    await Promise.all(this.notifiers.map((notifier) => notifier.notify(title, options)));
   }
 
   /**

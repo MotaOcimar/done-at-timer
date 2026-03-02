@@ -47,11 +47,11 @@ describe('useNotification', () => {
     expect(mocks.requestPermission).toHaveBeenCalled();
   });
 
-  it('should call notifyTaskComplete which calls service.notify', () => {
+  it('should call notifyTaskComplete which calls service.notify', async () => {
     const { result } = renderHook(() => useNotification());
     
-    act(() => {
-      result.current.notifyTaskComplete('Task 1');
+    await act(async () => {
+      await result.current.notifyTaskComplete('Task 1');
     });
 
     expect(mocks.notify).toHaveBeenCalledWith('Task Complete!', {

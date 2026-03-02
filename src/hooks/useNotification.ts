@@ -17,19 +17,16 @@ export function useNotification() {
     return result;
   }, []);
 
-  const notifyTaskComplete = useCallback((taskTitle: string) => {
-    console.log('useNotification.notifyTaskComplete called', taskTitle);
-    notificationService.notify('Task Complete!', {
+  const notifyTaskComplete = useCallback(async (taskTitle: string) => {
+    await notificationService.notify('Task Complete!', {
       body: `"${taskTitle}" has finished.`,
-      icon: '/icon.svg',
+      icon: `${import.meta.env.BASE_URL}icon.svg`,
     });
   }, []);
 
   // Update permission status on mount
   useEffect(() => {
-    console.log('useNotification mounted - initial permission:', permission);
     if (typeof window !== 'undefined' && 'Notification' in window) {
-      console.log('useNotification useEffect - current window.Notification.permission:', window.Notification.permission);
       setPermission(window.Notification.permission);
     }
   }, []);
