@@ -42,4 +42,17 @@ describe('PWA Build verification', () => {
       expect(indexHtml).toContain('<link rel="icon" type="image/svg+xml" href="/done-at-timer/icon.svg" />');
     }
   });
+
+  it('should generate a service worker with precaching in the dist directory', () => {
+    const swPath = path.resolve(__dirname, '../dist/sw.js');
+    
+    expect(fs.existsSync(swPath)).toBe(true);
+    
+    if (fs.existsSync(swPath)) {
+      const swContent = fs.readFileSync(swPath, 'utf-8');
+      // Check if it uses workbox precaching
+      expect(swContent).toContain('precacheAndRoute');
+      expect(swContent).toContain('index.html');
+    }
+  });
 });
