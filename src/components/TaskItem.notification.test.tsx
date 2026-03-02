@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TaskItem } from './TaskItem';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
+import { NotificationManager } from './NotificationManager';
 
 // Mock useNotification
 vi.mock('../hooks/useNotification', () => ({
@@ -43,7 +44,12 @@ describe('TaskItem Notifications', () => {
     useTaskStore.getState().addTask(taskTitle, 1); // 1 minute
     const task = useTaskStore.getState().tasks[0];
     
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(
+      <>
+        <NotificationManager />
+        <TaskItem task={task} onDelete={vi.fn()} />
+      </>
+    );
     
     // Start task
     act(() => {
@@ -73,7 +79,12 @@ describe('TaskItem Notifications', () => {
     useTaskStore.getState().addTask('Denied Task', 1);
     const task = useTaskStore.getState().tasks[0];
     
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(
+      <>
+        <NotificationManager />
+        <TaskItem task={task} onDelete={vi.fn()} />
+      </>
+    );
     
     act(() => {
       useTaskStore.getState().startTask(task.id);
