@@ -1,7 +1,7 @@
 export type NotificationPermissionStatus = NotificationPermission | 'unsupported';
 
 export interface INotifier {
-  notify(title: string, options?: NotificationOptions): void | Promise<void>;
+  notify(title: string, options?: NotificationOptions): Promise<void>;
 }
 
 export class BrowserNotifier implements INotifier {
@@ -15,11 +15,13 @@ export class BrowserNotifier implements INotifier {
     }
 
     try {
-      // Prefer service worker for PWA notifications (more reliable in background/standalone)
+      // Prefer service worker for PWA notifications
       if ('serviceWorker' in navigator) {
-        const registration = await navigator.serviceWorker.ready;
-        await registration.showNotification(title, options);
-        return;
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration) {
+          await registration.showNotification(title, options);
+          return;
+        }
       }
 
       new window.Notification(title, options);

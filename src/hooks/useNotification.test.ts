@@ -1,7 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useNotification } from './useNotification';
-import { NotificationService } from '../utils/notificationService';
 
 // Mock NotificationService
 const mocks = vi.hoisted(() => ({

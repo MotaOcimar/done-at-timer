@@ -27,7 +27,7 @@ describe('PWA Build verification', () => {
     }
   });
 
-  it('should include iOS meta tags in dist/index.html', () => {
+  it('should include PWA meta tags in dist/index.html', () => {
     const indexPath = path.resolve(__dirname, '../dist/index.html');
     
     expect(fs.existsSync(indexPath)).toBe(true);
@@ -35,11 +35,12 @@ describe('PWA Build verification', () => {
     if (fs.existsSync(indexPath)) {
       const indexHtml = fs.readFileSync(indexPath, 'utf-8');
       
+      expect(indexHtml).toContain('<meta name="mobile-web-app-capable" content="yes">');
       expect(indexHtml).toContain('<meta name="apple-mobile-web-app-capable" content="yes">');
-      expect(indexHtml).toContain('<link rel="apple-touch-icon" href="/done-at-timer/pwa-192x192.png">');
+      expect(indexHtml).toContain('<link rel="apple-touch-icon" href="pwa-192x192.png">');
       expect(indexHtml).toContain('<meta name="apple-mobile-web-app-status-bar-style" content="default">');
       expect(indexHtml).toContain('<meta name="apple-mobile-web-app-title" content="Done-At">');
-      expect(indexHtml).toContain('<link rel="icon" type="image/svg+xml" href="/done-at-timer/icon.svg" />');
+      expect(indexHtml).toContain('<link rel="icon" type="image/svg+xml" href="icon.svg" />');
     }
   });
 
