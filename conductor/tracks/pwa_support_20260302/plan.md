@@ -5,7 +5,7 @@
 
 ## Phase 1: Manifest, Icons & vite-plugin-pwa Setup
 
-- [ ] Task: Install `vite-plugin-pwa` as a dev dependency
+- [x] Task: Install `vite-plugin-pwa` as a dev dependency [ee807e4]
 - [ ] Task: Create PWA icon assets (192×192 and 512×512 PNG placeholders) in `public/`
 - [ ] Task: Validate icon assets — must be exact dimensions (192×192, 512×512), square aspect ratio (1:1), PNG format with transparency support, and `purpose: "any maskable"` in manifest (Chromium is strict about these for install prompt)
 - [ ] Task: **RED** — Write tests asserting that `npm run build` output contains `manifest.webmanifest` with correct `name`, `short_name`, `display`, `start_url`, `icons`
