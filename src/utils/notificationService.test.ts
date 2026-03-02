@@ -111,5 +111,17 @@ describe('NotificationService', () => {
       expect(consoleSpy).toHaveBeenCalled();
       consoleSpy.mockRestore();
     });
+
+    it('should call all registered notifiers', () => {
+      const mockNotifier1 = { notify: vi.fn() };
+      const mockNotifier2 = { notify: vi.fn() };
+      const service = new NotificationService([mockNotifier1]);
+      service.addNotifier(mockNotifier2);
+
+      service.notify('Test Title');
+
+      expect(mockNotifier1.notify).toHaveBeenCalledWith('Test Title', undefined);
+      expect(mockNotifier2.notify).toHaveBeenCalledWith('Test Title', undefined);
+    });
   });
 });

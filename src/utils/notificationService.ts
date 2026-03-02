@@ -1,6 +1,34 @@
 export type NotificationPermissionStatus = NotificationPermission | 'unsupported';
 
+export interface INotifier {
+  notify(title: string, options?: NotificationOptions): void;
+}
+
+export class BrowserNotifier implements INotifier {
+  notify(title: string, options?: NotificationOptions): void {
+    if (
+      typeof window === 'undefined' ||
+      !window.Notification ||
+      window.Notification.permission !== 'granted'
+    ) {
+      return;
+    }
+
+    try {
+      new window.Notification(title, options);
+    } catch (error) {
+      console.error('Error showing browser notification:', error);
+    }
+  }
+}
+
 export class NotificationService {
+  private notifiers: INotifier[] = [];
+
+  constructor(notifiers: INotifier[] = [new BrowserNotifier()]) {
+    this.notifiers = notifiers;
+  }
+
   /**
    * Request permission for notifications.
    * Returns current status or requests it if 'default'.
@@ -23,21 +51,16 @@ export class NotificationService {
   }
 
   /**
-   * Show a notification if permission is granted.
+   * Show a notification using all registered notifiers.
    */
   notify(title: string, options?: NotificationOptions): void {
-    if (
-      typeof window === 'undefined' ||
-      !window.Notification ||
-      window.Notification.permission !== 'granted'
-    ) {
-      return;
-    }
+    this.notifiers.forEach((notifier) => notifier.notify(title, options));
+  }
 
-    try {
-      new window.Notification(title, options);
-    } catch (error) {
-      console.error('Error showing notification:', error);
-    }
+  /**
+   * Register a new notifier.
+   */
+  addNotifier(notifier: INotifier): void {
+    this.notifiers.push(notifier);
   }
 }
