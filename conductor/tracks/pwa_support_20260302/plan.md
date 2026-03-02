@@ -16,7 +16,7 @@
 - [x] Task: Verify `npm run build` generates `manifest.webmanifest` and `sw.js` in `dist/` [b15d2ce]
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Manifest & Setup' (Protocol in workflow.md) [c03fedd]
 
-## Phase 2: Offline Support & Install Prompt
+## Phase 2: Offline Support & Install Prompt [checkpoint: 4f77e29]
 
 - [x] Task: **RED** — Write integration test: after service worker registration, app shell loads when network is unavailable [4de10ce]
 - [x] Task: **GREEN** — Verify precaching config in vite-plugin-pwa covers all critical assets [4de10ce]
@@ -26,12 +26,12 @@
 - [x] Task: **RED** — Write test: `InstallPrompt` is not visible on iOS (where `beforeinstallprompt` doesn't fire) [fb6bfa3]
 - [x] Task: **GREEN** — Handle iOS gracefully (show Safari-specific instructions or hide prompt) [fb6bfa3]
 - [x] Task: Add `InstallPrompt` to the app layout in an unobtrusive position [4883cc3]
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Offline & Install' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Offline & Install' (Protocol in workflow.md) [4f77e29]
 
 ## Phase 3: Local Notifications on Timer Completion
 
-- [ ] Task: **RED** — Write tests for a `NotificationService` (or adapter): `requestPermission()` returns permission state, `notify(title, options)` creates a notification, handles denied/unsupported gracefully
-- [ ] Task: **GREEN** — Implement `NotificationService` as a thin wrapper around the Notification API (Dependency Inversion: depend on an abstraction so tests can mock the browser API)
+- [x] Task: **RED** — Write tests for a `NotificationService` (or adapter): `requestPermission()` returns permission state, `notify(title, options)` creates a notification, handles denied/unsupported gracefully [d42ac60]
+- [x] Task: **GREEN** — Implement `NotificationService` as a thin wrapper around the Notification API (Dependency Inversion: depend on an abstraction so tests can mock the browser API) [d42ac60]
 - [ ] Task: **REFACTOR** — Ensure the service follows Open/Closed principle — extendable for future notification types without modifying existing code
 - [ ] Task: **RED** — Write tests for a `useNotification` hook: exposes `permission` state, `requestPermission()`, and `notifyTaskComplete(taskTitle)`
 - [ ] Task: **GREEN** — Implement `useNotification` hook consuming `NotificationService`
