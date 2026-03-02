@@ -15,10 +15,15 @@ export function PWAUpdateNotification() {
     }
   }, [needRefresh]);
 
+  const handleClose = () => {
+    setIsVisible(false);
+    setNeedRefresh(false);
+  };
+
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-[100] p-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-[100] p-4 duration-300">
       <div className="flex items-start gap-3">
         <div className="mt-1 p-2 bg-blue-50 text-blue-600 rounded-lg">
           <svg
@@ -31,7 +36,7 @@ export function PWAUpdateNotification() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="animate-spin-slow"
+            className="animate-spin"
           >
             <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
             <path d="M21 3v5h-5" />
@@ -52,7 +57,7 @@ export function PWAUpdateNotification() {
               Reload
             </button>
             <button
-              onClick={() => setIsVisible(false)}
+              onClick={handleClose}
               className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
               aria-label="Close"
             >

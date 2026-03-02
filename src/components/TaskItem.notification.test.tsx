@@ -94,14 +94,9 @@ describe('TaskItem Notifications', () => {
       vi.advanceTimersByTime(60000);
     });
 
-    // It should NOT be called if we handle permission inside TaskItem
-    // OR it should be called but handle itself inside useNotification
-    // Based on requirements, "when denied, no notification"
-    // If we call it and useNotification handles it, that's also fine.
-    // But let's check if we want to call it at all if permission is denied.
+    // Verify notifyTaskComplete was NOT called
+    expect(mockNotifyTaskComplete).not.toHaveBeenCalled();
     
-    // Actually, useNotification.notifyTaskComplete already uses NotificationService.notify
-    // which checks for 'granted'. So calling it is safe.
-    // But the task says "no notification".
+    vi.useRealTimers();
   });
 });

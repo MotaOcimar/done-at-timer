@@ -31,11 +31,11 @@ describe('PWAUpdateNotification', () => {
     expect(screen.getByRole('button', { name: /Reload/i })).toBeInTheDocument();
   });
 
-  it('should call updateServiceWorker when reload button is clicked', () => {
+  it('should call updateServiceWorker(true) when reload button is clicked', () => {
     mockNeedRefresh.mockReturnValue(true);
     render(<PWAUpdateNotification />);
     fireEvent.click(screen.getByRole('button', { name: /Reload/i }));
-    expect(mockUpdateServiceWorker).toHaveBeenCalled();
+    expect(mockUpdateServiceWorker).toHaveBeenCalledWith(true);
   });
 
   it('should hide when close button is clicked', () => {
