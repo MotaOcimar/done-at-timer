@@ -9,8 +9,8 @@
 - [x] Task: Create PWA icon assets (192×192 and 512×512 PNG placeholders) in `public/` [6167529]
 - [x] Task: Validate icon assets — must be exact dimensions (192×192, 512×512), square aspect ratio (1:1), PNG format with transparency support, and `purpose: "any maskable"` in manifest (Chromium is strict about these for install prompt) [cefe381]
 - [x] Task: **RED** — Write tests asserting that `npm run build` output contains `manifest.webmanifest` with correct `name`, `short_name`, `display`, `start_url`, `icons` [5d8a6c6]
-- [ ] Task: **GREEN** — Configure `VitePWA()` plugin in `vite.config.ts` with manifest metadata, icon paths, and `registerType: 'autoUpdate'`
-- [ ] Task: **REFACTOR** — Extract manifest config into a dedicated object/file if config becomes large (Single Responsibility)
+- [x] Task: **GREEN** — Configure `VitePWA()` plugin in `vite.config.ts` with manifest metadata, icon paths, and `registerType: 'autoUpdate'` [68df72c]
+- [~] Task: **REFACTOR** — Extract manifest config into a dedicated object/file if config becomes large (Single Responsibility)
 - [ ] Task: **RED** — Write tests asserting `index.html` contains `apple-touch-icon` and `apple-mobile-web-app-capable` meta tags
 - [ ] Task: **GREEN** — Add iOS meta tags to `index.html`
 - [ ] Task: Verify `npm run build` generates `manifest.webmanifest` and `sw.js` in `dist/`
