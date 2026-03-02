@@ -12,8 +12,8 @@
 - [x] Task: **GREEN** — Configure `VitePWA()` plugin in `vite.config.ts` with manifest metadata, icon paths, and `registerType: 'autoUpdate'` [68df72c]
 - [x] Task: **REFACTOR** — Extract manifest config into a dedicated object/file if config becomes large (Single Responsibility) [25c036c]
 - [x] Task: **RED** — Write tests asserting `index.html` contains `apple-touch-icon` and `apple-mobile-web-app-capable` meta tags [1fe6f86]
-- [~] Task: **GREEN** — Add iOS meta tags to `index.html`
-- [ ] Task: Verify `npm run build` generates `manifest.webmanifest` and `sw.js` in `dist/`
+- [x] Task: **GREEN** — Add iOS meta tags to `index.html` [512e09f]
+- [~] Task: Verify `npm run build` generates `manifest.webmanifest` and `sw.js` in `dist/`
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Manifest & Setup' (Protocol in workflow.md)
 
 ## Phase 2: Offline Support & Install Prompt
