@@ -35,11 +35,11 @@ describe('PWA Build verification', () => {
     if (fs.existsSync(indexPath)) {
       const indexHtml = fs.readFileSync(indexPath, 'utf-8');
       
-      // These will fail because we haven't added them yet
       expect(indexHtml).toContain('<meta name="apple-mobile-web-app-capable" content="yes">');
       expect(indexHtml).toContain('<link rel="apple-touch-icon" href="/done-at-timer/pwa-192x192.png">');
       expect(indexHtml).toContain('<meta name="apple-mobile-web-app-status-bar-style" content="default">');
       expect(indexHtml).toContain('<meta name="apple-mobile-web-app-title" content="Done-At">');
+      expect(indexHtml).toContain('<link rel="icon" type="image/svg+xml" href="/done-at-timer/icon.svg" />');
     }
   });
 });
