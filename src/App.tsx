@@ -4,6 +4,7 @@ import { TaskInput } from './components/TaskInput';
 import { TaskList } from './components/TaskList';
 import { ArrivalDisplay } from './components/ArrivalDisplay';
 import { RoutineManager } from './components/RoutineManager';
+import { InstallPrompt } from './components/InstallPrompt';
 
 function App() {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
@@ -35,6 +36,8 @@ function App() {
           isSavingExternal={isSavingActive}
           onSaveComplete={() => setIsSavingActive(false)}
         />
+        
+        <InstallPrompt />
       </div>
     </Layout>
   );
