@@ -32,7 +32,7 @@
 
 - [x] Task: **RED** — Write tests for a `NotificationService` (or adapter): `requestPermission()` returns permission state, `notify(title, options)` creates a notification, handles denied/unsupported gracefully [d42ac60]
 - [x] Task: **GREEN** — Implement `NotificationService` as a thin wrapper around the Notification API (Dependency Inversion: depend on an abstraction so tests can mock the browser API) [d42ac60]
-- [ ] Task: **REFACTOR** — Ensure the service follows Open/Closed principle — extendable for future notification types without modifying existing code
+- [x] Task: **REFACTOR** — Ensure the service follows Open/Closed principle — extendable for future notification types without modifying existing code [7fff5ed]
 - [ ] Task: **RED** — Write tests for a `useNotification` hook: exposes `permission` state, `requestPermission()`, and `notifyTaskComplete(taskTitle)`
 - [ ] Task: **GREEN** — Implement `useNotification` hook consuming `NotificationService`
 - [ ] Task: **RED** — Write tests: when a task completes and permission is granted, a notification fires with the task title; when denied, no notification and no error
