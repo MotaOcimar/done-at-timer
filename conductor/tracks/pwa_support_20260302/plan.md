@@ -3,7 +3,7 @@
 > **Methodology**: Strict TDD (Red → Green → Refactor) and SOLID principles throughout.
 > Every task starts by writing a failing test, then the minimal implementation to pass it, then refactoring.
 
-## Phase 1: Manifest, Icons & vite-plugin-pwa Setup
+## Phase 1: Manifest, Icons & vite-plugin-pwa Setup [checkpoint: c03fedd]
 
 - [x] Task: Install `vite-plugin-pwa` as a dev dependency [ee807e4]
 - [x] Task: Create PWA icon assets (192×192 and 512×512 PNG placeholders) in `public/` [6167529]
@@ -13,8 +13,8 @@
 - [x] Task: **REFACTOR** — Extract manifest config into a dedicated object/file if config becomes large (Single Responsibility) [25c036c]
 - [x] Task: **RED** — Write tests asserting `index.html` contains `apple-touch-icon` and `apple-mobile-web-app-capable` meta tags [1fe6f86]
 - [x] Task: **GREEN** — Add iOS meta tags to `index.html` [512e09f]
-- [~] Task: Verify `npm run build` generates `manifest.webmanifest` and `sw.js` in `dist/`
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Manifest & Setup' (Protocol in workflow.md)
+- [x] Task: Verify `npm run build` generates `manifest.webmanifest` and `sw.js` in `dist/` [b15d2ce]
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Manifest & Setup' (Protocol in workflow.md) [c03fedd]
 
 ## Phase 2: Offline Support & Install Prompt
 
