@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#0ea5e9" />
+  <!-- Inner circle (clock face) -->
+  <circle cx="256" cy="256" r="200" fill="#f0f9ff" />
+  <!-- Clock hour marks -->
+  <line x1="256" y1="76" x2="256" y2="96" stroke="#0c4a6e" stroke-width="8" stroke-linecap="round"/>
+  <line x1="256" y1="416" x2="256" y2="436" stroke="#0c4a6e" stroke-width="8" stroke-linecap="round"/>
+  <line x1="76" y1="256" x2="96" y2="256" stroke="#0c4a6e" stroke-width="8" stroke-linecap="round"/>
+  <line x1="416" y1="256" x2="436" y2="256" stroke="#0c4a6e" stroke-width="8" stroke-linecap="round"/>
+  <!-- Clock center dot -->
+  <circle cx="256" cy="256" r="12" fill="#0c4a6e" />
+  <!-- Hour hand (pointing ~10 o'clock) -->
+  <line x1="256" y1="256" x2="190" y2="160" stroke="#0c4a6e" stroke-width="10" stroke-linecap="round"/>
+  <!-- Minute hand (pointing ~2 o'clock) -->
+  <line x1="256" y1="256" x2="340" y2="170" stroke="#0284c7" stroke-width="7" stroke-linecap="round"/>
+  <!-- Checkmark overlay (bottom right) -->
+  <circle cx="380" cy="380" r="72" fill="#22c55e" />
+  <polyline points="345,380 370,405 415,355" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

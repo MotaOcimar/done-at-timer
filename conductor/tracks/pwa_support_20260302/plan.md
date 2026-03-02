@@ -18,15 +18,15 @@
 
 ## Phase 2: Offline Support & Install Prompt
 
-- [ ] Task: **RED** — Write integration test: after service worker registration, app shell loads when network is unavailable
-- [ ] Task: **GREEN** — Verify precaching config in vite-plugin-pwa covers all critical assets
-- [ ] Task: **RED** — Write tests for `InstallPrompt` component: captures `beforeinstallprompt`, shows install button only when event is available, hides after install, does not render when already installed
-- [ ] Task: **GREEN** — Create `InstallPrompt` component implementing the `beforeinstallprompt` event logic (Dependency Inversion: accept event interface, not browser global directly)
-- [ ] Task: **REFACTOR** — Ensure `InstallPrompt` follows Single Responsibility (UI only) and extract install logic into a `useInstallPrompt` hook (Interface Segregation)
-- [ ] Task: **RED** — Write test: `InstallPrompt` is not visible on iOS (where `beforeinstallprompt` doesn't fire)
-- [ ] Task: **GREEN** — Handle iOS gracefully (show Safari-specific instructions or hide prompt)
-- [ ] Task: Add `InstallPrompt` to the app layout in an unobtrusive position
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Offline & Install' (Protocol in workflow.md)
+- [x] Task: **RED** — Write integration test: after service worker registration, app shell loads when network is unavailable [4de10ce]
+- [x] Task: **GREEN** — Verify precaching config in vite-plugin-pwa covers all critical assets [4de10ce]
+- [x] Task: **RED** — Write tests for `InstallPrompt` component: captures `beforeinstallprompt`, shows install button only when event is available, hides after install, does not render when already installed [072ea84]
+- [x] Task: **GREEN** — Create `InstallPrompt` component implementing the `beforeinstallprompt` event logic (Dependency Inversion: accept event interface, not browser global directly) [072ea84]
+- [x] Task: **REFACTOR** — Ensure `InstallPrompt` follows Single Responsibility (UI only) and extract install logic into a `useInstallPrompt` hook (Interface Segregation) [568b0e6]
+- [x] Task: **RED** — Write test: `InstallPrompt` is not visible on iOS (where `beforeinstallprompt` doesn't fire) [fb6bfa3]
+- [x] Task: **GREEN** — Handle iOS gracefully (show Safari-specific instructions or hide prompt) [fb6bfa3]
+- [x] Task: Add `InstallPrompt` to the app layout in an unobtrusive position [4883cc3]
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Offline & Install' (Protocol in workflow.md)
 
 ## Phase 3: Local Notifications on Timer Completion
 
