@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateArrivalTime } from './time';
+import { calculateArrivalTime, calculateIntermediateETAs } from './time';
 import type { Task } from '../types';
 
 describe('calculateArrivalTime', () => {
@@ -41,5 +41,74 @@ describe('calculateArrivalTime', () => {
     
     // 10:00 + 10m + 20m = 10:30
     expect(result.toISOString()).toBe(new Date('2026-01-01T10:30:00Z').toISOString());
+  });
+});
+
+describe('calculateIntermediateETAs', () => {
+  it('all-pending, no active task', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'PENDING' },
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, null, now);
+    
+    expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T10:10:00Z').toISOString());
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:30:00Z').toISOString());
+  });
+
+  it('active + pending', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, 300, now); // 5 min left on T1
+    
+    expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T10:05:00Z').toISOString());
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:25:00Z').toISOString());
+  });
+
+  it('completed + active + pending', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'COMPLETED', completedAt: new Date('2026-01-01T09:50:00Z').getTime() },
+      { id: '2', title: 'T2', duration: 20, status: 'IN_PROGRESS' },
+      { id: '3', title: 'T3', duration: 15, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, 600, now); // 10 min left on T2
+    
+    expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T09:50:00Z').toISOString());
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:10:00Z').toISOString());
+    expect(etas.get('3')?.toISOString()).toBe(new Date('2026-01-01T10:25:00Z').toISOString());
+  });
+
+  it('overtime (active timeLeft <= 0)', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, -120, now); // 2 min overtime on T1
+    
+    expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T10:00:00Z').toISOString());
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:20:00Z').toISOString());
+  });
+
+  it('all completed', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'COMPLETED', completedAt: new Date('2026-01-01T09:50:00Z').getTime() },
+      { id: '2', title: 'T2', duration: 20, status: 'COMPLETED', completedAt: new Date('2026-01-01T10:10:00Z').getTime() },
+    ];
+    const now = new Date('2026-01-01T10:20:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, null, now);
+    
+    expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T09:50:00Z').toISOString());
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:10:00Z').toISOString());
   });
 });
