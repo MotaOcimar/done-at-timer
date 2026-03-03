@@ -54,7 +54,7 @@ const StatusIcon = ({
   if (isActive) {
     if (isTimeUp) {
       return (
-        <div className={`${baseClasses} bg-amber-100 text-amber-600`}>
+        <div className={`${baseClasses} bg-amber-100 text-amber-500`}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
           </svg>
@@ -132,7 +132,7 @@ const TaskCard = ({
       style={style}
       className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
         isTimeUp 
-          ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-500/20' 
+          ? 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50' 
           : isActive ? (isActuallyPaused ? 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50' : 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20')
           : isCompleted ? 'border-green-100 bg-green-50/50' 
           : 'border-gray-100 bg-white'
@@ -166,7 +166,7 @@ const TaskCard = ({
         {/* Task Info Area */}
         <div className="flex-1 min-w-0">
           <h3 className={`font-bold transition-all truncate ${
-            isTimeUp ? 'text-amber-700' : isActive ? (isActuallyPaused ? 'text-gray-600' : 'text-blue-700 text-lg') : 'text-gray-800'
+            isTimeUp ? 'text-amber-600' : isActive ? (isActuallyPaused ? 'text-gray-600' : 'text-blue-700 text-lg') : 'text-gray-800'
           } ${isCompleted ? 'line-through text-gray-400 font-medium' : ''}`}>
             <InlineEdit
               value={task.title}
@@ -199,7 +199,7 @@ const TaskCard = ({
               onClick={(e) => { e.stopPropagation(); onComplete(); }}
               className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg ${
                 isTimeUp 
-                  ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-200 scale-110' 
+                  ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100 scale-110' 
                   : 'bg-green-500 hover:bg-green-600 shadow-green-200'
               }`}
               aria-label="Done"
@@ -228,7 +228,7 @@ const TaskCard = ({
           <ProgressBar progress={progress} isActive={!isActuallyPaused && !isTimeUp} />
           <div className="flex justify-end mt-2">
             <span className={`text-sm font-black tabular-nums tracking-tight ${
-              isTimeUp ? 'text-amber-600 animate-pulse' : (isActuallyPaused ? 'text-gray-500' : 'text-blue-600')
+              isTimeUp ? 'text-amber-500 animate-pulse' : (isActuallyPaused ? 'text-gray-500' : 'text-blue-600')
             }`}>
               {timeDisplay}
             </span>
