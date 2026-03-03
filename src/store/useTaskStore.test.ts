@@ -40,6 +40,24 @@ describe('useTaskStore', () => {
     expect(tasks.every((t) => t.status === 'PENDING')).toBe(true);
   });
 
+  it('should set completedAt timestamp when completing the active task', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
+        { id: '2', title: 'Task 2', duration: 10, status: 'PENDING' },
+      ],
+      activeTaskId: '1',
+    });
+
+    const now = Date.now();
+    useTaskStore.getState().completeActiveTask(0);
+
+    const completedTask = useTaskStore.getState().tasks.find(t => t.id === '1');
+    expect(completedTask?.status).toBe('COMPLETED');
+    expect(completedTask?.completedAt).toBeGreaterThanOrEqual(now);
+    expect(completedTask?.completedAt).toBeLessThanOrEqual(Date.now());
+  });
+
   it('should clear all tasks', () => {
     useTaskStore.setState({
       tasks: [{ id: '1', title: 'T1', duration: 10, status: 'PENDING' }],

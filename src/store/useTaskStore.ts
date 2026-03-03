@@ -178,10 +178,10 @@ export const useTaskStore = create<TaskState>()(
         const actualSeconds = (activeTaskOriginal.duration * 60) - timeLeftSeconds;
         const actualDurationMinutes = Math.ceil(Math.max(0, actualSeconds) / 60);
 
-        // 1. Mark current task as COMPLETED and store actualDuration
+        // 1. Mark current task as COMPLETED and store actualDuration and completedAt
         const newTasks = tasks.map((t) =>
           t.id === activeTaskId 
-            ? { ...t, status: 'COMPLETED' as const, actualDuration: actualDurationMinutes } 
+            ? { ...t, status: 'COMPLETED' as const, actualDuration: actualDurationMinutes, completedAt: Date.now() } 
             : t
         );
 
