@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/done-at-timer/sw.js', { scope: '/done-at-timer/' })})}
