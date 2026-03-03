@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useNotificationService } from '../NotificationContext';
 import type { NotificationPermissionStatus } from '../utils/notificationService';
 
@@ -26,13 +26,6 @@ export function useNotification() {
       tag: 'task-complete',
     });
   }, [notificationService]);
-
-  // Update permission status on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'Notification' in window) {
-      setPermission(window.Notification.permission);
-    }
-  }, []);
 
   return {
     permission,

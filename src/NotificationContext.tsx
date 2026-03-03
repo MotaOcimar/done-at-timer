@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { NotificationService } from './utils/notificationService';
 
 const NotificationContext = createContext<NotificationService | null>(null);
@@ -7,7 +8,7 @@ export const NotificationProvider: React.FC<{
   service?: NotificationService; 
   children: ReactNode 
 }> = ({ service, children }) => {
-  const notificationService = service || new NotificationService();
+  const notificationService = useMemo(() => service || new NotificationService(), [service]);
   
   return (
     <NotificationContext.Provider value={notificationService}>
@@ -16,6 +17,7 @@ export const NotificationProvider: React.FC<{
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useNotificationService = () => {
   const context = useContext(NotificationContext);
   if (!context) {

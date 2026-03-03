@@ -11,6 +11,7 @@ export function PWAUpdateNotification() {
 
   useEffect(() => {
     if (needRefresh) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
     }
   }, [needRefresh]);
