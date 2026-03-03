@@ -62,7 +62,7 @@ Goal: Display ETAs inline in each card and reorganize the active card's time inf
 - [x] REFACTOR. c870e1b
 
 ### 2.6 — Manual verification checkpoint
-- [ ] Conductor — Manual Verification of Phase 2.
+- [x] Conductor — Manual Verification of Phase 2. 4d403fc
 
 ## Phase 3: Real-time Updates & Polish
 Goal: Ensure ETAs update live, remain correct across all interactions, and refine UI/UX based on feedback.
