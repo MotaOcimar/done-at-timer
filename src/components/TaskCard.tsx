@@ -38,7 +38,7 @@ const StatusIcon = ({
   isActive: boolean, 
   isPaused: boolean, 
   isTimeUp?: boolean,
-  cardState: string,
+  cardState: 'completed' | 'idle' | 'overtime' | 'paused' | 'running',
   onToggle: (e: React.MouseEvent) => void 
 }) => {
   const baseClasses = "flex items-center justify-center w-10 h-10 rounded-full transition-colors";
