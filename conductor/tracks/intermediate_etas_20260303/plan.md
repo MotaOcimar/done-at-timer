@@ -47,14 +47,14 @@ Goal: Display ETAs inline in each card and reorganize the active card's time inf
 - [x] REFACTOR. 6a98690
 
 ### 2.3 — Pending cards: show ETA on subtitle
-- [ ] RED: Write a test asserting pending cards display the ETA right-aligned on the subtitle line.
-- [ ] GREEN: Update `TaskCard.tsx` to render the ETA for idle/pending state.
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting pending cards display the ETA right-aligned on the subtitle line. 24b7cbb
+- [x] GREEN: Update `TaskCard.tsx` to render the ETA for idle/pending state. 24b7cbb
+- [x] REFACTOR. 24b7cbb
 
 ### 2.4 — Completed cards: show actual finish time
-- [ ] RED: Write a test asserting completed cards display the completion time right-aligned on the subtitle line.
-- [ ] GREEN: Update `TaskCard.tsx` to render `completedAt` formatted as time.
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting completed cards display the completion time right-aligned on the subtitle line. 24b7cbb
+- [x] GREEN: Update `TaskCard.tsx` to render `completedAt` formatted as time. 24b7cbb
+- [x] REFACTOR. 24b7cbb
 
 ### 2.5 — Wire ETA data through component tree
 - [ ] RED: Write a `TaskList` integration test asserting that each `TaskItem` receives the correct `eta` prop computed from `calculateIntermediateETAs`.
