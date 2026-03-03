@@ -64,10 +64,12 @@ describe('TaskCard Color Refinements', () => {
 
       // Title and duration should be neutral gray
       expect(title).toHaveClass('text-gray-600');
-      expect(durationLabel).toHaveClass('text-gray-400');
+      // The duration text is now inside a div that gets the labelClasses, and the div itself is the parent element found by text
+      const durationElement = screen.getByText('10', { selector: 'span' }).closest('div.text-xs');
+      expect(durationElement).toHaveClass('text-gray-400');
 
-      // Time display should be neutral gray (Issue #1 & #2)
-      expect(timeDisplay).toHaveClass('text-gray-500');
+      // The time is now shown in the subtitle, so we check the whole div
+      expect(screen.getByText(/total · 10 min left/i).closest('div.text-xs')).toHaveClass('text-gray-400');
     });
   });
 
@@ -104,10 +106,11 @@ describe('TaskCard Color Refinements', () => {
 
       // Title and duration should be active blue
       expect(title).toHaveClass('text-blue-700');
-      expect(durationLabel).toHaveClass('text-blue-400');
+      const durationElement = screen.getByText('10', { selector: 'span' }).closest('div.text-xs');
+      expect(durationElement).toHaveClass('text-blue-400');
 
       // Time display should be active blue
-      expect(timeDisplay).toHaveClass('text-blue-600');
+      expect(screen.getByText(/total · 10 min left/i).closest('div.text-xs')).toHaveClass('text-blue-400');
     });
   });
 
@@ -145,16 +148,17 @@ describe('TaskCard Color Refinements', () => {
       expect(statusIconDiv).toHaveClass('text-amber-500');
       expect(statusIconDiv).not.toHaveClass('text-amber-600');
 
-      // Title and duration should be softer amber - currently text-amber-700 and text-amber-400
+      // Title and duration should be softer amber - currently it's just 'text-amber-600' and 'text-amber-400'
       expect(title).toHaveClass('text-amber-600');
-      expect(durationLabel).toHaveClass('text-amber-400');
+      const durationElement = screen.getByText('10', { selector: 'span' }).closest('div.text-xs');
+      expect(durationElement).toHaveClass('text-amber-400');
 
       // Done button should be softer - currently bg-amber-500
       expect(doneButton).toHaveClass('bg-amber-400');
       expect(doneButton).not.toHaveClass('bg-amber-500');
 
-      // Time display should be softer - currently text-amber-600
-      expect(timeDisplay).toHaveClass('text-amber-500');
+      // Time display should be softer - currently text-amber-500
+      expect(screen.getByText(/total · 1 min over/i).closest('div.text-xs')).toHaveClass('text-amber-400');
     });
   });
 });
