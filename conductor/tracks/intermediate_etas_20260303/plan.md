@@ -65,25 +65,35 @@ Goal: Display ETAs inline in each card and reorganize the active card's time inf
 - [ ] Conductor — Manual Verification of Phase 2.
 
 ## Phase 3: Real-time Updates & Polish
-Goal: Ensure ETAs update live and remain correct across all interactions.
+Goal: Ensure ETAs update live, remain correct across all interactions, and refine UI/UX based on feedback.
 
 ### 3.1 — Real-time ETA recalculation
 - [ ] RED: Write a test asserting ETAs update when the clock advances (mock timer tick).
 - [ ] GREEN: Ensure the ETA computation re-runs every second (leverage existing `useTimer` or add a lightweight interval in `TaskList`).
 - [ ] REFACTOR.
 
-### 3.2 — Drag-and-drop recalculation
+### 3.2 — ETA UI Polish & Alignment (Feedback)
+- [ ] RED/GREEN: Fix ETA alignment in `TaskCard` so it sits perfectly right-aligned, below the action buttons area (trash icon space).
+- [ ] RED/GREEN: Replace the `→` text with a `map-pin` SVG icon for pending/active tasks and `map-pin-check-inside` for completed tasks.
+
+### 3.3 — Reordering Constraints (Feedback)
+- [ ] RED: Write tests asserting that COMPLETED and IN_PROGRESS tasks cannot be reordered, and PENDING tasks cannot be moved above the IN_PROGRESS task.
+- [ ] GREEN: Remove drag handles from COMPLETED and IN_PROGRESS tasks in `TaskCard`.
+- [ ] GREEN: Update `handleDragEnd` in `TaskList` to clamp drop indices so PENDING tasks stay within the PENDING section.
+- [ ] REFACTOR.
+
+### 3.4 — Drag-and-drop recalculation
 - [ ] RED: Write a test asserting that reordering tasks produces updated ETAs in the new order.
 - [ ] GREEN: Verify `reorderTasks` triggers re-render with recalculated ETAs (likely works for free via Zustand reactivity, but confirm).
 - [ ] REFACTOR.
 
-### 3.3 — Consistency with Arrival Clock
+### 3.5 — Consistency with Arrival Clock
 - [ ] RED: Write a test asserting the last task's ETA equals the value returned by `calculateArrivalTime`.
 - [ ] GREEN: Fix any discrepancy between the two calculations.
 - [ ] REFACTOR.
 
-### 3.4 — Visual polish
+### 3.6 — Visual polish
 - [ ] Task: Final visual review — check color consistency across states (running/paused/overtime/idle/completed) and ensure ETA text doesn't truncate on small screens.
 
-### 3.5 — Manual verification checkpoint
+### 3.7 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 3.
