@@ -111,4 +111,31 @@ describe('calculateIntermediateETAs', () => {
     expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T09:50:00Z').toISOString());
     expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:10:00Z').toISOString());
   });
+
+  it('completed before pending without active task', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'COMPLETED', completedAt: new Date('2026-01-01T09:50:00Z').getTime() },
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, null, now);
+    
+    expect(etas.get('1')?.toISOString()).toBe(new Date('2026-01-01T09:50:00Z').toISOString());
+    // Pending chains from 'now' (10:00), not affected by completed task
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:20:00Z').toISOString());
+  });
+
+  it('completed without completedAt is ignored and pending chains from now', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'COMPLETED' }, // Legacy task without completedAt
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    
+    const etas = calculateIntermediateETAs(tasks, null, now);
+    
+    expect(etas.has('1')).toBe(false);
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:20:00Z').toISOString());
+  });
 });
