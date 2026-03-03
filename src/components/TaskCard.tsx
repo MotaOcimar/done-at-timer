@@ -86,7 +86,7 @@ const StatusIcon = ({
     <div className={baseClasses}>
       <button
         onClick={onToggle}
-        className="flex items-center justify-center w-full h-full rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 group transition-colors"
+        className="flex items-center justify-center w-full h-full rounded-full bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-500 group transition-colors"
         aria-label="Play task"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-0.5" viewBox="0 0 20 20" fill="currentColor">
