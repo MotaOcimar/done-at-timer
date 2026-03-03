@@ -177,4 +177,41 @@ describe('TaskCard (Pure Visual)', () => {
     // so we can just check if it contains "→ " followed by a number.
     expect(screen.getByText(/→ \d{2}:\d{2}/)).toBeInTheDocument();
   });
+
+  it('shows ETA on subtitle for pending cards', () => {
+    const eta = new Date('2026-01-01T09:15:00Z');
+    render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={false} 
+        isCompleted={false} 
+        eta={eta}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/09:15/)).toBeInTheDocument();
+  });
+
+  it('shows actual finish time for completed cards', () => {
+    const completedTask: Task = { ...mockTask, status: 'COMPLETED' };
+    const completionTime = new Date('2026-01-01T08:32:00Z');
+    render(
+      <TaskCard 
+        task={completedTask} 
+        isActive={false} 
+        isCompleted={true} 
+        eta={completionTime}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/08:32/)).toBeInTheDocument();
+  });
 });

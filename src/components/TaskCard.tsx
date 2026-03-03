@@ -216,20 +216,27 @@ const TaskCard = ({
               ariaLabel="Task title"
             />
           </h3>
-          <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${labelClasses[cardState]}`}>
-            <InlineEdit
-              value={task.duration}
-              onSave={onDurationSave}
-              type="number"
-              ariaLabel="Task duration"
-              className="mr-0"
-            /> min {isActive ? `total · ${timeDisplay}` : ''}
-            {isCompleted && task.actualDuration !== undefined && (
-              <span className="ml-2 text-gray-500 lowercase font-medium">
-                (took {task.actualDuration} min)
+          <div className={`text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-between ${labelClasses[cardState]}`}>
+            <div>
+              <InlineEdit
+                value={task.duration}
+                onSave={onDurationSave}
+                type="number"
+                ariaLabel="Task duration"
+                className="mr-0"
+              /> min {isActive ? `total · ${timeDisplay}` : ''}
+              {isCompleted && task.actualDuration !== undefined && (
+                <span className="ml-2 text-gray-500 lowercase font-medium">
+                  (took {task.actualDuration} min)
+                </span>
+              )}
+            </div>
+            {!isActive && eta && (
+              <span className="tabular-nums opacity-70">
+                {new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta)}
               </span>
             )}
-          </p>
+          </div>
         </div>
 
         {/* Action Buttons Area */}
