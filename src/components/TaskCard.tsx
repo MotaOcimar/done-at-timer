@@ -13,6 +13,7 @@ interface TaskCardProps {
   timeLeft?: number;
   progress?: number;
   isActuallyPaused?: boolean;
+  eta?: Date;
   // Drag-and-drop props (optional for overlay)
   setNodeRef?: (node: HTMLElement | null) => void;
   style?: React.CSSProperties;
@@ -116,6 +117,7 @@ const TaskCard = ({
   timeLeft = 0, 
   progress = 0, 
   isActuallyPaused = false,
+  eta,
   setNodeRef,
   style,
   attributes,
@@ -269,11 +271,13 @@ const TaskCard = ({
             state={isTimeUp ? 'overtime' : isActuallyPaused ? 'paused' : 'running'}
           />
           <div className="flex justify-end mt-2">
-            <span className={`text-sm font-black tabular-nums tracking-tight ${
-              timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
-            }`}>
-              {timeDisplay}
-            </span>
+            {eta && (
+              <span className={`text-sm font-black tabular-nums tracking-tight ${
+                timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
+              }`}>
+                → {new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta)}
+              </span>
+            )}
           </div>
         </div>
       )}

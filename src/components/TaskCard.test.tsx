@@ -40,7 +40,7 @@ describe('TaskCard (Pure Visual)', () => {
       />
     );
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
-    expect(screen.getByText('5 min left')).toBeInTheDocument();
+    expect(screen.getByText(/5 min left/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Pause/i)).toBeInTheDocument();
   });
 
@@ -152,5 +152,29 @@ describe('TaskCard (Pure Visual)', () => {
       />
     );
     expect(screen.getByText(/· 2 min over/i)).toBeInTheDocument();
+  });
+
+  it('shows formatted ETA in progress footer when active', () => {
+    const eta = new Date('2026-01-01T08:35:00Z');
+    render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={true} 
+        isCompleted={false} 
+        timeLeft={300}
+        progress={0.5}
+        isActuallyPaused={false}
+        eta={eta}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/→/i)).toBeInTheDocument();
+    // Use an exact match or regex for the formatted time. It depends on local timezone in tests, 
+    // so we can just check if it contains "→ " followed by a number.
+    expect(screen.getByText(/→ \d{2}:\d{2}/)).toBeInTheDocument();
   });
 });
