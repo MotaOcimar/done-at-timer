@@ -3,6 +3,12 @@
 This file tracks all ideas, requested improvements, and roadmap items for future implementation.
 
 ## Priority Improvements (Current Focus)
+- [ ] **Arrival Clock Z-index Bug**: The Arrival Clock remains visible and unblurred when modals (Save Routine) or the side library are open. This is due to the sticky header having a higher z-index than the backdrop.
+- [ ] **UI Color Palette Refinement**: 
+    - **Softer Overtime Color**: Replace the heavy amber color with a more pleasant, less "alarming" tone to maintain the app's positive coaching vibe.
+    - **Neutral Paused State**: Use a neutral color (e.g., gray) for the active task when it is paused, as pausing is often a neutral/intentional decision.
+    - **Neutral Idle State**: Ensure tasks that haven't been started yet (Pending) use neutral colors. Currently, the play button uses blue even when not running, which is confusing.
+- [ ] **Minutes Input Bug**: On desktop, the minutes input shows spin buttons (up/down arrows) that obscure the number inside. Hide these buttons via CSS for a cleaner, consistent UI.
 - [ ] **Sticky Arrival Time**: The Arrival Time display should remain fixed/sticky at the top of the screen when scrolling through a long list of tasks.
 - [ ] **Arrival Status Icons**: 
     - Replace or augment the "drifting" text with meaningful icons next to the Arrival Clock.
@@ -14,6 +20,9 @@ This file tracks all ideas, requested improvements, and roadmap items for future
 - [x] **Site Metadata**: Update the site title in `index.html` from "temp-project" to "Done-At Timer".
 
 ## Future Roadmap (from Product Definition)
+- [ ] **Full Card Drag and Drop**: Allow users to drag tasks by clicking anywhere on the card, not just the handle. This would save horizontal space by removing the handle icon. Careful implementation is needed to avoid conflicts with interactive elements like text inputs and buttons.
+- [ ] **Intermediate Arrival Times**: Display the estimated completion time for each individual task in the list, allowing users to see not just when they'll finish everything, but when they'll finish each step.
+- [ ] **Media Style Notifications**: Instead of just simple complete notifications, use the Media Session API (or advanced PWA notifications) to show current task progress and provide play/pause controls, similar to music player notifications.
 - [ ] **Paused Time Tracking**: Measure the time spent in paused state and represent it with a distinct color in the progress bar to show "drift".
 - [ ] **Actual vs Estimated Comparison**: When a task is finished, display the actual duration. Show the original estimated time next to it with a strikethrough for easy comparison.
 - [ ] **Mini Time Timers**: Add visual "time timers" (circular progress indicators) to represent remaining time for individual tasks and the total session.
