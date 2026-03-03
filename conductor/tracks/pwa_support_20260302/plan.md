@@ -44,9 +44,9 @@
 
 ## Phase 4: Quality & Cross-Platform Verification
 
-- [ ] Task: Run full test suite — all tests must pass (no skipped tests)
-- [ ] Task: Run Lighthouse PWA audit and fix any flagged issues
-- [ ] Task: Test installation on Android Chrome, iOS Safari, and Desktop Chrome/Edge
-- [ ] Task: **RED** — Write test asserting service worker update flow works (new version detected → user notified)
-- [ ] Task: **GREEN** — Implement update notification if not handled by `registerType: 'autoUpdate'`
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Quality Gates' (Protocol in workflow.md)
+- [x] Task: Run full test suite — all tests must pass (no skipped tests) [7a63de5]
+- [x] Task: Run Lighthouse PWA audit and fix any flagged issues [fdfe614]
+- [x] Task: Test installation on Android Chrome, iOS Safari, and Desktop Chrome/Edge [6dec4f6]
+- [x] Task: **RED** — Write test asserting service worker update flow works (new version detected → user notified) [fdfe614]
+- [x] Task: **GREEN** — Implement update notification if not handled by `registerType: 'autoUpdate'` [fdfe614]
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Quality Gates' (Protocol in workflow.md) [c1a5d25]
