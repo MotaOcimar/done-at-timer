@@ -9,8 +9,8 @@
 - [x] Task: **GREEN** — Implement neutral color for idle/pending state play button and associated indicators [fea914f]
 - [x] Task: **RED** — Write failing tests asserting neutral (gray) color classes when active task is paused
 - [x] Task: **GREEN** — Implement neutral color for paused state (card, icon, text) [8e7bb44]
-- [ ] Task: **RED** — Write failing tests asserting softer tone classes for overtime state
-- [ ] Task: **GREEN** — Implement softer color for overtime state (card, icon, text, done button, time display)
+- [x] Task: **RED** — Write failing tests asserting softer tone classes for overtime state
+- [x] Task: **GREEN** — Implement softer color for overtime state (card, icon, text, done button, time display) [b9a4a53]
 - [ ] Task: **RED** — Write failing tests asserting ProgressBar color changes based on task state (blue when running, gray when paused, softer tone when overtime)
 - [ ] Task: **GREEN** — Make ProgressBar state-aware by accepting a state prop and applying the corresponding color
 - [ ] Task: **REFACTOR** — Review all color changes for consistency across components, extract shared color constants if needed
