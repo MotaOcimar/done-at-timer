@@ -5,8 +5,8 @@
 
 ## Phase 1: Update State Colors
 
-- [ ] Task: **RED** — Write failing tests asserting neutral color classes on idle/pending play button (gray instead of blue)
-- [ ] Task: **GREEN** — Implement neutral color for idle/pending state play button and associated indicators
+- [x] Task: **RED** — Write failing tests asserting neutral color classes on idle/pending play button (gray instead of blue)
+- [x] Task: **GREEN** — Implement neutral color for idle/pending state play button and associated indicators [fea914f]
 - [ ] Task: **RED** — Write failing tests asserting neutral (gray) color classes when active task is paused
 - [ ] Task: **GREEN** — Implement neutral color for paused state (card, icon, text)
 - [ ] Task: **RED** — Write failing tests asserting softer tone classes for overtime state
