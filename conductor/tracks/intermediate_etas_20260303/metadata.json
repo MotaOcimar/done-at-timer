@@ -4,5 +4,5 @@
   "status": "new",
   "created_at": "2026-03-03T10:00:00Z",
   "updated_at": "2026-03-03T10:00:00Z",
-  "description": "Implement intermediate arrival times (ETAs) per task using a timeline checkpoint style between task cards."
+  "description": "Implement intermediate arrival times (ETAs) per task displayed inline within task cards for a minimalist, scannable timeline."
 }
