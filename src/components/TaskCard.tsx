@@ -108,6 +108,8 @@ const StatusIcon = ({
   );
 };
 
+const timeFormatter = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' });
+
 const TaskCard = ({ 
   task, 
   isActive, 
@@ -233,7 +235,7 @@ const TaskCard = ({
             </div>
             {!isActive && eta && (
               <span className="tabular-nums opacity-70">
-                {new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta)}
+                {timeFormatter.format(eta)}
               </span>
             )}
           </div>
@@ -282,7 +284,7 @@ const TaskCard = ({
               <span className={`text-sm font-black tabular-nums tracking-tight ${
                 timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
               }`}>
-                → {new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta)}
+                → {timeFormatter.format(eta)}
               </span>
             )}
           </div>
