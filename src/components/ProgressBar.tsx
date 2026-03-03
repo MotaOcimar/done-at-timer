@@ -1,10 +1,17 @@
 interface ProgressBarProps {
   progress: number; // 0 to 1
   isActive?: boolean;
+  state?: 'running' | 'paused' | 'overtime';
 }
 
-const ProgressBar = ({ progress, isActive = false }: ProgressBarProps) => {
+const ProgressBar = ({ progress, isActive = false, state = 'running' }: ProgressBarProps) => {
   const percentage = Math.max(0, Math.min(100, Math.round(progress * 100)));
+
+  const stateClasses = {
+    running: 'bg-blue-500',
+    paused: 'bg-gray-400',
+    overtime: 'bg-amber-400'
+  };
 
   return (
     <div 
@@ -15,7 +22,7 @@ const ProgressBar = ({ progress, isActive = false }: ProgressBarProps) => {
       aria-valuemax={100}
     >
       <div 
-        className={`bg-blue-500 h-full rounded-full transition-all duration-1000 ease-linear ${isActive ? 'animate-pulse' : ''}`} 
+        className={`${stateClasses[state]} h-full rounded-full transition-all duration-1000 ease-linear ${isActive ? 'animate-pulse' : ''}`} 
         style={{ width: `${percentage}%` }}
       ></div>
     </div>

@@ -225,7 +225,11 @@ const TaskCard = ({
         <div className={`mt-4 pt-4 border-t animate-in fade-in slide-in-from-top-2 duration-500 ${
           isActuallyPaused ? 'border-gray-200' : 'border-blue-100/50'
         }`}>
-          <ProgressBar progress={progress} isActive={!isActuallyPaused && !isTimeUp} />
+          <ProgressBar 
+            progress={progress} 
+            isActive={!isActuallyPaused && !isTimeUp} 
+            state={isTimeUp ? 'overtime' : isActuallyPaused ? 'paused' : 'running'}
+          />
           <div className="flex justify-end mt-2">
             <span className={`text-sm font-black tabular-nums tracking-tight ${
               isTimeUp ? 'text-amber-500 animate-pulse' : (isActuallyPaused ? 'text-gray-500' : 'text-blue-600')

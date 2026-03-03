@@ -37,4 +37,20 @@ describe('ProgressBar', () => {
     const inactiveBar = screen.getByRole('progressbar').firstChild;
     expect(inactiveBar).not.toHaveClass('animate-pulse');
   });
+
+  it('applies correct color classes based on state', () => {
+    // Default should be running (blue)
+    const { rerender } = render(<ProgressBar progress={0.5} />);
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass('bg-blue-500');
+
+    // Paused state
+    rerender(<ProgressBar progress={0.5} state="paused" />);
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass('bg-gray-400');
+    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass('bg-blue-500');
+
+    // Overtime state
+    rerender(<ProgressBar progress={0.5} state="overtime" />);
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass('bg-amber-400');
+    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass('bg-blue-500');
+  });
 });
