@@ -13,5 +13,5 @@
 - [x] Task: **GREEN** — Implement softer color for overtime state (card, icon, text, done button, time display) [b9a4a53]
 - [x] Task: **RED** — Write failing tests asserting ProgressBar color changes based on task state (blue when running, gray when paused, softer tone when overtime)
 - [x] Task: **GREEN** — Make ProgressBar state-aware by accepting a state prop and applying the corresponding color [fc9d662]
-- [ ] Task: **REFACTOR** — Review all color changes for consistency across components, extract shared color constants if needed
+- [x] Task: **REFACTOR** — Review all color changes for consistency across components, extract shared color constants if needed [c83ae02]
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Update State Colors' (Protocol in workflow.md)
