@@ -113,4 +113,44 @@ describe('TaskCard (Pure Visual)', () => {
     );
     expect(screen.getByText('(took 15 min)')).toBeInTheDocument();
   });
+
+  it('shows remaining time in subtitle when active', () => {
+    render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={true} 
+        isCompleted={false} 
+        timeLeft={300} // 5 min left
+        progress={0.5}
+        isActuallyPaused={false}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    // the label should be e.g. "10 min total · 5 min left" or something similar with these parts
+    expect(screen.getByText(/· 5 min left/i)).toBeInTheDocument();
+  });
+
+  it('shows overtime in subtitle when active and in overtime', () => {
+    render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={true} 
+        isCompleted={false} 
+        isTimeUp={true}
+        timeLeft={-120} // 2 min over
+        progress={1}
+        isActuallyPaused={false}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/· 2 min over/i)).toBeInTheDocument();
+  });
 });

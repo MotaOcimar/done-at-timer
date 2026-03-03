@@ -221,7 +221,7 @@ const TaskCard = ({
               type="number"
               ariaLabel="Task duration"
               className="mr-0"
-            /> min {isActive ? 'total' : ''}
+            /> min {isActive ? `total · ${timeDisplay}` : ''}
             {isCompleted && task.actualDuration !== undefined && (
               <span className="ml-2 text-gray-500 lowercase font-medium">
                 (took {task.actualDuration} min)
