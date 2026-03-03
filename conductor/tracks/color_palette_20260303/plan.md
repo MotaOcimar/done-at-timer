@@ -29,4 +29,7 @@
 - [x] Task: **RED** — Update ArrivalDisplay tests to assert better progress bar contrast [6f42c12]
 - [x] Task: **GREEN** — Improve ArrivalDisplay progress bar contrast for idle, paused, and overtime states [0342e1d]
 
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions [f0bbfb7]
+
 - [ ] Task: Conductor - User Manual Verification 'UI Color Palette Refinement' (Protocol in workflow.md)
