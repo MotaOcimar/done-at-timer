@@ -22,8 +22,6 @@ describe('TaskCard Color Refinements', () => {
       );
       
       const playButton = screen.getByRole('button', { name: /Play task/i });
-      
-      // These should fail currently as they are bg-blue-50 and text-blue-500
       expect(playButton).toHaveClass('bg-gray-100');
       expect(playButton).toHaveClass('text-gray-400');
       
@@ -41,6 +39,7 @@ describe('TaskCard Color Refinements', () => {
           isActive={true} 
           isCompleted={false} 
           isActuallyPaused={true}
+          timeLeft={600} // 10 min left
           onDelete={vi.fn()}
           onToggle={vi.fn()}
           onTitleSave={vi.fn()}
@@ -53,19 +52,62 @@ describe('TaskCard Color Refinements', () => {
       const statusIconButton = screen.getByRole('button', { name: /Resume/i });
       const title = screen.getByRole('heading', { name: /Test Task/i });
       const durationLabel = screen.getByText(/min total/i);
+      const timeDisplay = screen.getByText(/10 min left/i);
 
-      // Card should be neutral gray - currently it's blue
+      // Card should be neutral gray
       expect(card).toHaveClass('border-gray-300');
       expect(card).toHaveClass('bg-gray-50');
-      expect(card).not.toHaveClass('border-blue-500');
-
-      // Status icon should be neutral gray - currently it's blue
+      
+      // Status icon button should be neutral gray
       expect(statusIconButton).toHaveClass('bg-gray-100');
       expect(statusIconButton).toHaveClass('text-gray-500');
 
-      // Title and duration should be neutral gray - currently they are blue
+      // Title and duration should be neutral gray
       expect(title).toHaveClass('text-gray-600');
       expect(durationLabel).toHaveClass('text-gray-400');
+
+      // Time display should be neutral gray (Issue #1 & #2)
+      expect(timeDisplay).toHaveClass('text-gray-500');
+    });
+  });
+
+  describe('Running State', () => {
+    it('uses active blue colors when the task is running', () => {
+      render(
+        <TaskCard 
+          task={mockTask} 
+          isActive={true} 
+          isCompleted={false} 
+          isActuallyPaused={false}
+          timeLeft={600} // 10 min left
+          onDelete={vi.fn()}
+          onToggle={vi.fn()}
+          onTitleSave={vi.fn()}
+          onDurationSave={vi.fn()}
+          onComplete={vi.fn()}
+        />
+      );
+      
+      const card = screen.getByRole('heading', { name: /Test Task/i }).closest('div.flex-col');
+      const statusIconButton = screen.getByRole('button', { name: /Pause/i });
+      const title = screen.getByRole('heading', { name: /Test Task/i });
+      const durationLabel = screen.getByText(/min total/i);
+      const timeDisplay = screen.getByText(/10 min left/i);
+
+      // Card should be active blue
+      expect(card).toHaveClass('border-blue-500');
+      expect(card).toHaveClass('bg-blue-50');
+
+      // Status icon button should be active blue
+      expect(statusIconButton).toHaveClass('bg-blue-100');
+      expect(statusIconButton).toHaveClass('text-blue-600');
+
+      // Title and duration should be active blue
+      expect(title).toHaveClass('text-blue-700');
+      expect(durationLabel).toHaveClass('text-blue-400');
+
+      // Time display should be active blue
+      expect(timeDisplay).toHaveClass('text-blue-600');
     });
   });
 

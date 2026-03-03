@@ -31,16 +31,24 @@ const StatusIcon = ({
   isActive, 
   isPaused, 
   isTimeUp,
+  cardState,
   onToggle 
 }: { 
   isCompleted: boolean, 
   isActive: boolean, 
   isPaused: boolean, 
   isTimeUp?: boolean,
+  cardState: string,
   onToggle: (e: React.MouseEvent) => void 
 }) => {
   const baseClasses = "flex items-center justify-center w-10 h-10 rounded-full transition-colors";
   
+  const iconButtonClasses = {
+    idle: 'bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-500',
+    paused: 'bg-gray-100 text-gray-500 hover:bg-gray-200',
+    running: 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+  };
+
   if (isCompleted) {
     return (
       <div className={`${baseClasses} text-green-500`} data-testid="checkmark-icon">
@@ -66,7 +74,7 @@ const StatusIcon = ({
         <button
           onClick={onToggle}
           className={`flex items-center justify-center w-full h-full rounded-full transition-colors ${
-            isPaused ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+            iconButtonClasses[cardState as keyof typeof iconButtonClasses]
           }`}
           aria-label={isPaused ? 'Resume' : 'Pause'}
         >
@@ -88,7 +96,7 @@ const StatusIcon = ({
     <div className={baseClasses}>
       <button
         onClick={onToggle}
-        className="flex items-center justify-center w-full h-full rounded-full bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-500 group transition-colors"
+        className={`flex items-center justify-center w-full h-full rounded-full group transition-colors ${iconButtonClasses.idle}`}
         aria-label="Play task"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-0.5" viewBox="0 0 20 20" fill="currentColor">
@@ -155,6 +163,14 @@ const TaskCard = ({
     running: 'text-blue-400'
   };
 
+  const timeDisplayClasses = {
+    completed: 'text-gray-400',
+    idle: 'text-gray-400',
+    overtime: 'text-amber-500 animate-pulse',
+    paused: 'text-gray-500',
+    running: 'text-blue-600'
+  };
+
   return (
     <div 
       ref={setNodeRef}
@@ -184,6 +200,7 @@ const TaskCard = ({
             isActive={isActive} 
             isPaused={isActuallyPaused} 
             isTimeUp={isTimeUp}
+            cardState={cardState}
             onToggle={onToggle}
           />
         </div>
@@ -253,7 +270,7 @@ const TaskCard = ({
           />
           <div className="flex justify-end mt-2">
             <span className={`text-sm font-black tabular-nums tracking-tight ${
-              isTimeUp ? 'text-amber-500 animate-pulse' : (isActuallyPaused ? 'text-gray-500' : 'text-blue-600')
+              timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
             }`}>
               {timeDisplay}
             </span>
