@@ -6,9 +6,9 @@ This plan details the steps to implement per-task ETAs displayed inline within e
 Goal: Record completion timestamps and compute per-task ETAs.
 
 ### 1.1 — `completedAt` field on Task type
-- [ ] RED: Write a store test asserting that `completeActiveTask` sets `completedAt` to a timestamp on the completed task.
-- [ ] GREEN: Update `Task` type in `src/types/index.ts` to include `completedAt?: number`. Update `completeActiveTask` in `src/store/useTaskStore.ts` to record `Date.now()`.
-- [ ] REFACTOR: Clean up if needed.
+- [x] RED: Write a store test asserting that `completeActiveTask` sets `completedAt` to a timestamp on the completed task. 0a5c107
+- [x] GREEN: Update `Task` type in `src/types/index.ts` to include `completedAt?: number`. Update `completeActiveTask` in `src/store/useTaskStore.ts` to record `Date.now()`. 0a5c107
+- [x] REFACTOR: Clean up if needed. 0a5c107
 
 ### 1.2 — `calculateIntermediateETAs` utility
 - [ ] RED: Write a test for **all-pending, no active task** — ETAs chain from `now`.
