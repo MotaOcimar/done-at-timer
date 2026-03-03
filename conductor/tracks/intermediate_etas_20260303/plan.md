@@ -34,12 +34,12 @@ Goal: Record completion timestamps and compute per-task ETAs.
 Goal: Display ETAs inline in each card and reorganize the active card's time info.
 
 ### 2.1 — Active card subtitle: show remaining time
-- [ ] RED: Write a component test asserting that the active card's subtitle renders `X min total · Y min left`.
-- [ ] GREEN: Update `TaskCard.tsx` subtitle for the active state.
-- [ ] REFACTOR.
-- [ ] RED: Write a test for the overtime variant: `X min total · Z min over`.
-- [ ] GREEN: Handle overtime in the subtitle.
-- [ ] REFACTOR.
+- [x] RED: Write a component test asserting that the active card's subtitle renders `X min total · Y min left`. ced6347
+- [x] GREEN: Update `TaskCard.tsx` subtitle for the active state. ced6347
+- [x] REFACTOR. ced6347
+- [x] RED: Write a test for the overtime variant: `X min total · Z min over`. ced6347
+- [x] GREEN: Handle overtime in the subtitle. ced6347
+- [x] REFACTOR. ced6347
 
 ### 2.2 — Active card footer: replace countdown with ETA
 - [ ] RED: Write a test asserting the active card's progress footer renders the formatted ETA (e.g., `→ 08:35`) instead of "X min left".
