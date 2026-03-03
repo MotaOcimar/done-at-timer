@@ -126,17 +126,42 @@ const TaskCard = ({
     ? `${mins} min over`
     : mins > 0 ? `${mins} min left` : '< 1 min left';
 
+  const cardState = isCompleted ? 'completed' :
+                    !isActive ? 'idle' :
+                    isTimeUp ? 'overtime' :
+                    isActuallyPaused ? 'paused' : 'running';
+
+  const cardClasses = {
+    completed: 'border-green-100 bg-green-50/50 opacity-70',
+    idle: 'border-gray-100 bg-white',
+    overtime: 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50',
+    paused: 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50',
+    running: 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20'
+  };
+
+  const titleClasses = {
+    completed: 'line-through text-gray-400 font-medium',
+    idle: 'text-gray-800',
+    overtime: 'text-amber-600',
+    paused: 'text-gray-600',
+    running: 'text-blue-700 text-lg'
+  };
+
+  const labelClasses = {
+    completed: 'text-gray-400',
+    idle: 'text-gray-400',
+    overtime: 'text-amber-400',
+    paused: 'text-gray-400',
+    running: 'text-blue-400'
+  };
+
   return (
     <div 
       ref={setNodeRef}
       style={style}
       className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
-        isTimeUp 
-          ? 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50' 
-          : isActive ? (isActuallyPaused ? 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50' : 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20')
-          : isCompleted ? 'border-green-100 bg-green-50/50' 
-          : 'border-gray-100 bg-white'
-      } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
+        cardClasses[cardState]
+      } ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
     >
       <div className="flex items-center gap-4">
         {/* Drag Handle */}
@@ -165,18 +190,14 @@ const TaskCard = ({
 
         {/* Task Info Area */}
         <div className="flex-1 min-w-0">
-          <h3 className={`font-bold transition-all truncate ${
-            isTimeUp ? 'text-amber-600' : isActive ? (isActuallyPaused ? 'text-gray-600' : 'text-blue-700 text-lg') : 'text-gray-800'
-          } ${isCompleted ? 'line-through text-gray-400 font-medium' : ''}`}>
+          <h3 className={`font-bold transition-all truncate ${titleClasses[cardState]}`}>
             <InlineEdit
               value={task.title}
               onSave={onTitleSave}
               ariaLabel="Task title"
             />
           </h3>
-          <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-            isTimeUp ? 'text-amber-400' : (isActive && !isActuallyPaused) ? 'text-blue-400' : 'text-gray-400'
-          }`}>
+          <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${labelClasses[cardState]}`}>
             <InlineEdit
               value={task.duration}
               onSave={onDurationSave}
