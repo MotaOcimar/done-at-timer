@@ -20,6 +20,7 @@ import { useTaskStore } from '../store/useTaskStore';
 import { TaskItem } from './TaskItem';
 import { TaskCard } from './TaskCard';
 import type { Task } from '../types';
+import { calculateIntermediateETAs } from '../utils/time';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
@@ -56,6 +57,10 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  // Calculate intermediate ETAs based on current time
+  // Note: For now we use the initial render time, this will be made real-time in Phase 3
+  const etas = calculateIntermediateETAs(tasks, activeTaskTimeLeft, new Date());
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = tasks.find((t) => t.id === event.active.id);
@@ -166,7 +171,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
         >
           <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
             {tasks.map((task) => (
-              <TaskItem key={task.id} task={task} onDelete={removeTask} />
+              <TaskItem key={task.id} task={task} onDelete={removeTask} eta={etas.get(task.id)} />
             ))}
           </SortableContext>
           <DragOverlay adjustScale={false}>
@@ -180,6 +185,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
                   isTimeUp={activeTask.id === activeTaskIdFromStore && isTimeUpGlobal}
                   timeLeft={activeTask.id === activeTaskIdFromStore ? (activeTaskTimeLeft ?? 0) : 0}
                   progress={activeTask.id === activeTaskIdFromStore ? (1 - ((activeTaskTimeLeft ?? 0) / (activeTask.duration * 60))) : 0}
+                  eta={etas.get(activeTask.id)}
                   onDelete={() => {}}
                   onToggle={() => {}}
                   onTitleSave={() => {}}

@@ -26,6 +26,24 @@ vi.mock('@dnd-kit/sortable', async (importOriginal) => {
 describe('TaskList', () => {
   beforeEach(() => {
     useTaskStore.setState({ tasks: [] });
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('computes and passes ETA to TaskItems', () => {
+    vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+      ],
+      activeTaskTimeLeft: null,
+    });
+    
+    render(<TaskList />);
+    expect(screen.getByText(/10:10/)).toBeInTheDocument();
   });
 
   it('renders list of tasks', () => {

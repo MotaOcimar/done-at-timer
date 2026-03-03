@@ -9,9 +9,10 @@ import { TaskCard } from './TaskCard';
 interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
+  eta?: Date;
 }
 
-const TaskItem = ({ task, onDelete }: TaskItemProps) => {
+const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
   const {
     attributes,
     listeners,
@@ -100,6 +101,7 @@ const TaskItem = ({ task, onDelete }: TaskItemProps) => {
       timeLeft={timeLeft}
       progress={progress}
       isActuallyPaused={isActuallyPaused}
+      eta={eta}
       setNodeRef={setNodeRef}
       style={style}
       attributes={attributes}
