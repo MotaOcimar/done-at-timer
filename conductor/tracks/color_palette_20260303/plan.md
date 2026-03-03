@@ -3,7 +3,7 @@
 > **Methodology**: Strict TDD (Red → Green → Refactor) and SOLID principles throughout.
 > Every task starts by writing a failing test, then the minimal implementation to pass it, then refactoring.
 
-## Phase 1: Update State Colors [checkpoint: 4b32c11]
+## Phase 1: Update State Colors [checkpoint: 3c25504]
 
 - [x] Task: **RED** — Write failing tests asserting neutral color classes on idle/pending play button (gray instead of blue)
 - [x] Task: **GREEN** — Implement neutral color for idle/pending state play button and associated indicators [fea914f]
