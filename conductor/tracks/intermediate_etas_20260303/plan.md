@@ -57,9 +57,9 @@ Goal: Display ETAs inline in each card and reorganize the active card's time inf
 - [x] REFACTOR. 24b7cbb
 
 ### 2.5 — Wire ETA data through component tree
-- [ ] RED: Write a `TaskList` integration test asserting that each `TaskItem` receives the correct `eta` prop computed from `calculateIntermediateETAs`.
-- [ ] GREEN: Call `calculateIntermediateETAs` in `TaskList.tsx` and pass `eta` down through `TaskItem` → `TaskCard`.
-- [ ] REFACTOR.
+- [x] RED: Write a `TaskList` integration test asserting that each `TaskItem` receives the correct `eta` prop computed from `calculateIntermediateETAs`. c870e1b
+- [x] GREEN: Call `calculateIntermediateETAs` in `TaskList.tsx` and pass `eta` down through `TaskItem` → `TaskCard`. c870e1b
+- [x] REFACTOR. c870e1b
 
 ### 2.6 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 2.
