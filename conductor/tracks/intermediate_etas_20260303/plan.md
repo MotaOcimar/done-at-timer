@@ -42,9 +42,9 @@ Goal: Display ETAs inline in each card and reorganize the active card's time inf
 - [x] REFACTOR. ced6347
 
 ### 2.2 — Active card footer: replace countdown with ETA
-- [ ] RED: Write a test asserting the active card's progress footer renders the formatted ETA (e.g., `→ 08:35`) instead of "X min left".
-- [ ] GREEN: Replace the countdown span with the ETA display. Add `eta?: Date` prop to `TaskCard`.
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting the active card's progress footer renders the formatted ETA (e.g., `→ 08:35`) instead of "X min left". 6a98690
+- [x] GREEN: Replace the countdown span with the ETA display. Add `eta?: Date` prop to `TaskCard`. 6a98690
+- [x] REFACTOR. 6a98690
 
 ### 2.3 — Pending cards: show ETA on subtitle
 - [ ] RED: Write a test asserting pending cards display the ETA right-aligned on the subtitle line.
