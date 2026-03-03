@@ -3,39 +3,45 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NotificationBell } from './NotificationBell';
 import { useNotification } from '../hooks/useNotification';
 
-// Mock useNotification
-vi.mock('../hooks/useNotification', () => ({
-  useNotification: vi.fn(),
-}));
+// Mock the hook
+vi.mock('../hooks/useNotification');
 
 describe('NotificationBell', () => {
   const mockRequestPermission = vi.fn();
+  const mockNotifyTaskComplete = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useNotification as any).mockReturnValue({
-      permission: 'default',
-      requestPermission: mockRequestPermission,
-    });
   });
 
   it('should render the bell icon when permission is default', () => {
+    (useNotification as any).mockReturnValue({
+      permission: 'default',
+      requestPermission: mockRequestPermission,
+      notifyTaskComplete: mockNotifyTaskComplete,
+    });
+
     render(<NotificationBell />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
-    // Assuming we use a specific icon or title
-    expect(screen.getByTitle(/enable notifications/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /enable notifications/i })).toBeInTheDocument();
   });
 
   it('should render a different icon or state when permission is granted', () => {
     (useNotification as any).mockReturnValue({
       permission: 'granted',
       requestPermission: mockRequestPermission,
+      notifyTaskComplete: mockNotifyTaskComplete,
     });
     render(<NotificationBell />);
     expect(screen.getByTitle(/notifications enabled/i)).toBeInTheDocument();
   });
 
   it('should call requestPermission when clicked and permission is default', () => {
+    (useNotification as any).mockReturnValue({
+      permission: 'default',
+      requestPermission: mockRequestPermission,
+      notifyTaskComplete: mockNotifyTaskComplete,
+    });
+
     render(<NotificationBell />);
     fireEvent.click(screen.getByRole('button'));
     expect(mockRequestPermission).toHaveBeenCalled();
@@ -45,7 +51,9 @@ describe('NotificationBell', () => {
     (useNotification as any).mockReturnValue({
       permission: 'unsupported',
       requestPermission: mockRequestPermission,
+      notifyTaskComplete: mockNotifyTaskComplete,
     });
+
     const { container } = render(<NotificationBell />);
     expect(container.firstChild).toBeNull();
   });

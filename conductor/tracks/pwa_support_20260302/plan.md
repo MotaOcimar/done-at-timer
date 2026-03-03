@@ -28,7 +28,7 @@
 - [x] Task: Add `InstallPrompt` to the app layout in an unobtrusive position [4883cc3]
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Offline & Install' (Protocol in workflow.md) [4f77e29]
 
-## Phase 3: Local Notifications on Timer Completion
+## Phase 3: Local Notifications on Timer Completion [checkpoint: c695094]
 
 - [x] Task: **RED** — Write tests for a `NotificationService` (or adapter): `requestPermission()` returns permission state, `notify(title, options)` creates a notification, handles denied/unsupported gracefully [d42ac60]
 - [x] Task: **GREEN** — Implement `NotificationService` as a thin wrapper around the Notification API (Dependency Inversion: depend on an abstraction so tests can mock the browser API) [d42ac60]
@@ -40,13 +40,13 @@
 - [x] Task: **RED** — Write tests for a UI element (bell icon/toggle) that requests notification permission on click [a0168f9]
 - [x] Task: **GREEN** — Implement the permission request UI element [a0168f9]
 - [x] Task: **REFACTOR** — Review all notification code for Single Responsibility and clean interfaces [a0168f9]
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Notifications' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Notifications' (Protocol in workflow.md) [c695094]
 
 ## Phase 4: Quality & Cross-Platform Verification
 
-- [ ] Task: Run full test suite — all tests must pass (no skipped tests)
-- [ ] Task: Run Lighthouse PWA audit and fix any flagged issues
-- [ ] Task: Test installation on Android Chrome, iOS Safari, and Desktop Chrome/Edge
-- [ ] Task: **RED** — Write test asserting service worker update flow works (new version detected → user notified)
-- [ ] Task: **GREEN** — Implement update notification if not handled by `registerType: 'autoUpdate'`
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Quality Gates' (Protocol in workflow.md)
+- [x] Task: Run full test suite — all tests must pass (no skipped tests) [7a63de5]
+- [x] Task: Run Lighthouse PWA audit and fix any flagged issues [fdfe614]
+- [x] Task: Test installation on Android Chrome, iOS Safari, and Desktop Chrome/Edge [6dec4f6]
+- [x] Task: **RED** — Write test asserting service worker update flow works (new version detected → user notified) [fdfe614]
+- [x] Task: **GREEN** — Implement update notification if not handled by `registerType: 'autoUpdate'` [fdfe614]
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Quality Gates' (Protocol in workflow.md) [c1a5d25]

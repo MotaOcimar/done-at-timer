@@ -7,13 +7,20 @@ import { RoutineManager } from './components/RoutineManager';
 import { InstallPrompt } from './components/InstallPrompt';
 import { NotificationBell } from './components/NotificationBell';
 
+import { NotificationProvider } from './NotificationContext';
+import { NotificationManager } from './components/NotificationManager';
+import { PWAUpdateNotification } from './components/PWAUpdateNotification';
+
 function App() {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [isSavingActive, setIsSavingActive] = useState(false);
 
   return (
-    <Layout>
-      <div className="flex flex-col relative">
+    <NotificationProvider>
+      <Layout>
+        <NotificationManager />
+        <PWAUpdateNotification />
+        <div className="flex flex-col relative">
         {/* Sticky Header - Simples e Limpo */}
         <div className="sticky top-0 z-50 bg-gray-50 -mx-4 px-4 pt-3 pb-6 pointer-events-none">
           <div className="relative pointer-events-auto">
@@ -44,6 +51,7 @@ function App() {
         <InstallPrompt />
       </div>
     </Layout>
+    </NotificationProvider>
   );
 }
 

@@ -16,10 +16,11 @@ export const useInstallPrompt = () => {
 
   useEffect(() => {
     // Detect iOS
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: boolean }).MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone;
     
     if (isIOSDevice && !isStandalone) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsIOS(true);
       setIsInstallable(true); // Show iOS specific instructions
     }

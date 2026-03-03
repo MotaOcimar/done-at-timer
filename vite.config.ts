@@ -12,9 +12,14 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
+
       includeAssets: ['icon.svg', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: pwaManifest,
+      devOptions: {
+        enabled: true,
+        suppressWarnings: true,
+      },
     }),
   ],
   test: {

@@ -18,6 +18,8 @@
   - _Reasoning:_ Modern, lightweight, and highly accessible toolkit for drag and drop in React.
 - **Effects:** **canvas-confetti**
   - _Reasoning:_ Lightweight library for celebration animations.
+- **PWA Support:** **vite-plugin-pwa**
+  - _Reasoning:_ Automated service worker generation and manifest injection for Vite projects.
 
 ## 2. Backend (Optional for MVP, likely Local Storage initially)
 

@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TaskItem } from './TaskItem';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
+import { NotificationManager } from './NotificationManager';
 
 // Mock useNotification
 vi.mock('../hooks/useNotification', () => ({
@@ -43,7 +44,12 @@ describe('TaskItem Notifications', () => {
     useTaskStore.getState().addTask(taskTitle, 1); // 1 minute
     const task = useTaskStore.getState().tasks[0];
     
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(
+      <>
+        <NotificationManager />
+        <TaskItem task={task} onDelete={vi.fn()} />
+      </>
+    );
     
     // Start task
     act(() => {
@@ -73,7 +79,12 @@ describe('TaskItem Notifications', () => {
     useTaskStore.getState().addTask('Denied Task', 1);
     const task = useTaskStore.getState().tasks[0];
     
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(
+      <>
+        <NotificationManager />
+        <TaskItem task={task} onDelete={vi.fn()} />
+      </>
+    );
     
     act(() => {
       useTaskStore.getState().startTask(task.id);
@@ -83,14 +94,9 @@ describe('TaskItem Notifications', () => {
       vi.advanceTimersByTime(60000);
     });
 
-    // It should NOT be called if we handle permission inside TaskItem
-    // OR it should be called but handle itself inside useNotification
-    // Based on requirements, "when denied, no notification"
-    // If we call it and useNotification handles it, that's also fine.
-    // But let's check if we want to call it at all if permission is denied.
+    // Verify notifyTaskComplete was NOT called
+    expect(mockNotifyTaskComplete).not.toHaveBeenCalled();
     
-    // Actually, useNotification.notifyTaskComplete already uses NotificationService.notify
-    // which checks for 'granted'. So calling it is safe.
-    // But the task says "no notification".
+    vi.useRealTimers();
   });
 });
