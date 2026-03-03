@@ -2,7 +2,7 @@
 
 This plan details the steps to implement per-task ETAs displayed inline within each task card. Every step follows strict TDD: write a failing test **first**, then write the minimum production code to make it pass, then refactor.
 
-## Phase 1: State & Logic (Data Layer)
+## Phase 1: State & Logic (Data Layer) [checkpoint: 9411049]
 Goal: Record completion timestamps and compute per-task ETAs.
 
 ### 1.1 — `completedAt` field on Task type
@@ -28,7 +28,7 @@ Goal: Record completion timestamps and compute per-task ETAs.
 - [x] REFACTOR. a09a2be
 
 ### 1.3 — Manual verification checkpoint
-- [ ] Conductor — Manual Verification of Phase 1.
+- [x] Conductor — Manual Verification of Phase 1. 9411049
 
 ## Phase 2: UI Integration (Card Changes)
 Goal: Display ETAs inline in each card and reorganize the active card's time info.
