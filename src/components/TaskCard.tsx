@@ -279,15 +279,15 @@ const TaskCard = ({
             isActive={!isActuallyPaused && !isTimeUp} 
             state={isTimeUp ? 'overtime' : isActuallyPaused ? 'paused' : 'running'}
           />
-          <div className="flex justify-end mt-2">
-            {eta && (
+          {eta && (
+            <div className="flex justify-end mt-2">
               <span className={`text-sm font-black tabular-nums tracking-tight ${
                 timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
               }`}>
                 → {timeFormatter.format(eta)}
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
