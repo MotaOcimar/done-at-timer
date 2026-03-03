@@ -76,7 +76,7 @@ describe('ArrivalDisplay', () => {
     const { container } = render(<ArrivalDisplay />);
     
     expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
-    expect(container.firstChild).toHaveClass('bg-gray-100');
+    expect(container.firstChild).toHaveClass('bg-gray-50');
   });
 
   it('shows softer amber color and drifting text when time is up', () => {

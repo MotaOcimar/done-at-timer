@@ -109,35 +109,47 @@ const ArrivalDisplay = () => {
   );
   const progressPercentage = Math.min(100, Math.round(progress * 100));
 
-  const displayState = isTimeUp ? 'overtime' :
-                       (activeTaskId && !targetEndTime) ? 'paused' : 'running';
+  const displayState = !activeTaskId ? 'idle' :
+                       isTimeUp ? 'overtime' :
+                       !targetEndTime ? 'paused' : 'running';
 
   const containerClasses = {
-    running: 'bg-blue-600 shadow-blue-200 text-white',
-    paused: 'bg-gray-100 shadow-gray-200 text-gray-900',
-    overtime: 'bg-amber-50 shadow-amber-100 text-amber-900'
+    running: 'bg-blue-600 shadow-blue-200 text-white shadow-2xl',
+    paused: 'bg-gray-50 border-gray-300 shadow-gray-200 text-gray-900 border shadow-xl',
+    overtime: 'bg-amber-50 border-amber-300 shadow-amber-200 text-amber-900 border shadow-xl',
+    idle: 'bg-white border-gray-200 shadow-gray-200 text-gray-900 border shadow-xl'
   };
 
   const labelClasses = {
     running: 'text-blue-200',
     paused: 'text-gray-500',
-    overtime: 'text-amber-600'
+    overtime: 'text-amber-600',
+    idle: 'text-gray-500'
   };
 
   const progressBgClasses = {
     running: 'bg-blue-900/30',
-    paused: 'bg-gray-300',
-    overtime: 'bg-amber-200/50'
+    paused: 'bg-gray-200',
+    overtime: 'bg-amber-200/50',
+    idle: 'bg-gray-200'
+  };
+
+  const progressFillClasses = {
+    running: 'bg-white/90',
+    paused: 'bg-gray-400',
+    overtime: 'bg-amber-400',
+    idle: 'bg-gray-400'
   };
 
   const progressRemainingClasses = {
     running: 'text-blue-100',
     paused: 'text-gray-500',
-    overtime: 'text-amber-700'
+    overtime: 'text-amber-700',
+    idle: 'text-gray-500'
   };
 
   return (
-    <div className={`text-center py-8 px-6 rounded-3xl shadow-2xl transition-all duration-700 ${
+    <div className={`text-center py-8 px-6 rounded-3xl transition-all duration-700 ${
       containerClasses[displayState]
     }`}>
       <h2 className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 transition-colors duration-700 ${
@@ -152,11 +164,12 @@ const ArrivalDisplay = () => {
       <div className="mt-8 px-4">
         <div className={`h-1.5 w-full rounded-full overflow-hidden mb-2 transition-colors duration-700 ${
           progressBgClasses[displayState]
-        }`}>
+        }`} role="progressbar" aria-valuenow={progressPercentage} aria-valuemin={0} aria-valuemax={100}>
           <div
-            className={`h-full bg-white/90 rounded-full transition-all duration-1000 ease-linear ${activeTaskId && !isDrifting ? 'animate-pulse' : ''}`}
+            className={`h-full rounded-full transition-all duration-1000 ease-linear ${activeTaskId && !isDrifting ? 'animate-pulse' : ''} ${
+              progressFillClasses[displayState]
+            }`}
             style={{ width: `${progressPercentage}%` }}
-            role="progressbar"
           ></div>
         </div>
         <div className={`flex justify-end text-xs font-bold uppercase tracking-widest opacity-80 transition-colors duration-700 ${

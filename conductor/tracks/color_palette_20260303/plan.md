@@ -17,10 +17,16 @@
 - [x] Task: **RED** — Write missing tests for StatusIcon pause button colors and explicit 'running' state colors in TaskCard.color.test.tsx [7428f52]
 - [x] Task: **GREEN** — Centralize remaining inline color logic (time display, StatusIcon pause button) into cardState mappings in TaskCard.tsx [9842c12]
 
-## Phase 2: Main Timer Color Refinement [checkpoint: d144c9b]
+## Phase 2: Main Timer Color Refinement [checkpoint: 225a514]
 
 - [x] Task: **RED** — Write failing tests for ArrivalDisplay asserting neutral gray when paused and softer amber when overtime [7f91a2d]
 - [x] Task: **GREEN** — Implement color refinement in ArrivalDisplay based on current task state (paused, overtime, running) [9a42e1d]
 - [x] Task: **REFACTOR** — Ensure consistency between ArrivalDisplay and TaskCard color logic [d144c9b]
+- [x] Task: **RED** — Write failing test for ArrivalDisplay 'idle' state (no active task) asserting neutral color [938f1a2]
+- [x] Task: **GREEN** — Implement 'idle' state colors in ArrivalDisplay [e142c9d]
+- [x] Task: **RED** — Update ArrivalDisplay tests to assert better contrast (borders and distinct backgrounds) [3f42c12]
+- [x] Task: **GREEN** — Improve ArrivalDisplay contrast for idle, paused, and overtime states (add borders, adjust backgrounds) [0242e1d]
+- [x] Task: **RED** — Update ArrivalDisplay tests to assert better progress bar contrast [6f42c12]
+- [x] Task: **GREEN** — Improve ArrivalDisplay progress bar contrast for idle, paused, and overtime states [0342e1d]
 
 - [ ] Task: Conductor - User Manual Verification 'UI Color Palette Refinement' (Protocol in workflow.md)
