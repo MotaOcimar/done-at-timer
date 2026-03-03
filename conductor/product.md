@@ -39,6 +39,9 @@ The primary value of this application is to solve the problem of **lateness due 
 - **Flexible Execution:** Users can start any timer in the list in any order.
 - **Inline Editing:** Ability to update task names and durations directly within the list by clicking on them.
 - **Web-Based:** Accessible via a web browser for easy local testing and usage.
+- **PWA Support:** Installable as a native-like app on Android, iOS, and Desktop.
+- **Offline Capability:** Fully functional without an internet connection after the first visit.
+- **Local Notifications:** System notifications alert the user when a task's timer completes.
 
 ## 5. Success Metrics
 

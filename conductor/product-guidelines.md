@@ -23,6 +23,10 @@
   - **Completion:** Visual and/or auditory rewards for finishing a task (e.g., a satisfying checkmark animation, a pleasant sound).
   - **Progress:** A clear visual representation of progress through the _entire list_, not just the current task (e.g., a progress bar filling up as the "Arrival Time" draws nearer).
 - **Flexible Flow:** The UI must support the "out of order" execution model. Users should be able to tap any task in the list to start it without navigating through complex menus.
+- **PWA Experience:**
+  - **Installability:** Provide a clear, non-intrusive way to install the app (e.g., a "Install" button) to encourage repeated use.
+  - **Offline Reliability:** The app must load and function even without network access, ensuring the timer is always available.
+  - **Update Awareness:** Notify the user when a new version is available with a simple "Reload" option to ensure they have the latest features without disrupting their flow.
 
 ## 3. Tone of Voice
 
