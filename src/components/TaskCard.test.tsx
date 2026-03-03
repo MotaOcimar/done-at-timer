@@ -181,10 +181,10 @@ describe('TaskCard (Pure Visual)', () => {
   it('shows ETA on subtitle for pending cards', () => {
     const eta = new Date('2026-01-01T09:15:00Z');
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={false} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={false}
+        isCompleted={false}
         eta={eta}
         onDelete={vi.fn()}
         onToggle={vi.fn()}
@@ -193,17 +193,17 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />
     );
-    expect(screen.getByText(/09:15/)).toBeInTheDocument();
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta);
+    expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
-
   it('shows actual finish time for completed cards', () => {
     const completedTask: Task = { ...mockTask, status: 'COMPLETED' };
     const completionTime = new Date('2026-01-01T08:32:00Z');
     render(
-      <TaskCard 
-        task={completedTask} 
-        isActive={false} 
-        isCompleted={true} 
+      <TaskCard
+        task={completedTask}
+        isActive={false}
+        isCompleted={true}
         eta={completionTime}
         onDelete={vi.fn()}
         onToggle={vi.fn()}
@@ -212,6 +212,6 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />
     );
-    expect(screen.getByText(/08:32/)).toBeInTheDocument();
-  });
-});
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(completionTime);
+    expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
+  });});

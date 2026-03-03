@@ -30,7 +30,7 @@ Goal: Record completion timestamps and compute per-task ETAs.
 ### 1.3 — Manual verification checkpoint
 - [x] Conductor — Manual Verification of Phase 1. 9411049
 
-## Phase 2: UI Integration (Card Changes)
+## Phase 2: UI Integration (Card Changes) [checkpoint: 7b3bd68]
 Goal: Display ETAs inline in each card and reorganize the active card's time info.
 
 ### 2.1 — Active card subtitle: show remaining time
