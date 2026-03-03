@@ -50,3 +50,6 @@
 - [x] Task: **RED** — Write test asserting service worker update flow works (new version detected → user notified) [fdfe614]
 - [x] Task: **GREEN** — Implement update notification if not handled by `registerType: 'autoUpdate'` [fdfe614]
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Quality Gates' (Protocol in workflow.md) [c1a5d25]
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions [d836570]
