@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -57,10 +57,17 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Calculate intermediate ETAs based on current time
-  // Note: For now we use the initial render time, this will be made real-time in Phase 3
-  const etas = calculateIntermediateETAs(tasks, activeTaskTimeLeft, new Date());
+  const etas = calculateIntermediateETAs(tasks, activeTaskTimeLeft, currentTime);
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = tasks.find((t) => t.id === event.active.id);

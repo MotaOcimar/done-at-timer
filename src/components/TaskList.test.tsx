@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TaskList } from './TaskList';
 import { useTaskStore } from '../store/useTaskStore';
@@ -44,6 +44,26 @@ describe('TaskList', () => {
     
     render(<TaskList />);
     expect(screen.getByText(/10:10/)).toBeInTheDocument();
+  });
+
+  it('updates ETA in real-time when the clock advances', () => {
+    vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+      ],
+      activeTaskTimeLeft: null,
+    });
+    
+    render(<TaskList />);
+    expect(screen.getByText(/10:10/)).toBeInTheDocument();
+
+    act(() => {
+      vi.setSystemTime(new Date('2026-01-01T10:01:00Z'));
+      vi.advanceTimersByTime(1000);
+    });
+
+    expect(screen.getByText(/10:11/)).toBeInTheDocument();
   });
 
   it('renders list of tasks', () => {
