@@ -65,7 +65,9 @@ const StatusIcon = ({
       <div className={baseClasses}>
         <button
           onClick={onToggle}
-          className="flex items-center justify-center w-full h-full rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
+          className={`flex items-center justify-center w-full h-full rounded-full transition-colors ${
+            isPaused ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+          }`}
           aria-label={isPaused ? 'Resume' : 'Pause'}
         >
           {isPaused ? (
@@ -131,7 +133,7 @@ const TaskCard = ({
       className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
         isTimeUp 
           ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-500/20' 
-          : isActive ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20' 
+          : isActive ? (isActuallyPaused ? 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50' : 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20')
           : isCompleted ? 'border-green-100 bg-green-50/50' 
           : 'border-gray-100 bg-white'
       } ${isCompleted ? 'opacity-70' : ''} ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
@@ -164,7 +166,7 @@ const TaskCard = ({
         {/* Task Info Area */}
         <div className="flex-1 min-w-0">
           <h3 className={`font-bold transition-all truncate ${
-            isTimeUp ? 'text-amber-700' : isActive ? 'text-blue-700 text-lg' : 'text-gray-800'
+            isTimeUp ? 'text-amber-700' : isActive ? (isActuallyPaused ? 'text-gray-600' : 'text-blue-700 text-lg') : 'text-gray-800'
           } ${isCompleted ? 'line-through text-gray-400 font-medium' : ''}`}>
             <InlineEdit
               value={task.title}
@@ -173,7 +175,7 @@ const TaskCard = ({
             />
           </h3>
           <p className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-            isTimeUp ? 'text-amber-400' : isActive ? 'text-blue-400' : 'text-gray-400'
+            isTimeUp ? 'text-amber-400' : (isActive && !isActuallyPaused) ? 'text-blue-400' : 'text-gray-400'
           }`}>
             <InlineEdit
               value={task.duration}
@@ -220,11 +222,13 @@ const TaskCard = ({
       </div>
 
       {isActive && (
-        <div className="mt-4 pt-4 border-t border-blue-100/50 animate-in fade-in slide-in-from-top-2 duration-500">
+        <div className={`mt-4 pt-4 border-t animate-in fade-in slide-in-from-top-2 duration-500 ${
+          isActuallyPaused ? 'border-gray-200' : 'border-blue-100/50'
+        }`}>
           <ProgressBar progress={progress} isActive={!isActuallyPaused && !isTimeUp} />
           <div className="flex justify-end mt-2">
             <span className={`text-sm font-black tabular-nums tracking-tight ${
-              isTimeUp ? 'text-amber-600 animate-pulse' : 'text-blue-600'
+              isTimeUp ? 'text-amber-600 animate-pulse' : (isActuallyPaused ? 'text-gray-500' : 'text-blue-600')
             }`}>
               {timeDisplay}
             </span>
