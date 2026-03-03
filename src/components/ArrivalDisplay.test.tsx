@@ -67,7 +67,7 @@ describe('ArrivalDisplay', () => {
     expect(screen.getByText(/All tasks finished/i)).toBeInTheDocument();
   });
 
-  it('shows amber color and drifting text when paused', () => {
+  it('shows neutral gray color and drifting text when paused', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
     useTaskStore.getState().startTask(taskId);
@@ -76,10 +76,10 @@ describe('ArrivalDisplay', () => {
     const { container } = render(<ArrivalDisplay />);
     
     expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
-    expect(container.firstChild).toHaveClass('bg-amber-500');
+    expect(container.firstChild).toHaveClass('bg-gray-100');
   });
 
-  it('shows amber color and drifting text when time is up', () => {
+  it('shows softer amber color and drifting text when time is up', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
     useTaskStore.getState().startTask(taskId);
@@ -90,7 +90,7 @@ describe('ArrivalDisplay', () => {
     const { container } = render(<ArrivalDisplay />);
     
     expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
-    expect(container.firstChild).toHaveClass('bg-amber-500');
+    expect(container.firstChild).toHaveClass('bg-amber-50');
   });
 
   it('calculates ETA correctly during overtime (no past ETA)', () => {

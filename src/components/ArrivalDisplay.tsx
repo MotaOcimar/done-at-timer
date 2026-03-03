@@ -109,14 +109,39 @@ const ArrivalDisplay = () => {
   );
   const progressPercentage = Math.min(100, Math.round(progress * 100));
 
+  const displayState = isTimeUp ? 'overtime' :
+                       (activeTaskId && !targetEndTime) ? 'paused' : 'running';
+
+  const containerClasses = {
+    running: 'bg-blue-600 shadow-blue-200 text-white',
+    paused: 'bg-gray-100 shadow-gray-200 text-gray-900',
+    overtime: 'bg-amber-50 shadow-amber-100 text-amber-900'
+  };
+
+  const labelClasses = {
+    running: 'text-blue-200',
+    paused: 'text-gray-500',
+    overtime: 'text-amber-600'
+  };
+
+  const progressBgClasses = {
+    running: 'bg-blue-900/30',
+    paused: 'bg-gray-300',
+    overtime: 'bg-amber-200/50'
+  };
+
+  const progressRemainingClasses = {
+    running: 'text-blue-100',
+    paused: 'text-gray-500',
+    overtime: 'text-amber-700'
+  };
+
   return (
-    <div className={`text-center py-8 px-6 text-white rounded-3xl shadow-2xl transition-all duration-700 ${
-      isDrifting 
-        ? 'bg-amber-500 shadow-amber-200' 
-        : 'bg-blue-600 shadow-blue-200'
+    <div className={`text-center py-8 px-6 rounded-3xl shadow-2xl transition-all duration-700 ${
+      containerClasses[displayState]
     }`}>
       <h2 className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 transition-colors duration-700 ${
-        isDrifting ? 'text-amber-100' : 'text-blue-200'
+        labelClasses[displayState]
       }`}>
         {isDrifting ? 'Arrival time is drifting' : 'You will be done at'}
       </h2>
@@ -126,7 +151,7 @@ const ArrivalDisplay = () => {
 
       <div className="mt-8 px-4">
         <div className={`h-1.5 w-full rounded-full overflow-hidden mb-2 transition-colors duration-700 ${
-          isDrifting ? 'bg-amber-900/30' : 'bg-blue-900/30'
+          progressBgClasses[displayState]
         }`}>
           <div
             className={`h-full bg-white/90 rounded-full transition-all duration-1000 ease-linear ${activeTaskId && !isDrifting ? 'animate-pulse' : ''}`}
@@ -135,7 +160,7 @@ const ArrivalDisplay = () => {
           ></div>
         </div>
         <div className={`flex justify-end text-xs font-bold uppercase tracking-widest opacity-80 transition-colors duration-700 ${
-          isDrifting ? 'text-amber-50' : 'text-blue-100'
+          progressRemainingClasses[displayState]
         }`}>
           <span>{remainingMinutes} min left</span>
         </div>

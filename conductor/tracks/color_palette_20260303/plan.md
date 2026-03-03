@@ -16,4 +16,11 @@
 - [x] Task: **REFACTOR** — Review all color changes for consistency across components, extract shared color constants if needed [c83ae02]
 - [x] Task: **RED** — Write missing tests for StatusIcon pause button colors and explicit 'running' state colors in TaskCard.color.test.tsx [7428f52]
 - [x] Task: **GREEN** — Centralize remaining inline color logic (time display, StatusIcon pause button) into cardState mappings in TaskCard.tsx [9842c12]
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Update State Colors' (Protocol in workflow.md)
+
+## Phase 2: Main Timer Color Refinement [checkpoint: d144c9b]
+
+- [x] Task: **RED** — Write failing tests for ArrivalDisplay asserting neutral gray when paused and softer amber when overtime [7f91a2d]
+- [x] Task: **GREEN** — Implement color refinement in ArrivalDisplay based on current task state (paused, overtime, running) [9a42e1d]
+- [x] Task: **REFACTOR** — Ensure consistency between ArrivalDisplay and TaskCard color logic [d144c9b]
+
+- [ ] Task: Conductor - User Manual Verification 'UI Color Palette Refinement' (Protocol in workflow.md)
