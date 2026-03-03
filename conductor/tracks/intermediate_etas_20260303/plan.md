@@ -11,21 +11,21 @@ Goal: Record completion timestamps and compute per-task ETAs.
 - [x] REFACTOR: Clean up if needed. 0a5c107
 
 ### 1.2 — `calculateIntermediateETAs` utility
-- [ ] RED: Write a test for **all-pending, no active task** — ETAs chain from `now`.
-- [ ] GREEN: Create `calculateIntermediateETAs(tasks, activeTaskTimeLeft, now)` in `src/utils/time.ts` returning `Map<string, Date>`. Implement the pending-only path.
-- [ ] REFACTOR.
-- [ ] RED: Write a test for **active + pending** — active ETA = `now + timeLeft`, pending chain from active's ETA.
-- [ ] GREEN: Implement the active task path.
-- [ ] REFACTOR.
-- [ ] RED: Write a test for **completed + active + pending** — completed tasks use `completedAt`, rest chains normally.
-- [ ] GREEN: Implement the completed task path.
-- [ ] REFACTOR.
-- [ ] RED: Write a test for **overtime** (active `timeLeft <= 0`) — active ETA = `now`, pending chain from `now`.
-- [ ] GREEN: Handle the overtime edge case.
-- [ ] REFACTOR.
-- [ ] RED: Write a test for **all completed** — every task uses its `completedAt`.
-- [ ] GREEN: Ensure full-completed scenario works.
-- [ ] REFACTOR.
+- [x] RED: Write a test for **all-pending, no active task** — ETAs chain from `now`. a09a2be
+- [x] GREEN: Create `calculateIntermediateETAs(tasks, activeTaskTimeLeft, now)` in `src/utils/time.ts` returning `Map<string, Date>`. Implement the pending-only path. a09a2be
+- [x] REFACTOR. a09a2be
+- [x] RED: Write a test for **active + pending** — active ETA = `now + timeLeft`, pending chain from active's ETA. a09a2be
+- [x] GREEN: Implement the active task path. a09a2be
+- [x] REFACTOR. a09a2be
+- [x] RED: Write a test for **completed + active + pending** — completed tasks use `completedAt`, rest chains normally. a09a2be
+- [x] GREEN: Implement the completed task path. a09a2be
+- [x] REFACTOR. a09a2be
+- [x] RED: Write a test for **overtime** (active `timeLeft <= 0`) — active ETA = `now`, pending chain from `now`. a09a2be
+- [x] GREEN: Handle the overtime edge case. a09a2be
+- [x] REFACTOR. a09a2be
+- [x] RED: Write a test for **all completed** — every task uses its `completedAt`. a09a2be
+- [x] GREEN: Ensure full-completed scenario works. a09a2be
+- [x] REFACTOR. a09a2be
 
 ### 1.3 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 1.
