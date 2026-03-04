@@ -93,7 +93,7 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] REFACTOR. f7d7af1
 
 ### 3.6 — Visual polish
-- [ ] Task: Final visual review — check color consistency across states (running/paused/overtime/idle/completed) and ensure ETA text doesn't truncate on small screens.
+- [x] Task: Final visual review — check color consistency across states (running/paused/overtime/idle/completed) and ensure ETA text doesn't truncate on small screens. 0eddddf
 
 ### 3.7 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 3.
