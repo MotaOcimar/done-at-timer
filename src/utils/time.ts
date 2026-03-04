@@ -1,22 +1,5 @@
 import type { Task } from '../types';
 
-export const calculateArrivalTime = (
-  tasks: Task[],
-  activeTimeLeftSeconds: number | null,
-  currentTime: Date
-): Date => {
-  const pendingDurationMinutes = tasks
-    .filter((task) => task.status === 'PENDING')
-    .reduce((acc, task) => acc + task.duration, 0);
-
-  // Soma segundos da tarefa ativa (garantindo que não seja negativo se estiver em overtime) 
-  // + minutos das pendentes convertido em segundos
-  const totalRemainingSeconds =
-    Math.max(0, activeTimeLeftSeconds || 0) + pendingDurationMinutes * 60;
-
-  return new Date(currentTime.getTime() + totalRemainingSeconds * 1000);
-};
-
 export const calculateIntermediateETAs = (
   tasks: Task[],
   activeTimeLeftSeconds: number | null,
@@ -41,4 +24,29 @@ export const calculateIntermediateETAs = (
   }
 
   return etas;
+};
+
+export const calculateArrivalTime = (
+  tasks: Task[],
+  activeTimeLeftSeconds: number | null,
+  currentTime: Date
+): Date => {
+  const etas = calculateIntermediateETAs(tasks, activeTimeLeftSeconds, currentTime);
+  
+  // Find the last non-completed task (Active or Pending)
+  // If all tasks are completed, or no tasks, arrival time is 'now'
+  let lastEta = currentTime;
+  
+  // Tasks are ordered, so we can just iterate and pick the last one that isn't COMPLETED
+  // or specifically, the last one in the map that corresponds to a non-completed task.
+  for (const task of tasks) {
+    if (task.status !== 'COMPLETED') {
+      const eta = etas.get(task.id);
+      if (eta) {
+        lastEta = eta;
+      }
+    }
+  }
+
+  return lastEta;
 };
