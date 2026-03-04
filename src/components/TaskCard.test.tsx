@@ -172,7 +172,7 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta);
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(eta);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
 
@@ -191,7 +191,7 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta);
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(eta);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
   it('shows actual finish time for completed cards', () => {
@@ -210,11 +210,11 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(completionTime);
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(completionTime);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
     });
 
-    it('hides drag handle for active tasks', () => {
+  it('hides drag handle for active tasks', () => {
     render(
       <TaskCard 
         task={mockTask} 
@@ -228,9 +228,9 @@ describe('TaskCard (Pure Visual)', () => {
       />
     );
     expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
-    });
+  });
 
-    it('hides drag handle for completed tasks', () => {
+  it('hides drag handle for completed tasks', () => {
     render(
       <TaskCard 
         task={{ ...mockTask, status: 'COMPLETED' }} 
@@ -244,5 +244,5 @@ describe('TaskCard (Pure Visual)', () => {
       />
     );
     expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
-    });
-    });
+  });
+});

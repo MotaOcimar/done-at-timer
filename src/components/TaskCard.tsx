@@ -26,6 +26,8 @@ interface TaskCardProps {
   onComplete: () => void;
 }
 
+type CardState = 'completed' | 'idle' | 'overtime' | 'paused' | 'running';
+
 const StatusIcon = ({ 
   isCompleted, 
   isActive, 
@@ -38,12 +40,12 @@ const StatusIcon = ({
   isActive: boolean, 
   isPaused: boolean, 
   isTimeUp?: boolean,
-  cardState: 'completed' | 'idle' | 'overtime' | 'paused' | 'running',
+  cardState: CardState,
   onToggle: (e: React.MouseEvent) => void 
 }) => {
   const baseClasses = "flex items-center justify-center w-10 h-10 rounded-full transition-colors";
   
-  const iconButtonClasses = {
+  const iconButtonClasses: Partial<Record<CardState, string>> = {
     idle: 'bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-500',
     paused: 'bg-gray-100 text-gray-500 hover:bg-gray-200',
     running: 'bg-blue-100 text-blue-600 hover:bg-blue-200'
@@ -69,13 +71,12 @@ const StatusIcon = ({
         </div>
       );
     }
+    const activeClass = iconButtonClasses[cardState];
     return (
       <div className={baseClasses}>
         <button
           onClick={onToggle}
-          className={`flex items-center justify-center w-full h-full rounded-full transition-colors ${
-            iconButtonClasses[cardState as keyof typeof iconButtonClasses]
-          }`}
+          className={`flex items-center justify-center w-full h-full rounded-full transition-colors ${activeClass || ''}`}
           aria-label={isPaused ? 'Resume' : 'Pause'}
         >
           {isPaused ? (
@@ -141,12 +142,12 @@ const TaskCard = ({
     ? `${mins} min over`
     : mins > 0 ? `${mins} min left` : '< 1 min left';
 
-  const cardState = isCompleted ? 'completed' :
+  const cardState: CardState = isCompleted ? 'completed' :
                     !isActive ? 'idle' :
                     isTimeUp ? 'overtime' :
                     isActuallyPaused ? 'paused' : 'running';
 
-  const cardClasses = {
+  const cardClasses: Record<CardState, string> = {
     completed: 'border-green-100 bg-green-50/50 opacity-70',
     idle: 'border-gray-100 bg-white',
     overtime: 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50',
@@ -154,7 +155,7 @@ const TaskCard = ({
     running: 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20'
   };
 
-  const titleClasses = {
+  const titleClasses: Record<CardState, string> = {
     completed: 'line-through text-gray-400 font-medium',
     idle: 'text-gray-800',
     overtime: 'text-amber-600',
@@ -162,7 +163,7 @@ const TaskCard = ({
     running: 'text-blue-700 text-lg'
   };
 
-  const labelClasses = {
+  const labelClasses: Record<CardState, string> = {
     completed: 'text-gray-400',
     idle: 'text-gray-400',
     overtime: 'text-amber-400',
@@ -170,7 +171,7 @@ const TaskCard = ({
     running: 'text-blue-400'
   };
 
-  const timeDisplayClasses = {
+  const timeDisplayClasses: Record<CardState, string> = {
     completed: 'text-gray-400',
     idle: 'text-gray-400',
     overtime: 'text-amber-500 animate-pulse',
@@ -272,7 +273,7 @@ const TaskCard = ({
             )}
           </div>
           {!isActive && eta && (
-            <span className={`text-[10px] font-bold tabular-nums flex items-center gap-1 pr-1 ${labelClasses[cardState]}`}>
+            <span className={`text-[10px] font-bold tabular-nums flex items-center gap-1 pr-1 whitespace-nowrap ${labelClasses[cardState]}`}>
               {isCompleted ? (
                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><path d="m9 10 2 2 4-4"/></svg>
               ) : (
@@ -295,8 +296,8 @@ const TaskCard = ({
           />
           {eta && (
             <div className="flex justify-end mt-2">
-              <span className={`text-sm font-black tabular-nums tracking-tight flex items-center gap-1.5 ${
-                timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
+              <span className={`text-sm font-black tabular-nums tracking-tight flex items-center gap-1.5 whitespace-nowrap ${
+                timeDisplayClasses[cardState]
               }`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 {timeFormatter.format(eta)}

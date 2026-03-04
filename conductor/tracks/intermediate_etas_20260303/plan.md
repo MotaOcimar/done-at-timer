@@ -112,7 +112,49 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] RED: Write a `TaskList` test asserting that wrapping the list in `<LayoutGroup>` does not break existing rendering (tasks still render in correct order with correct ETAs). b79ce6c
 - [x] GREEN: Wrap the `SortableContext` children area in `TaskList.tsx` with `<LayoutGroup>` from `framer-motion` to scope layout animations. b79ce6c
 - [x] REFACTOR: Verify no duplicate wrappers, clean up imports. Ensure `DragOverlay` card does NOT use `motion.div` (overlay is ephemeral and should not animate layout). b79ce6c
-- [ ] Manual test: Start a task that is NOT first in the list → confirm it animates smoothly to top. Drag-and-drop a pending task → confirm drag still works without jank. Complete a task → confirm it animates to the completed section.
+- [x] Manual test: Start a task that is NOT first in the list → confirm it animates smoothly to top. Drag-and-drop a pending task → confirm drag still works without jank. Complete a task → confirm it animates to the completed section. 1e33223
+- [x] Task: Polish reordering animation — use `layout="position"` to prevent content stretching during size changes.
 
 ### 3.9 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 3.
+
+## Phase 4: Architectural Consolidation & Robust Testing [checkpoint: pending]
+Goal: Address identified fragilities and gaps to ensure long-term stability.
+
+### 4.1 — Unify ETA Logic (Binding Architecturally)
+- [x] RED: Write a test for `calculateArrivalTime` asserting that it always matches the last non-completed task's ETA from `calculateIntermediateETAs`. b9f50c0
+- [x] GREEN: Refactor `calculateArrivalTime` to call `calculateIntermediateETAs` and return the last value (or `now` if all completed). b9f50c0
+- [x] REFACTOR. b9f50c0
+
+### 4.2 — Single Timer Source (Single Source of Truth)
+- [ ] RED: Write a test for a new `useClock` hook that provides a synchronized `Date` across components.
+- [ ] GREEN: Create `src/hooks/useClock.ts` and replace `setInterval` in `ArrivalDisplay.tsx` and `TaskList.tsx`.
+- [ ] REFACTOR.
+
+### 4.3 — Robust Reordering Tests (Clamping Logic)
+- [ ] RED: Update `TaskList.test.tsx` with a more realistic `DndContext` mock that exercises reordering with mixed status lists (COMPLETED + IN_PROGRESS + PENDING).
+- [ ] GREEN: Verify reordering constraints in `useTaskStore.ts` are robust against all edge cases.
+- [ ] REFACTOR.
+
+### 4.4 — Edge Case Testing (Store Logic)
+- [ ] RED: Write store tests for `startTask` on an already active task (timer reset behavior) and for switching active tasks while paused (no elapsed time loss).
+- [ ] GREEN: Fix any identified bugs in `useTaskStore.ts`.
+- [ ] REFACTOR.
+
+### 4.5 — Drag animation test coverage
+- [ ] RED: Write a `TaskItem` test asserting that `layout` becomes `false` when `isDragging` is `true` (mock `useSortable` to return `isDragging: true`).
+- [ ] GREEN: Verify existing implementation passes.
+- [ ] REFACTOR.
+
+### 4.6 — Performance memoization
+- [ ] REFACTOR: Wrap `calculateIntermediateETAs` call in `TaskList.tsx` with `useMemo` (deps: `[tasks, activeTaskTimeLeft, currentTime]`).
+- [ ] REFACTOR: Wrap `sensors` declaration in `TaskList.tsx` with `useMemo` to avoid recreation on every render.
+
+### 4.7 — Type-safety cleanup
+- [ ] REFACTOR: Remove `as keyof typeof` casts in `TaskCard.tsx` for `iconButtonClasses` and `timeDisplayClasses`. Narrow the `cardState` type so TypeScript can verify key access statically.
+
+### 4.8 — ETA text truncation fix
+- [ ] REFACTOR: Add `whitespace-nowrap` (or equivalent) to the ETA `span` in `TaskCard.tsx` to prevent truncation on small screens.
+
+### 4.9 — Manual verification checkpoint
+- [ ] Conductor — Manual Verification of Phase 4.

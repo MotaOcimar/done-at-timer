@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { LayoutGroup } from 'framer-motion';
 import {
   DndContext,
@@ -38,22 +38,22 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const activeTaskIdFromStore = useTaskStore((state) => state.activeTaskId);
   const isTimeUpGlobal = useTaskStore((state) => state.isTimeUp);
 
-  const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 10,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 250,
-        tolerance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+  const keyboardSensor = useSensor(KeyboardSensor, {
+    coordinateGetter: sortableKeyboardCoordinates,
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
@@ -68,7 +68,10 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   }, []);
 
   // Calculate intermediate ETAs based on current time
-  const etas = calculateIntermediateETAs(tasks, activeTaskTimeLeft, currentTime);
+  const etas = useMemo(() => 
+    calculateIntermediateETAs(tasks, activeTaskTimeLeft, currentTime),
+    [tasks, activeTaskTimeLeft, currentTime]
+  );
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = tasks.find((t) => t.id === event.active.id);
@@ -83,7 +86,15 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
       // Only PENDING tasks are draggable, but we double check
       if (activeTask?.status === 'PENDING') {
         const firstPendingIndex = tasks.findIndex(t => t.status === 'PENDING');
-        const lastPendingIndex = tasks.length - 1;
+        // Find last index that is PENDING
+        let lastPendingIndex = tasks.length - 1;
+        for (let i = tasks.length - 1; i >= 0; i--) {
+          if (tasks[i].status === 'PENDING') {
+            lastPendingIndex = i;
+            break;
+          }
+        }
+        
         const overIndex = tasks.findIndex(t => t.id === over.id);
         
         // Clamp overIndex to pending range

@@ -213,7 +213,12 @@ export const useTaskStore = create<TaskState>()(
       },
       resetTasks: () =>
         set((state) => ({
-          tasks: state.tasks.map((task) => ({ ...task, status: 'PENDING' })),
+          tasks: state.tasks.map((task) => ({ 
+            ...task, 
+            status: 'PENDING',
+            completedAt: undefined,
+            actualDuration: undefined 
+          })),
           activeTaskTimeLeft: null,
           activeTaskId: null,
           targetEndTime: null,
