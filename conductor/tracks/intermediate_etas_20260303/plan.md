@@ -100,5 +100,19 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] GREEN: Update `startTask` in `useTaskStore.ts` to reorder the `tasks` array. 097430b
 - [x] REFACTOR. 097430b
 
-### 3.8 — Manual verification checkpoint
+### 3.8 — Smooth reordering animations (Feedback)
+
+**Context:** `startTask()` reordena o array no Zustand e o React re-renderiza instantaneamente — os cards "pulam" sem transição. O `@dnd-kit` só anima durante drag manual, não em reordens programáticas. `framer-motion` com `layout` prop resolve isso via FLIP automático.
+
+**Conflito dnd-kit ↔ framer-motion:** ambos manipulam posição do elemento. Solução: separar responsabilidades em dois wrappers — `motion.div` (outer, layout animation) e `div` com ref/style do dnd-kit (inner, drag transform). Desabilitar `layout` durante drag ativo (`layout={!isDragging}`) para evitar conflito de transforms.
+
+- [x] Task: Install `framer-motion` — `npm install framer-motion`. 9cb760b
+- [ ] RED: Write a `TaskItem` test asserting the component renders a `motion.div` wrapper with `layout` prop (using `framer-motion`'s `motion` export). Verify it renders children correctly.
+- [ ] GREEN: Refactor `TaskItem.tsx` — wrap `TaskCard` in a `motion.div` with `layout` and `transition={{ duration: 0.3, ease: 'easeInOut' }}`. Keep dnd-kit's `setNodeRef`/`style`/`attributes` on the inner `TaskCard` div (unchanged). Pass `isDragging` to control `layout={!isDragging}`.
+- [ ] RED: Write a `TaskList` test asserting that wrapping the list in `<LayoutGroup>` does not break existing rendering (tasks still render in correct order with correct ETAs).
+- [ ] GREEN: Wrap the `SortableContext` children area in `TaskList.tsx` with `<LayoutGroup>` from `framer-motion` to scope layout animations.
+- [ ] REFACTOR: Verify no duplicate wrappers, clean up imports. Ensure `DragOverlay` card does NOT use `motion.div` (overlay is ephemeral and should not animate layout).
+- [ ] Manual test: Start a task that is NOT first in the list → confirm it animates smoothly to top. Drag-and-drop a pending task → confirm drag still works without jank. Complete a task → confirm it animates to the completed section.
+
+### 3.9 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 3.
