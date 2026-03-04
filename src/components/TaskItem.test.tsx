@@ -4,6 +4,19 @@ import { TaskItem } from './TaskItem';
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 
+// Mock framer-motion to check for layout prop
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: vi.fn(({ children, layout, ...props }) => (
+      <div data-testid="motion-div" data-layout={layout.toString()} {...props}>
+        {children}
+      </div>
+    )),
+  },
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  LayoutGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {
   const actual = await importOriginal() as Record<string, unknown>;
   return {
@@ -129,5 +142,13 @@ describe('TaskItem', () => {
     // The handle should have the attributes from useSortable mock
     const handle = screen.getByLabelText(/drag to reorder/i);
     expect(handle).toHaveAttribute('data-testid', 'sortable-attributes');
+  });
+
+  it('renders a motion.div wrapper with layout prop for animations', () => {
+    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    
+    const motionDiv = screen.getByTestId('motion-div');
+    expect(motionDiv).toBeInTheDocument();
+    expect(motionDiv.getAttribute('data-layout')).toBe('true');
   });
 });

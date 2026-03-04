@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
@@ -92,26 +93,31 @@ const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
   const progress = Math.max(0, Math.min(1, 1 - (timeLeft / totalDurationSecs)));
 
   return (
-    <TaskCard
-      task={task}
-      isActive={isActive}
-      isCompleted={isCompleted}
-      isDragging={isDragging}
-      isTimeUp={isTimeUp}
-      timeLeft={timeLeft}
-      progress={progress}
-      isActuallyPaused={isActuallyPaused}
-      eta={eta}
-      setNodeRef={setNodeRef}
-      style={style}
-      attributes={attributes}
-      listeners={listeners}
-      onDelete={onDelete}
-      onToggle={handleToggle}
-      onTitleSave={handleTitleSave}
-      onDurationSave={handleDurationSave}
-      onComplete={onManualComplete}
-    />
+    <motion.div
+      layout={!isDragging}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    >
+      <TaskCard
+        task={task}
+        isActive={isActive}
+        isCompleted={isCompleted}
+        isDragging={isDragging}
+        isTimeUp={isTimeUp}
+        timeLeft={timeLeft}
+        progress={progress}
+        isActuallyPaused={isActuallyPaused}
+        eta={eta}
+        setNodeRef={setNodeRef}
+        style={style}
+        attributes={attributes}
+        listeners={listeners}
+        onDelete={onDelete}
+        onToggle={handleToggle}
+        onTitleSave={handleTitleSave}
+        onDurationSave={handleDurationSave}
+        onComplete={onManualComplete}
+      />
+    </motion.div>
   );
 };
 
