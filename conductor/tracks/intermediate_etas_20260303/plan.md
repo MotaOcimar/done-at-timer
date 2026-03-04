@@ -68,9 +68,9 @@ Goal: Display ETAs inline in each card and reorganize the active card's time inf
 Goal: Ensure ETAs update live, remain correct across all interactions, and refine UI/UX based on feedback.
 
 ### 3.1 — Real-time ETA recalculation
-- [ ] RED: Write a test asserting ETAs update when the clock advances (mock timer tick).
-- [ ] GREEN: Ensure the ETA computation re-runs every second (leverage existing `useTimer` or add a lightweight interval in `TaskList`).
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting ETAs update when the clock advances (mock timer tick). 6b554e0
+- [x] GREEN: Ensure the ETA computation re-runs every second (leverage existing `useTimer` or add a lightweight interval in `TaskList`). 6b554e0
+- [x] REFACTOR. 6b554e0
 
 ### 3.2 — ETA UI Polish & Alignment (Feedback)
 - [ ] RED/GREEN: Fix ETA alignment in `TaskCard` so it sits perfectly right-aligned, below the action buttons area (trash icon space).
