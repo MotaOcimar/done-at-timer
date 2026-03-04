@@ -108,7 +108,11 @@ const StatusIcon = ({
   );
 };
 
-const timeFormatter = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' });
+const timeFormatter = new Intl.DateTimeFormat('default', { 
+  hour: '2-digit', 
+  minute: '2-digit',
+  hour12: false
+});
 
 const TaskCard = ({ 
   task, 
