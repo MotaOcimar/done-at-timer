@@ -16,6 +16,8 @@
   - _Reasoning:_ Clean, modern SVG icons that work perfectly with React and Tailwind.
 - **Drag and Drop:** **@dnd-kit/core** and **@dnd-kit/sortable**
   - _Reasoning:_ Modern, lightweight, and highly accessible toolkit for drag and drop in React.
+- **Animations:** **framer-motion**
+  - _Reasoning:_ Powerful animation library for React that simplifies layout animations (FLIP technique) for smooth reordering.
 - **Effects:** **canvas-confetti**
   - _Reasoning:_ Lightweight library for celebration animations.
 - **PWA Support:** **vite-plugin-pwa**
