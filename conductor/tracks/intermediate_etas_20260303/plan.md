@@ -83,9 +83,9 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] REFACTOR. 9fccd59
 
 ### 3.4 — Drag-and-drop recalculation
-- [ ] RED: Write a test asserting that reordering tasks produces updated ETAs in the new order.
-- [ ] GREEN: Verify `reorderTasks` triggers re-render with recalculated ETAs (likely works for free via Zustand reactivity, but confirm).
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting that reordering tasks produces updated ETAs in the new order. 4bc5843
+- [x] GREEN: Verify `reorderTasks` triggers re-render with recalculated ETAs (likely works for free via Zustand reactivity, but confirm). 4bc5843
+- [x] REFACTOR. 4bc5843
 
 ### 3.5 — Consistency with Arrival Clock
 - [ ] RED: Write a test asserting the last task's ETA equals the value returned by `calculateArrivalTime`.
