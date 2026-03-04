@@ -70,6 +70,7 @@ export const useTaskStore = create<TaskState>()(
           let targetEndTime = state.targetEndTime;
           let totalElapsedBeforePause = state.totalElapsedBeforePause;
           let isTimeUp = state.isTimeUp;
+          let tasks = state.tasks;
 
           // If updating duration of the currently active task, adjust the target end time
           if (
@@ -77,14 +78,14 @@ export const useTaskStore = create<TaskState>()(
             typeof updates.duration === 'number' &&
             targetEndTime
           ) {
-            const oldTask = state.tasks.find((t) => t.id === id);
+            const oldTask = tasks.find((t) => t.id === id);
             if (oldTask) {
               const durationDiff = updates.duration - oldTask.duration;
               targetEndTime += durationDiff * 60 * 1000;
             }
           }
 
-          const newTasks = state.tasks.map((task) =>
+          let newTasks = tasks.map((task) =>
             task.id === id ? { ...task, ...updates } : task
           );
 
@@ -95,6 +96,20 @@ export const useTaskStore = create<TaskState>()(
               targetEndTime = Date.now() + (task.duration * 60 * 1000);
               totalElapsedBeforePause = 0;
               isTimeUp = false;
+
+              // Reorder: newly active task moves after all COMPLETED tasks
+              // Ensure other tasks are not IN_PROGRESS
+              const tasksWithCorrectStatus = newTasks.map(t => 
+                t.id === id ? t : (t.status === 'IN_PROGRESS' ? { ...t, status: 'PENDING' as const } : t)
+              );
+
+              const completedTasks = tasksWithCorrectStatus.filter(t => t.status === 'COMPLETED');
+              const nonCompletedTasks = tasksWithCorrectStatus.filter(t => t.status !== 'COMPLETED');
+              
+              const taskToStart = nonCompletedTasks.find(t => t.id === id)!;
+              const remainingNonCompleted = nonCompletedTasks.filter(t => t.id !== id);
+              
+              newTasks = [...completedTasks, taskToStart, ...remainingNonCompleted];
             }
           } else if (id === state.activeTaskId && updates.status === 'COMPLETED') {
             activeTaskId = null;
@@ -113,33 +128,8 @@ export const useTaskStore = create<TaskState>()(
         }),
       setActiveTaskTimeLeft: (seconds) => set({ activeTaskTimeLeft: seconds }),
       startTask: (id) => {
-        const state = get();
-        const task = state.tasks.find((t) => t.id === id);
-        if (!task) return;
-
-        // Mark as IN_PROGRESS and handle previously active task
-        const updatedTasks = state.tasks.map((t) => {
-          if (t.id === id) return { ...t, status: 'IN_PROGRESS' as const };
-          if (t.status === 'IN_PROGRESS') return { ...t, status: 'PENDING' as const };
-          return t;
-        });
-
-        // Reorder: move the newly active task to be the first after all COMPLETED tasks
-        const completedTasks = updatedTasks.filter(t => t.status === 'COMPLETED');
-        const nonCompletedTasks = updatedTasks.filter(t => t.status !== 'COMPLETED');
-        
-        const taskToStart = nonCompletedTasks.find(t => t.id === id)!;
-        const remainingNonCompleted = nonCompletedTasks.filter(t => t.id !== id);
-        
-        const finalTasks = [...completedTasks, taskToStart, ...remainingNonCompleted];
-
-        set({
-          tasks: finalTasks,
-          activeTaskId: id,
-          targetEndTime: Date.now() + task.duration * 60 * 1000,
-          totalElapsedBeforePause: 0,
-          isTimeUp: false,
-        });
+        const { updateTask } = get();
+        updateTask(id, { status: 'IN_PROGRESS' });
       },
       pauseTask: () => {
         const state = get();
