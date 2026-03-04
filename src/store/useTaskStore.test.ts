@@ -83,4 +83,43 @@ describe('useTaskStore', () => {
     expect(tasks[1].id).toBe('1');
     expect(tasks[2].id).toBe('3');
   });
+
+  it('should move a task to the top of the active section when started', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Completed Task', duration: 10, status: 'COMPLETED' },
+        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        { id: '3', title: 'Task 3', duration: 30, status: 'PENDING' },
+      ],
+    });
+
+    useTaskStore.getState().startTask('3');
+
+    const { tasks } = useTaskStore.getState();
+    // Order should be: Completed Task (1), Task 3 (3), Task 2 (2)
+    expect(tasks[0].id).toBe('1');
+    expect(tasks[1].id).toBe('3');
+    expect(tasks[2].id).toBe('2');
+    expect(tasks[1].status).toBe('IN_PROGRESS');
+    expect(tasks[2].status).toBe('PENDING');
+  });
+
+  it('should move the previously active task down when another is started', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Active Task', duration: 10, status: 'IN_PROGRESS' },
+        { id: '2', title: 'Pending Task', duration: 20, status: 'PENDING' },
+      ],
+      activeTaskId: '1',
+    });
+
+    useTaskStore.getState().startTask('2');
+
+    const { tasks } = useTaskStore.getState();
+    // Order should be: Task 2 (now active), Task 1 (now pending)
+    expect(tasks[0].id).toBe('2');
+    expect(tasks[1].id).toBe('1');
+    expect(tasks[0].status).toBe('IN_PROGRESS');
+    expect(tasks[1].status).toBe('PENDING');
+  });
 });

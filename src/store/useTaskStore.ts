@@ -117,16 +117,24 @@ export const useTaskStore = create<TaskState>()(
         const task = state.tasks.find((t) => t.id === id);
         if (!task) return;
 
-        // Se já houver uma tarefa ativa, marcamos como PENDING (ou pausada se preferir)
-        // Por enquanto, seguimos o modelo de playlist: iniciar uma nova substitui a atual.
-        const newTasks = state.tasks.map((t) => {
+        // Mark as IN_PROGRESS and handle previously active task
+        const updatedTasks = state.tasks.map((t) => {
           if (t.id === id) return { ...t, status: 'IN_PROGRESS' as const };
           if (t.status === 'IN_PROGRESS') return { ...t, status: 'PENDING' as const };
           return t;
         });
 
+        // Reorder: move the newly active task to be the first after all COMPLETED tasks
+        const completedTasks = updatedTasks.filter(t => t.status === 'COMPLETED');
+        const nonCompletedTasks = updatedTasks.filter(t => t.status !== 'COMPLETED');
+        
+        const taskToStart = nonCompletedTasks.find(t => t.id === id)!;
+        const remainingNonCompleted = nonCompletedTasks.filter(t => t.id !== id);
+        
+        const finalTasks = [...completedTasks, taskToStart, ...remainingNonCompleted];
+
         set({
-          tasks: newTasks,
+          tasks: finalTasks,
           activeTaskId: id,
           targetEndTime: Date.now() + task.duration * 60 * 1000,
           totalElapsedBeforePause: 0,
