@@ -88,9 +88,9 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] REFACTOR. 4bc5843
 
 ### 3.5 — Consistency with Arrival Clock
-- [ ] RED: Write a test asserting the last task's ETA equals the value returned by `calculateArrivalTime`.
-- [ ] GREEN: Fix any discrepancy between the two calculations.
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting the last task's ETA equals the value returned by `calculateArrivalTime`. f7d7af1
+- [x] GREEN: Fix any discrepancy between the two calculations. f7d7af1
+- [x] REFACTOR. f7d7af1
 
 ### 3.6 — Visual polish
 - [ ] Task: Final visual review — check color consistency across states (running/paused/overtime/idle/completed) and ensure ETA text doesn't truncate on small screens.
