@@ -144,11 +144,11 @@ describe('TaskItem', () => {
     expect(handle).toHaveAttribute('data-testid', 'sortable-attributes');
   });
 
-  it('renders a motion.div wrapper with layout prop for animations', () => {
+  it('renders a motion.div wrapper with layout="position" prop for animations', () => {
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
     const motionDiv = screen.getByTestId('motion-div');
     expect(motionDiv).toBeInTheDocument();
-    expect(motionDiv.getAttribute('data-layout')).toBe('true');
+    expect(motionDiv.getAttribute('data-layout')).toBe('position');
   });
 });
