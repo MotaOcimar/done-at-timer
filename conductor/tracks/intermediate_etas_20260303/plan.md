@@ -95,5 +95,10 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 ### 3.6 — Visual polish
 - [x] Task: Final visual review — check color consistency across states (running/paused/overtime/idle/completed) and ensure ETA text doesn't truncate on small screens. 0eddddf
 
-### 3.7 — Manual verification checkpoint
+### 3.7 — Auto-reordering on play (Feedback)
+- [x] RED: Write a store test asserting that starting a PENDING task moves it to the top of the active section (after COMPLETED tasks). 097430b
+- [x] GREEN: Update `startTask` in `useTaskStore.ts` to reorder the `tasks` array. 097430b
+- [x] REFACTOR. 097430b
+
+### 3.8 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 3.
