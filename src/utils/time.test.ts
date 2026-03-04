@@ -42,6 +42,36 @@ describe('calculateArrivalTime', () => {
     // 10:00 + 10m + 20m = 10:30
     expect(result.toISOString()).toBe(new Date('2026-01-01T10:30:00Z').toISOString());
   });
+
+  it('is consistent with the last task ETA in calculateIntermediateETAs', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    const timeLeft = 300; // 5 min
+    
+    const arrivalTime = calculateArrivalTime(tasks, timeLeft, now);
+    const etas = calculateIntermediateETAs(tasks, timeLeft, now);
+    
+    expect(arrivalTime.toISOString()).toBe(etas.get('2')?.toISOString());
+  });
+
+  it('handles overtime consistently between both functions', () => {
+    const tasks: Task[] = [
+      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+    ];
+    const now = new Date('2026-01-01T10:00:00Z');
+    const timeLeft = -300; // 5 min overtime
+    
+    const arrivalTime = calculateArrivalTime(tasks, timeLeft, now);
+    const etas = calculateIntermediateETAs(tasks, timeLeft, now);
+    
+    // BOTH should return 10:20 (now + T2 duration)
+    expect(etas.get('2')?.toISOString()).toBe(new Date('2026-01-01T10:20:00Z').toISOString());
+    expect(arrivalTime.toISOString()).toBe(etas.get('2')?.toISOString());
+  });
 });
 
 describe('calculateIntermediateETAs', () => {

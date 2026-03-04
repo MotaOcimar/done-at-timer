@@ -9,9 +9,10 @@ export const calculateArrivalTime = (
     .filter((task) => task.status === 'PENDING')
     .reduce((acc, task) => acc + task.duration, 0);
 
-  // Soma segundos da tarefa ativa + minutos das pendentes convertido em segundos
+  // Soma segundos da tarefa ativa (garantindo que não seja negativo se estiver em overtime) 
+  // + minutos das pendentes convertido em segundos
   const totalRemainingSeconds =
-    (activeTimeLeftSeconds || 0) + pendingDurationMinutes * 60;
+    Math.max(0, activeTimeLeftSeconds || 0) + pendingDurationMinutes * 60;
 
   return new Date(currentTime.getTime() + totalRemainingSeconds * 1000);
 };
