@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LayoutGroup } from 'framer-motion';
 import {
   DndContext,
   closestCenter,
@@ -191,9 +192,11 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-            {tasks.map((task) => (
-              <TaskItem key={task.id} task={task} onDelete={removeTask} eta={etas.get(task.id)} />
-            ))}
+            <LayoutGroup>
+              {tasks.map((task) => (
+                <TaskItem key={task.id} task={task} onDelete={removeTask} eta={etas.get(task.id)} />
+              ))}
+            </LayoutGroup>
           </SortableContext>
           <DragOverlay adjustScale={false}>
             {activeTask ? (

@@ -3,6 +3,19 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TaskList } from './TaskList';
 import { useTaskStore } from '../store/useTaskStore';
 
+// Mock framer-motion to check for LayoutGroup
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, layout, ...props }: any) => (
+      <div data-testid="motion-div" data-layout={layout?.toString()} {...props}>
+        {children}
+      </div>
+    ),
+  },
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  LayoutGroup: ({ children }: { children: React.ReactNode }) => <div data-testid="layout-group">{children}</div>,
+}));
+
 vi.mock('@dnd-kit/core', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
@@ -180,5 +193,15 @@ describe('TaskList', () => {
     // New ETAs: Task 2: 10:20, Task 1: 10:30
     expect(screen.getByText(/10:20/)).toBeInTheDocument();
     expect(screen.getByText(/10:30/)).toBeInTheDocument();
+  });
+
+  it('wraps the sortable items in a LayoutGroup for smooth reordering', () => {
+    useTaskStore.setState({
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+    });
+
+    render(<TaskList />);
+    
+    expect(screen.getByTestId('layout-group')).toBeInTheDocument();
   });
 });
