@@ -111,7 +111,7 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] GREEN: Refactor `TaskItem.tsx` — wrap `TaskCard` in a `motion.div` with `layout` and `transition={{ duration: 0.3, ease: 'easeInOut' }}`. Keep dnd-kit's `setNodeRef`/`style`/`attributes` on the inner `TaskCard` div (unchanged). Pass `isDragging` to control `layout={!isDragging}`. b8d433e
 - [x] RED: Write a `TaskList` test asserting that wrapping the list in `<LayoutGroup>` does not break existing rendering (tasks still render in correct order with correct ETAs). b79ce6c
 - [x] GREEN: Wrap the `SortableContext` children area in `TaskList.tsx` with `<LayoutGroup>` from `framer-motion` to scope layout animations. b79ce6c
-- [ ] REFACTOR: Verify no duplicate wrappers, clean up imports. Ensure `DragOverlay` card does NOT use `motion.div` (overlay is ephemeral and should not animate layout).
+- [x] REFACTOR: Verify no duplicate wrappers, clean up imports. Ensure `DragOverlay` card does NOT use `motion.div` (overlay is ephemeral and should not animate layout). b79ce6c
 - [ ] Manual test: Start a task that is NOT first in the list → confirm it animates smoothly to top. Drag-and-drop a pending task → confirm drag still works without jank. Complete a task → confirm it animates to the completed section.
 
 ### 3.9 — Manual verification checkpoint
