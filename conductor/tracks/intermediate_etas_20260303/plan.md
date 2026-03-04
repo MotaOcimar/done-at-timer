@@ -116,7 +116,7 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] Task: Polish reordering animation — use `layout="position"` to prevent content stretching during size changes.
 
 ### 3.9 — Manual verification checkpoint
-- [ ] Conductor — Manual Verification of Phase 3.
+- [x] Conductor — Manual Verification of Phase 3. 5ad795c
 
 ## Phase 4: Architectural Consolidation & Robust Testing [checkpoint: pending]
 Goal: Address identified fragilities and gaps to ensure long-term stability.
