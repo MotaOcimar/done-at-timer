@@ -172,10 +172,8 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />
     );
-    expect(screen.getByText(/→/i)).toBeInTheDocument();
-    // Use an exact match or regex for the formatted time. It depends on local timezone in tests, 
-    // so we can just check if it contains "→ " followed by a number.
-    expect(screen.getByText(/→ \d{2}:\d{2}/)).toBeInTheDocument();
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(eta);
+    expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
 
   it('shows ETA on subtitle for pending cards', () => {

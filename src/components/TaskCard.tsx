@@ -233,39 +233,46 @@ const TaskCard = ({
                 </span>
               )}
             </div>
-            {!isActive && eta && (
-              <span className="tabular-nums opacity-70">
-                {timeFormatter.format(eta)}
-              </span>
-            )}
           </div>
         </div>
 
-        {/* Action Buttons Area */}
-        <div className="flex items-center gap-1">
-          {isActive && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onComplete(); }}
-              className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg ${
-                isTimeUp 
-                  ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100 scale-110' 
-                  : 'bg-green-500 hover:bg-green-600 shadow-green-200'
-              }`}
-              aria-label="Done"
-            >
-              Done
-            </button>
-          )}
-          {!isActive && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
-              className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-              aria-label="Delete task"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-            </button>
+        {/* Action Buttons Area & ETA */}
+        <div className="flex flex-col items-end justify-center min-w-[3rem]">
+          <div className="flex items-center gap-1">
+            {isActive && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onComplete(); }}
+                className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg ${
+                  isTimeUp 
+                    ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100 scale-110' 
+                    : 'bg-green-500 hover:bg-green-600 shadow-green-200'
+                }`}
+                aria-label="Done"
+              >
+                Done
+              </button>
+            )}
+            {!isActive && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
+                className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                aria-label="Delete task"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
+          </div>
+          {!isActive && eta && (
+            <span className={`text-[10px] font-bold tabular-nums flex items-center gap-1 pr-1 ${labelClasses[cardState]}`}>
+              {isCompleted ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><path d="m9 10 2 2 4-4"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              )}
+              {timeFormatter.format(eta)}
+            </span>
           )}
         </div>
       </div>
@@ -281,10 +288,11 @@ const TaskCard = ({
           />
           {eta && (
             <div className="flex justify-end mt-2">
-              <span className={`text-sm font-black tabular-nums tracking-tight ${
+              <span className={`text-sm font-black tabular-nums tracking-tight flex items-center gap-1.5 ${
                 timeDisplayClasses[cardState as keyof typeof timeDisplayClasses]
               }`}>
-                → {timeFormatter.format(eta)}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                {timeFormatter.format(eta)}
               </span>
             </div>
           )}
