@@ -95,7 +95,7 @@ const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
   return (
     <motion.div
       layout={!isDragging}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
     >
       <TaskCard
         task={task}
