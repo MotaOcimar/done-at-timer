@@ -73,8 +73,8 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] REFACTOR. 6b554e0
 
 ### 3.2 — ETA UI Polish & Alignment (Feedback)
-- [ ] RED/GREEN: Fix ETA alignment in `TaskCard` so it sits perfectly right-aligned, below the action buttons area (trash icon space).
-- [ ] RED/GREEN: Replace the `→` text with a `map-pin` SVG icon for pending/active tasks and `map-pin-check-inside` for completed tasks.
+- [x] RED/GREEN: Fix ETA alignment in `TaskCard` so it sits perfectly right-aligned, below the action buttons area (trash icon space). 52986f4
+- [x] RED/GREEN: Replace the `→` text with a `map-pin` SVG icon for pending/active tasks and `map-pin-check-inside` for completed tasks. 52986f4
 
 ### 3.3 — Reordering Constraints (Feedback)
 - [ ] RED: Write tests asserting that COMPLETED and IN_PROGRESS tasks cannot be reordered, and PENDING tasks cannot be moved above the IN_PROGRESS task.
