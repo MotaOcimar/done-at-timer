@@ -77,10 +77,10 @@ Goal: Ensure ETAs update live, remain correct across all interactions, and refin
 - [x] RED/GREEN: Replace the `→` text with a `map-pin` SVG icon for pending/active tasks and `map-pin-check-inside` for completed tasks. 52986f4
 
 ### 3.3 — Reordering Constraints (Feedback)
-- [ ] RED: Write tests asserting that COMPLETED and IN_PROGRESS tasks cannot be reordered, and PENDING tasks cannot be moved above the IN_PROGRESS task.
-- [ ] GREEN: Remove drag handles from COMPLETED and IN_PROGRESS tasks in `TaskCard`.
-- [ ] GREEN: Update `handleDragEnd` in `TaskList` to clamp drop indices so PENDING tasks stay within the PENDING section.
-- [ ] REFACTOR.
+- [x] RED: Write tests asserting that COMPLETED and IN_PROGRESS tasks cannot be reordered, and PENDING tasks cannot be moved above the IN_PROGRESS task. 9fccd59
+- [x] GREEN: Remove drag handles from COMPLETED and IN_PROGRESS tasks in `TaskCard`. 9fccd59
+- [x] GREEN: Update `handleDragEnd` in `TaskList` to clamp drop indices so PENDING tasks stay within the PENDING section. 9fccd59
+- [x] REFACTOR. 9fccd59
 
 ### 3.4 — Drag-and-drop recalculation
 - [ ] RED: Write a test asserting that reordering tasks produces updated ETAs in the new order.
