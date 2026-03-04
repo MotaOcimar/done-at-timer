@@ -78,7 +78,21 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      reorderTasks(active.id.toString(), over.id.toString());
+      const activeTask = tasks.find(t => t.id === active.id);
+      // Only PENDING tasks are draggable, but we double check
+      if (activeTask?.status === 'PENDING') {
+        const firstPendingIndex = tasks.findIndex(t => t.status === 'PENDING');
+        const lastPendingIndex = tasks.length - 1;
+        const overIndex = tasks.findIndex(t => t.id === over.id);
+        
+        // Clamp overIndex to pending range
+        const clampedIndex = Math.max(firstPendingIndex, Math.min(lastPendingIndex, overIndex));
+        const clampedOverId = tasks[clampedIndex].id;
+        
+        if (active.id !== clampedOverId) {
+          reorderTasks(active.id.toString(), clampedOverId.toString());
+        }
+      }
     }
 
     setActiveTask(null);

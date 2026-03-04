@@ -136,4 +136,25 @@ describe('TaskList', () => {
     expect(tasks[0].id).toBe('2');
     expect(tasks[1].id).toBe('1');
   });
+
+  it('prevents reordering PENDING tasks above ACTIVE tasks', () => {
+    // Task 1 (ACTIVE), Task 2 (PENDING)
+    useTaskStore.setState({
+      tasks: [
+        { id: '2', title: 'Active Task', duration: 10, status: 'IN_PROGRESS' },
+        { id: '1', title: 'Pending Task', duration: 20, status: 'PENDING' },
+      ],
+      activeTaskId: '2',
+    });
+
+    render(<TaskList />);
+    
+    // Mock DndContext already tries to move '1' over '2'
+    fireEvent.click(screen.getByTestId('dnd-context'));
+    
+    const { tasks } = useTaskStore.getState();
+    // Order should NOT change
+    expect(tasks[0].id).toBe('2');
+    expect(tasks[1].id).toBe('1');
+  });
 });

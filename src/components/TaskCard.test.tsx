@@ -212,4 +212,37 @@ describe('TaskCard (Pure Visual)', () => {
     );
     const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit' }).format(completionTime);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
-  });});
+    });
+
+    it('hides drag handle for active tasks', () => {
+    render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={true} 
+        isCompleted={false} 
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
+    });
+
+    it('hides drag handle for completed tasks', () => {
+    render(
+      <TaskCard 
+        task={{ ...mockTask, status: 'COMPLETED' }} 
+        isActive={false} 
+        isCompleted={true} 
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
+    });
+    });
