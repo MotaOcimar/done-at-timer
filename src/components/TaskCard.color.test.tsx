@@ -51,8 +51,8 @@ describe('TaskCard Color Refinements', () => {
       const card = screen.getByRole('heading', { name: /Test Task/i }).closest('div.flex-col');
       const statusIconButton = screen.getByRole('button', { name: /Resume/i });
       const title = screen.getByRole('heading', { name: /Test Task/i });
-      const durationLabel = screen.getByText(/min total/i);
-      const timeDisplay = screen.getByText(/10 min left/i);
+      screen.getByText(/min total/i);
+      screen.getByText(/10 min left/i);
 
       // Card should be neutral gray
       expect(card).toHaveClass('border-gray-300');
@@ -93,8 +93,8 @@ describe('TaskCard Color Refinements', () => {
       const card = screen.getByRole('heading', { name: /Test Task/i }).closest('div.flex-col');
       const statusIconButton = screen.getByRole('button', { name: /Pause/i });
       const title = screen.getByRole('heading', { name: /Test Task/i });
-      const durationLabel = screen.getByText(/min total/i);
-      const timeDisplay = screen.getByText(/10 min left/i);
+      screen.getByText(/min total/i);
+      screen.getByText(/10 min left/i);
 
       // Card should be active blue
       expect(card).toHaveClass('border-blue-500');
@@ -134,9 +134,9 @@ describe('TaskCard Color Refinements', () => {
       const card = screen.getByRole('heading', { name: /Test Task/i }).closest('div.flex-col');
       
       const title = screen.getByRole('heading', { name: /Test Task/i });
-      const durationLabel = screen.getByText(/min total/i);
+      screen.getByText(/min total/i);
       const doneButton = screen.getByRole('button', { name: /Done/i });
-      const timeDisplay = screen.getByText(/1 min over/i);
+      screen.getByText(/1 min over/i);
 
       // Card should be softer amber - currently it's border-amber-500
       expect(card).toHaveClass('border-amber-300');
