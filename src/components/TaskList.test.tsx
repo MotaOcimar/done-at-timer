@@ -157,4 +157,28 @@ describe('TaskList', () => {
     expect(tasks[0].id).toBe('2');
     expect(tasks[1].id).toBe('1');
   });
+
+  it('recalculates ETAs when tasks are reordered', () => {
+    vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+      ],
+    });
+
+    render(<TaskList />);
+    
+    // Initial ETAs: Task 1: 10:10, Task 2: 10:30
+    expect(screen.getByText(/10:10/)).toBeInTheDocument();
+    expect(screen.getByText(/10:30/)).toBeInTheDocument();
+
+    // Reorder: Move '1' over '2' -> arrayMove(0, 1) -> ['2', '1']
+    fireEvent.click(screen.getByTestId('dnd-context'));
+    
+    // New Order: Task 2 (20 min), Task 1 (10 min)
+    // New ETAs: Task 2: 10:20, Task 1: 10:30
+    expect(screen.getByText(/10:20/)).toBeInTheDocument();
+    expect(screen.getByText(/10:30/)).toBeInTheDocument();
+  });
 });
