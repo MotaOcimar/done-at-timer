@@ -168,15 +168,10 @@ Goal: Address identified fragilities and gaps to ensure long-term stability.
 ### 4.10 — Improve `useClock` test coverage
 **Gap:** `useClock` uses module-level mutable state (`listeners` Set, `interval` variable) but tests don't cover re-mount or multi-consumer scenarios.
 
-- [ ] RED: Write a test asserting that after unmount and re-mount, the clock continues ticking (simulates strict mode / HMR).
-- [ ] RED: Write a test asserting that two simultaneous consumers share the same interval and both receive updates.
-- [ ] GREEN: Verify existing implementation passes (it should — these are coverage tests, not bug-driven).
-- [ ] REFACTOR.
+- [x] RED: Write a test asserting that after unmount and re-mount, the clock continues ticking (simulates strict mode / HMR). d0ee44c
+- [x] RED: Write a test asserting that two simultaneous consumers share the same interval and both receive updates. d0ee44c
+- [x] GREEN: Verify existing implementation passes (it should — these are coverage tests, not bug-driven). d0ee44c
+- [x] REFACTOR. d0ee44c
 
-### 4.11 — Document `useTimer` interval duplication as tech debt
-**Context:** With a task active, 3 `setInterval` calls run simultaneously: `useClock` (shared), `useTimer` in `ArrivalDisplay`, and `useTimer` in `TaskItem`. Plan 4.2 introduced `useClock` as a "single timer source" but it was added alongside `useTimer`, not replacing it. Unifying them would be a significant refactor (different return shapes: `Date` vs `timeLeft` seconds).
-
-- [ ] Task: Add a `TODO` comment in `useTimer.ts` documenting the duplication and linking to this plan item as tech debt.
-
-### 4.12 — Manual verification checkpoint
+### 4.11 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 4.
