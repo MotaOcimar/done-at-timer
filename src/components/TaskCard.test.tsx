@@ -212,7 +212,69 @@ describe('TaskCard (Pure Visual)', () => {
     );
     const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(completionTime);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
-    });
+  });
+
+  it('uses consistent styling for ETA across states', () => {
+    const eta = new Date('2026-01-01T08:35:00Z');
+    
+    // Active state
+    const { rerender } = render(
+      <TaskCard 
+        task={mockTask} 
+        isActive={true} 
+        isCompleted={false} 
+        eta={eta}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(eta);
+    const activeEta = screen.getByText(new RegExp(expectedTime));
+    expect(activeEta).toHaveClass('text-sm');
+    expect(activeEta).toHaveClass('font-bold');
+    expect(activeEta).not.toHaveClass('font-black');
+
+    // Pending state
+    rerender(
+      <TaskCard 
+        task={mockTask} 
+        isActive={false} 
+        isCompleted={false} 
+        eta={eta}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    const pendingEta = screen.getByText(new RegExp(expectedTime));
+    expect(pendingEta).toHaveClass('text-xs');
+    expect(pendingEta).toHaveClass('font-bold');
+    expect(pendingEta).not.toHaveClass('text-[10px]');
+
+    // Completed state
+    rerender(
+      <TaskCard 
+        task={{ ...mockTask, status: 'COMPLETED' }} 
+        isActive={false} 
+        isCompleted={true} 
+        eta={eta}
+        onDelete={vi.fn()}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />
+    );
+    const completedEta = screen.getByText(new RegExp(expectedTime));
+    expect(completedEta).toHaveClass('text-xs');
+    expect(completedEta).toHaveClass('font-bold');
+    expect(completedEta).not.toHaveClass('text-[10px]');
+  });
 
   it('hides drag handle for active tasks', () => {
     render(
