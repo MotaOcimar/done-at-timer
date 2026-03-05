@@ -44,5 +44,4 @@ This file tracks all ideas, requested improvements, and roadmap items for future
 ## Technical Debt
 - [ ] **Per-task Progress Persistence**: Move the elapsed time tracking from the global `totalElapsedBeforePause` state into the `Task` type itself (e.g., `task.elapsedSeconds`). This ensures that partially completed tasks preserve their progress when the active task is switched or when they are moved back to pending, preventing them from "restarting" from zero when resumed. *Implementar junto com um botão "Reset Progress" na UI — uma vez que `elapsedSeconds` vive na tarefa, resetar é trivial (`task.elapsedSeconds = 0`).*
 - [ ] **Code Comments**: Translate Portuguese comments in `src/hooks/useTimer.ts` to English for consistency.
-- [ ] **Cleanup**: Remove unused `elapsedSeconds` variable in `src/store/useTaskStore.ts` inside the `pauseTask` action.
 - [ ] **Unified Timer Architecture**: Refactor `useTimer` to consume the synchronized 'now' from `useClock` instead of maintaining its own internal `setInterval` calls. This will eliminate duplicate 'tick' logic and ensure a single source of truth for all time-based calculations across the application.
