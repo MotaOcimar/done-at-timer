@@ -1,7 +1,7 @@
-import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 if (typeof window !== 'undefined') {
+  await import('@testing-library/jest-dom');
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation(query => ({
