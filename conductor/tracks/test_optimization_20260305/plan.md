@@ -9,8 +9,8 @@ Each file is migrated individually following the TDD cycle:
 
 ### Cycle 1 — Unblock `node` environment via setup guard
 - [x] Task: **Red** — Pick one pure-logic test (e.g. `useTaskStore.test.ts`), add `// @vitest-environment node` pragma at line 1 → run it → observe failure (setupTests.ts references `window`). 2b73e54
-- [~] Task: **Green** — Add `typeof window !== 'undefined'` guard around DOM-specific code in `src/setupTests.ts` → re-run → test passes.
-- [ ] Task: **Refactor** — Review `setupTests.ts` for any other code that needs guarding.
+- [x] Task: **Green** — Add `typeof window !== 'undefined'` guard around DOM-specific code in `src/setupTests.ts` → re-run → test passes. abd24ec
+- [~] Task: **Refactor** — Review `setupTests.ts` for any other code that needs guarding.
 
 ### Cycle 2 — Migrate remaining pure-logic tests to `node`
 - [ ] Task: **Red** — For each remaining pure-logic test file (`src/store/*.test.ts`, `src/utils/time.test.ts`), add `// @vitest-environment node` pragma → run → observe pass or fail.
