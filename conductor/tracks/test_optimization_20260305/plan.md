@@ -13,9 +13,9 @@ Each file is migrated individually following the TDD cycle:
 - [x] Task: **Refactor** — Review `setupTests.ts` for any other code that needs guarding. a1b14fb
 
 ### Cycle 2 — Migrate remaining pure-logic tests to `node`
-- [ ] Task: **Red** — For each remaining pure-logic test file (`src/store/*.test.ts`, `src/utils/time.test.ts`), add `// @vitest-environment node` pragma → run → observe pass or fail.
-- [ ] Task: **Green** — For any file that fails: diagnose the DOM dependency. Either fix the test to not depend on DOM, or mark it as requiring a DOM environment (it stays on jsdom for now).
-- [ ] Task: **Refactor** — Remove any unnecessary DOM references found during the audit.
+- [x] Task: **Red** — For each remaining pure-logic test file (`src/store/*.test.ts`, `src/utils/time.test.ts`), add `// @vitest-environment node` pragma → run → observe pass or fail. 0cb1c2e
+- [x] Task: **Green** — For any file that fails: diagnose the DOM dependency. Either fix the test to not depend on DOM, or mark it as requiring a DOM environment (it stays on jsdom for now). 0cb1c2e
+- [x] Task: **Refactor** — Remove any unnecessary DOM references found during the audit. 0cb1c2e
 
 ### Cycle 3 — Audit edge-case files
 - [ ] Task: **Red** — Add `// @vitest-environment node` pragma to `src/utils/notificationService.test.ts` and `src/pwa.test.ts` → run → observe result.
