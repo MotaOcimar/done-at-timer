@@ -127,34 +127,56 @@ Goal: Address identified fragilities and gaps to ensure long-term stability.
 - [x] REFACTOR. b9f50c0
 
 ### 4.2 — Single Timer Source (Single Source of Truth)
-- [ ] RED: Write a test for a new `useClock` hook that provides a synchronized `Date` across components.
-- [ ] GREEN: Create `src/hooks/useClock.ts` and replace `setInterval` in `ArrivalDisplay.tsx` and `TaskList.tsx`.
-- [ ] REFACTOR.
+- [x] RED: Write a test for a new `useClock` hook that provides a synchronized `Date` across components. b9f50c0
+- [x] GREEN: Create `src/hooks/useClock.ts` and replace `setInterval` in `ArrivalDisplay.tsx` and `TaskList.tsx`. b9f50c0
+- [x] REFACTOR. b9f50c0
 
 ### 4.3 — Robust Reordering Tests (Clamping Logic)
-- [ ] RED: Update `TaskList.test.tsx` with a more realistic `DndContext` mock that exercises reordering with mixed status lists (COMPLETED + IN_PROGRESS + PENDING).
-- [ ] GREEN: Verify reordering constraints in `useTaskStore.ts` are robust against all edge cases.
-- [ ] REFACTOR.
+- [x] RED: Update `TaskList.test.tsx` with a more realistic `DndContext` mock that exercises reordering with mixed status lists (COMPLETED + IN_PROGRESS + PENDING). c870e1b
+- [x] GREEN: Verify reordering constraints in `useTaskStore.ts` are robust against all edge cases. c870e1b
+- [x] REFACTOR. c870e1b
 
 ### 4.4 — Edge Case Testing (Store Logic)
-- [ ] RED: Write store tests for `startTask` on an already active task (timer reset behavior) and for switching active tasks while paused (no elapsed time loss).
-- [ ] GREEN: Fix any identified bugs in `useTaskStore.ts`.
-- [ ] REFACTOR.
+- [x] RED: Write store tests for `startTask` on an already active task (timer reset behavior) and for switching active tasks while paused (no elapsed time loss). b9f50c0
+- [x] GREEN: Fix any identified bugs in `useTaskStore.ts`. b9f50c0
+- [x] REFACTOR. b9f50c0
 
 ### 4.5 — Drag animation test coverage
-- [ ] RED: Write a `TaskItem` test asserting that `layout` becomes `false` when `isDragging` is `true` (mock `useSortable` to return `isDragging: true`).
-- [ ] GREEN: Verify existing implementation passes.
-- [ ] REFACTOR.
+- [x] RED: Write a `TaskItem` test asserting that `layout` becomes `false` when `isDragging` is `true` (mock `useSortable` to return `isDragging: true`). b9f50c0
+- [x] GREEN: Verify existing implementation passes. b9f50c0
+- [x] REFACTOR. b9f50c0
 
 ### 4.6 — Performance memoization
-- [ ] REFACTOR: Wrap `calculateIntermediateETAs` call in `TaskList.tsx` with `useMemo` (deps: `[tasks, activeTaskTimeLeft, currentTime]`).
-- [ ] REFACTOR: Wrap `sensors` declaration in `TaskList.tsx` with `useMemo` to avoid recreation on every render.
+- [x] REFACTOR: Wrap `calculateIntermediateETAs` call in `TaskList.tsx` with `useMemo` (deps: `[tasks, activeTaskTimeLeft, currentTime]`). b9f50c0
+- [x] REFACTOR: Wrap `sensors` declaration in `TaskList.tsx` with `useMemo` to avoid recreation on every render. b9f50c0
 
 ### 4.7 — Type-safety cleanup
-- [ ] REFACTOR: Remove `as keyof typeof` casts in `TaskCard.tsx` for `iconButtonClasses` and `timeDisplayClasses`. Narrow the `cardState` type so TypeScript can verify key access statically.
+- [x] REFACTOR: Remove `as keyof typeof` casts in `TaskCard.tsx` for `iconButtonClasses` and `timeDisplayClasses`. Narrow the `cardState` type so TypeScript can verify key access statically. b9f50c0
 
 ### 4.8 — ETA text truncation fix
-- [ ] REFACTOR: Add `whitespace-nowrap` (or equivalent) to the ETA `span` in `TaskCard.tsx` to prevent truncation on small screens.
+- [x] REFACTOR: Add `whitespace-nowrap` (or equivalent) to the ETA `span` in `TaskCard.tsx` to prevent truncation on small screens. b9f50c0
 
-### 4.9 — Manual verification checkpoint
+### 4.9 — Revert `elapsedSeconds` task-switching feature (move to backlog)
+**Context:** The `elapsedSeconds` field (introduced in 4.4) enables resuming a paused task's progress when switching between tasks. However, this feature has UX implications that weren't addressed: no way to reset an individual task's progress, no visual indicator that a non-active task has partial progress, and it adds complexity that conflicts with the app's minimalist vision. The feature should be evaluated as a product decision, not shipped as a side-effect of an edge-case fix.
+
+**Action:** Remove `elapsedSeconds` from the store logic and the `Task` type. The `updateTask` path for `IN_PROGRESS` should no longer save/restore elapsed time on task switches — switching tasks simply resets the previous task to PENDING with a fresh timer. Add a backlog item for the feature if desired later.
+
+- [x] RED: Write a store test asserting that switching from Task A to Task B resets Task A to PENDING **without** `elapsedSeconds`, and Task B starts with its full duration. b9f50c0
+- [x] GREEN: Remove `elapsedSeconds` from `Task` type and `updateTask` logic. Remove the edge-cases test (4.4) that depended on this behavior. b9f50c0
+- [x] REFACTOR: Clean up any remaining references to `elapsedSeconds`. b9f50c0
+
+### 4.10 — Improve `useClock` test coverage
+**Gap:** `useClock` uses module-level mutable state (`listeners` Set, `interval` variable) but tests don't cover re-mount or multi-consumer scenarios.
+
+- [ ] RED: Write a test asserting that after unmount and re-mount, the clock continues ticking (simulates strict mode / HMR).
+- [ ] RED: Write a test asserting that two simultaneous consumers share the same interval and both receive updates.
+- [ ] GREEN: Verify existing implementation passes (it should — these are coverage tests, not bug-driven).
+- [ ] REFACTOR.
+
+### 4.11 — Document `useTimer` interval duplication as tech debt
+**Context:** With a task active, 3 `setInterval` calls run simultaneously: `useClock` (shared), `useTimer` in `ArrivalDisplay`, and `useTimer` in `TaskItem`. Plan 4.2 introduced `useClock` as a "single timer source" but it was added alongside `useTimer`, not replacing it. Unifying them would be a significant refactor (different return shapes: `Date` vs `timeLeft` seconds).
+
+- [ ] Task: Add a `TODO` comment in `useTimer.ts` documenting the duplication and linking to this plan item as tech debt.
+
+### 4.12 — Manual verification checkpoint
 - [ ] Conductor — Manual Verification of Phase 4.

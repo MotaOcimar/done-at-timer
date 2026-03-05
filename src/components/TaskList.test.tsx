@@ -21,7 +21,15 @@ vi.mock('@dnd-kit/core', async (importOriginal) => {
   return {
     ...actual,
     DndContext: vi.fn(({ children, onDragEnd }) => (
-      <div data-testid="dnd-context" onClick={() => onDragEnd && onDragEnd({ active: { id: '1' }, over: { id: '2' } })}>
+      <div 
+        data-testid="dnd-context" 
+        onClick={(e: any) => {
+          // Access properties from the native event
+          const activeId = e.nativeEvent.activeId || '1';
+          const overId = e.nativeEvent.overId || '2';
+          onDragEnd && onDragEnd({ active: { id: activeId }, over: { id: overId } });
+        }}
+      >
         {children}
       </div>
     )),
@@ -45,6 +53,14 @@ describe('TaskList', () => {
   afterEach(() => {
     vi.useRealTimers();
   });
+
+  const triggerDragEnd = (activeId: string, overId: string) => {
+    const dndContext = screen.getByTestId('dnd-context');
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    Object.defineProperty(event, 'activeId', { value: activeId });
+    Object.defineProperty(event, 'overId', { value: overId });
+    dndContext.dispatchEvent(event);
+  };
 
   it('computes and passes ETA to TaskItems', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
@@ -142,8 +158,10 @@ describe('TaskList', () => {
 
     render(<TaskList />);
     
-    // Trigger the mock drag end by clicking the dnd-context div
-    fireEvent.click(screen.getByTestId('dnd-context'));
+    // Trigger the mock drag end
+    act(() => {
+      triggerDragEnd('1', '2');
+    });
     
     const { tasks } = useTaskStore.getState();
     expect(tasks[0].id).toBe('2');
@@ -162,13 +180,51 @@ describe('TaskList', () => {
 
     render(<TaskList />);
     
-    // Mock DndContext already tries to move '1' over '2'
-    fireEvent.click(screen.getByTestId('dnd-context'));
+    // Move '1' over '2'
+    act(() => {
+      triggerDragEnd('1', '2');
+    });
     
     const { tasks } = useTaskStore.getState();
     // Order should NOT change
     expect(tasks[0].id).toBe('2');
     expect(tasks[1].id).toBe('1');
+  });
+
+  it('clamps reordering of PENDING tasks to be after COMPLETED tasks', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: 'c1', title: 'Completed 1', duration: 10, status: 'COMPLETED' },
+        { id: 'i1', title: 'Active 1', duration: 10, status: 'IN_PROGRESS' },
+        { id: 'p1', title: 'Pending 1', duration: 10, status: 'PENDING' },
+        { id: 'p2', title: 'Pending 2', duration: 10, status: 'PENDING' },
+      ],
+      activeTaskId: 'i1',
+    });
+
+    render(<TaskList />);
+    
+    // Try to move 'p2' over 'c1' (completed)
+    act(() => {
+      triggerDragEnd('p2', 'c1');
+    });
+    
+    let { tasks } = useTaskStore.getState();
+    // 'p2' should be clamped to the first pending position (index 2)
+    // List should be [c1, i1, p2, p1]
+    expect(tasks[2].id).toBe('p2');
+    expect(tasks[0].id).toBe('c1');
+    expect(tasks[1].id).toBe('i1');
+
+    // Try to move 'p1' over 'i1' (active)
+    act(() => {
+      triggerDragEnd('p1', 'i1');
+    });
+    tasks = useTaskStore.getState().tasks;
+    // 'p1' should be clamped to the first pending position (index 2)
+    // Current list is [c1, i1, p2, p1]. Move p1 over i1 -> clamped to 2 -> [c1, i1, p1, p2]
+    expect(tasks[2].id).toBe('p1');
+    expect(tasks[1].id).toBe('i1');
   });
 
   it('recalculates ETAs when tasks are reordered', () => {
@@ -187,7 +243,9 @@ describe('TaskList', () => {
     expect(screen.getByText(/10:30/)).toBeInTheDocument();
 
     // Reorder: Move '1' over '2' -> arrayMove(0, 1) -> ['2', '1']
-    fireEvent.click(screen.getByTestId('dnd-context'));
+    act(() => {
+      triggerDragEnd('1', '2');
+    });
     
     // New Order: Task 2 (20 min), Task 1 (10 min)
     // New ETAs: Task 2: 10:20, Task 1: 10:30

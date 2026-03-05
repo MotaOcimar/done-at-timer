@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { LayoutGroup } from 'framer-motion';
 import {
   DndContext,
@@ -22,6 +22,7 @@ import { TaskItem } from './TaskItem';
 import { TaskCard } from './TaskCard';
 import type { Task } from '../types';
 import { calculateIntermediateETAs } from '../utils/time';
+import { useClock } from '../hooks/useClock';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
@@ -58,14 +59,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const currentTime = useClock();
 
   // Calculate intermediate ETAs based on current time
   const etas = useMemo(() => 
@@ -82,29 +76,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      const activeTask = tasks.find(t => t.id === active.id);
-      // Only PENDING tasks are draggable, but we double check
-      if (activeTask?.status === 'PENDING') {
-        const firstPendingIndex = tasks.findIndex(t => t.status === 'PENDING');
-        // Find last index that is PENDING
-        let lastPendingIndex = tasks.length - 1;
-        for (let i = tasks.length - 1; i >= 0; i--) {
-          if (tasks[i].status === 'PENDING') {
-            lastPendingIndex = i;
-            break;
-          }
-        }
-        
-        const overIndex = tasks.findIndex(t => t.id === over.id);
-        
-        // Clamp overIndex to pending range
-        const clampedIndex = Math.max(firstPendingIndex, Math.min(lastPendingIndex, overIndex));
-        const clampedOverId = tasks[clampedIndex].id;
-        
-        if (active.id !== clampedOverId) {
-          reorderTasks(active.id.toString(), clampedOverId.toString());
-        }
-      }
+      reorderTasks(active.id.toString(), over.id.toString());
     }
 
     setActiveTask(null);

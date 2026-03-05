@@ -151,4 +151,24 @@ describe('TaskItem', () => {
     expect(motionDiv).toBeInTheDocument();
     expect(motionDiv.getAttribute('data-layout')).toBe('position');
   });
+
+  it('disables layout animation during dragging to prevent conflicts with dnd-kit transforms', async () => {
+    const { useSortable } = await import('@dnd-kit/sortable');
+    
+    // Mock isDragging as true
+    vi.mocked(useSortable).mockReturnValueOnce({
+      attributes: {},
+      listeners: {},
+      setNodeRef: vi.fn(),
+      transform: null,
+      transition: null,
+      isDragging: true,
+    } as any);
+
+    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    
+    const motionDiv = screen.getByTestId('motion-div');
+    // layout prop should be false when isDragging is true
+    expect(motionDiv.getAttribute('data-layout')).toBe('false');
+  });
 });

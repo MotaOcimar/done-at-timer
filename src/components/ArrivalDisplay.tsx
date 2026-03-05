@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
+import { useClock } from '../hooks/useClock';
 
 const ArrivalDisplay = () => {
-  const [now, setNow] = useState(new Date());
+  const now = useClock();
   const tasks = useTaskStore((state) => state.tasks);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
@@ -25,14 +26,6 @@ const ArrivalDisplay = () => {
   // isDrifting means the arrival time is moving forward in real-time (not progress is being made)
   // This happens when the timer is paused OR when time is up and we're waiting for confirmation.
   const isDrifting = (activeTaskId && !targetEndTime) || isTimeUp;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const allCompleted =
     tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');

@@ -277,9 +277,28 @@ export const useTaskStore = create<TaskState>()(
           const newIndex = state.tasks.findIndex((t) => t.id === overId);
 
           if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-            return {
-              tasks: arrayMove(state.tasks, oldIndex, newIndex),
-            };
+            const activeTask = state.tasks[oldIndex];
+            // Only PENDING tasks can be reordered
+            if (activeTask.status !== 'PENDING') return state;
+
+            // Find valid range for PENDING tasks (after COMPLETED and IN_PROGRESS)
+            const firstPendingIndex = state.tasks.findIndex(t => t.status === 'PENDING');
+            let lastPendingIndex = state.tasks.length - 1;
+            for (let i = state.tasks.length - 1; i >= 0; i--) {
+              if (state.tasks[i].status === 'PENDING') {
+                lastPendingIndex = i;
+                break;
+              }
+            }
+
+            // Clamp newIndex to pending range
+            const clampedIndex = Math.max(firstPendingIndex, Math.min(lastPendingIndex, newIndex));
+
+            if (oldIndex !== clampedIndex) {
+              return {
+                tasks: arrayMove(state.tasks, oldIndex, clampedIndex),
+              };
+            }
           }
 
           return state;
