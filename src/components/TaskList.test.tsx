@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TaskList } from './TaskList';

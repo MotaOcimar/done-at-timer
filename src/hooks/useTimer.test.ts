@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useTimer } from './useTimer';
