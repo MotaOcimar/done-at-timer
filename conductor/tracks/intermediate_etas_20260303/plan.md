@@ -175,3 +175,29 @@ Goal: Address identified fragilities and gaps to ensure long-term stability.
 
 ### 4.11 — Manual verification checkpoint
 - [x] Conductor — Manual Verification of Phase 4. e3bc82a
+
+## Phase 5: ETA Visual Consistency (Feedback)
+Goal: Eliminate the visual "zigzag" of ETA text across task states by normalizing size and weight, while keeping color variation tied to card state.
+
+**Context:** Currently the ETA text varies significantly between states:
+- Completed/Pending: `text-[10px] font-bold` (10px, weight 700)
+- Active: `text-sm font-black` (14px, weight 900)
+
+Combined with the completed card's `opacity-70`, this creates a jarring size/weight jump when scanning the task list vertically. The fix normalizes size and weight while preserving the per-state color, which the user considers an elegant touch.
+
+**Changes:**
+1. Pending/Completed ETA: `text-[10px] font-bold` → `text-xs font-bold` (10px → 12px)
+2. Active ETA: `text-sm font-black` → `text-sm font-bold` (weight 900 → 700)
+
+### 5.1 — Normalize non-active ETA size
+- [x] RED: Update the existing `TaskCard` tests for pending/completed ETA to assert `text-xs` class instead of `text-[10px]`. 81f4529
+- [x] GREEN: In `TaskCard.tsx`, change the non-active ETA `span` from `text-[10px]` to `text-xs`. 81f4529
+- [x] REFACTOR. 81f4529
+
+### 5.2 — Normalize active ETA weight
+- [x] RED: Update the existing `TaskCard` test for active ETA to assert `font-bold` instead of `font-black`. 81f4529
+- [x] GREEN: In `TaskCard.tsx`, change the active ETA `span` from `font-black` to `font-bold`. 81f4529
+- [x] REFACTOR. 81f4529
+
+### 5.3 — Manual verification checkpoint
+- [x] Conductor — Manual Verification of Phase 5. 81f4529
