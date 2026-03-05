@@ -176,7 +176,7 @@ Goal: Address identified fragilities and gaps to ensure long-term stability.
 ### 4.11 — Manual verification checkpoint
 - [x] Conductor — Manual Verification of Phase 4. e3bc82a
 
-## Phase 5: ETA Visual Consistency (Feedback)
+## Phase 5: ETA Visual Consistency (Feedback) [checkpoint: 431c1b0]
 Goal: Eliminate the visual "zigzag" of ETA text across task states by normalizing size and weight, while keeping color variation tied to card state.
 
 **Context:** Currently the ETA text varies significantly between states:
