@@ -18,9 +18,9 @@ Each file is migrated individually following the TDD cycle:
 - [x] Task: **Refactor** — Remove any unnecessary DOM references found during the audit. 0cb1c2e
 
 ### Cycle 3 — Audit edge-case files
-- [ ] Task: **Red** — Add `// @vitest-environment node` pragma to `src/utils/notificationService.test.ts` and `src/pwa.test.ts` → run → observe result.
-- [ ] Task: **Green** — If they fail, remove the pragma (they need DOM). If they pass, keep the pragma.
-- [ ] Task: Conductor - User Manual Verification 'Pure-logic tests on node environment' (Protocol in workflow.md)
+- [x] Task: **Red** — Add `// @vitest-environment node` pragma to `src/utils/notificationService.test.ts` and `src/pwa.test.ts` → run → observe result. 4449bcc
+- [x] Task: **Green** — If they fail, remove the pragma (they need DOM). If they pass, keep the pragma. 4449bcc
+- [~] Task: Conductor - User Manual Verification 'Pure-logic tests on node environment' (Protocol in workflow.md)
 
 ## Phase 2: Prove `happy-dom` for DOM-dependent tests
 
