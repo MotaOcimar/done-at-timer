@@ -18,6 +18,7 @@
 ## 2. User Experience (UX)
 
 - **Focus-First:** The primary view when a timer is running should be the current task and the _predicted completion time_.
+- **Inline ETAs:** Each task in the list provides immediate feedback on its individual ETA or completion time, allowing users to scan the list and understand the temporal impact of their routine without looking back and forth to the main arrival clock.
 - **Frictionless Interaction:** Starting, stopping, and switching tasks should be instantaneous and require minimal clicks.
 - **Gamified Feedback:**
   - **Completion:** Visual and/or auditory rewards for finishing a task (e.g., a satisfying checkmark animation, a pleasant sound).
