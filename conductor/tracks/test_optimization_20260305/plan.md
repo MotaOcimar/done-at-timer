@@ -3,7 +3,7 @@
 > **Methodology:** Strict TDD (Red → Green → Refactor) applied to infrastructure changes.
 > Each migration is proven file-by-file with `// @vitest-environment` pragmas before any global config change. The global config is the **Refactor** step — an extraction of what was already proven locally.
 
-## Phase 1: Prove `node` environment for pure-logic tests
+## Phase 1: Prove `node` environment for pure-logic tests [checkpoint: 2ffaceb]
 
 Each file is migrated individually following the TDD cycle:
 
@@ -20,7 +20,7 @@ Each file is migrated individually following the TDD cycle:
 ### Cycle 3 — Audit edge-case files
 - [x] Task: **Red** — Add `// @vitest-environment node` pragma to `src/utils/notificationService.test.ts` and `src/pwa.test.ts` → run → observe result. 4449bcc
 - [x] Task: **Green** — If they fail, remove the pragma (they need DOM). If they pass, keep the pragma. 4449bcc
-- [~] Task: Conductor - User Manual Verification 'Pure-logic tests on node environment' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Pure-logic tests on node environment' 2ffaceb
 
 ## Phase 2: Prove `happy-dom` for DOM-dependent tests
 
