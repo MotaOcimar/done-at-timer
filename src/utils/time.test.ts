@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import { calculateArrivalTime, calculateIntermediateETAs } from './time';
 import type { Task } from '../types';
