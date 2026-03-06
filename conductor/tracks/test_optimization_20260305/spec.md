@@ -1,20 +1,32 @@
 # Specification: Test Infrastructure Optimization (Fast Tests)
 
 ## 1. Overview
-The current test suite suffers from high infrastructure overhead (~530s cumulative). This track aims to optimize test execution by switching the default environment to `node` for pure logic tests and migrating DOM-dependent tests from `jsdom` to `happy-dom`.
+The current test suite suffers from high infrastructure overhead (~187s cumulative). This track aims to optimize test execution by switching the default environment to `node` for pure logic tests and migrating DOM-dependent tests from `jsdom` to `happy-dom`.
 
 ### Baseline (measured 2026-03-05)
 | Metric | Value |
 |--------|-------|
-| Total wall time | ~91s |
-| Environment (cumulative) | 361.77s |
-| Import (cumulative) | 107.56s |
-| Setup (cumulative) | 59.64s |
-| Tests (cumulative) | 21.71s |
+| Total wall time | ~42s |
+| Environment (cumulative) | 139.31s |
+| Import (cumulative) | 31.92s |
+| Setup (cumulative) | 16.11s |
+| Tests (cumulative) | 41.56s |
 | Test files | 35 |
 
+### Phase 2 Results (measured 2026-03-06)
+| Metric | Baseline | Phase 2 | Reduction |
+|--------|----------|---------|-----------|
+| Total wall time | ~42s | **~24s** | **-43%** |
+| Environment (cumulative) | 139.31s | **51.45s** | **-63%** |
+| Import (cumulative) | 31.92s | **35.78s** | +12% |
+| Setup (cumulative) | 16.11s | **12.69s** | **-21%** |
+| Tests (cumulative) | 41.56s | **14.04s** | **-66%** |
+
+- 9 test files on `node`, 26 on `happy-dom`, 0 on `jsdom`
+- All 163 tests passing, zero regressions
+
 ## 2. Goals & Functional Requirements
-- **Goal:** Reduce infrastructure overhead from ~530s to the minimum possible.
+- **Goal:** Reduce infrastructure overhead from ~187s to the minimum possible.
 - **Goal:** Improve developer productivity by providing faster feedback loops.
 
 ### Functional Requirements:
