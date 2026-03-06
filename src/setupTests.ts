@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+process.env.TZ = 'UTC';
+
 if (typeof window !== 'undefined') {
   await import('@testing-library/jest-dom');
   Object.defineProperty(window, 'matchMedia', {
