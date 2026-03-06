@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ArrivalDisplay } from './ArrivalDisplay';

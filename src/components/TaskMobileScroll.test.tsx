@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { TaskItem } from './TaskItem';
