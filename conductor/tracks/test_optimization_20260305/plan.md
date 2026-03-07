@@ -35,17 +35,23 @@ Each file is migrated individually following the TDD cycle:
 - [x] Task: **Refactor** — Document any files that could not migrate from jsdom (if any). 7837fca
 - [x] Task: Conductor - User Manual Verification 'DOM tests on happy-dom' 7837fca
 
-## Phase 3: Extract to global config (the big Refactor) [checkpoint: 7837fca]
+## Phase 3: Extract to global config (the big Refactor) [checkpoint: 7837fca] — CANCELLED
 
-Now that every file has a proven pragma, extract the pattern into `vite.config.ts` and remove the pragmas.
+> **Original goal:** Extract per-file pragmas into `vite.config.ts` using `environmentMatchGlobs`.
 
-- [ ] Task: **Red** — Remove all per-file `// @vitest-environment` pragmas → run full suite → tests fail (back to default jsdom for all).
-- [ ] Task: **Green** — Update `vite.config.ts`: set `environment: 'node'` as default, add `environmentMatchGlobs` mapping DOM test paths to `happy-dom` (and `jsdom` for any exceptions found in Phase 2) → run full suite → all tests pass.
-- [ ] Task: **Refactor** — Simplify `environmentMatchGlobs` patterns (merge overlapping globs, remove redundancies).
-- [ ] Task: Conductor - User Manual Verification 'Global config extraction' (Protocol in workflow.md)
+- [x] Task: **Red** — Remove all per-file `// @vitest-environment` pragmas → run full suite → tests fail (back to default jsdom for all). cf23c12
+- [~] Task: **Green** — Update `vite.config.ts`: set `environment: 'node'` as default, add `environmentMatchGlobs` mapping DOM test paths to `happy-dom` → run full suite → all tests pass.
+  - **BLOCKED:** `environmentMatchGlobs` was removed in Vitest 4. The config option silently does nothing.
+  - **Alternative investigated:** Vitest 4 workspace projects (`vitest.workspace.ts` with two `defineProject` entries). Rejected — adds config complexity (extra file, duplicated `setupFiles`) for no performance gain.
+- [x] Task: **Restore pragmas** — Re-add all per-file `// @vitest-environment` pragmas removed in the Red step, restoring the proven state from Phase 2.
+- [~] Task: ~~**Refactor** — Simplify `environmentMatchGlobs` patterns.~~ N/A.
+- [~] Task: ~~Conductor - User Manual Verification 'Global config extraction'.~~ N/A.
+
+> **Conclusion:** Per-file pragmas ARE the idiomatic Vitest 4 approach. They are self-documenting, fail-fast (a missing pragma on a DOM test crashes immediately in `node`), and add zero config overhead. Phase 3 is closed as not applicable to Vitest 4.
 
 ## Phase 4: Cleanup & Benchmark
 
-- [ ] Task: Remove `jsdom` from `devDependencies` if no test file requires it.
-- [ ] Task: Run the full test suite and record execution time and infrastructure overhead. Compare against baseline (42s wall / 187s cumulative overhead).
-- [ ] Task: Conductor - User Manual Verification 'Cleanup & Final Verification' (Protocol in workflow.md)
+- [x] Task: Remove `jsdom` from `devDependencies` if no test file requires it. 1f18463
+- [x] Task: Run the full test suite and record execution time and infrastructure overhead. Compare against baseline (91s wall / 361s env). **Final: 31s wall / 118s env overhead.**
+- [x] Task: Conductor - User Manual Verification 'Cleanup & Final Verification' (Protocol in workflow.md)
+
