@@ -46,12 +46,12 @@ The current test suite suffers from high infrastructure overhead (~187s cumulati
 - **Performance:** Significant reduction in total test execution time.
 
 ## 4. Acceptance Criteria
-- [ ] `vite.config.ts` uses `node` as the default `test.environment`.
-- [ ] `environmentMatchGlobs` correctly maps UI-related tests to `happy-dom`.
-- [ ] `src/setupTests.ts` uses a conditional guard for DOM-specific mocks.
-- [ ] Total infrastructure overhead (environment creation + imports + setup) is significantly reduced vs. baseline.
-- [ ] All existing tests pass without regressions.
-- [ ] `jsdom` is no longer a dependency of the project (if possible).
+- [x] `vite.config.ts` uses `node` as the default `test.environment`.
+- [x] ~~`environmentMatchGlobs` correctly maps UI-related tests to `happy-dom`.~~ Per-file `// @vitest-environment` pragmas used instead (idiomatic Vitest 4).
+- [x] `src/setupTests.ts` uses a conditional guard for DOM-specific mocks.
+- [x] Total infrastructure overhead (environment creation + imports + setup) is significantly reduced vs. baseline.
+- [x] All existing tests pass without regressions.
+- [x] `jsdom` is no longer a dependency of the project.
 
 ## 5. Out of Scope
 - Rewriting existing tests to improve their internal logic (unless necessary for the migration).
