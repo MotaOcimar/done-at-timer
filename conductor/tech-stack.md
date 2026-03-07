@@ -36,6 +36,6 @@
 - **Linting/Formatting:** **ESLint** + **Prettier**
   - _Reasoning:_ Ensures code quality and consistent formatting automatically.
 - **Testing:** **Vitest** + **React Testing Library**
-  - _Reasoning:_ Fast unit testing framework compatible with Vite.
+  - _Reasoning:_ Optimized for speed with a **hybrid environment strategy**. Pure logic tests run in `node` (default), while DOM-dependent tests use **happy-dom** via per-file pragmas for minimal overhead (significantly faster than jsdom).
 - **Hosting:** **GitHub Pages**
   - _Reasoning:_ Free hosting for static sites, integrated with GitHub workflow.
