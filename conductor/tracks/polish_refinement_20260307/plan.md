@@ -6,7 +6,7 @@ TDD applies to **behavioral** changes where a test can verify intent (z-index la
 
 ---
 
-## Phase 1: Cleanup and Bug Fixes
+## Phase 1: Cleanup and Bug Fixes [checkpoint: aae408f]
 
 ### [x] 1.1 Delete `src/App.css` (851fb2a)
 - Delete the file. No imports exist anywhere — verified via grep.
