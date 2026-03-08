@@ -19,7 +19,7 @@ TDD applies to **behavioral** changes where a test can verify intent (z-index la
 - **Green:** In `App.tsx:25`, change `z-50` to `z-30`. Run test — passes.
 - **Refactor:** None needed.
 
-### 1.3 Hide spin buttons on number inputs
+### [x] 1.3 Hide spin buttons on number inputs (67c98de)
 - Add CSS rule to `src/index.css` (after `@import 'tailwindcss'` and `@theme` block):
   ```css
   input[type="number"]::-webkit-inner-spin-button,
