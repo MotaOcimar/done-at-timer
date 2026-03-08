@@ -42,7 +42,7 @@ const TaskInput = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors font-bold flex-shrink-0 shadow-lg shadow-blue-100"
+          className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors font-bold flex-shrink-0 shadow-md shadow-blue-100"
           aria-label="Add task"
         >
           <svg
