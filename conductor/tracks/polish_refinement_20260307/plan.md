@@ -61,7 +61,7 @@ Changes:
 - `PWAUpdateNotification.tsx:56` — reload button: `rounded-lg` -> `rounded-xl`
 - `PWAUpdateNotification.tsx:62` — close button: `rounded-lg` -> `rounded-xl`
 
-### 2.2 Standardize shadows
+### [x] 2.2 Standardize shadows (06bf3a3)
 Target hierarchy: `shadow-sm` (resting) / `shadow-md` (hover/secondary) / `shadow-xl` (floating UI) / `shadow-2xl` (hero/overlays).
 
 Changes:
