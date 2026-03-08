@@ -8,7 +8,7 @@ TDD applies to **behavioral** changes where a test can verify intent (z-index la
 
 ## Phase 1: Cleanup and Bug Fixes
 
-### 1.1 Delete `src/App.css`
+### [x] 1.1 Delete `src/App.css` (851fb2a)
 - Delete the file. No imports exist anywhere — verified via grep.
 - Run `npm run build` to confirm no breakage.
 
