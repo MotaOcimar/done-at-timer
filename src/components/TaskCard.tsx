@@ -226,7 +226,7 @@ const TaskCard = ({
               ariaLabel="Task title"
             />
           </h3>
-          <div className={`text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-between ${labelClasses[cardState]}`}>
+          <div className={`text-xs font-bold uppercase tracking-wide transition-colors flex items-center justify-between ${labelClasses[cardState]}`}>
             <div>
               <InlineEdit
                 value={task.duration}
@@ -250,7 +250,7 @@ const TaskCard = ({
             {isActive && (
               <button
                 onClick={(e) => { e.stopPropagation(); onComplete(); }}
-                className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg ${
+                className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-wide transition-all shadow-lg ${
                   isTimeUp 
                     ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100 scale-110' 
                     : 'bg-green-500 hover:bg-green-600 shadow-green-200'

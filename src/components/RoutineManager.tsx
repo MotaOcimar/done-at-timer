@@ -135,7 +135,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
           <div className="flex-1 overflow-y-auto p-6">
             {/* List Section */}
             <div className="space-y-4">
-              <h3 className="text-xs font-black text-gray-300 uppercase tracking-widest">Saved Libraries</h3>
+              <h3 className="text-xs font-black text-gray-300 uppercase tracking-wide">Saved Libraries</h3>
               {routines.length === 0 ? (
                 <div className="py-10 text-center text-gray-400 text-sm italic border-2 border-dashed border-gray-100 rounded-2xl">
                   No routines yet.

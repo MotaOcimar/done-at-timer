@@ -58,7 +58,7 @@ const ArrivalDisplay = () => {
             />
           </svg>
         </div>
-        <h2 className="text-green-100 text-sm font-bold uppercase tracking-[0.2em] mb-2">
+        <h2 className="text-green-100 text-sm font-bold uppercase tracking-wide mb-2">
           Routine Complete!
         </h2>
         <div className="text-5xl font-black tracking-tight">Well Done.</div>
@@ -145,7 +145,7 @@ const ArrivalDisplay = () => {
     <div className={`text-center py-8 px-6 rounded-2xl transition-all duration-700 ${
       containerClasses[displayState]
     }`}>
-      <h2 className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 transition-colors duration-700 ${
+      <h2 className={`text-sm font-bold uppercase tracking-wide mb-4 transition-colors duration-700 ${
         labelClasses[displayState]
       }`}>
         {isDrifting ? 'Arrival time is drifting' : 'You will be done at'}
@@ -165,7 +165,7 @@ const ArrivalDisplay = () => {
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
-        <div className={`flex justify-end text-xs font-bold uppercase tracking-widest opacity-80 transition-colors duration-700 ${
+        <div className={`flex justify-end text-xs font-bold uppercase tracking-wide opacity-80 transition-colors duration-700 ${
           progressRemainingClasses[displayState]
         }`}>
           <span>{remainingMinutes} min left</span>
