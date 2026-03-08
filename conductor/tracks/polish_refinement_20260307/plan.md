@@ -12,7 +12,7 @@ TDD applies to **behavioral** changes where a test can verify intent (z-index la
 - Delete the file. No imports exist anywhere — verified via grep.
 - Run `npm run build` to confirm no breakage.
 
-### 1.2 Fix sticky header z-index (TDD)
+### [x] 1.2 Fix sticky header z-index (TDD) (bfcb2f2)
 **Existing test:** `integration.sticky.test.tsx:21` asserts `z-50`.
 
 - **Red:** Update test assertion from `z-50` to `z-30`. Run test — fails.
