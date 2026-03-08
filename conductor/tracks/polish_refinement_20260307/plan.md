@@ -45,7 +45,7 @@ TDD applies to **behavioral** changes where a test can verify intent (z-index la
 
 All tasks in this phase are pure visual CSS class swaps. No behavioral tests — manual verification at end of phase.
 
-### 2.1 Standardize border radius
+### [x] 2.1 Standardize border radius (196d5df)
 Target system: `rounded-xl` (small: buttons, inputs, icon boxes, toasts) / `rounded-2xl` (large: cards, modals, ArrivalDisplay).
 
 Changes:
