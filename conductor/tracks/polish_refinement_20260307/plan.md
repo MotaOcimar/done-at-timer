@@ -70,7 +70,7 @@ Changes:
 - `TaskInput.tsx:45` — add button: `shadow-lg` -> `shadow-md`
 - `TaskList.tsx:160` — reset button: `shadow-lg` -> `shadow-md`
 
-### 2.3 Standardize letter spacing
+### [x] 2.3 Standardize letter spacing (e3a7f03)
 Target: all small uppercase labels use `tracking-wide`. Remove `tracking-widest` and `tracking-[0.2em]`.
 
 Changes:
