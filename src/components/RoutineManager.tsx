@@ -77,7 +77,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <form 
             onSubmit={handleSave} 
-            className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-green-100 max-w-sm w-full"
+            className="bg-white rounded-2xl p-6 shadow-2xl border-2 border-green-100 max-w-sm w-full"
           >
             <div className="bg-green-50 w-12 h-12 rounded-2xl flex items-center justify-center text-green-500 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,7 +137,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
             <div className="space-y-4">
               <h3 className="text-xs font-black text-gray-300 uppercase tracking-widest">Saved Libraries</h3>
               {routines.length === 0 ? (
-                <div className="py-10 text-center text-gray-400 text-sm italic border-2 border-dashed border-gray-100 rounded-3xl">
+                <div className="py-10 text-center text-gray-400 text-sm italic border-2 border-dashed border-gray-100 rounded-2xl">
                   No routines yet.
                 </div>
               ) : (
@@ -182,7 +182,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
       {confirmLoadId && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmLoadId(null)} />
-          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-blue-100 max-w-sm w-full relative z-[70]">
+          <div className="bg-white rounded-2xl p-6 shadow-2xl border-2 border-blue-100 max-w-sm w-full relative z-[70]">
             <div className="bg-blue-50 w-12 h-12 rounded-2xl flex items-center justify-center text-blue-500 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -213,7 +213,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
       {confirmDeleteId && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmDeleteId(null)} />
-          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70]">
+          <div className="bg-white rounded-2xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70]">
             <div className="bg-red-50 w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

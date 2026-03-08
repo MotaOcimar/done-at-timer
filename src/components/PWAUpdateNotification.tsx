@@ -26,7 +26,7 @@ export function PWAUpdateNotification() {
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-[100] p-4 duration-300">
       <div className="flex items-start gap-3">
-        <div className="mt-1 p-2 bg-blue-50 text-blue-600 rounded-lg">
+        <div className="mt-1 p-2 bg-blue-50 text-blue-600 rounded-xl">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -53,13 +53,13 @@ export function PWAUpdateNotification() {
           <div className="mt-3 flex gap-2">
             <button
               onClick={() => updateServiceWorker(true)}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors cursor-pointer"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-xl transition-colors cursor-pointer"
             >
               Reload
             </button>
             <button
               onClick={handleClose}
-              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
               aria-label="Close"
             >
               <svg

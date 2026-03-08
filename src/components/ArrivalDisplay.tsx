@@ -43,7 +43,7 @@ const ArrivalDisplay = () => {
 
   if (allCompleted) {
     return (
-      <div className="text-center py-12 px-6 bg-green-500 text-white rounded-3xl shadow-2xl shadow-green-200 animate-in zoom-in duration-500">
+      <div className="text-center py-12 px-6 bg-green-500 text-white rounded-2xl shadow-2xl shadow-green-200 animate-in zoom-in duration-500">
         <div className="flex justify-center mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +142,7 @@ const ArrivalDisplay = () => {
   };
 
   return (
-    <div className={`text-center py-8 px-6 rounded-3xl transition-all duration-700 ${
+    <div className={`text-center py-8 px-6 rounded-2xl transition-all duration-700 ${
       containerClasses[displayState]
     }`}>
       <h2 className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 transition-colors duration-700 ${
