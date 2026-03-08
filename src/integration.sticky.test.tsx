@@ -18,7 +18,7 @@ describe('Sticky Arrival Display Integration', () => {
 
     expect(stickyContainer).toBeInTheDocument();
     expect(stickyContainer).toHaveClass('top-0');
-    expect(stickyContainer).toHaveClass('z-50');
+    expect(stickyContainer).toHaveClass('z-30');
     expect(stickyContainer).toHaveClass('bg-gray-50');
   });
 });

@@ -22,7 +22,7 @@ function App() {
         <PWAUpdateNotification />
         <div className="flex flex-col relative">
         {/* Sticky Header - Simples e Limpo */}
-        <div className="sticky top-0 z-50 bg-gray-50 -mx-4 px-4 pt-3 pb-6 pointer-events-none">
+        <div className="sticky top-0 z-30 bg-gray-50 -mx-4 px-4 pt-3 pb-6 pointer-events-none">
           <div className="relative pointer-events-auto">
             <ArrivalDisplay />
             <div className="absolute top-4 right-4">
