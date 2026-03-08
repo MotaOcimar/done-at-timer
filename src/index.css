@@ -16,3 +16,12 @@
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
