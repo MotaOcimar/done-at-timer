@@ -62,21 +62,21 @@
 
 ## Phase 2: Header Update and Cleanup
 
-### [ ] 2.1 Update header icon in App.tsx
+### [x] 2.1 Update header icon in App.tsx (8d2436d)
 - Replace the "Library" icon button in `App.tsx` with the `Menu` icon from Lucide (`lucide-react`).
 - Add `aria-label="Open menu"` to the button.
 - No TDD needed — pure visual icon swap with no behavioral change (same `onClick` handler).
 
-### [ ] 2.2 Remove NotificationBell from App.tsx
+### [x] 2.2 Remove NotificationBell from App.tsx (8d2436d)
 - Remove the `<NotificationBell />` component and its import from `App.tsx`.
 - Clean up the `absolute top-4 right-4` wrapper div that contained the bell.
 - Run `npm test` — all tests pass (no assertion-of-absence needed).
 
-### [ ] 2.3 Remove InstallPrompt from App.tsx
+### [x] 2.3 Remove InstallPrompt from App.tsx (8d2436d)
 - Remove the `<InstallPrompt />` component and its import from `App.tsx`.
 - Run `npm test` — all tests pass.
 
-### [ ] 2.4 Delete standalone component files
+### [x] 2.4 Delete standalone component files (a378a2e)
 - Run `npm run build` first to confirm no remaining imports reference these components.
 - Delete `src/components/NotificationBell.tsx` and `src/components/NotificationBell.test.tsx`.
 - Delete `src/components/InstallPrompt.tsx` and `src/components/InstallPrompt.test.tsx`.
