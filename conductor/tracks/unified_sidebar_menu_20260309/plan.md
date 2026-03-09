@@ -2,7 +2,7 @@
 
 ## Phase 1: Build the Unified Sidebar
 
-### [ ] 1.1 Rename RoutineManager to ControlCenter
+### [x] 1.1 Rename RoutineManager to ControlCenter (48b0e6a)
 - Rename `src/components/RoutineManager.tsx` → `src/components/ControlCenter.tsx` and update the export name.
 - Rename `src/components/RoutineManager.test.tsx` → `src/components/ControlCenter.test.tsx` and update all references.
 - Update the import in `App.tsx` from `RoutineManager` to `ControlCenter`.
