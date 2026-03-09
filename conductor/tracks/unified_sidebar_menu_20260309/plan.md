@@ -20,7 +20,7 @@
 - **Green:** In `ControlCenter.tsx`, add a "Preferences" section below the routines list. Use the `useNotification` hook to read permission state and trigger `requestPermission`. Implement the four visual states.
 - **Refactor:** Extract section header styling if duplicated.
 
-### [ ] 1.3 Add Install App section to ControlCenter (TDD)
+### [x] 1.3 Add Install App section to ControlCenter (TDD) (ef2a0f5)
 - **Red:** In `ControlCenter.test.tsx`, add tests for:
   - Shows "Install App" button when `isInstallable` is `true` and not iOS.
   - Shows iOS share instructions when `isIOS` is `true`.
