@@ -1,23 +1,22 @@
-# Implementation Plan: Replace Notification Bell with Context-Aware Prompt
+# Implementation Plan: Unified Sidebar Menu (Control Center)
 
-## Phase 1: Removal and Cleanup
-- [ ] Task: Remove `NotificationBell` component call from `App.tsx`.
-- [ ] Task: Delete `src/components/NotificationBell.tsx` and its test file `src/components/NotificationBell.test.tsx`.
-- [ ] Task: Remove any unused imports related to `NotificationBell`.
+## Phase 1: Cleanup and Refactoring
+- [ ] Task: Remove `NotificationBell` and `InstallPrompt` calls from `App.tsx`.
+- [ ] Task: Rename `src/components/RoutineManager.tsx` to `src/components/SidebarMenu.tsx`.
+- [ ] Task: Remove `src/components/NotificationBell.tsx`, `src/components/NotificationBell.test.tsx`, `src/components/InstallPrompt.tsx`, and `src/components/InstallPrompt.test.tsx`.
 
-## Phase 2: Create Notification Prompt Component
-- [ ] Task: Create `src/components/NotificationPrompt.tsx` with Top Banner styling.
-- [ ] Task: Implement "Enable" and "Dismiss" buttons.
-- [ ] Task: Integrate with `useNotification` hook for `requestPermission`.
-- [ ] Task: Add basic unit tests for `NotificationPrompt` (rendering, button clicks).
+## Phase 2: Sidebar Enhancement
+- [ ] Task: Update `SidebarMenu.tsx` (formerly `RoutineManager`) to include a "Settings" or "Preferences" section.
+- [ ] Task: Implement a Notification Toggle within the sidebar using the `useNotification` hook.
+- [ ] Task: Implement an "Install App" section within the sidebar using the `useInstallPrompt` hook.
+- [ ] Task: Ensure the sidebar layout handles multiple sections elegantly (using separators/headers).
 
-## Phase 3: Logic and Integration
-- [ ] Task: Update `App.tsx` or a new hook to track the `notifications_prompt_dismissed` state in LocalStorage.
-- [ ] Task: Implement the trigger logic: show prompt if (any task is `COMPLETED`) AND (permission is `'default'`) AND (not dismissed).
-- [ ] Task: Insert `NotificationPrompt` into the application layout (e.g., as a fixed banner at the top).
-- [ ] Task: Verify that granting/denying permission or dismissing the prompt hides it permanently.
+## Phase 3: Header and Integration
+- [ ] Task: Update the header button in `App.tsx` to use a `Settings` or `Menu` icon from Lucide.
+- [ ] Task: Update all references to `RoutineManager` to `SidebarMenu` across the codebase.
+- [ ] Task: Verify that the sidebar correctly reflects the current notification permission state and installability.
 
 ## Phase 4: Verification and Polish
-- [ ] Task: Integration test for the end-to-end flow (Complete a task -> Prompt appears -> Dismiss -> Prompt gone).
-- [ ] Task: Manual verification on mobile and desktop.
+- [ ] Task: Update/Add tests for the new `SidebarMenu` component.
+- [ ] Task: Verify the mobile experience for the new unified menu.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)

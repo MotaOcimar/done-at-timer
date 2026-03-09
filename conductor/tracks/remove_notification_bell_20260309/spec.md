@@ -1,30 +1,28 @@
-# Specification: Replace Notification Bell with Context-Aware Prompt
+# Specification: Unified Sidebar Menu (Control Center)
 
 ## Overview
-Remove the persistent `NotificationBell` from the header and introduce a context-aware "Top Banner" prompt that asks for notification permission only when it becomes relevant.
+Consolidate routine management, notification permissions, and PWA installation into a single, unified Sidebar Menu. This declutters the main UI, removes distracting prompts, and aligns with the app's minimalist philosophy.
 
 ## Functional Requirements
-1. **Remove Existing Bell**: Remove the `NotificationBell` component from its absolute position in `App.tsx`.
-2. **New Notification Prompt Component**:
-   - **Style**: A top-anchored banner (Top Banner).
-   - **Content**: "Don't miss a beat! Enable notifications to be alerted when each task ends."
-   - **Actions**: "Enable" button and a "Dismiss" (X) button.
-3. **Trigger Logic**:
-   - The prompt appears when a task status changes to `COMPLETED` for the first time.
-   - It only shows if notification permission is currently `'default'` (not yet asked).
-   - It only shows if the user hasn't previously dismissed it.
-4. **Action Logic**:
-   - **Enable**: Triggers `Notification.requestPermission()`. If granted/denied, hide the prompt permanently.
-   - **Dismiss**: Hides the prompt and stores a `notifications_prompt_dismissed` flag in LocalStorage to prevent it from reappearing.
-5. **Persistence**: Use LocalStorage to track if the prompt has been dismissed.
-
-## Non-Functional Requirements
-- **Responsive Design**: The banner must look good on both mobile and desktop.
-- **Visual Consistency**: Use existing Tailwind colors and Lucide icons.
+1.  **Header Update**:
+    - Replace the "Library" icon/button with a "Settings" or "Menu" icon (e.g., `Settings` or `Menu` from Lucide).
+    - Remove the `NotificationBell` icon completely from the header.
+2.  **Unified Sidebar (`SidebarMenu`)**:
+    - Rename/Refactor `RoutineManager` to `SidebarMenu`.
+    - **Routine Section**: Preserve existing "Save Routine" and "Load Routine" functionality.
+    - **Preferences Section**: Add a toggle or button to manage Notification permissions using the `useNotification` hook.
+    - **App Section**: Integrate the "Install App" functionality (from `InstallPrompt`) into the sidebar. Only show this if the app is installable and not already installed.
+3.  **Remove Automatic Prompts**:
+    - Remove the automatic `InstallPrompt` banner.
+    - Remove the permanent `NotificationBell`.
+    - Notification permission should be managed via the sidebar toggle.
+4.  **UI/UX**:
+    - Clear visual separation between "Routines", "Preferences", and "App" sections.
+    - Use consistent styling (Tailwind CSS).
 
 ## Acceptance Criteria
-- [ ] Header no longer contains the `NotificationBell` icon.
-- [ ] Completing the first task in a routine triggers the banner (if permission state is `'default'`).
-- [ ] Clicking "Enable" results in the browser permission dialog appearing.
-- [ ] Clicking "Dismiss" hides the banner and prevents it from showing again on subsequent completions or reloads.
-- [ ] If permission is granted or denied via the "Enable" flow, the banner disappears permanently.
+- [ ] Header has a single menu/settings icon instead of the library icon.
+- [ ] `NotificationBell` and `InstallPrompt` banners are removed from the main view.
+- [ ] Sidebar contains sections for Routines, Notifications, and Installation.
+- [ ] Notifications can be toggled from the sidebar.
+- [ ] "Install App" button appears in the sidebar only when the app is installable.

@@ -4,6 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Remove the notification bell icon from the ETA display and replace it with a one-time permission prompt.**
+- [ ] **Track: Unified Sidebar Menu: Consolidate Routine management, Notifications, and PWA Installation into a single Control Center.**
 *Link: [./tracks/remove_notification_bell_20260309/](./tracks/remove_notification_bell_20260309/)*
 
