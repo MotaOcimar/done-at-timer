@@ -20,7 +20,7 @@
 - **Green:** In `ControlCenter.tsx`, add a "Preferences" section below the routines list. Use the `useNotification` hook to read permission state and trigger `requestPermission`. Implement the four visual states.
 - **Refactor:** Extract section header styling if duplicated.
 
-### [ ] 1.2.1 Add App-level Notification Toggle (TDD)
+### [x] 1.2.1 Add App-level Notification Toggle (TDD) (e39f578)
 - **Red:** In `ControlCenter.test.tsx`, add tests for:
   - When permission is `granted`, show an active toggle.
   - Clicking the active toggle disables notifications in the app store.
