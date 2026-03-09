@@ -9,20 +9,18 @@ describe('App', () => {
     expect(
       screen.getByRole('heading', { name: /You will be done at/i }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: /Plan your routine/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Open menu/i })).toBeInTheDocument();
+    expect(screen.getByText(/No tasks yet/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/What's next?/i)).toBeInTheDocument();
   });
 
   it('renders TaskInput after TaskList', () => {
     render(<App />);
-    const taskListHeader = screen.getByRole('heading', { name: /Plan your routine/i });
+    const taskListEmpty = screen.getByText(/No tasks yet/i);
     const taskInput = screen.getByPlaceholderText(/What's next?/i);
 
-    // Check if taskInput is after taskListHeader in the DOM
-    // compareDocumentPosition returns a bitmask. 4 means "following"
-    const position = taskListHeader.compareDocumentPosition(taskInput);
+    // Check if taskInput is after taskListEmpty in the DOM
+    const position = taskListEmpty.compareDocumentPosition(taskInput);
     expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });

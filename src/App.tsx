@@ -4,8 +4,6 @@ import { TaskInput } from './components/TaskInput';
 import { TaskList } from './components/TaskList';
 import { ArrivalDisplay } from './components/ArrivalDisplay';
 import { ControlCenter } from './components/ControlCenter';
-import { InstallPrompt } from './components/InstallPrompt';
-import { NotificationBell } from './components/NotificationBell';
 
 import { NotificationProvider } from './NotificationContext';
 import { NotificationManager } from './components/NotificationManager';
@@ -26,7 +24,15 @@ function App() {
           <div className="relative pointer-events-auto">
             <ArrivalDisplay />
             <div className="absolute top-4 right-4">
-              <NotificationBell />
+              <button 
+                onClick={() => setIsLibraryOpen(true)}
+                className="p-3 bg-white text-gray-400 hover:text-gray-600 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-md active:scale-95"
+                aria-label="Open menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -34,7 +40,6 @@ function App() {
         <div className="mt-8 pt-8 border-t border-gray-100">
           <TaskList 
             onSaveRoutine={() => setIsSavingActive(true)} 
-            onLoadRoutine={() => setIsLibraryOpen(true)}
           />
           <div className="mt-6">
             <TaskInput />
@@ -47,8 +52,6 @@ function App() {
           isSavingExternal={isSavingActive}
           onSaveComplete={() => setIsSavingActive(false)}
         />
-        
-        <InstallPrompt />
       </div>
     </Layout>
     </NotificationProvider>

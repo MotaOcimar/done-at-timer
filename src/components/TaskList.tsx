@@ -26,10 +26,9 @@ import { useClock } from '../hooks/useClock';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
-  onLoadRoutine?: () => void;
 }
 
-const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
+const TaskList = ({ onSaveRoutine }: TaskListProps) => {
   const tasks = useTaskStore((state) => state.tasks);
   const removeTask = useTaskStore((state) => state.removeTask);
   const clearTasks = useTaskStore((state) => state.clearTasks);
@@ -101,13 +100,14 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
     }
   };
 
-  if (tasks.length === 0 && !onLoadRoutine) {
+  if (tasks.length === 0) {
     return (
       <div className="text-center py-8 text-gray-400">
-        No tasks yet. Add one above!
+        No tasks yet. Add one below!
       </div>
     );
   }
+
 
   return (
     <div className="space-y-2">
@@ -116,17 +116,6 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
           {tasks.length > 0 ? `Tasks (${tasks.length})` : 'Plan your routine'}
         </h2>
         <div className="flex gap-4 items-center">
-          {onLoadRoutine && (
-            <button
-              onClick={onLoadRoutine}
-              className="text-xs font-bold text-blue-400 hover:text-blue-600 uppercase tracking-wide transition-colors flex items-center gap-1"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              Load
-            </button>
-          )}
           {onSaveRoutine && tasks.length > 0 && (
             <button
               onClick={onSaveRoutine}
@@ -205,7 +194,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
         </DndContext>
       ) : (
         <div className="text-center py-8 text-gray-400">
-          No tasks yet. Add one above or load a routine!
+          No tasks yet. Add one above!
         </div>
       )}
     </div>
