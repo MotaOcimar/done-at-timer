@@ -3,12 +3,13 @@
 This file tracks all ideas, requested improvements, and roadmap items for future implementation.
 
 ## Priority Improvements (Current Focus)
-- [ ] **Arrival Clock Z-index Bug**: The Arrival Clock remains visible and unblurred when modals (Save Routine) or the side library are open. This is due to the sticky header having a higher z-index than the backdrop.
-- [ ] **UI Color Palette Refinement**:
-    - **Softer Overtime Color**: Replace the heavy amber color with a more pleasant, less "alarming" tone to maintain the app's positive coaching vibe.
+- [x] **Arrival Clock Z-index Bug**: The Arrival Clock remains visible and unblurred when modals (Save Routine) or the side library are open. This is due to the sticky header having a higher z-index than the backdrop. *(Done — [Polish & Consistency Refinement](./archive/polish_refinement_20260307/))*
+- [x] **UI Color Palette Refinement**:
+    - **Softer Overtime Color**: Replace the heavy amber color with a more pleasant, less "alarming" tone to maintain the app's positive coaching vibe. *(Done — [Polish & Consistency Refinement](./archive/polish_refinement_20260307/))*
+    - [x] **Ultra Soft Green for Completed**: Redesign completed task styling to use subtle greens instead of global opacity reduction for better readability. *(Done — [Polish & Consistency Refinement](./archive/polish_refinement_20260307/))*
     - ~~**Neutral Paused State**: Use a neutral color (e.g., gray) for the active task when it is paused, as pausing is often a neutral/intentional decision.~~ *(Done — [UI Color Palette Refinement](./archive/color_palette_20260303/))*
     - ~~**Neutral Idle State**: Ensure tasks that haven't been started yet (Pending) use neutral colors. Currently, the play button uses blue even when not running, which is confusing.~~ *(Done — [UI Color Palette Refinement](./archive/color_palette_20260303/))*
-- [ ] **Minutes Input Bug**: On desktop, the minutes input shows spin buttons (up/down arrows) that obscure the number inside. Hide these buttons via CSS for a cleaner, consistent UI.
+- [x] **Minutes Input Bug**: On desktop, the minutes input shows spin buttons (up/down arrows) that obscure the number inside. Hide these buttons via CSS for a cleaner, consistent UI. *(Done — [Polish & Consistency Refinement](./archive/polish_refinement_20260307/))*
 - [x] **Sticky Arrival Time**: The Arrival Time display should remain fixed/sticky at the top of the screen when scrolling through a long list of tasks. *(Done — [Sticky Arrival Time](./archive/sticky_arrival_20260222/))*
 - [ ] **Arrival Status Icons**: 
     - Replace or augment the "drifting" text with meaningful icons next to the Arrival Clock.
@@ -26,7 +27,7 @@ This file tracks all ideas, requested improvements, and roadmap items for future
 - [x] **Intermediate Arrival Times**: Display the estimated completion time for each individual task in the list, allowing users to see not just when they'll finish everything, but when they'll finish each step. *(Done — [Intermediate Arrival Times](./archive/intermediate_etas_20260303/))*
 - [ ] **Media Style Notifications**: Instead of just simple complete notifications, use the Media Session API (or advanced PWA notifications) to show current task progress and provide play/pause controls, similar to music player notifications.
 - [ ] **Paused Time Tracking**: Measure the time spent in paused state and represent it with a distinct color in the progress bar to show "drift".
-- [ ] **Actual vs Estimated Comparison**: When a task is finished, display the actual duration. Show the original estimated time next to it with a strikethrough for easy comparison.
+- [x] **Actual vs Estimated Comparison**: When a task is finished, display the actual duration. Show the original estimated time next to it with a strikethrough for easy comparison. *(Done — [Polish & Consistency Refinement](./archive/polish_refinement_20260307/))*
 - [ ] **Mini Time Timers**: Add visual "time timers" (circular progress indicators) to represent remaining time for individual tasks and the total session.
 - [ ] **Routine List Expansion**: Clicking a routine in the list expands it to show a preview with its task list and buttons to load or delete.
 - [ ] **Dark Mode**: Implementation of a dark theme with a manual toggle for user preference.
