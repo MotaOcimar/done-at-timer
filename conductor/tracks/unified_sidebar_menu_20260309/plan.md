@@ -30,7 +30,7 @@
 - **Green:** In `ControlCenter.tsx`, add an "App" section below Preferences. Use the `useInstallPrompt` hook. Implement conditional rendering based on `isInstallable` and `isIOS`.
 - **Refactor:** Ensure consistent section styling across Routines, Preferences, and App.
 
-### [~] 1.4 Refine PWA Install feedback (TDD)
+### [x] 1.4 Refine PWA Install feedback (TDD) (9685d5b)
 - **Red:** In `ControlCenter.test.tsx`, add tests for:
   - Shows "✓ App Installed" indicator when app is in standalone mode.
   - Shows "Installation not available" message when `isInstallable` is `false` and not in standalone mode.
