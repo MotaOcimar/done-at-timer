@@ -2,6 +2,7 @@
 
 ## 1. Visual Identity & Design Principles
 
+- **Design Principle: Focus over Discoverability:** To protect the user's concentration, the main view is reserved for the timer and tasks. Secondary features like routine management and app settings are consolidated into the Control Center sidebar, accessed only when intended.
 - **Aesthetic:** **Minimalist but Playful (Gamified Focus).**
   - **Core Philosophy:** The design must be clean and uncluttered to promote focus, avoiding distractions. However, it should not be sterile. It should feel "gamified" through the use of vibrant, interesting colors and engaging UI elements that invite interaction.
   - **Elements:** Use distinct, "chunky" or tactile-looking buttons and progress bars that feel satisfying to interact with. Think of high-quality productivity games or habit trackers.
@@ -25,7 +26,7 @@
   - **Progress:** A clear visual representation of progress through the _entire list_, not just the current task (e.g., a progress bar filling up as the "Arrival Time" draws nearer).
 - **Flexible Flow:** The UI must support the "out of order" execution model. Users should be able to tap any task in the list to start it without navigating through complex menus.
 - **PWA Experience:**
-  - **Installability:** Provide a clear, non-intrusive way to install the app (e.g., a "Install" button) to encourage repeated use.
+  - **Installability:** App installation is surfaced within the Control Center. This removes persistent "Install" banners from the playful main interface while keeping the option easily accessible.
   - **Offline Reliability:** The app must load and function even without network access, ensuring the timer is always available.
   - **Update Awareness:** Notify the user when a new version is available with a simple "Reload" option to ensure they have the latest features without disrupting their flow.
 
