@@ -28,7 +28,7 @@
 - Both are kept. The UI shows "App Installed" when **either** is true.
 - On `appinstalled` event, both `isStandalone` and `isAlreadyInstalled` should be set to `true`.
 
-### [ ] 2.1 Update `useInstallPrompt.ts` (TDD)
+### [x] 2.1 Update `useInstallPrompt.ts` (TDD) 2b98af4
 - **Red:** Add a `describe('getInstalledRelatedApps detection')` block in `useInstallPrompt.test.ts` with tests for:
   1. `isAlreadyInstalled` initializes as `false` (default values test already covers this — extend it).
   2. API available + returns non-empty array → `isAlreadyInstalled` is `true`.
