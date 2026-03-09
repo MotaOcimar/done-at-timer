@@ -15,7 +15,7 @@
 
 ## Phase 1: PWA Manifest Update
 
-### [ ] 1.1 Add `related_applications` to PWA Manifest
+### [x] 1.1 Add `related_applications` to PWA Manifest 549fd40
 - Update `pwa-manifest.ts` to include `related_applications` with `platform: "webapp"` and the app's `url` (e.g., the GitHub Pages URL).
 - This is required for `navigator.getInstalledRelatedApps()` to work.
 - No TDD needed — purely declarative configuration change.
