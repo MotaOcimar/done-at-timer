@@ -10,7 +10,7 @@ import {
   GripHorizontal, 
   Trash2, 
   MapPin,
-  CircleCheck
+  MapPinCheckInside
 } from 'lucide-react';
 
 interface TaskCardProps {
@@ -271,7 +271,7 @@ const TaskCard = ({
           {!isActive && eta && (
             <span className={`text-xs font-bold tabular-nums flex items-center gap-1 pr-1 whitespace-nowrap ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}>
               {isCompleted ? (
-                <CircleCheck size={10} strokeWidth={2.5} className="opacity-60" />
+                <MapPinCheckInside size={10} strokeWidth={2.5} className="opacity-60" />
               ) : (
                 <MapPin size={10} strokeWidth={2.5} className="opacity-70" />
               )}
