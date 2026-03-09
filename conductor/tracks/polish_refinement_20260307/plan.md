@@ -45,21 +45,20 @@ TDD applies to **behavioral** changes where a test can verify intent (z-index la
 
 All tasks in this phase are pure visual CSS class swaps. No behavioral tests — manual verification at end of phase.
 
-### [x] 2.1 Standardize border radius (196d5df)
-Target system: `rounded-xl` (small: buttons, inputs, icon boxes, toasts) / `rounded-2xl` (large: cards, modals, ArrivalDisplay).
+### [x] 2.1 Standardize border radius (586dfd5)
+Target system — 3-tier:
+- **Small (`rounded-xl`):** Buttons (Add, Done, Restart, Install, Reload), inputs, icon boxes.
+- **Medium (`rounded-2xl`):** `TaskCard`s and drag overlays.
+- **Large (`rounded-3xl`):** `ArrivalDisplay`, modals, and large prompts/toasts (`InstallPrompt`, `PWAUpdateNotification`).
 
-Changes:
-- `ArrivalDisplay.tsx:46` — completion state: `rounded-3xl` -> `rounded-2xl`
-- `ArrivalDisplay.tsx:145` — main container: `rounded-3xl` -> `rounded-2xl`
-- `RoutineManager.tsx:80` — save modal: `rounded-3xl` -> `rounded-2xl`
-- `RoutineManager.tsx:140` — empty state: `rounded-3xl` -> `rounded-2xl`
-- `RoutineManager.tsx:185` — load modal: `rounded-3xl` -> `rounded-2xl`
-- `RoutineManager.tsx:216` — delete modal: `rounded-3xl` -> `rounded-2xl`
-- `InstallPrompt.tsx:16` — icon box: `rounded-lg` -> `rounded-xl`
-- `InstallPrompt.tsx:30` — install button: `rounded-lg` -> `rounded-xl`
-- `PWAUpdateNotification.tsx:29` — icon box: `rounded-lg` -> `rounded-xl`
-- `PWAUpdateNotification.tsx:56` — reload button: `rounded-lg` -> `rounded-xl`
-- `PWAUpdateNotification.tsx:62` — close button: `rounded-lg` -> `rounded-xl`
+Changes applied:
+- `TaskCard.tsx`: `rounded-2xl` (main container), `rounded-xl` (Done button).
+- `TaskInput.tsx`: `rounded-xl` (inputs and Add button).
+- `TaskList.tsx`: `rounded-xl` (Restart Routine button).
+- `ArrivalDisplay.tsx`: `rounded-3xl` (all containers).
+- `RoutineManager.tsx`: `rounded-3xl` (modals/empty state), `rounded-xl` (icon boxes).
+- `InstallPrompt.tsx`: `rounded-3xl` (container), `rounded-xl` (icon box/Install button).
+- `PWAUpdateNotification.tsx`: `rounded-3xl` (container), `rounded-xl` (icon box/Reload/Close).
 
 ### [x] 2.2 Standardize shadows (06bf3a3)
 Target hierarchy: `shadow-sm` (resting) / `shadow-md` (hover/secondary) / `shadow-xl` (floating UI) / `shadow-2xl` (hero/overlays).
