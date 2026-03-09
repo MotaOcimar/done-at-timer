@@ -148,7 +148,7 @@ const TaskCard = ({
                     isActuallyPaused ? 'paused' : 'running';
 
   const cardClasses: Record<CardState, string> = {
-    completed: 'border-green-200 bg-green-50',
+    completed: 'border-green-100 bg-green-50/50',
     idle: 'border-gray-100 bg-white',
     overtime: 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50',
     paused: 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50',
@@ -156,7 +156,7 @@ const TaskCard = ({
   };
 
   const titleClasses: Record<CardState, string> = {
-    completed: 'line-through text-green-800/50 font-medium',
+    completed: 'line-through text-green-800/40 font-medium',
     idle: 'text-gray-800',
     overtime: 'text-amber-600',
     paused: 'text-gray-600',
@@ -164,7 +164,7 @@ const TaskCard = ({
   };
 
   const labelClasses: Record<CardState, string> = {
-    completed: 'text-green-700/40',
+    completed: 'text-green-700/30',
     idle: 'text-gray-400',
     overtime: 'text-amber-400',
     paused: 'text-gray-400',
@@ -172,7 +172,7 @@ const TaskCard = ({
   };
 
   const timeDisplayClasses: Record<CardState, string> = {
-    completed: 'text-green-700/40',
+    completed: 'text-green-700/30',
     idle: 'text-gray-400',
     overtime: 'text-amber-500 animate-pulse',
     paused: 'text-gray-500',
@@ -236,7 +236,7 @@ const TaskCard = ({
                 className="mr-0"
               /> min {isActive ? `total · ${timeDisplay}` : ''}
               {isCompleted && task.actualDuration !== undefined && (
-                <span className="ml-2 text-green-700/60 lowercase font-medium">
+                <span className="ml-2 text-green-700/50 lowercase font-medium">
                   (took {task.actualDuration} min)
                 </span>
               )}

@@ -103,10 +103,10 @@ Changes:
 - `TaskCard.tsx:255` — overtime Done button: remove `scale-110`
 - `TaskList.tsx:146` — confirm-clear: remove `scale-105`
 
-### [x] 3.2 Redesign completed task styling (TDD) (c39199d, refined to Soft Green)
+### [x] 3.2 Redesign completed task styling (TDD) (aa35941, refined to Ultra Soft Green)
 **Why TDD:** The change removes `opacity-70` (which affects readability/accessibility) and replaces it with muted colors. This is a behavioral change — "completed tasks must remain readable" — and there's an existing pattern of color tests in `TaskCard.color.test.tsx`.
 
-- **Refined Design (Soft Green):** Uses `bg-green-50` and `border-green-200` for a positive "mission accomplished" feel without global opacity reduction. Text uses transparent green shades (`text-green-800/50` for title, etc.).
+- **Refined Design (Ultra Soft Green):** Uses `bg-green-50/50` and `border-green-100` for an extremely subtle "mission accomplished" feel without global opacity reduction. Text uses very transparent green shades (`text-green-800/40` for title, etc.).
 
 ### 3.3 Conductor: Manual Verification — Phase 3
 - Verify overtime Done button no longer jumps in size.

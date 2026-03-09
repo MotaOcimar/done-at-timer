@@ -164,7 +164,7 @@ describe('TaskCard Color Refinements', () => {
   });
 
   describe('Completed State', () => {
-    it('uses a "Soft Green" design (no global opacity-70) for a positive "mission accomplished" feel', () => {
+    it('uses an "Ultra Soft Green" design (no global opacity-70) for a very subtle "mission accomplished" feel', () => {
       render(
         <TaskCard 
           task={{ ...mockTask, status: 'COMPLETED', actualDuration: 12 }} 
@@ -186,19 +186,19 @@ describe('TaskCard Color Refinements', () => {
       // Card should NOT have global opacity-70
       expect(card).not.toHaveClass('opacity-70');
       
-      // Card should be soft green
-      expect(card).toHaveClass('border-green-200');
-      expect(card).toHaveClass('bg-green-50');
+      // Card should be ultra soft green
+      expect(card).toHaveClass('border-green-100');
+      expect(card).toHaveClass('bg-green-50/50');
 
-      // Title should be muted green and line-through
-      expect(title).toHaveClass('text-green-800/50');
+      // Title should be very muted green and line-through
+      expect(title).toHaveClass('text-green-800/40');
       expect(title).toHaveClass('line-through');
 
-      // Labels (duration) should be very muted green
-      expect(durationElement).toHaveClass('text-green-700/40');
+      // Labels (duration) should be extremely muted green
+      expect(durationElement).toHaveClass('text-green-700/30');
       
-      // Actual duration should be slightly more visible green
-      expect(actualDurationElement).toHaveClass('text-green-700/60');
+      // Actual duration should be very muted green
+      expect(actualDurationElement).toHaveClass('text-green-700/50');
     });
   });
 });
