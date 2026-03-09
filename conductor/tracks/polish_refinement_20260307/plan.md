@@ -103,25 +103,10 @@ Changes:
 - `TaskCard.tsx:255` — overtime Done button: remove `scale-110`
 - `TaskList.tsx:146` — confirm-clear: remove `scale-105`
 
-### [x] 3.2 Redesign completed task styling (TDD) (588a2e1)
+### [x] 3.2 Redesign completed task styling (TDD) (c39199d, refined to Soft Green)
 **Why TDD:** The change removes `opacity-70` (which affects readability/accessibility) and replaces it with muted colors. This is a behavioral change — "completed tasks must remain readable" — and there's an existing pattern of color tests in `TaskCard.color.test.tsx`.
 
-**Existing test to update:** `TaskCard.test.tsx:80` asserts `opacity-50` for *dragging* — NOT affected by this change.
-
-- **Red:** Add a new `describe('Completed State')` block in `TaskCard.color.test.tsx` that asserts:
-  - Completed card does NOT have `opacity-70`
-  - Completed card has `bg-gray-50` and `border-gray-200`
-  - Completed title has `text-gray-400` and `line-through` (already the case, but formalize)
-  - Run tests — Red (card currently has `opacity-70`)
-
-- **Green:** Update `TaskCard.tsx`:
-  - `cardClasses.completed`: `'border-green-100 bg-green-50/50 opacity-70'` -> `'border-gray-200 bg-gray-50'`
-  - Keep existing `titleClasses.completed`: `'line-through text-gray-400 font-medium'` (already good)
-  - Keep existing `labelClasses.completed`: `'text-gray-400'` (already good)
-  - Keep existing `timeDisplayClasses.completed`: `'text-gray-400'` (already good)
-  - Run tests — Green.
-
-- **Refactor:** Verify completed ETA text (`text-xs font-bold` in gray) passes WCAG AA contrast against `bg-gray-50`. `text-gray-400` (#9ca3af) on `bg-gray-50` (#f9fafb) = contrast ~2.6:1 — fails AA. Adjust to `text-gray-500` (#6b7280) = ~4.6:1 — passes. Update classes and tests accordingly.
+- **Refined Design (Soft Green):** Uses `bg-green-50` and `border-green-200` for a positive "mission accomplished" feel without global opacity reduction. Text uses transparent green shades (`text-green-800/50` for title, etc.).
 
 ### 3.3 Conductor: Manual Verification — Phase 3
 - Verify overtime Done button no longer jumps in size.
