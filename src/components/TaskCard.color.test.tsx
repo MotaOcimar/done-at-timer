@@ -162,4 +162,41 @@ describe('TaskCard Color Refinements', () => {
       expect(screen.getByText(/total · 1 min over/i).closest('div.text-xs')).toHaveClass('text-amber-400');
     });
   });
+
+  describe('Completed State', () => {
+    it('uses muted gray colors and removes global opacity-70 for better readability', () => {
+      render(
+        <TaskCard 
+          task={{ ...mockTask, status: 'COMPLETED', actualDuration: 12 }} 
+          isActive={false} 
+          isCompleted={true} 
+          onDelete={vi.fn()}
+          onToggle={vi.fn()}
+          onTitleSave={vi.fn()}
+          onDurationSave={vi.fn()}
+          onComplete={vi.fn()}
+        />
+      );
+      
+      const card = screen.getByRole('heading', { name: /Test Task/i }).closest('div.flex-col');
+      const title = screen.getByRole('heading', { name: /Test Task/i });
+      const durationElement = screen.getByText('10', { selector: 'span' }).closest('div.text-xs');
+      const actualDurationElement = screen.getByText(/took 12 min/i);
+
+      // Card should NOT have global opacity-70
+      expect(card).not.toHaveClass('opacity-70');
+      
+      // Card should be muted gray
+      expect(card).toHaveClass('border-gray-200');
+      expect(card).toHaveClass('bg-gray-50');
+
+      // Title should be gray and line-through
+      expect(title).toHaveClass('text-gray-400');
+      expect(title).toHaveClass('line-through');
+
+      // Duration and actual duration should be gray
+      expect(durationElement).toHaveClass('text-gray-400');
+      expect(actualDurationElement).toHaveClass('text-gray-500'); // Refactor target for AA contrast
+    });
+  });
 });

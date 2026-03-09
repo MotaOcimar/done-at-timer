@@ -148,7 +148,7 @@ const TaskCard = ({
                     isActuallyPaused ? 'paused' : 'running';
 
   const cardClasses: Record<CardState, string> = {
-    completed: 'border-green-100 bg-green-50/50 opacity-70',
+    completed: 'border-gray-200 bg-gray-50',
     idle: 'border-gray-100 bg-white',
     overtime: 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50',
     paused: 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50',

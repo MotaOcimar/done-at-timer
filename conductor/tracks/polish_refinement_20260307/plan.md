@@ -103,7 +103,7 @@ Changes:
 - `TaskCard.tsx:255` — overtime Done button: remove `scale-110`
 - `TaskList.tsx:146` — confirm-clear: remove `scale-105`
 
-### 3.2 Redesign completed task styling (TDD)
+### [x] 3.2 Redesign completed task styling (TDD) (588a2e1)
 **Why TDD:** The change removes `opacity-70` (which affects readability/accessibility) and replaces it with muted colors. This is a behavioral change — "completed tasks must remain readable" — and there's an existing pattern of color tests in `TaskCard.color.test.tsx`.
 
 **Existing test to update:** `TaskCard.test.tsx:80` asserts `opacity-50` for *dragging* — NOT affected by this change.
