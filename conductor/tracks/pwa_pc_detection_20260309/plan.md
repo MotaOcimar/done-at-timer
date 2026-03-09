@@ -1,6 +1,6 @@
 # Implementation Plan: PWA Installation Status Detection (PC/Brave)
 
-## Phase 0: Lint Fixes from Sidebar Menu Review
+## Phase 0: Lint Fixes from Sidebar Menu Review [checkpoint: 73b041a]
 
 ### [x] 0.1 Fix `useInstallPrompt.ts` — setState síncrono no effect c57fafb
 - Move `isStandalone` initialization from `useEffect` body to `useState` initializer to avoid cascading renders.
