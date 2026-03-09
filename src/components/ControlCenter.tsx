@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 
-interface RoutineManagerProps {
+interface ControlCenterProps {
   isOpen: boolean;
   onClose: () => void;
   isSavingExternal?: boolean;
   onSaveComplete?: () => void;
 }
 
-const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: RoutineManagerProps) => {
+const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: ControlCenterProps) => {
   const tasks = useTaskStore((state) => state.tasks);
   const routines = useTaskStore((state) => state.routines);
   const saveRoutine = useTaskStore((state) => state.saveRoutine);
@@ -120,7 +120,7 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="text-xl font-black text-gray-800 uppercase tracking-wide">Your Routines</h2>
+            <h2 className="text-xl font-black text-gray-800 uppercase tracking-wide">Control Center</h2>
             <button 
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
@@ -245,4 +245,4 @@ const RoutineManager = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: R
   );
 };
 
-export { RoutineManager };
+export { ControlCenter };

@@ -3,7 +3,7 @@ import { Layout } from './components/Layout';
 import { TaskInput } from './components/TaskInput';
 import { TaskList } from './components/TaskList';
 import { ArrivalDisplay } from './components/ArrivalDisplay';
-import { RoutineManager } from './components/RoutineManager';
+import { ControlCenter } from './components/ControlCenter';
 import { InstallPrompt } from './components/InstallPrompt';
 import { NotificationBell } from './components/NotificationBell';
 
@@ -41,7 +41,7 @@ function App() {
           </div>
         </div>
 
-        <RoutineManager 
+        <ControlCenter 
           isOpen={isLibraryOpen} 
           onClose={() => setIsLibraryOpen(false)}
           isSavingExternal={isSavingActive}

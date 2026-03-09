@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { RoutineManager } from './RoutineManager';
+import { ControlCenter } from './ControlCenter';
 import { useTaskStore } from '../store/useTaskStore';
 
 // Mock the task store
@@ -9,7 +9,7 @@ vi.mock('../store/useTaskStore', () => ({
   useTaskStore: vi.fn(),
 }));
 
-describe('RoutineManager', () => {
+describe('ControlCenter', () => {
   const mockTasks = [
     { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }
   ];
@@ -35,24 +35,24 @@ describe('RoutineManager', () => {
   });
 
   it('should not render anything when closed', () => {
-    const { container } = render(<RoutineManager isOpen={false} onClose={vi.fn()} />);
+    const { container } = render(<ControlCenter isOpen={false} onClose={vi.fn()} />);
     expect(container.firstChild).toBeNull();
   });
 
   it('should render the drawer when open', () => {
-    render(<RoutineManager isOpen={true} onClose={vi.fn()} />);
-    expect(screen.getByText(/Your Routines/i)).toBeInTheDocument();
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+    expect(screen.getByText(/Control Center/i)).toBeInTheDocument();
     expect(screen.getByText(/Morning Routine/i)).toBeInTheDocument();
   });
 
   it('should render the save modal when isSavingExternal is true', () => {
-    render(<RoutineManager isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
+    render(<ControlCenter isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
     expect(screen.getByText(/Save Routine/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/e.g., Morning Focus/i)).toBeInTheDocument();
   });
 
   it('should call saveRoutine when submitting the save form', () => {
-    render(<RoutineManager isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
+    render(<ControlCenter isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
     const input = screen.getByPlaceholderText(/e.g., Morning Focus/i);
     const saveButton = screen.getByRole('button', { name: /Save/i });
 
@@ -63,7 +63,7 @@ describe('RoutineManager', () => {
   });
 
   it('should show confirmation when trying to load a routine with existing tasks', () => {
-    render(<RoutineManager isOpen={true} onClose={vi.fn()} />);
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
     const routineItem = screen.getByText(/Morning Routine/i);
     fireEvent.click(routineItem);
 
@@ -71,7 +71,7 @@ describe('RoutineManager', () => {
   });
 
   it('should call loadRoutine when confirming load', () => {
-    render(<RoutineManager isOpen={true} onClose={vi.fn()} />);
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
     const routineItem = screen.getByText(/Morning Routine/i);
     fireEvent.click(routineItem);
 
@@ -82,7 +82,7 @@ describe('RoutineManager', () => {
   });
 
   it('should show confirmation when trying to delete a routine', () => {
-    render(<RoutineManager isOpen={true} onClose={vi.fn()} />);
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
     const deleteButton = screen.getByLabelText(/Delete routine/i);
     fireEvent.click(deleteButton);
 
