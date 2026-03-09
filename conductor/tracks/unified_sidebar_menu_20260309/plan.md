@@ -20,6 +20,18 @@
 - **Green:** In `ControlCenter.tsx`, add a "Preferences" section below the routines list. Use the `useNotification` hook to read permission state and trigger `requestPermission`. Implement the four visual states.
 - **Refactor:** Extract section header styling if duplicated.
 
+### [ ] 1.2.1 Add App-level Notification Toggle (TDD)
+- **Red:** In `ControlCenter.test.tsx`, add tests for:
+  - When permission is `granted`, show an active toggle.
+  - Clicking the active toggle disables notifications in the app store.
+  - When disabled in app store, show an inactive toggle.
+  - Clicking the inactive toggle enables notifications in the app store.
+- **Green:**
+  - Update `useTaskStore.ts` to include `isNotificationsEnabled: boolean` and `toggleNotifications: () => void`.
+  - Update `useNotification.ts` to respect `isNotificationsEnabled` before sending notifications.
+  - Update `ControlCenter.tsx` to show a toggle when permission is `granted`.
+- **Refactor:** Ensure the toggle UX is clear and consistent with the rest of the app.
+
 ### [x] 1.3 Add Install App section to ControlCenter (TDD) (ef2a0f5)
 - **Red:** In `ControlCenter.test.tsx`, add tests for:
   - Shows "Install App" button when `isInstallable` is `true` and not iOS.

@@ -22,11 +22,11 @@ Rename/refactor `RoutineManager` component to `ControlCenter` to reflect its exp
 
 ### 2.2 Add Preferences Section — Notification Toggle
 
-Add a "Preferences" section to the sidebar with a notification permission toggle using the `useNotification` hook.
+Add a "Preferences" section to the sidebar with a notification permission toggle using the `useNotification` hook, and an app-level toggle using `useTaskStore`.
 
 **States to handle:**
 - `default` — Show an "Enable Notifications" toggle/button. Clicking it calls `requestPermission()`.
-- `granted` — Show a visual indicator that notifications are enabled (green badge/checkmark). Toggle is in "on" state. Disabling requires the user to go to browser settings — display a helper text explaining this.
+- `granted` — Show an active toggle representing the app-level notification state. Users can click it to turn notifications on or off within the app without changing browser permissions.
 - `denied` — Show a visual indicator that notifications are blocked (red/muted). Display helper text: "Notifications are blocked. To enable, update your browser's site settings."
 - `unsupported` — Hide the notification toggle entirely (browser doesn't support notifications).
 
@@ -74,6 +74,8 @@ After integrating their functionality into `ControlCenter`:
 - [ ] Sidebar contains clearly separated sections for Routines, Preferences, and App.
 - [ ] Notification toggle correctly reflects current permission state (`default`/`granted`/`denied`).
 - [ ] Clicking the notification toggle when permission is `default` triggers the browser permission prompt.
+- [ ] When permission is `granted`, an app-level toggle allows turning notifications on/off.
+- [ ] Notifications are only sent if both browser permission is `granted` and app-level toggle is enabled.
 - [ ] When permission is `denied`, helper text explains how to unblock via browser settings.
 - [ ] When permission is `unsupported`, the notification section is hidden.
 - [ ] "Install App" button appears only when the app is installable.
