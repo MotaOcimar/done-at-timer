@@ -24,7 +24,7 @@ export function PWAUpdateNotification() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-[100] p-4 duration-300">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white border border-gray-200 rounded-3xl shadow-xl z-[100] p-4 duration-300">
       <div className="flex items-start gap-3">
         <div className="mt-1 p-2 bg-blue-50 text-blue-600 rounded-xl">
           <svg

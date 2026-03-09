@@ -11,7 +11,7 @@ export const InstallPrompt: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:right-auto md:left-4 md:w-80 bg-white p-4 rounded-xl shadow-xl border border-slate-200 z-50 duration-300">
+    <div className="fixed bottom-4 left-4 right-4 md:right-auto md:left-4 md:w-80 bg-white p-4 rounded-3xl shadow-xl border border-slate-200 z-50 duration-300">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0 text-white shadow-inner">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
