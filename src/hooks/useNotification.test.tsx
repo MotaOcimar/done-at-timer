@@ -5,6 +5,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useNotification } from './useNotification';
 import { NotificationProvider } from '../NotificationContext';
 import { NotificationService } from '../utils/notificationService';
+import { useTaskStore } from '../store/useTaskStore';
+
+vi.mock('../store/useTaskStore', () => ({
+  useTaskStore: vi.fn(),
+}));
 
 describe('useNotification', () => {
   const mocks = {
@@ -26,6 +31,7 @@ describe('useNotification', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    (useTaskStore as any).mockImplementation((selector: any) => selector({ isNotificationsEnabled: true }));
     Object.defineProperty(window, 'Notification', {
       value: { permission: 'default' },
       configurable: true,
@@ -64,5 +70,16 @@ describe('useNotification', () => {
       requireInteraction: true,
       tag: 'task-complete',
     });
+  });
+
+  it('should not call service.notify when notifications are disabled in store', async () => {
+    (useTaskStore as any).mockImplementation((selector: any) => selector({ isNotificationsEnabled: false }));
+    const { result } = renderHook(() => useNotification(), { wrapper });
+
+    await act(async () => {
+      await result.current.notifyTaskComplete('Task 1');
+    });
+
+    expect(mocks.notify).not.toHaveBeenCalled();
   });
 });

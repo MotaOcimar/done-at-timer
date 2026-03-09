@@ -140,14 +140,68 @@ describe('ControlCenter', () => {
       expect(mockRequestPermission).toHaveBeenCalled();
     });
 
-    it('should show "enabled" indicator when permission is granted', () => {
+    it('should show active toggle when permission is granted and notifications are enabled in store', () => {
+      const mockToggleNotifications = vi.fn();
       (useNotification as any).mockReturnValue({
         permission: 'granted',
         requestPermission: mockRequestPermission,
       });
+      (useTaskStore as any).mockImplementation((selector: any) => 
+        selector({
+          tasks: [],
+          routines: [],
+          isNotificationsEnabled: true,
+          toggleNotifications: mockToggleNotifications,
+        })
+      );
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
       
-      expect(screen.getByText(/Notifications Enabled/i)).toBeInTheDocument();
+      expect(screen.getByText(/Notifications/i)).toBeInTheDocument();
+      const toggle = screen.getByRole('switch', { name: /Toggle Notifications/i });
+      expect(toggle).toBeChecked();
+    });
+
+    it('should show inactive toggle when permission is granted and notifications are disabled in store', () => {
+      const mockToggleNotifications = vi.fn();
+      (useNotification as any).mockReturnValue({
+        permission: 'granted',
+        requestPermission: mockRequestPermission,
+      });
+      (useTaskStore as any).mockImplementation((selector: any) => 
+        selector({
+          tasks: [],
+          routines: [],
+          isNotificationsEnabled: false,
+          toggleNotifications: mockToggleNotifications,
+        })
+      );
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Notifications/i)).toBeInTheDocument();
+      const toggle = screen.getByRole('switch', { name: /Toggle Notifications/i });
+      expect(toggle).not.toBeChecked();
+    });
+
+    it('should call toggleNotifications when the app-level toggle is clicked', () => {
+      const mockToggleNotifications = vi.fn();
+      (useNotification as any).mockReturnValue({
+        permission: 'granted',
+        requestPermission: mockRequestPermission,
+      });
+      (useTaskStore as any).mockImplementation((selector: any) => 
+        selector({
+          tasks: [],
+          routines: [],
+          isNotificationsEnabled: true,
+          toggleNotifications: mockToggleNotifications,
+        })
+      );
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      const toggle = screen.getByRole('switch', { name: /Toggle Notifications/i });
+      fireEvent.click(toggle);
+      
+      expect(mockToggleNotifications).toHaveBeenCalled();
     });
 
     it('should show "blocked" message with helper text when permission is denied', () => {

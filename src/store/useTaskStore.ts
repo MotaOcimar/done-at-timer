@@ -17,6 +17,7 @@ interface TaskState {
   targetEndTime: number | null; // timestamp
   totalElapsedBeforePause: number; // segundos
   isTimeUp: boolean;
+  isNotificationsEnabled: boolean;
   routines: Routine[];
   addTask: (title: string, duration: number) => void;
   removeTask: (id: string) => void;
@@ -33,6 +34,7 @@ interface TaskState {
   loadRoutine: (id: string) => void;
   deleteRoutine: (id: string) => void;
   reorderTasks: (activeId: string, overId: string) => void;
+  toggleNotifications: () => void;
 }
 
 export const useTaskStore = create<TaskState>()(
@@ -44,6 +46,7 @@ export const useTaskStore = create<TaskState>()(
       targetEndTime: null,
       totalElapsedBeforePause: 0,
       isTimeUp: false,
+      isNotificationsEnabled: true,
       routines: [],
       addTask: (title, duration) =>
         set((state) => ({
@@ -304,6 +307,7 @@ export const useTaskStore = create<TaskState>()(
           return state;
         });
       },
+      toggleNotifications: () => set((state) => ({ isNotificationsEnabled: !state.isNotificationsEnabled })),
     }),
     {
       name: 'done-at-timer-storage',

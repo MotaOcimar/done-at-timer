@@ -16,6 +16,8 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const saveRoutine = useTaskStore((state) => state.saveRoutine);
   const loadRoutine = useTaskStore((state) => state.loadRoutine);
   const deleteRoutine = useTaskStore((state) => state.deleteRoutine);
+  const isNotificationsEnabled = useTaskStore((state) => state.isNotificationsEnabled);
+  const toggleNotifications = useTaskStore((state) => state.toggleNotifications);
 
   const { permission, requestPermission } = useNotification();
   const { isInstallable, isIOS, isStandalone, promptInstall } = useInstallPrompt();
@@ -207,18 +209,35 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                   )}
 
                   {permission === 'granted' && (
-                    <div className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-2xl">
+                    <div className={`flex items-center justify-between p-4 border rounded-2xl transition-all ${isNotificationsEnabled ? 'bg-green-50 border-green-100' : 'bg-gray-50 border-gray-100 opacity-80'}`}>
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-green-500 text-white rounded-xl">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
+                        <div className={`p-2 rounded-xl transition-colors ${isNotificationsEnabled ? 'bg-green-500 text-white' : 'bg-gray-400 text-white'}`}>
+                          {isNotificationsEnabled ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                            </svg>
+                          )}
                         </div>
-                        <span className="font-bold text-green-700">Notifications Enabled</span>
+                        <span className={`font-bold transition-colors ${isNotificationsEnabled ? 'text-green-700' : 'text-gray-500'}`}>
+                          {isNotificationsEnabled ? 'Notifications Enabled' : 'Notifications Paused'}
+                        </span>
                       </div>
-                      <div className="text-[10px] font-black text-green-500 uppercase tracking-widest bg-white px-2 py-1 rounded-lg">
-                        Active
-                      </div>
+                      <button
+                        role="switch"
+                        aria-checked={isNotificationsEnabled}
+                        aria-label="Toggle Notifications"
+                        onClick={toggleNotifications}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${isNotificationsEnabled ? 'bg-green-500' : 'bg-gray-300'}`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isNotificationsEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+                        />
+                      </button>
                     </div>
                   )}
 

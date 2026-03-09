@@ -1,9 +1,11 @@
 import { useState, useCallback } from 'react';
 import { useNotificationService } from '../NotificationContext';
+import { useTaskStore } from '../store/useTaskStore';
 import type { NotificationPermissionStatus } from '../utils/notificationService';
 
 export function useNotification() {
   const notificationService = useNotificationService();
+  const isNotificationsEnabled = useTaskStore((state) => state.isNotificationsEnabled);
   const [permission, setPermission] = useState<NotificationPermissionStatus>(
     typeof window !== 'undefined' && 'Notification' in window
       ? window.Notification.permission
@@ -17,6 +19,8 @@ export function useNotification() {
   }, [notificationService]);
 
   const notifyTaskComplete = useCallback(async (taskTitle: string) => {
+    if (!isNotificationsEnabled) return;
+
     await notificationService.notify('Task Complete!', {
       body: `"${taskTitle}" has finished.`,
       icon: `${import.meta.env.BASE_URL}icon.svg`,
@@ -25,7 +29,7 @@ export function useNotification() {
       requireInteraction: true,
       tag: 'task-complete',
     });
-  }, [notificationService]);
+  }, [notificationService, isNotificationsEnabled]);
 
   return {
     permission,
