@@ -4,6 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Unified Sidebar Menu: Consolidate Routine management, Notifications, and PWA Installation into a single Control Center.**
+- [x] **Track: Unified Sidebar Menu: Consolidate Routine management, Notifications, and PWA Installation into a single Control Center.**
 *Link: [./tracks/unified_sidebar_menu_20260309/](./tracks/unified_sidebar_menu_20260309/)*
 
