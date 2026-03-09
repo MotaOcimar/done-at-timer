@@ -113,7 +113,15 @@
 
 ---
 
-## Final: Run Full Test Suite
-- `CI=true npm test` — all tests must pass.
-- `npm run build` — production build must succeed.
-- `npm run lint` — no lint errors.
+## Phase 4: Minimalist & Coherence Polish
+
+### [ ] 4.1 Minimalist Menu Button Style
+- Update the "Open menu" button in `App.tsx` to remove its background (`bg-white`), border (`border-gray-100`), and shadow (`shadow-sm`).
+- Ensure it only shows the icon on a transparent background with appropriate hover/active states.
+
+### [ ] 4.2 Coherent Notification Icons (TDD)
+- **Red:** In `ControlCenter.test.tsx`, add tests to:
+  - Verify `Bell` icon is shown when notifications are enabled.
+  - Verify `BellOff` icon is shown when notifications are disabled (currently may be using a generic speaker icon).
+- **Green:** Update `ControlCenter.tsx` to use the `Bell` and `BellOff` icons consistently in the Preference section.
+- **Refactor:** Clean up any unused icon imports.

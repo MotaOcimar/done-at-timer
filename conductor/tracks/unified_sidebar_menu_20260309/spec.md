@@ -43,8 +43,13 @@ Integrate PWA install functionality (from `InstallPrompt`) into the sidebar usin
 ### 2.4 Header Update
 
 - Replace the current "Library" icon/button in `App.tsx` with the `Menu` icon from `lucide-react`. Add `aria-label="Open menu"` to the button.
+- **Minimalist Styling:** The menu button should have a minimalist style: no background, no border, no shadow — only the icon visible on the transparent background.
 - Remove the `NotificationBell` component from the header entirely.
 - Remove the standalone `InstallPrompt` banner from `App.tsx`.
+
+### 2.5 Preferences Section — Notification Toggle (Refinement)
+
+- **Coherent Icons:** Use the `Bell` icon when notifications are enabled and the `BellOff` icon when notifications are disabled or paused. This ensures visual consistency across states.
 
 ### 2.5 Remove Standalone Components
 
