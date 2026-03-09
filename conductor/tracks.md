@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Fix PWA installation status detection on PC**
+- [~] **Track: Fix PWA installation status detection on PC**
 *Link: [./tracks/pwa_pc_detection_20260309/](./tracks/pwa_pc_detection_20260309/)*

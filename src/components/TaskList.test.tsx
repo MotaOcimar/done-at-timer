@@ -28,7 +28,9 @@ vi.mock('@dnd-kit/core', async (importOriginal) => {
           // Access properties from the native event
           const activeId = e.nativeEvent.activeId || '1';
           const overId = e.nativeEvent.overId || '2';
-          onDragEnd && onDragEnd({ active: { id: activeId }, over: { id: overId } });
+          if (onDragEnd) {
+            onDragEnd({ active: { id: activeId }, over: { id: overId } });
+          }
         }}
       >
         {children}

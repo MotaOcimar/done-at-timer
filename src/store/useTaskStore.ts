@@ -73,7 +73,7 @@ export const useTaskStore = create<TaskState>()(
           let targetEndTime = state.targetEndTime;
           let totalElapsedBeforePause = state.totalElapsedBeforePause;
           let isTimeUp = state.isTimeUp;
-          let tasks = state.tasks;
+          const tasks = state.tasks;
 
           // If updating duration of the currently active task, adjust the target end time
           if (

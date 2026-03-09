@@ -11,23 +11,19 @@ export interface BeforeInstallPromptEvent extends Event {
 
 export const useInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
+  
+  const [isStandalone, setIsStandalone] = useState(() => {
+    return !!(window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone);
+  });
+
+  const [isIOS] = useState(() => {
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: boolean }).MSStream;
+    return !!(isIOSDevice && !isStandalone);
+  });
+
+  const [isInstallable, setIsInstallable] = useState(isIOS);
 
   useEffect(() => {
-    // Detect iOS
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: boolean }).MSStream;
-    const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone;
-    
-    setIsStandalone(!!standalone);
-
-    if (isIOSDevice && !standalone) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsIOS(true);
-      setIsInstallable(true); // Show iOS specific instructions
-    }
-
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
@@ -42,6 +38,7 @@ export const useInstallPrompt = () => {
       // Clear the deferredPrompt so it can be garbage collected
       setDeferredPrompt(null);
       setIsInstallable(false);
+      setIsStandalone(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
