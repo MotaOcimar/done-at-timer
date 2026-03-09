@@ -165,11 +165,15 @@ describe('TaskCard Color Refinements', () => {
 
   describe('Completed State', () => {
     it('uses an "Ultra Soft Green" design (no global opacity-70) for a very subtle "mission accomplished" feel', () => {
+      const mockEta = new Date();
+      mockEta.setHours(12, 0, 0);
+      
       render(
         <TaskCard 
           task={{ ...mockTask, status: 'COMPLETED', actualDuration: 12 }} 
           isActive={false} 
           isCompleted={true} 
+          eta={mockEta}
           onDelete={vi.fn()}
           onToggle={vi.fn()}
           onTitleSave={vi.fn()}
@@ -197,8 +201,10 @@ describe('TaskCard Color Refinements', () => {
       // Labels (duration) should be extremely muted green
       expect(durationElement).toHaveClass('text-green-700/30');
       
-      // Actual duration should be very muted green
+      // Actual duration and ETA should be more visible green
       expect(actualDurationElement).toHaveClass('text-green-700/50');
+      const etaElement = screen.getByText(/12:00/i).closest('span');
+      expect(etaElement).toHaveClass('text-green-700/60');
     });
   });
 });
