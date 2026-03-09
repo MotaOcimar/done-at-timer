@@ -92,11 +92,11 @@
 
 ## Phase 3: Verification and Polish
 
-### [ ] 3.1 Update all codebase references
+### [x] 3.1 Update all codebase references (8d2436d)
 - Search for any remaining references to `RoutineManager`, `NotificationBell`, or `InstallPrompt` across the codebase (imports, comments, test files).
 - Update or remove as needed.
 
-### [ ] 3.2 Verify mobile experience
+### [x] 3.2 Verify mobile experience (8d2436d)
 - Test the sidebar on mobile viewport (Chrome DevTools or real device).
 - Verify touch targets are adequate (44x44px minimum).
 - Verify notification toggle and install button are easily tappable.
