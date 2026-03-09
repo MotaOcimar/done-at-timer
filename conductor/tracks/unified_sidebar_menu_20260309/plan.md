@@ -9,7 +9,7 @@
 - Update the sidebar drawer title from "Your Routines" to "Control Center".
 - Run `npm test` — all existing tests pass with updated names. No TDD needed (pure rename, no new behavior).
 
-### [ ] 1.2 Add Notification Toggle to ControlCenter (TDD)
+### [x] 1.2 Add Notification Toggle to ControlCenter (TDD) (315f4c4)
 - **Red:** In `ControlCenter.test.tsx`, add tests for:
   - Renders "Enable Notifications" toggle when permission is `default`.
   - Calls `requestPermission()` when the toggle is clicked.
