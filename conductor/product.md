@@ -42,7 +42,8 @@ The primary value of this application is to solve the problem of **lateness due 
 - **Web-Based:** Accessible via a web browser for easy local testing and usage.
 - **PWA Support:** Installable as a native-like app on Android, iOS, and Desktop.
 - **Offline Capability:** Fully functional without an internet connection after the first visit.
-- **Local Notifications:** System notifications alert the user when a task's timer completes.
+- **Local Notifications:** System notifications alert the user when a task's timer completes. Users can toggle notifications at the app level via the Control Center.
+- **Control Center:** A unified sidebar menu that consolidates routine management (save, load, delete), preferences (notification toggle), and app installation into a single, distraction-free interface.
 
 ## 5. Success Metrics
 
