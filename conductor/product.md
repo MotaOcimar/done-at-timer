@@ -37,6 +37,10 @@ The primary value of this application is to solve the problem of **lateness due 
 - **Actual vs Estimated Tracking:** When a task is completed, the app records and displays the real time taken side-by-side with the original estimate.
 - **Dynamic Update:** As tasks are completed or time passes, the "Arrival Clock" updates to reflect the new reality.
 - **Task Lists:** Users can create lists of tasks with defined durations (e.g., "Morning Routine").
+- **Control Center (Unified Sidebar):** A single location for managing secondary features, keeping the main interface distraction-free.
+  - **Routine Management:** Save, load, and delete task lists.
+  - **Preferences:** Toggle in-app notifications and manage browser permissions.
+  - **App Installation:** Access PWA installation options and status.
 - **Flexible Execution:** Users can start any timer in the list in any order.
 - **Inline Editing:** Ability to update task names and durations directly within the list by clicking on them.
 - **Web-Based:** Accessible via a web browser for easy local testing and usage.
