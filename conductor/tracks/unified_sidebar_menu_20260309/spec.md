@@ -34,9 +34,11 @@ Add a "Preferences" section to the sidebar with a notification permission toggle
 
 Integrate PWA install functionality (from `InstallPrompt`) into the sidebar using the `useInstallPrompt` hook.
 
-- Show an "Install App" button only when `isInstallable` is `true`.
-- On iOS, show the "Share → Add to Home Screen" instruction text instead of a button.
-- When the app is already installed (or `isInstallable` is `false`), hide this section entirely.
+- **States to handle:**
+  - `installable` (and not iOS) — Show "Install App" button. Clicking calls `promptInstall()`.
+  - `ios` — Show "Share → Add to Home Screen" instructions.
+  - `installed` (standalone mode) — Show a "✓ App Installed" indicator.
+  - `unavailable` — Show a muted message: "Installation not available in this browser" (if not installable and not already installed).
 
 ### 2.4 Header Update
 
@@ -76,9 +78,10 @@ After integrating their functionality into `ControlCenter`:
 - [ ] When permission is `unsupported`, the notification section is hidden.
 - [ ] "Install App" button appears only when the app is installable.
 - [ ] On iOS, the sidebar shows "Share → Add to Home Screen" instructions instead of an install button.
-- [ ] When the app is already installed, the install section is hidden.
+- [ ] When the app is already installed, the sidebar shows an "App Installed" indicator.
+- [ ] When installation is not possible, the sidebar explains it is "Unavailable in this browser".
 - [ ] All existing RoutineManager tests pass (updated for rename).
-- [ ] New tests cover notification toggle states and install section visibility.
+- [ ] New tests cover notification toggle states and all app installation states (including "Installed" and "Unavailable").
 
 ## 5. Out of Scope
 

@@ -30,10 +30,20 @@
 - **Green:** In `ControlCenter.tsx`, add an "App" section below Preferences. Use the `useInstallPrompt` hook. Implement conditional rendering based on `isInstallable` and `isIOS`.
 - **Refactor:** Ensure consistent section styling across Routines, Preferences, and App.
 
-### 1.4 Conductor: Manual Verification — Phase 1
+### [~] 1.4 Refine PWA Install feedback (TDD)
+- **Red:** In `ControlCenter.test.tsx`, add tests for:
+  - Shows "✓ App Installed" indicator when app is in standalone mode.
+  - Shows "Installation not available" message when `isInstallable` is `false` and not in standalone mode.
+  - Run tests — all new tests fail.
+- **Green:** 
+  - Update `useInstallPrompt.ts` to detect and return `isStandalone` state.
+  - Update `ControlCenter.tsx` to handle `isStandalone` and the `unavailable` state.
+- **Refactor:** Ensure clear messaging for leigo users.
+
+### 1.5 Conductor: Manual Verification — Phase 1
 - Open the sidebar and verify all three sections are visible (Routines, Preferences, App).
 - Test notification toggle: click to request permission, verify state updates.
-- Test install section visibility (if in an installable context).
+- Test install section: verify feedback when already installed or unavailable.
 - Verify existing routine save/load/delete still works correctly.
 
 ---
