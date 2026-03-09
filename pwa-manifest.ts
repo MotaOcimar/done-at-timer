@@ -26,4 +26,10 @@ export const pwaManifest: Partial<ManifestOptions> = {
       purpose: 'any maskable',
     },
   ],
+  related_applications: [
+    {
+      platform: 'webapp',
+      url: 'https://motaocimar.github.io/done-at-timer/manifest.webmanifest',
+    },
+  ],
 };
