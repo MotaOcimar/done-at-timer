@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Menu } from 'lucide-react';
 import { Layout } from './components/Layout';
 import { TaskInput } from './components/TaskInput';
 import { TaskList } from './components/TaskList';
@@ -29,9 +30,7 @@ function App() {
                 className="p-2 text-gray-400 hover:text-gray-600 transition-all active:scale-90"
                 aria-label="Open menu"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <Menu size={24} />
               </button>
             </div>
           </div>

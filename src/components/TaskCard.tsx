@@ -2,6 +2,16 @@ import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
 import type { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
+import { 
+  CheckCircle2, 
+  Clock, 
+  Play, 
+  Pause, 
+  GripHorizontal, 
+  Trash2, 
+  MapPin,
+  CircleCheck
+} from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
@@ -54,9 +64,7 @@ const StatusIcon = ({
   if (isCompleted) {
     return (
       <div className={`${baseClasses} text-green-500`} data-testid="checkmark-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-        </svg>
+        <CheckCircle2 size={24} strokeWidth={2} />
       </div>
     );
   }
@@ -65,9 +73,7 @@ const StatusIcon = ({
     if (isTimeUp) {
       return (
         <div className={`${baseClasses} bg-amber-100 text-amber-500`}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-          </svg>
+          <Clock size={24} strokeWidth={2} />
         </div>
       );
     }
@@ -80,13 +86,9 @@ const StatusIcon = ({
           aria-label={isPaused ? 'Resume' : 'Pause'}
         >
           {isPaused ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-0.5" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" />
-            </svg>
+            <Play size={24} strokeWidth={2} className="ml-0.5 fill-current" />
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
+            <Pause size={24} strokeWidth={2} className="fill-current" />
           )}
         </button>
       </div>
@@ -100,9 +102,7 @@ const StatusIcon = ({
         className={`flex items-center justify-center w-full h-full rounded-full group transition-colors ${iconButtonClasses.idle}`}
         aria-label="Play task"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-0.5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" />
-        </svg>
+        <Play size={24} strokeWidth={2} className="ml-0.5 fill-current" />
       </button>
     </div>
   );
@@ -197,9 +197,7 @@ const TaskCard = ({
             className={`flex-shrink-0 cursor-grab active:cursor-grabbing p-1 -ml-1 text-gray-300 hover:text-gray-500 transition-colors ${isDragging ? 'cursor-grabbing' : ''}`}
             aria-label="Drag to reorder"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-            </svg>
+            <GripHorizontal size={20} strokeWidth={2} />
           </div>
         ) : (
           <div className="w-5 flex-shrink-0" />
@@ -266,18 +264,16 @@ const TaskCard = ({
                 className="p-2 text-gray-300 hover:text-red-500 transition-colors"
                 aria-label="Delete task"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
+                <Trash2 size={20} strokeWidth={2} />
               </button>
             )}
           </div>
           {!isActive && eta && (
             <span className={`text-xs font-bold tabular-nums flex items-center gap-1 pr-1 whitespace-nowrap ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}>
               {isCompleted ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><path d="m9 10 2 2 4-4"/></svg>
+                <CircleCheck size={10} strokeWidth={2.5} className="opacity-60" />
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <MapPin size={10} strokeWidth={2.5} className="opacity-70" />
               )}
               {timeFormatter.format(eta)}
             </span>
@@ -299,7 +295,7 @@ const TaskCard = ({
               <span className={`text-sm font-bold tabular-nums tracking-tight flex items-center gap-1.5 whitespace-nowrap ${
                 timeDisplayClasses[cardState]
               }`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <MapPin size={14} strokeWidth={2.5} className="opacity-70" />
                 {timeFormatter.format(eta)}
               </span>
             </div>

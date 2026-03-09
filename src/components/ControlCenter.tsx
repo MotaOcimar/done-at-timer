@@ -1,4 +1,17 @@
 import { useState } from 'react';
+import { 
+  X, 
+  ChevronRight, 
+  Trash2, 
+  Bell, 
+  BellOff, 
+  Save, 
+  Download, 
+  Check, 
+  AlertTriangle, 
+  Info,
+  Ban
+} from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
@@ -87,9 +100,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
             className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-green-100 max-w-sm w-full"
           >
             <div className="bg-green-50 w-12 h-12 rounded-xl flex items-center justify-center text-green-500 mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-              </svg>
+              <Save size={24} strokeWidth={2} />
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">Save Routine</h3>
             <p className="text-gray-500 text-sm mb-4">Give a name to your current list of tasks.</p>
@@ -132,9 +143,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X size={24} strokeWidth={2} />
             </button>
           </div>
 
@@ -163,18 +172,14 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                       </div>
                       <div className="flex items-center gap-1">
                         <div className="p-2 text-blue-500 opacity-60">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
+                          <ChevronRight size={20} strokeWidth={2} />
                         </div>
                         <button
                           onClick={(e) => initiateDelete(e, routine.id)}
                           className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
                           aria-label="Delete routine"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                          <Trash2 size={20} strokeWidth={2} />
                         </button>
                       </div>
                     </div>
@@ -194,16 +199,12 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                     >
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-500 text-white rounded-xl">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                          </svg>
+                          <Bell size={20} strokeWidth={2} />
                         </div>
                         <span className="font-bold text-blue-700">Enable Notifications</span>
                       </div>
                       <div className="p-1 bg-white rounded-lg opacity-60 group-hover:opacity-100 transition-opacity">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ChevronRight size={16} strokeWidth={2} className="text-blue-500" />
                       </div>
                     </button>
                   )}
@@ -213,17 +214,9 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-xl transition-colors ${isNotificationsEnabled ? 'bg-green-500 text-white' : 'bg-gray-400 text-white'}`}>
                           {isNotificationsEnabled ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" data-testid="icon-bell">
-                              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                            </svg>
+                            <Bell size={20} strokeWidth={2} data-testid="icon-bell" />
                           ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" data-testid="icon-bell-off">
-                              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
-                              <path d="M17 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 .258-1.742" />
-                              <path d="m2 2 20 20" />
-                              <path d="M8.668 3.01A6 6 0 0 1 18 8c0 2.687.77 4.653 1.707 6.05" />
-                            </svg>
+                            <BellOff size={20} strokeWidth={2} data-testid="icon-bell-off" />
                           )}
                         </div>
                         <span className={`font-bold transition-colors ${isNotificationsEnabled ? 'text-green-700' : 'text-gray-500'}`}>
@@ -249,9 +242,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                       <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl opacity-60">
                         <div className="flex items-center gap-3">
                           <div className="p-2 bg-gray-400 text-white rounded-xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                            </svg>
+                            <Ban size={20} strokeWidth={2} />
                           </div>
                           <span className="font-bold text-gray-500">Notifications Blocked</span>
                         </div>
@@ -272,9 +263,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                   <div className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-2xl">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-green-500 text-white rounded-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
+                        <Check size={20} strokeWidth={2} />
                       </div>
                       <span className="font-bold text-green-700">App Installed</span>
                     </div>
@@ -290,25 +279,19 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                     >
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-gray-800 text-white rounded-xl">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                          </svg>
+                          <Download size={20} strokeWidth={2} />
                         </div>
                         <span className="font-bold text-gray-800">Install App</span>
                       </div>
                       <div className="p-1 bg-white rounded-lg opacity-60 group-hover:opacity-100 transition-opacity">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ChevronRight size={16} strokeWidth={2} className="text-gray-400" />
                       </div>
                     </button>
                   ) : (
                     <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl space-y-3">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-500 text-white rounded-xl">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                          </svg>
+                          <Download size={20} strokeWidth={2} />
                         </div>
                         <span className="font-bold text-blue-700">Install on iOS</span>
                       </div>
@@ -321,9 +304,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                   <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl">
                     <div className="flex items-center gap-3 opacity-60">
                       <div className="p-2 bg-gray-400 text-white rounded-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
+                        <AlertTriangle size={20} strokeWidth={2} />
                       </div>
                       <span className="font-bold text-gray-500">Installation not available</span>
                     </div>
@@ -341,9 +322,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmLoadId(null)} />
           <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-blue-100 max-w-sm w-full relative z-[70]">
             <div className="bg-blue-50 w-12 h-12 rounded-xl flex items-center justify-center text-blue-500 mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <Info size={24} strokeWidth={2} />
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">Replace current tasks?</h3>
             <p className="text-gray-500 text-sm mb-6">
@@ -372,9 +351,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
           <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmDeleteId(null)} />
           <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70]">
             <div className="bg-red-50 w-12 h-12 rounded-xl flex items-center justify-center text-red-500 mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
+              <Trash2 size={24} strokeWidth={2} />
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">Delete this routine?</h3>
             <p className="text-gray-500 text-sm mb-6">

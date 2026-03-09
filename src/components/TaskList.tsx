@@ -17,6 +17,10 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { 
+  Save, 
+  RotateCcw 
+} from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import { TaskItem } from './TaskItem';
 import { TaskCard } from './TaskCard';
@@ -121,9 +125,7 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
               onClick={onSaveRoutine}
               className="text-xs font-bold text-green-400 hover:text-green-600 uppercase tracking-wide transition-colors flex items-center gap-1"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-              </svg>
+              <Save size={12} strokeWidth={2} />
               Save
             </button>
           )}
@@ -148,9 +150,7 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
             onClick={() => resetTasks()}
             className="w-full bg-white border-2 border-green-500 text-green-600 py-4 rounded-xl font-bold text-lg hover:bg-green-50 transition-all shadow-md shadow-green-50 flex items-center justify-center gap-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
+            <RotateCcw size={24} strokeWidth={2} />
             Restart Routine
           </button>
         </div>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { CheckCircle2 } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
@@ -45,18 +46,7 @@ const ArrivalDisplay = () => {
     return (
       <div className="text-center py-12 px-6 bg-green-500 text-white rounded-3xl shadow-2xl shadow-green-200 animate-in zoom-in duration-500">
         <div className="flex justify-center mb-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-16 w-16 text-green-100"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <CheckCircle2 size={64} strokeWidth={2} className="text-green-100" />
         </div>
         <h2 className="text-green-100 text-sm font-bold uppercase tracking-wide mb-2">
           Routine Complete!
