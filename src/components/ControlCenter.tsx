@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 interface ControlCenterProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const deleteRoutine = useTaskStore((state) => state.deleteRoutine);
 
   const { permission, requestPermission } = useNotification();
+  const { isInstallable, isIOS, promptInstall } = useInstallPrompt();
 
   const [routineName, setRoutineName] = useState('');
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
@@ -234,6 +236,48 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                       </div>
                       <p className="px-4 text-[11px] text-gray-400 leading-relaxed italic">
                         To enable, update your browser's site settings.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {isInstallable && (
+              <div className="mt-8 pt-8 border-t border-gray-100 space-y-4">
+                <h3 className="text-xs font-black text-gray-300 uppercase tracking-wide">App</h3>
+                <div className="space-y-3">
+                  {!isIOS ? (
+                    <button
+                      onClick={promptInstall}
+                      className="w-full flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-2xl hover:border-blue-200 hover:bg-white hover:shadow-md transition-all group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gray-800 text-white rounded-xl">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                        </div>
+                        <span className="font-bold text-gray-800">Install App</span>
+                      </div>
+                      <div className="p-1 bg-white rounded-lg opacity-60 group-hover:opacity-100 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-500 text-white rounded-xl">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                        </div>
+                        <span className="font-bold text-blue-700">Install on iOS</span>
+                      </div>
+                      <p className="text-xs text-blue-600 leading-relaxed">
+                        Tap the share icon and select <span className="font-black">"Add to Home Screen"</span> to install Done-At Timer.
                       </p>
                     </div>
                   )}

@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ControlCenter } from './ControlCenter';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 // Mock the task store
 vi.mock('../store/useTaskStore', () => ({
@@ -13,6 +14,11 @@ vi.mock('../store/useTaskStore', () => ({
 // Mock useNotification hook
 vi.mock('../hooks/useNotification', () => ({
   useNotification: vi.fn(),
+}));
+
+// Mock useInstallPrompt hook
+vi.mock('../hooks/useInstallPrompt', () => ({
+  useInstallPrompt: vi.fn(),
 }));
 
 describe('ControlCenter', () => {
@@ -27,6 +33,7 @@ describe('ControlCenter', () => {
   const mockLoadRoutine = vi.fn();
   const mockDeleteRoutine = vi.fn();
   const mockRequestPermission = vi.fn();
+  const mockPromptInstall = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -43,6 +50,12 @@ describe('ControlCenter', () => {
     (useNotification as any).mockReturnValue({
       permission: 'default',
       requestPermission: mockRequestPermission,
+    });
+
+    (useInstallPrompt as any).mockReturnValue({
+      isInstallable: false,
+      isIOS: false,
+      promptInstall: mockPromptInstall,
     });
   });
 
@@ -156,6 +169,59 @@ describe('ControlCenter', () => {
       
       expect(screen.queryByText(/Enable Notifications/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Notifications Enabled/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('App', () => {
+    it('should show "Install App" button when isInstallable is true and not iOS', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: true,
+        isIOS: false,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/^App$/i)).toBeInTheDocument();
+      expect(screen.getByText(/Install App/i)).toBeInTheDocument();
+    });
+
+    it('should call promptInstall when install button is clicked', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: true,
+        isIOS: false,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      const installButton = screen.getByText(/Install App/i);
+      fireEvent.click(installButton);
+      
+      expect(mockPromptInstall).toHaveBeenCalled();
+    });
+
+    it('should show iOS share instructions when isIOS is true', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: true,
+        isIOS: true,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/^App$/i)).toBeInTheDocument();
+      expect(screen.getByText(/Tap the share icon and select/i)).toBeInTheDocument();
+      expect(screen.getByText(/Add to Home Screen/i)).toBeInTheDocument();
+    });
+
+    it('should hide install section when isInstallable is false', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: false,
+        isIOS: false,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/App/i)).not.toBeInTheDocument();
     });
   });
 });
