@@ -96,7 +96,7 @@ Changes:
 
 ## Phase 3: Visual Refinements
 
-### 3.1 Remove jarring scale transitions
+### [x] 3.1 Remove jarring scale transitions (7cc0571)
 No tests assert on scale values. Manual verification only.
 
 Changes:
