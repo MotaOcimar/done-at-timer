@@ -20,7 +20,7 @@
 - This is required for `navigator.getInstalledRelatedApps()` to work.
 - No TDD needed — purely declarative configuration change.
 
-## Phase 2: Hook Improvement (TDD)
+## Phase 2: Hook Improvement (TDD) [checkpoint: 1dbb2e1]
 
 ### Design Decision: `isAlreadyInstalled` vs `isStandalone`
 - `isStandalone` detects display-mode — only true when the app is **opened as a PWA**.
