@@ -252,7 +252,7 @@ const TaskCard = ({
                 onClick={(e) => { e.stopPropagation(); onComplete(); }}
                 className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-wide transition-all shadow-lg ${
                   isTimeUp 
-                    ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100 scale-110' 
+                    ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100' 
                     : 'bg-green-500 hover:bg-green-600 shadow-green-200'
                 }`}
                 aria-label="Done"

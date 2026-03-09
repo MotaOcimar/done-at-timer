@@ -143,7 +143,7 @@ const TaskList = ({ onSaveRoutine, onLoadRoutine }: TaskListProps) => {
               onClick={handleClearClick}
               className={`text-xs font-bold uppercase tracking-wide transition-all duration-500 ease-in-out whitespace-nowrap text-center ${
                 isConfirmingClear 
-                  ? 'text-red-600 w-28 scale-105' 
+                  ? 'text-red-600 w-28' 
                   : 'text-red-300 sm:hover:text-red-500 w-20'
               }`}
             >
