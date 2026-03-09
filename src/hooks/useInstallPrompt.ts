@@ -16,7 +16,7 @@ export const useInstallPrompt = () => {
     return !!(window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone);
   });
 
-  const [isIOS] = useState(() => {
+  const [isIOS, setIsIOS] = useState(() => {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: boolean }).MSStream;
     return !!(isIOSDevice && !isStandalone);
   });

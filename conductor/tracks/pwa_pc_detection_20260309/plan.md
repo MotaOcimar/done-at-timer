@@ -2,12 +2,12 @@
 
 ## Phase 0: Lint Fixes from Sidebar Menu Review
 
-### [x] 0.1 Fix `useInstallPrompt.ts` — setState síncrono no effect
+### [x] 0.1 Fix `useInstallPrompt.ts` — setState síncrono no effect c57fafb
 - Move `isStandalone` initialization from `useEffect` body to `useState` initializer to avoid cascading renders.
 - Remove the unused/duplicated `eslint-disable-next-line` directive on line 26.
 - Run `npm run lint` — errors on `useInstallPrompt.ts` resolved.
 
-### [x] 0.2 Fix `useTaskStore.ts` — `let` → `const`
+### [x] 0.2 Fix `useTaskStore.ts` — `let` → `const` c57fafb
 - Change `let tasks` to `const tasks` on line 76 to satisfy `prefer-const` rule.
 - Run `npm run lint` — error on `useTaskStore.ts` resolved.
 
