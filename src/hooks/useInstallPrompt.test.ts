@@ -37,6 +37,69 @@ describe('useInstallPrompt', () => {
     expect(result.current.isInstallable).toBe(false);
     expect(result.current.isIOS).toBe(false);
     expect(result.current.isStandalone).toBe(false);
+    expect((result.current as any).isAlreadyInstalled).toBe(false);
+  });
+
+  describe('getInstalledRelatedApps detection', () => {
+    it('should detect if app is already installed via API', async () => {
+      const getInstalledRelatedAppsSpy = vi.fn().mockResolvedValue([{ platform: 'webapp' }]);
+      Object.defineProperty(navigator, 'getInstalledRelatedApps', {
+        value: getInstalledRelatedAppsSpy,
+        configurable: true,
+      });
+
+      const { result } = renderHook(() => useInstallPrompt());
+
+      // It's async in useEffect, so we need to wait
+      await act(async () => {
+        await Promise.resolve(); // Allow useEffect promise to resolve
+      });
+
+      expect(getInstalledRelatedAppsSpy).toHaveBeenCalled();
+      expect((result.current as any).isAlreadyInstalled).toBe(true);
+    });
+
+    it('should set isAlreadyInstalled to false if API returns empty array', async () => {
+      const getInstalledRelatedAppsSpy = vi.fn().mockResolvedValue([]);
+      Object.defineProperty(navigator, 'getInstalledRelatedApps', {
+        value: getInstalledRelatedAppsSpy,
+        configurable: true,
+      });
+
+      const { result } = renderHook(() => useInstallPrompt());
+
+      await act(async () => {
+        await Promise.resolve();
+      });
+
+      expect((result.current as any).isAlreadyInstalled).toBe(false);
+    });
+
+    it('should handle missing getInstalledRelatedApps API gracefully', async () => {
+      Object.defineProperty(navigator, 'getInstalledRelatedApps', {
+        value: undefined,
+        configurable: true,
+      });
+
+      const { result } = renderHook(() => useInstallPrompt());
+
+      await act(async () => {
+        await Promise.resolve();
+      });
+
+      expect((result.current as any).isAlreadyInstalled).toBe(false);
+    });
+
+    it('should set isAlreadyInstalled to true when appinstalled event fires', () => {
+      const { result } = renderHook(() => useInstallPrompt());
+
+      act(() => {
+        window.dispatchEvent(new Event('appinstalled'));
+      });
+
+      expect((result.current as any).isAlreadyInstalled).toBe(true);
+      expect(result.current.isStandalone).toBe(true);
+    });
   });
 
   it('should detect standalone mode', () => {

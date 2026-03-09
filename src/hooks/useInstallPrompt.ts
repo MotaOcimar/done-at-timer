@@ -11,6 +11,7 @@ export interface BeforeInstallPromptEvent extends Event {
 
 export const useInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isAlreadyInstalled, setIsAlreadyInstalled] = useState(false);
   
   const [isStandalone, setIsStandalone] = useState(() => {
     return !!(window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone);
@@ -24,6 +25,15 @@ export const useInstallPrompt = () => {
   const [isInstallable, setIsInstallable] = useState(isIOS);
 
   useEffect(() => {
+    // Check if app is already installed
+    if (typeof (navigator as any).getInstalledRelatedApps === 'function') {
+      (navigator as any).getInstalledRelatedApps().then((apps: any[]) => {
+        if (apps && apps.length > 0) {
+          setIsAlreadyInstalled(true);
+        }
+      });
+    }
+
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
@@ -39,6 +49,7 @@ export const useInstallPrompt = () => {
       setDeferredPrompt(null);
       setIsInstallable(false);
       setIsStandalone(true);
+      setIsAlreadyInstalled(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -70,5 +81,5 @@ export const useInstallPrompt = () => {
     setIsInstallable(false);
   };
 
-  return { isInstallable, isIOS, isStandalone, promptInstall, hideInstall };
+  return { isInstallable, isIOS, isStandalone, isAlreadyInstalled, promptInstall, hideInstall };
 };
