@@ -13,7 +13,7 @@
 
 ---
 
-## Phase 1: PWA Manifest Update
+## Phase 1: PWA Manifest Update [checkpoint: a350928]
 
 ### [x] 1.1 Add `related_applications` to PWA Manifest 549fd40
 - Update `pwa-manifest.ts` to include `related_applications` with `platform: "webapp"` and the app's `url` (e.g., the GitHub Pages URL).
