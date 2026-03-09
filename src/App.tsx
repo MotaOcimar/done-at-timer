@@ -26,7 +26,7 @@ function App() {
             <div className="absolute top-4 right-4">
               <button 
                 onClick={() => setIsLibraryOpen(true)}
-                className="p-3 bg-white text-gray-400 hover:text-gray-600 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-md active:scale-95"
+                className="p-2 text-gray-400 hover:text-gray-600 transition-all active:scale-90"
                 aria-label="Open menu"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

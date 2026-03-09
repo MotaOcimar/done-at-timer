@@ -204,6 +204,46 @@ describe('ControlCenter', () => {
       expect(mockToggleNotifications).toHaveBeenCalled();
     });
 
+    it('should show coherent icons when notifications are enabled vs disabled', () => {
+      const mockToggleNotifications = vi.fn();
+      
+      // Test case 1: Enabled
+      const { rerender } = render(
+        <ControlCenter isOpen={true} onClose={vi.fn()} />
+      );
+      (useNotification as any).mockReturnValue({
+        permission: 'granted',
+        requestPermission: mockRequestPermission,
+      });
+      (useTaskStore as any).mockImplementation((selector: any) => 
+        selector({
+          tasks: [],
+          routines: [],
+          isNotificationsEnabled: true,
+          toggleNotifications: mockToggleNotifications,
+        })
+      );
+      rerender(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      // Check for Bell icon
+      expect(screen.getByText(/Notifications Enabled/i)).toBeInTheDocument();
+      expect(screen.getByTestId('icon-bell')).toBeInTheDocument();
+
+      // Test case 2: Disabled
+      (useTaskStore as any).mockImplementation((selector: any) => 
+        selector({
+          tasks: [],
+          routines: [],
+          isNotificationsEnabled: false,
+          toggleNotifications: mockToggleNotifications,
+        })
+      );
+      rerender(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Notifications Paused/i)).toBeInTheDocument();
+      expect(screen.getByTestId('icon-bell-off')).toBeInTheDocument();
+    });
+
     it('should show "blocked" message with helper text when permission is denied', () => {
       (useNotification as any).mockReturnValue({
         permission: 'denied',

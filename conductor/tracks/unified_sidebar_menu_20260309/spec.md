@@ -61,6 +61,7 @@ After integrating their functionality into `ControlCenter`:
 
 ### 2.6 UI/UX
 
+- **Iconography:** Use the `lucide-react` library for all icons (Menu, Bell, BellOff, Settings, Trash, etc.) to ensure maintainability, accessibility, and visual consistency. Use consistent props (e.g., `size={20}`, `strokeWidth={2}`) for all icons in the sidebar.
 - Clear visual separation between "Routines", "Preferences", and "App" sections using section headers (styled like the existing "Saved Libraries" heading: `text-xs font-black text-gray-300 uppercase tracking-wide`).
 - Consistent styling with existing sidebar (Tailwind CSS, same border-radius/shadow tokens).
 - Sidebar drawer title changes from "Your Routines" to "Control Center" (or "Menu").

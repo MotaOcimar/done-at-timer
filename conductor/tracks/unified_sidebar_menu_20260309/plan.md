@@ -115,13 +115,16 @@
 
 ## Phase 4: Minimalist & Coherence Polish
 
-### [ ] 4.1 Minimalist Menu Button Style
+### [x] 4.1 Minimalist Menu Button Style
 - Update the "Open menu" button in `App.tsx` to remove its background (`bg-white`), border (`border-gray-100`), and shadow (`shadow-sm`).
 - Ensure it only shows the icon on a transparent background with appropriate hover/active states.
 
-### [ ] 4.2 Coherent Notification Icons (TDD)
-- **Red:** In `ControlCenter.test.tsx`, add tests to:
-  - Verify `Bell` icon is shown when notifications are enabled.
-  - Verify `BellOff` icon is shown when notifications are disabled (currently may be using a generic speaker icon).
-- **Green:** Update `ControlCenter.tsx` to use the `Bell` and `BellOff` icons consistently in the Preference section.
-- **Refactor:** Clean up any unused icon imports.
+### [ ] 4.3 Integrate `lucide-react` Library
+- Install `lucide-react` as a production dependency.
+- Refactor `App.tsx` to use the `Menu` component from `lucide-react`.
+- Refactor `ControlCenter.tsx` to use `Bell`, `BellOff`, `Settings`, `Trash2`, `Save`, `Download`, `LogOut`, and `ChevronRight` (or similar) from `lucide-react` to replace raw SVGs.
+- Ensure all icons in the sidebar follow a consistent stroke width and size (e.g., `size={20}`, `strokeWidth={2}`).
+
+### [ ] 4.4 Final Cleanup & Verification
+- Run `npm run build` to ensure all imports are correct and there are no dependency issues.
+- `CI=true npm test` — ensure all tests pass, including those checking for icon presence.
