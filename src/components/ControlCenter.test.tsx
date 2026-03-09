@@ -55,6 +55,7 @@ describe('ControlCenter', () => {
     (useInstallPrompt as any).mockReturnValue({
       isInstallable: false,
       isIOS: false,
+      isStandalone: false,
       promptInstall: mockPromptInstall,
     });
   });
@@ -177,6 +178,7 @@ describe('ControlCenter', () => {
       (useInstallPrompt as any).mockReturnValue({
         isInstallable: true,
         isIOS: false,
+        isStandalone: false,
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
@@ -189,6 +191,7 @@ describe('ControlCenter', () => {
       (useInstallPrompt as any).mockReturnValue({
         isInstallable: true,
         isIOS: false,
+        isStandalone: false,
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
@@ -203,6 +206,7 @@ describe('ControlCenter', () => {
       (useInstallPrompt as any).mockReturnValue({
         isInstallable: true,
         isIOS: true,
+        isStandalone: false,
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
@@ -216,12 +220,26 @@ describe('ControlCenter', () => {
       (useInstallPrompt as any).mockReturnValue({
         isInstallable: false,
         isIOS: false,
+        isStandalone: false,
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
       
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/App/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/Installation not available/i)).toBeInTheDocument();
+    });
+
+    it('should show "App Installed" indicator when isStandalone is true', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: false,
+        isIOS: false,
+        isStandalone: true,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
     });
   });
 });

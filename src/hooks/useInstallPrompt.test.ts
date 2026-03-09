@@ -36,6 +36,18 @@ describe('useInstallPrompt', () => {
     const { result } = renderHook(() => useInstallPrompt());
     expect(result.current.isInstallable).toBe(false);
     expect(result.current.isIOS).toBe(false);
+    expect(result.current.isStandalone).toBe(false);
+  });
+
+  it('should detect standalone mode', () => {
+    window.matchMedia = vi.fn().mockImplementation(query => ({
+      matches: query === '(display-mode: standalone)',
+      media: query,
+    }));
+
+    const { result } = renderHook(() => useInstallPrompt());
+    
+    expect(result.current.isStandalone).toBe(true);
   });
 
   it('should detect beforeinstallprompt event', () => {

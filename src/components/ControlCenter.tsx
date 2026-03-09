@@ -18,7 +18,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const deleteRoutine = useTaskStore((state) => state.deleteRoutine);
 
   const { permission, requestPermission } = useNotification();
-  const { isInstallable, isIOS, promptInstall } = useInstallPrompt();
+  const { isInstallable, isIOS, isStandalone, promptInstall } = useInstallPrompt();
 
   const [routineName, setRoutineName] = useState('');
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
@@ -243,11 +243,25 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
               </div>
             )}
 
-            {isInstallable && (
-              <div className="mt-8 pt-8 border-t border-gray-100 space-y-4">
-                <h3 className="text-xs font-black text-gray-300 uppercase tracking-wide">App</h3>
-                <div className="space-y-3">
-                  {!isIOS ? (
+            <div className="mt-8 pt-8 border-t border-gray-100 space-y-4">
+              <h3 className="text-xs font-black text-gray-300 uppercase tracking-wide">App</h3>
+              <div className="space-y-3">
+                {isStandalone ? (
+                  <div className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-500 text-white rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span className="font-bold text-green-700">App Installed</span>
+                    </div>
+                    <div className="text-[10px] font-black text-green-500 uppercase tracking-widest bg-white px-2 py-1 rounded-lg">
+                      Native
+                    </div>
+                  </div>
+                ) : isInstallable ? (
+                  !isIOS ? (
                     <button
                       onClick={promptInstall}
                       className="w-full flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-2xl hover:border-blue-200 hover:bg-white hover:shadow-md transition-all group"
@@ -280,10 +294,21 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                         Tap the share icon and select <span className="font-black">"Add to Home Screen"</span> to install Done-At Timer.
                       </p>
                     </div>
-                  )}
-                </div>
+                  )
+                ) : (
+                  <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl">
+                    <div className="flex items-center gap-3 opacity-60">
+                      <div className="p-2 bg-gray-400 text-white rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <span className="font-bold text-gray-500">Installation not available</span>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

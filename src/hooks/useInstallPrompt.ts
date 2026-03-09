@@ -13,13 +13,16 @@ export const useInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     // Detect iOS
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: boolean }).MSStream;
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone;
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone;
     
-    if (isIOSDevice && !isStandalone) {
+    setIsStandalone(!!standalone);
+
+    if (isIOSDevice && !standalone) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsIOS(true);
       setIsInstallable(true); // Show iOS specific instructions
@@ -70,5 +73,5 @@ export const useInstallPrompt = () => {
     setIsInstallable(false);
   };
 
-  return { isInstallable, isIOS, promptInstall, hideInstall };
+  return { isInstallable, isIOS, isStandalone, promptInstall, hideInstall };
 };
