@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
+import { useNotification } from '../hooks/useNotification';
 
 interface ControlCenterProps {
   isOpen: boolean;
@@ -14,6 +15,8 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const saveRoutine = useTaskStore((state) => state.saveRoutine);
   const loadRoutine = useTaskStore((state) => state.loadRoutine);
   const deleteRoutine = useTaskStore((state) => state.deleteRoutine);
+
+  const { permission, requestPermission } = useNotification();
 
   const [routineName, setRoutineName] = useState('');
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
@@ -175,6 +178,68 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                 </div>
               )}
             </div>
+
+            {permission !== 'unsupported' && (
+              <div className="mt-8 pt-8 border-t border-gray-100 space-y-4">
+                <h3 className="text-xs font-black text-gray-300 uppercase tracking-wide">Preferences</h3>
+                <div className="space-y-3">
+                  {permission === 'default' && (
+                    <button
+                      onClick={requestPermission}
+                      className="w-full flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-2xl hover:bg-blue-100 transition-all group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-500 text-white rounded-xl">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                          </svg>
+                        </div>
+                        <span className="font-bold text-blue-700">Enable Notifications</span>
+                      </div>
+                      <div className="p-1 bg-white rounded-lg opacity-60 group-hover:opacity-100 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </button>
+                  )}
+
+                  {permission === 'granted' && (
+                    <div className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-2xl">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-green-500 text-white rounded-xl">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <span className="font-bold text-green-700">Notifications Enabled</span>
+                      </div>
+                      <div className="text-[10px] font-black text-green-500 uppercase tracking-widest bg-white px-2 py-1 rounded-lg">
+                        Active
+                      </div>
+                    </div>
+                  )}
+
+                  {permission === 'denied' && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl opacity-60">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-gray-400 text-white rounded-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                          </div>
+                          <span className="font-bold text-gray-500">Notifications Blocked</span>
+                        </div>
+                      </div>
+                      <p className="px-4 text-[11px] text-gray-400 leading-relaxed italic">
+                        To enable, update your browser's site settings.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

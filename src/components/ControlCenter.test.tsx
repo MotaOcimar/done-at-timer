@@ -3,10 +3,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ControlCenter } from './ControlCenter';
 import { useTaskStore } from '../store/useTaskStore';
+import { useNotification } from '../hooks/useNotification';
 
 // Mock the task store
 vi.mock('../store/useTaskStore', () => ({
   useTaskStore: vi.fn(),
+}));
+
+// Mock useNotification hook
+vi.mock('../hooks/useNotification', () => ({
+  useNotification: vi.fn(),
 }));
 
 describe('ControlCenter', () => {
@@ -20,6 +26,7 @@ describe('ControlCenter', () => {
   const mockSaveRoutine = vi.fn();
   const mockLoadRoutine = vi.fn();
   const mockDeleteRoutine = vi.fn();
+  const mockRequestPermission = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -32,6 +39,11 @@ describe('ControlCenter', () => {
         deleteRoutine: mockDeleteRoutine,
       })
     );
+
+    (useNotification as any).mockReturnValue({
+      permission: 'default',
+      requestPermission: mockRequestPermission,
+    });
   });
 
   it('should not render anything when closed', () => {
@@ -87,5 +99,63 @@ describe('ControlCenter', () => {
     fireEvent.click(deleteButton);
 
     expect(screen.getByText(/Delete this routine\?/i)).toBeInTheDocument();
+  });
+
+  describe('Notifications', () => {
+    it('should render "Enable Notifications" toggle when permission is default', () => {
+      (useNotification as any).mockReturnValue({
+        permission: 'default',
+        requestPermission: mockRequestPermission,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Preferences/i)).toBeInTheDocument();
+      expect(screen.getByText(/Enable Notifications/i)).toBeInTheDocument();
+    });
+
+    it('should call requestPermission when the toggle is clicked', () => {
+      (useNotification as any).mockReturnValue({
+        permission: 'default',
+        requestPermission: mockRequestPermission,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      const toggle = screen.getByText(/Enable Notifications/i);
+      fireEvent.click(toggle);
+      
+      expect(mockRequestPermission).toHaveBeenCalled();
+    });
+
+    it('should show "enabled" indicator when permission is granted', () => {
+      (useNotification as any).mockReturnValue({
+        permission: 'granted',
+        requestPermission: mockRequestPermission,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Notifications Enabled/i)).toBeInTheDocument();
+    });
+
+    it('should show "blocked" message with helper text when permission is denied', () => {
+      (useNotification as any).mockReturnValue({
+        permission: 'denied',
+        requestPermission: mockRequestPermission,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Notifications Blocked/i)).toBeInTheDocument();
+      expect(screen.getByText(/To enable, update your browser's site settings./i)).toBeInTheDocument();
+    });
+
+    it('should hide notification section entirely when permission is unsupported', () => {
+      (useNotification as any).mockReturnValue({
+        permission: 'unsupported',
+        requestPermission: mockRequestPermission,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.queryByText(/Enable Notifications/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Notifications Enabled/i)).not.toBeInTheDocument();
+    });
   });
 });
