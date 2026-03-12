@@ -74,3 +74,11 @@
 
 ### [x] 4.2 Final Cleanup & Checkpoint 74fe4a2
 - Commit all changes and create a checkpoint.
+
+---
+
+## Phase: Review Fixes
+
+### [x] Task: Apply review suggestions bb0be39
+- Remove unnecessary `as any` casts in `useInstallPrompt.test.ts`.
+
