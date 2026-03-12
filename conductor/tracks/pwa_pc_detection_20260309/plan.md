@@ -47,7 +47,7 @@
 
 ## Phase 3: UI Update (TDD)
 
-### [ ] 3.1 Update `ControlCenter.tsx` (TDD)
+### [x] 3.1 Update `ControlCenter.tsx` (TDD) 66f0de1
 - **Red:** Add/update tests in `ControlCenter.test.tsx` under the App installation `describe` block:
   1. `isAlreadyInstalled=true`, `isStandalone=false` → shows "App Installed" indicator (the core fix).
   2. `isAlreadyInstalled=true`, `isInstallable=true` → shows "App Installed", **not** the "Install App" button (`isAlreadyInstalled` takes priority).
