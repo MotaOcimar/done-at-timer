@@ -37,7 +37,7 @@ describe('useInstallPrompt', () => {
     expect(result.current.isInstallable).toBe(false);
     expect(result.current.isIOS).toBe(false);
     expect(result.current.isStandalone).toBe(false);
-    expect((result.current as any).isAlreadyInstalled).toBe(false);
+    expect(result.current.isAlreadyInstalled).toBe(false);
   });
 
   describe('getInstalledRelatedApps detection', () => {
@@ -56,7 +56,7 @@ describe('useInstallPrompt', () => {
       });
 
       expect(getInstalledRelatedAppsSpy).toHaveBeenCalled();
-      expect((result.current as any).isAlreadyInstalled).toBe(true);
+      expect(result.current.isAlreadyInstalled).toBe(true);
     });
 
     it('should set isAlreadyInstalled to false if API returns empty array', async () => {
@@ -72,7 +72,7 @@ describe('useInstallPrompt', () => {
         await Promise.resolve();
       });
 
-      expect((result.current as any).isAlreadyInstalled).toBe(false);
+      expect(result.current.isAlreadyInstalled).toBe(false);
     });
 
     it('should handle missing getInstalledRelatedApps API gracefully', async () => {
@@ -87,7 +87,7 @@ describe('useInstallPrompt', () => {
         await Promise.resolve();
       });
 
-      expect((result.current as any).isAlreadyInstalled).toBe(false);
+      expect(result.current.isAlreadyInstalled).toBe(false);
     });
 
     it('should set isAlreadyInstalled to true when appinstalled event fires', () => {
@@ -97,7 +97,7 @@ describe('useInstallPrompt', () => {
         window.dispatchEvent(new Event('appinstalled'));
       });
 
-      expect((result.current as any).isAlreadyInstalled).toBe(true);
+      expect(result.current.isAlreadyInstalled).toBe(true);
       expect(result.current.isStandalone).toBe(true);
     });
   });
