@@ -9,6 +9,16 @@ export interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
+interface RelatedApplication {
+  id: string;
+  platform: string;
+  url: string;
+}
+
+interface NavigatorWithRelatedApps extends Navigator {
+  getInstalledRelatedApps(): Promise<RelatedApplication[]>;
+}
+
 export const useInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isAlreadyInstalled, setIsAlreadyInstalled] = useState(false);
@@ -26,8 +36,9 @@ export const useInstallPrompt = () => {
 
   useEffect(() => {
     // Check if app is already installed
-    if (typeof (navigator as any).getInstalledRelatedApps === 'function') {
-      (navigator as any).getInstalledRelatedApps().then((apps: any[]) => {
+    const nav = navigator as NavigatorWithRelatedApps;
+    if (typeof nav.getInstalledRelatedApps === 'function') {
+      nav.getInstalledRelatedApps().then((apps) => {
         if (apps && apps.length > 0) {
           setIsAlreadyInstalled(true);
         }

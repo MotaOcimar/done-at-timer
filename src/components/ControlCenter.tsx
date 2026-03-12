@@ -33,7 +33,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const toggleNotifications = useTaskStore((state) => state.toggleNotifications);
 
   const { permission, requestPermission } = useNotification();
-  const { isInstallable, isIOS, isStandalone, promptInstall } = useInstallPrompt();
+  const { isInstallable, isIOS, isStandalone, isAlreadyInstalled, promptInstall } = useInstallPrompt();
 
   const [routineName, setRoutineName] = useState('');
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
@@ -88,6 +88,8 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
     <>
       {/* Backdrop for Drawer and External Save Modal */}
       <div 
+        role="presentation"
+        aria-hidden="true"
         className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen || isSavingExternal ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={isSavingExternal ? handleCancelSave : onClose}
       />
@@ -259,7 +261,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
             <div className="mt-8 pt-8 border-t border-gray-100 space-y-4">
               <h3 className="text-xs font-black text-gray-300 uppercase tracking-wide">App</h3>
               <div className="space-y-3">
-                {isStandalone ? (
+                {(isStandalone || isAlreadyInstalled) ? (
                   <div className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-2xl">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-green-500 text-white rounded-xl">
@@ -268,7 +270,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                       <span className="font-bold text-green-700">App Installed</span>
                     </div>
                     <div className="text-[10px] font-black text-green-500 uppercase tracking-widest bg-white px-2 py-1 rounded-lg">
-                      Native
+                      {isStandalone ? 'Native' : 'Linked'}
                     </div>
                   </div>
                 ) : isInstallable ? (
@@ -319,7 +321,12 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
       {/* Custom Confirmation Modals */}
       {confirmLoadId && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmLoadId(null)} />
+          <div 
+            role="presentation" 
+            aria-hidden="true" 
+            className="fixed inset-0 bg-black/40 backdrop-blur-md" 
+            onClick={() => setConfirmLoadId(null)} 
+          />
           <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-blue-100 max-w-sm w-full relative z-[70]">
             <div className="bg-blue-50 w-12 h-12 rounded-xl flex items-center justify-center text-blue-500 mb-4">
               <Info size={24} strokeWidth={2} />
@@ -348,7 +355,12 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
 
       {confirmDeleteId && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-md" onClick={() => setConfirmDeleteId(null)} />
+          <div 
+            role="presentation" 
+            aria-hidden="true" 
+            className="fixed inset-0 bg-black/40 backdrop-blur-md" 
+            onClick={() => setConfirmDeleteId(null)} 
+          />
           <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70]">
             <div className="bg-red-50 w-12 h-12 rounded-xl flex items-center justify-center text-red-500 mb-4">
               <Trash2 size={24} strokeWidth={2} />

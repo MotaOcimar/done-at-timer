@@ -71,6 +71,48 @@ describe('ControlCenter', () => {
     expect(screen.getByText(/Morning Routine/i)).toBeInTheDocument();
   });
 
+  it('should call loadRoutine immediately if there are no tasks', () => {
+    (useTaskStore as any).mockImplementation((selector: any) => 
+      selector({
+        tasks: [],
+        routines: mockRoutines,
+        saveRoutine: mockSaveRoutine,
+        loadRoutine: mockLoadRoutine,
+        deleteRoutine: mockDeleteRoutine,
+      })
+    );
+    const mockOnClose = vi.fn();
+    render(<ControlCenter isOpen={true} onClose={mockOnClose} />);
+    const routineItem = screen.getByText(/Morning Routine/i);
+    fireEvent.click(routineItem);
+
+    expect(mockLoadRoutine).toHaveBeenCalledWith('r1');
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  it('should call onClose when clicking the main backdrop', () => {
+    const mockOnClose = vi.fn();
+    render(<ControlCenter isOpen={true} onClose={mockOnClose} />);
+    
+    // The main backdrop is the first child with backdrop-blur-sm
+    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-sm'));
+    if (backdrop) {
+      fireEvent.click(backdrop);
+      expect(mockOnClose).toHaveBeenCalled();
+    }
+  });
+
+  it('should call handleCancelSave when clicking the backdrop during external saving', () => {
+    const mockOnSaveComplete = vi.fn();
+    render(<ControlCenter isOpen={false} isSavingExternal={true} onSaveComplete={mockOnSaveComplete} onClose={vi.fn()} />);
+    
+    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-sm'));
+    if (backdrop) {
+      fireEvent.click(backdrop);
+      expect(mockOnSaveComplete).toHaveBeenCalled();
+    }
+  });
+
   it('should render the save modal when isSavingExternal is true', () => {
     render(<ControlCenter isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
     expect(screen.getByText(/Save Routine/i)).toBeInTheDocument();
@@ -107,12 +149,75 @@ describe('ControlCenter', () => {
     expect(mockLoadRoutine).toHaveBeenCalledWith('r1');
   });
 
+  it('should close the load confirmation modal when clicking the backdrop', () => {
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+    const routineItem = screen.getByText(/Morning Routine/i);
+    fireEvent.click(routineItem);
+
+    expect(screen.getByText(/Replace current tasks\?/i)).toBeInTheDocument();
+    
+    // Backdrop for confirmation modal
+    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-md'));
+    if (backdrop) {
+      fireEvent.click(backdrop);
+      expect(screen.queryByText(/Replace current tasks\?/i)).not.toBeInTheDocument();
+    }
+  });
+
+  it('should close the load confirmation modal when clicking the cancel button', () => {
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+    const routineItem = screen.getByText(/Morning Routine/i);
+    fireEvent.click(routineItem);
+
+    const cancelButton = screen.getByRole('button', { name: /Cancel/i });
+    fireEvent.click(cancelButton);
+
+    expect(screen.queryByText(/Replace current tasks\?/i)).not.toBeInTheDocument();
+  });
+
   it('should show confirmation when trying to delete a routine', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
     const deleteButton = screen.getByLabelText(/Delete routine/i);
     fireEvent.click(deleteButton);
 
     expect(screen.getByText(/Delete this routine\?/i)).toBeInTheDocument();
+  });
+
+  it('should call deleteRoutine when confirming delete', () => {
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+    const deleteButton = screen.getByLabelText(/Delete routine/i);
+    fireEvent.click(deleteButton);
+
+    const confirmDeleteButton = screen.getByRole('button', { name: /^Delete$/ });
+    fireEvent.click(confirmDeleteButton);
+
+    expect(mockDeleteRoutine).toHaveBeenCalledWith('r1');
+  });
+
+  it('should close the delete confirmation modal when clicking the cancel button', () => {
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+    const deleteButton = screen.getByLabelText(/Delete routine/i);
+    fireEvent.click(deleteButton);
+
+    const cancelButton = screen.getByRole('button', { name: /Cancel/i });
+    fireEvent.click(cancelButton);
+
+    expect(screen.queryByText(/Delete this routine\?/i)).not.toBeInTheDocument();
+  });
+
+  it('should close the delete confirmation modal when clicking the backdrop', () => {
+    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+    const deleteButton = screen.getByLabelText(/Delete routine/i);
+    fireEvent.click(deleteButton);
+
+    expect(screen.getByText(/Delete this routine\?/i)).toBeInTheDocument();
+    
+    // Backdrop for confirmation modal
+    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-md'));
+    if (backdrop) {
+      fireEvent.click(backdrop);
+      expect(screen.queryByText(/Delete this routine\?/i)).not.toBeInTheDocument();
+    }
   });
 
   describe('Notifications', () => {
@@ -328,11 +433,69 @@ describe('ControlCenter', () => {
         isInstallable: false,
         isIOS: false,
         isStandalone: true,
+        isAlreadyInstalled: false,
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
       
       expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
+    });
+
+    it('should show "App Installed" indicator when isAlreadyInstalled is true and isStandalone is false', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: false,
+        isIOS: false,
+        isStandalone: false,
+        isAlreadyInstalled: true,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
+    });
+
+    it('should prioritize "App Installed" over "Install App" when both are true', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: true,
+        isIOS: false,
+        isStandalone: false,
+        isAlreadyInstalled: true,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
+    });
+
+    it('should show "Install App" button when isInstallable is true and not installed', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: true,
+        isIOS: false,
+        isStandalone: false,
+        isAlreadyInstalled: false,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Install App/i)).toBeInTheDocument();
+      expect(screen.queryByText(/App Installed/i)).not.toBeInTheDocument();
+    });
+
+    it('should show "Installation not available" when not installable and not installed', () => {
+      (useInstallPrompt as any).mockReturnValue({
+        isInstallable: false,
+        isIOS: false,
+        isStandalone: false,
+        isAlreadyInstalled: false,
+        promptInstall: mockPromptInstall,
+      });
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      
+      expect(screen.getByText(/Installation not available/i)).toBeInTheDocument();
+      expect(screen.queryByText(/App Installed/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
     });
   });
