@@ -45,7 +45,7 @@
   - Add `isAlreadyInstalled` to the return value.
 - **Refactor:** Evaluate whether `isStandalone` can be derived from `isAlreadyInstalled` in some cases to reduce redundancy. Keep both if they serve distinct purposes (standalone = display mode, alreadyInstalled = API detection).
 
-## Phase 3: UI Update (TDD)
+## Phase 3: UI Update (TDD) [checkpoint: 66f0de1]
 
 ### [x] 3.1 Update `ControlCenter.tsx` (TDD) 66f0de1
 - **Red:** Add/update tests in `ControlCenter.test.tsx` under the App installation `describe` block:
@@ -62,9 +62,9 @@
 
 ---
 
-## Phase 4: Verification and Polish
+## Phase 4: Verification and Polish [checkpoint: 74fe4a2]
 
-### [x] 4.1 Conductor: User Manual Verification 'PWA Detection Fix' 66f0de1
+### [x] 4.1 Conductor: User Manual Verification 'PWA Detection Fix' 74fe4a2
 - Follow the Verification and Checkpointing Protocol from `workflow.md`.
 - Automated test command: `CI=true npm test`.
 - Manual Verification Steps:
@@ -72,5 +72,5 @@
   2. If the app is already installed, open the Control Center and verify it shows "✓ App Installed" (not "Installation not available").
   3. If it's not installed, install it and verify the status updates immediately.
 
-### [ ] 4.2 Final Cleanup & Checkpoint
+### [x] 4.2 Final Cleanup & Checkpoint 74fe4a2
 - Commit all changes and create a checkpoint.
