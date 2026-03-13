@@ -1,0 +1,8 @@
+{
+  "track_id": "task_interaction_refinement_20260313",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-03-13T10:00:00Z",
+  "updated_at": "2026-03-13T10:00:00Z",
+  "description": "Remover as barras laterais e permitir o dnd de qq parte do card da task + tirar o botão de exclusão da task e colocar ele como uma confirmação \"debaixo\" do card da task, que só aparece se o usuário arrastar a task da direita para esquerda"
+}
