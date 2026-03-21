@@ -4,5 +4,5 @@
   "status": "new",
   "created_at": "2026-03-13T10:00:00Z",
   "updated_at": "2026-03-13T10:00:00Z",
-  "description": "Remover as barras laterais e permitir o dnd de qq parte do card da task + tirar o botão de exclusão da task e colocar ele como uma confirmação \"debaixo\" do card da task, que só aparece se o usuário arrastar a task da direita para esquerda"
+  "description": "Remover drag handle e áreas laterais do card da task, permitir DnD de qualquer parte do card + substituir botão de exclusão inline por swipe-to-delete (arrastar da direita para esquerda revela botão de confirmação)"
 }

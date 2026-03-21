@@ -64,6 +64,13 @@ This file tracks all ideas, requested improvements, and roadmap items for future
         - **Dirty state**: If the user has unsaved changes and tries to load a different routine or clear the list, should there be a confirmation prompt?
     - **Status**: Idea stage — needs design discussion to map out all user scenarios before implementation.
 
+## Process & Documentation
+- [ ] **Centralized Project Specs Directory**: Organize all specifications into a single indexed directory (`conductor/specs/`), establishing a clear distinction between two spec types:
+    - **Project Specs** (living documentation): Centralize *what* was done and *why*, including all technical definitions and motivations. These are the single source of truth — always up to date. When a future track proposes changes that modify a previous spec, the project spec is updated to reflect the latest state. Each project spec links back to the tracks that created or modified it.
+    - **Track Specs** (frozen per-track): Function like Jira tickets — scoped to a specific track with its own definition and plan. Once a track is archived, its spec is **never modified**, preserving a historical snapshot of what was decided and implemented at that point in time.
+    - **Key benefit**: An AI agent (or any contributor) can read the latest project spec to understand current state without parsing the full track history. Track history remains available for deeper investigation into *when* and *how* decisions evolved.
+    - **Analogy**: The specs directory is the project's central documentation; tracks are Jira tickets with their own self-contained definition and plan.
+
 ## Technical Debt
 - [ ] **Per-task Progress Persistence**: Move the elapsed time tracking from the global `totalElapsedBeforePause` state into the `Task` type itself (e.g., `task.elapsedSeconds`). This ensures that partially completed tasks preserve their progress when the active task is switched or when they are moved back to pending, preventing them from "restarting" from zero when resumed. *Implementar junto com um botão "Reset Progress" na UI — uma vez que `elapsedSeconds` vive na tarefa, resetar é trivial (`task.elapsedSeconds = 0`).*
 - [ ] **Code Comments**: Translate Portuguese comments in `src/hooks/useTimer.ts` to English for consistency.
