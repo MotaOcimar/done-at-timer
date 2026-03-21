@@ -71,6 +71,20 @@ This file tracks all ideas, requested improvements, and roadmap items for future
     - **Key benefit**: An AI agent (or any contributor) can read the latest project spec to understand current state without parsing the full track history. Track history remains available for deeper investigation into *when* and *how* decisions evolved.
     - **Analogy**: The specs directory is the project's central documentation; tracks are Jira tickets with their own self-contained definition and plan.
 
+## Cross-Device
+- [ ] **Routine Sync / Sharing Between Devices**: Enable users to access the same routines on multiple devices without requiring a backend server (must stay compatible with static GitHub Pages hosting).
+    - **Plano A — Real-time sync (static-only)**: Investigate whether peer-to-peer or decentralized sync is feasible from a static page (e.g., WebRTC, CRDTs with a free signaling relay, shared storage APIs). Requires a viability study before any implementation.
+    - **Plano B — Routine sharing (fallback)**: If real sync isn't viable, allow users to export/import routines between devices via:
+        1. **File export/import**: Download routine as a file, import on the other device.
+        2. **Shareable URL with query parameters**: Encode the full routine payload in the URL so the user can copy/paste or share it.
+    - **Tradeoffs to evaluate**:
+        - URL length limits per browser (query parameter approach may hit ceiling for large routines)
+        - User perception of very long URLs (may look suspicious or be truncated by messaging apps)
+        - File format choice (JSON? custom?)
+        - UX friction of each approach
+    - **Constraint**: No backend server. The value of static hosting (security, simplicity, zero ops) must be preserved.
+    - **Status**: Backlog — needs viability research before spec work.
+
 ## Technical Debt
 - [ ] **Per-task Progress Persistence**: Move the elapsed time tracking from the global `totalElapsedBeforePause` state into the `Task` type itself (e.g., `task.elapsedSeconds`). This ensures that partially completed tasks preserve their progress when the active task is switched or when they are moved back to pending, preventing them from "restarting" from zero when resumed. *Implementar junto com um botão "Reset Progress" na UI — uma vez que `elapsedSeconds` vive na tarefa, resetar é trivial (`task.elapsedSeconds = 0`).*
 - [ ] **Code Comments**: Translate Portuguese comments in `src/hooks/useTimer.ts` to English for consistency.

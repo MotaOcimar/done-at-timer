@@ -4,7 +4,7 @@
 This track aims to refine task interactions and clean up the UI by removing redundant elements and introducing a swipe-to-delete pattern.
 
 ## Functional Requirements
-- **Whole Card Dragging**: Tasks can be reordered by dragging from any part of the task card. Interactive elements within the card (inline edit inputs, Play/Pause/Done buttons) must remain functional and **not** initiate drag.
+- **Whole Card Dragging**: Non-completed tasks can be reordered by dragging from any part of the task card. Completed tasks are excluded from drag-to-reorder — they represent history and their order should not change. Interactive elements within the card (inline edit inputs, Play/Pause/Done buttons) must remain functional and **not** initiate drag or swipe.
 - **Remove Drag Handles & Spacers**: The existing `GripHorizontal` drag handle icons on the left side of task cards are removed, along with the empty spacer `div` that renders in their place for active/completed tasks, reclaiming horizontal space.
 - **Swipe-to-Delete**:
     - **Scope**: Available on all tasks **except completed** tasks. This includes pending, paused, and active tasks. Completed tasks are intentionally excluded — they represent history of what was done and should not be individually removable. Batch clearing (Reset/Clear) remains available for starting fresh.
@@ -12,7 +12,7 @@ This track aims to refine task interactions and clean up the UI by removing redu
     - This revealed state ("Reveal & Stay") persists until the user either clicks "Delete" or swipes back to dismiss.
     - On active tasks, the swipe-to-delete coexists with the "Done" button — swipe reveals Delete behind the card while Done remains visible on the card surface.
 - **Delete Confirmation**: The "Delete" button is revealed behind the card, and clicking it confirms the deletion.
-- **Remove Inline Delete Button**: The current delete button (Trash2 icon) on the task card is removed.
+- **Remove Inline Delete Button**: The current delete button (Trash2 icon) on the task card is removed. **Behavioral change**: completed tasks currently have an individual delete button — after this change, completed tasks can only be removed via batch clear (Reset/Clear). This is intentional: completed tasks are history, not actionable items.
 
 ## Gesture Conflict Resolution (DnD vs. Swipe)
 Three interaction layers share the card surface: interactive elements (inputs, buttons), swipe-to-delete, and drag-to-reorder. Resolution order:
@@ -28,7 +28,8 @@ Three interaction layers share the card surface: interactive elements (inputs, b
 
 ## Acceptance Criteria
 - [ ] Task cards no longer have the `GripHorizontal` drag handle or the empty spacer div.
-- [ ] Dragging from anywhere on a task card (outside interactive elements) initiates reordering (after hold delay).
+- [ ] Dragging from anywhere on a non-completed task card (outside interactive elements) initiates reordering (after hold delay).
+- [ ] Completed tasks cannot be dragged to reorder.
 - [ ] Interactive elements (inline edit inputs, Play/Pause/Done buttons) remain functional and do not trigger drag or swipe.
 - [ ] Swiping a pending, paused, or active task from right to left (no delay needed) reveals a "Delete" button behind the card.
 - [ ] Completed tasks do not support swipe-to-delete.
@@ -37,6 +38,11 @@ Three interaction layers share the card surface: interactive elements (inputs, b
 - [ ] The existing inline delete button (Trash2) within the task card is gone.
 - [ ] Keyboard users can trigger delete via `Delete` key or equivalent fallback.
 - [ ] Right-to-left gesture always triggers swipe-to-delete, never reorder.
+- [ ] On active tasks, swipe-to-delete coexists with the "Done" button — swipe reveals Delete behind the card while Done remains visible and functional on the card surface.
+- [ ] When a drag-to-reorder begins on any card, all other cards with a revealed swipe-delete area automatically dismiss (snap back to closed).
+- [ ] Keyboard `Delete` key only triggers task removal when the card itself is focused, not when an inner interactive element (e.g., InlineEdit input) has focus.
+- [ ] Deleting an active task (via swipe or keyboard) stops the timer and auto-advances to the next pending task (same behavior as completing a task).
+- [ ] Vertical scrolling of the task list is not intercepted by horizontal swipe gestures — `touch-action: pan-y` on the card container allows vertical scroll while capturing horizontal gestures.
 
 ## Out of Scope
 - Changing the overall app layout (only task card-level interaction refinements).
