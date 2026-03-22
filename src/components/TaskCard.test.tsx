@@ -369,7 +369,59 @@ describe('TaskCard (Pure Visual)', () => {
       
       expect(containerOnPointerDown).not.toHaveBeenCalled();
     });
+
+    it('stops propagation on onTouchStart for Play button (prevents TouchSensor activation)', () => {
+      const containerOnTouchStart = vi.fn();
+      render(
+        <div onTouchStart={containerOnTouchStart}>
+          <TaskCard
+            task={mockTask}
+            isActive={false}
+            isCompleted={false}
+            onToggle={vi.fn()}
+            onDelete={vi.fn()}
+            onTitleSave={vi.fn()}
+            onDurationSave={vi.fn()}
+            onComplete={vi.fn()}
+          />
+        </div>
+      );
+
+      const playButton = screen.getByLabelText(/Play task/i);
+      const event = new TouchEvent('touchstart', {
+        bubbles: true,
+        cancelable: true,
+      });
+      playButton.dispatchEvent(event);
+
+      expect(containerOnTouchStart).not.toHaveBeenCalled();
+    });
+
+    it('stops propagation on onTouchStart for Done button (prevents TouchSensor activation)', () => {
+      const containerOnTouchStart = vi.fn();
+      render(
+        <div onTouchStart={containerOnTouchStart}>
+          <TaskCard
+            task={mockTask}
+            isActive={true}
+            isCompleted={false}
+            onComplete={vi.fn()}
+            onDelete={vi.fn()}
+            onToggle={vi.fn()}
+            onTitleSave={vi.fn()}
+            onDurationSave={vi.fn()}
+          />
+        </div>
+      );
+
+      const doneButton = screen.getByRole('button', { name: /Done/i });
+      const event = new TouchEvent('touchstart', {
+        bubbles: true,
+        cancelable: true,
+      });
+      doneButton.dispatchEvent(event);
+
+      expect(containerOnTouchStart).not.toHaveBeenCalled();
+    });
   });
 });
-
-

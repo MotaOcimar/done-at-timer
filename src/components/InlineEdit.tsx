@@ -86,6 +86,8 @@ export const InlineEdit = ({
           onBlur={handleSave}
           onKeyDown={handleKeyDown}
           onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
           className={`row-start-1 col-start-1 bg-transparent text-inherit border-b border-blue-500/30 focus:border-blue-500/60 outline-none px-1 -mx-1 min-w-0 transition-colors font-[inherit] ${className}`}
           aria-label={ariaLabel}
         />
@@ -99,6 +101,8 @@ export const InlineEdit = ({
         e.stopPropagation();
         setIsEditing(true);
       }}
+      onPointerDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
       className={`cursor-pointer hover:bg-black/5 rounded px-1 -mx-1 transition-colors border border-transparent ${className}`}
       role="button"
       tabIndex={0}

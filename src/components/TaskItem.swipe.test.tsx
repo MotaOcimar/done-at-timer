@@ -69,7 +69,8 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
     // and be distinct from the task content
     const deleteButton = screen.getByRole('button', { name: /^Delete$/ });
     expect(deleteButton).toBeInTheDocument();
-    expect(deleteButton.parentElement).toHaveClass('bg-red-500'); // Check for red background behind
+    // bg-red-500 is on the wrapper div (grandparent of the button)
+    expect(deleteButton.parentElement?.parentElement).toHaveClass('bg-red-500');
   });
 
   it('calls onDelete when the revealed Delete button is clicked', () => {
@@ -110,7 +111,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
     const onDelete = vi.fn();
     render(<TaskItem task={task} onDelete={onDelete} />);
     
-    const card = screen.getByTestId('task-card');
+    const card = screen.getByTestId('task-item-container');
     fireEvent.keyDown(card, { key: 'Delete', code: 'Delete' });
     
     expect(onDelete).toHaveBeenCalledWith(task.id);

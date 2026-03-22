@@ -35,7 +35,9 @@ describe('Manual Confirmation Integration', () => {
     expect(useTaskStore.getState().tasks[0].status).toBe('IN_PROGRESS');
 
     // UI should show Done button (prominent one for TimeUp)
-    const doneBtn = screen.getByRole('button', { name: /Done/i });
+    // Use a more specific selector because the card container also has role="button" from dnd-kit
+    const doneBtn = screen.getAllByRole('button', { name: /Done/i }).find(el => el.tagName === 'BUTTON');
+    if (!doneBtn) throw new Error('Done button not found');
     expect(doneBtn).toBeInTheDocument();
 
     // Click Done

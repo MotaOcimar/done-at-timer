@@ -35,8 +35,9 @@ describe('Playlist Execution Integration', () => {
     expect(task1Title.parentElement?.tagName).toBe('H3');
     expect(task1Title.parentElement).toHaveClass('font-bold');
 
-    // Mark as Done
-    const doneBtn = screen.getByRole('button', { name: /Done/i });
+    // Mark as Done - Use a more specific selector because the card container also has role="button" from dnd-kit
+    const doneBtn = screen.getAllByRole('button', { name: /Done/i }).find(el => el.tagName === 'BUTTON');
+    if (!doneBtn) throw new Error('Done button not found');
     fireEvent.click(doneBtn);
 
     // Task 1 should be COMPLETED, Task 2 should be IN_PROGRESS (pela lógica de onComplete automática)
