@@ -1,13 +1,11 @@
 import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
-import type { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
 import { 
   CheckCircle2, 
   Clock, 
   Play, 
   Pause, 
-  GripHorizontal, 
   Trash2, 
   MapPin,
   MapPinCheckInside
@@ -23,11 +21,6 @@ interface TaskCardProps {
   progress?: number;
   isActuallyPaused?: boolean;
   eta?: Date;
-  // Drag-and-drop props (optional for overlay)
-  setNodeRef?: (node: HTMLElement | null) => void;
-  style?: React.CSSProperties;
-  attributes?: DraggableAttributes;
-  listeners?: DraggableSyntheticListeners;
   // Callbacks
   onDelete: (id: string) => void;
   onToggle: (e: React.MouseEvent) => void;
@@ -82,6 +75,7 @@ const StatusIcon = ({
       <div className={baseClasses}>
         <button
           onClick={onToggle}
+          onPointerDown={(e) => e.stopPropagation()}
           className={`flex items-center justify-center w-full h-full rounded-full transition-colors ${activeClass || ''}`}
           aria-label={isPaused ? 'Resume' : 'Pause'}
         >
@@ -99,6 +93,7 @@ const StatusIcon = ({
     <div className={baseClasses}>
       <button
         onClick={onToggle}
+        onPointerDown={(e) => e.stopPropagation()}
         className={`flex items-center justify-center w-full h-full rounded-full group transition-colors ${iconButtonClasses.idle}`}
         aria-label="Play task"
       >
@@ -124,10 +119,6 @@ const TaskCard = ({
   progress = 0, 
   isActuallyPaused = false,
   eta,
-  setNodeRef,
-  style,
-  attributes,
-  listeners,
   onDelete,
   onToggle,
   onTitleSave,
@@ -181,28 +172,11 @@ const TaskCard = ({
 
   return (
     <div 
-      ref={setNodeRef}
-      style={style}
       className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
         cardClasses[cardState]
       } ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
     >
       <div className="flex items-center gap-4">
-        {/* Drag Handle - Only for PENDING tasks */}
-        {!isActive && !isCompleted ? (
-          <div 
-            {...attributes} 
-            {...listeners}
-            style={{ touchAction: 'none' }}
-            className={`flex-shrink-0 cursor-grab active:cursor-grabbing p-1 -ml-1 text-gray-300 hover:text-gray-500 transition-colors ${isDragging ? 'cursor-grabbing' : ''}`}
-            aria-label="Drag to reorder"
-          >
-            <GripHorizontal size={20} strokeWidth={2} />
-          </div>
-        ) : (
-          <div className="w-5 flex-shrink-0" />
-        )}
-
         {/* Consistent Status Icon Area */}
         <div className="flex-shrink-0">
           <StatusIcon 
@@ -248,6 +222,7 @@ const TaskCard = ({
             {isActive && (
               <button
                 onClick={(e) => { e.stopPropagation(); onComplete(); }}
+                onPointerDown={(e) => e.stopPropagation()}
                 className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-wide transition-all shadow-lg ${
                   isTimeUp 
                     ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100' 
@@ -261,6 +236,7 @@ const TaskCard = ({
             {!isActive && (
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
+                onPointerDown={(e) => e.stopPropagation()}
                 className="p-2 text-gray-300 hover:text-red-500 transition-colors"
                 aria-label="Delete task"
               >

@@ -277,35 +277,99 @@ describe('TaskCard (Pure Visual)', () => {
     expect(completedEta).not.toHaveClass('text-[10px]');
   });
 
-  it('hides drag handle for active tasks', () => {
-    render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
-        onDelete={vi.fn()}
-        onToggle={vi.fn()}
-        onTitleSave={vi.fn()}
-        onDurationSave={vi.fn()}
-        onComplete={vi.fn()}
-      />
-    );
-    expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
-  });
+  describe('Phase 1: Reordering & Cleanup', () => {
+    it('does not render GripHorizontal icon or spacer div for any task', () => {
+      const { container, rerender } = render(
+        <TaskCard 
+          task={mockTask} 
+          isActive={false} 
+          isCompleted={false} 
+          onDelete={vi.fn()}
+          onToggle={vi.fn()}
+          onTitleSave={vi.fn()}
+          onDurationSave={vi.fn()}
+          onComplete={vi.fn()}
+        />
+      );
+      
+      // GripHorizontal is typically rendered as an svg or a div with aria-label
+      expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
+      // Check for spacer div (w-5 flex-shrink-0)
+      const spacer = container.querySelector('.w-5.flex-shrink-0');
+      expect(spacer).not.toBeInTheDocument();
 
-  it('hides drag handle for completed tasks', () => {
-    render(
-      <TaskCard 
-        task={{ ...mockTask, status: 'COMPLETED' }} 
-        isActive={false} 
-        isCompleted={true} 
-        onDelete={vi.fn()}
-        onToggle={vi.fn()}
-        onTitleSave={vi.fn()}
-        onDurationSave={vi.fn()}
-        onComplete={vi.fn()}
-      />
-    );
-    expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
+      // Rerender as active
+      rerender(
+        <TaskCard 
+          task={mockTask} 
+          isActive={true} 
+          isCompleted={false} 
+          onDelete={vi.fn()}
+          onToggle={vi.fn()}
+          onTitleSave={vi.fn()}
+          onDurationSave={vi.fn()}
+          onComplete={vi.fn()}
+        />
+      );
+      expect(container.querySelector('.w-5.flex-shrink-0')).not.toBeInTheDocument();
+    });
+
+    it('stops propagation on onPointerDown for Play/Pause button', () => {
+      const onToggle = vi.fn();
+      const containerOnPointerDown = vi.fn();
+      render(
+        <div onPointerDown={containerOnPointerDown}>
+          <TaskCard 
+            task={mockTask} 
+            isActive={false} 
+            isCompleted={false} 
+            onToggle={onToggle}
+            onDelete={vi.fn()}
+            onTitleSave={vi.fn()}
+            onDurationSave={vi.fn()}
+            onComplete={vi.fn()}
+          />
+        </div>
+      );
+
+      const playButton = screen.getByLabelText(/Play task/i);
+      const event = new MouseEvent('pointerdown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      playButton.dispatchEvent(event);
+      
+      expect(containerOnPointerDown).not.toHaveBeenCalled();
+    });
+
+    it('stops propagation on onPointerDown for Done button', () => {
+      const onComplete = vi.fn();
+      const containerOnPointerDown = vi.fn();
+      render(
+        <div onPointerDown={containerOnPointerDown}>
+          <TaskCard 
+            task={mockTask} 
+            isActive={true} 
+            isCompleted={false} 
+            onComplete={onComplete}
+            onDelete={vi.fn()}
+            onToggle={vi.fn()}
+            onTitleSave={vi.fn()}
+            onDurationSave={vi.fn()}
+          />
+        </div>
+      );
+
+      const doneButton = screen.getByRole('button', { name: /Done/i });
+      const event = new MouseEvent('pointerdown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      doneButton.dispatchEvent(event);
+      
+      expect(containerOnPointerDown).not.toHaveBeenCalled();
+    });
   });
 });
+
+
