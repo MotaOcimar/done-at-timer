@@ -88,7 +88,7 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
         3. **Use `@testing-library/user-event`** with pointer event sequences if the environment supports it.
     - [ ] Write a small proof-of-concept test using the chosen strategy. Confirm it can: (a) trigger a swipe reveal, (b) verify the Delete button appears, (c) dismiss the reveal.
     - [ ] Document the hook API and chosen test strategy in this task's commit note so Phase 2 follows consistently.
-- [ ] Task: Write failing tests for Phase 2 (TDD Red)
+- [x] Task: Write failing tests for Phase 2 (TDD Red) 48fafbd
     - [ ] Using the strategy validated in the spike, test that right-to-left swipe on a non-completed task reveals a "Delete" button.
     - [ ] Test that clicking the revealed Delete button calls `removeTask`.
     - [ ] Test that completed tasks do not have swipe-to-delete (no Delete button rendered, swipe has no effect).
