@@ -9,6 +9,124 @@
 5. **User Experience First:** Every decision should prioritize user experience
 6. **Non-Interactive & CI-Aware:** Prefer non-interactive commands. Use `CI=true` for watch-mode tools (tests, linters) to ensure single execution.
 
+## Plan Creation
+
+Before any implementation begins, a **plan** must be created from the track's **spec**. The plan is the bridge between _what_ to build (spec) and _how_ to build it (code). Its goal is to make execution as mechanical as possible — the developer (human or AI) should be able to follow the plan step-by-step without having to make architectural or testing decisions on the fly.
+
+### Prerequisites
+
+Before writing a plan, read and internalize:
+- The track's `spec.md` (what to build)
+- `product.md` and `product-guidelines.md` (user-facing context)
+- `tech-stack.md` (available tools and libraries)
+- The current codebase (files, patterns, and conventions already in place)
+
+### Plan Structure
+
+Every `plan.md` follows this structure:
+
+```markdown
+# Implementation Plan: [Feature Name]
+
+## Technical Context
+[Relevant files, libraries, current state — with file paths and line numbers]
+
+## Phase 1: [Title]
+- [ ] Task: **RED** — [test description]
+- [ ] Task: **GREEN** — [implementation description]
+- [ ] Task: **REFACTOR** — [cleanup description]
+- [ ] Task: Manual verification
+    - [ ] [Concrete step: what to do and what to expect]
+    - [ ] [Concrete step: what to do and what to expect]
+
+## Phase 2: [Title]
+...
+```
+
+### Technical Context
+
+The plan starts with a **Technical Context** section that maps the current state of the codebase relevant to the track. This gives the developer immediate orientation without having to explore. Include:
+- File paths and line numbers for code that will be modified
+- Library versions and existing configurations
+- Store actions, hooks, or utilities that will be reused
+- Any constraints or gotchas discovered during plan research
+
+### Phase Decomposition
+
+Break the spec into **phases** — each phase is a deployable, verifiable increment:
+- Each phase should deliver a cohesive unit of functionality that can be manually verified
+- Phases are sequential — Phase 2 may depend on Phase 1's output
+- Every phase ends with a **Manual verification** task containing concrete, specific sub-steps (see below)
+- Name phases descriptively: `Phase 1: Core Hook Logic`, not `Phase 1: Part A`
+
+### Task Granularity
+
+Tasks are the atomic units of work. Each task should be completable in a single commit:
+- Use imperative names: "Create...", "Remove...", "Wire...", "Add..."
+- A task that requires more than ~3 files changed is likely too coarse — split it
+- A task that changes a single line is likely too fine — merge it with related work
+- Include specific file paths, function names, and line numbers when known
+
+### TDD by Design
+
+TDD is not left to the developer's discretion — it is **embedded in the plan** as explicit tasks:
+
+- **RED tasks** (`Task: **RED** — ...`) define _what tests to write_ and _what they should assert_. Be specific: "Write test asserting `useSwipeToReveal` returns `isRevealed: false` initially", not "Write tests for swipe".
+- **GREEN tasks** (`Task: **GREEN** — ...`) define _what to implement_ to make the RED tests pass. These describe the minimum implementation, not the ideal one.
+- **REFACTOR tasks** (`Task: **REFACTOR** — ...`) define cleanup opportunities: extract duplication, rename for clarity, simplify conditionals. These are optional but should be included when the GREEN implementation is expected to be rough.
+
+**When TDD doesn't apply:** Pure visual changes (CSS-only, animation tuning) that cannot be meaningfully validated by the test environment (happy-dom/jsdom) do not need RED/GREEN/REFACTOR labels. State this explicitly in the task: _"No TDD — pure CSS change, verified manually."_
+
+### SOLID by Design
+
+Architectural decisions that involve SOLID principles must be made **during plan creation**, not during implementation. The developer should not have to decide whether to create an abstraction — the plan should already specify it.
+
+Apply SOLID judiciously:
+- **SRP (Single Responsibility):** If a component or hook already manages multiple concerns, the plan should extract new logic into a dedicated unit. Example: _"Swipe gesture logic lives in a dedicated `useSwipeToReveal` hook — `TaskItem` already manages DnD, timer, and task lifecycle."_
+- **DIP (Dependency Inversion):** When wrapping a browser API (Notification, Vibration, ServiceWorker), the plan should specify an abstraction layer so tests can mock it. Example: _"Create `src/utils/haptics.ts` with a `triggerHaptic()` wrapper that gates behind `'vibrate' in navigator`."_
+- **ISP / OCP / LSP:** Apply only when they solve a concrete problem, not preemptively.
+
+**The over-engineering guard:** Before adding an abstraction to the plan, ask: _"Does this solve a problem that exists right now, or one I'm imagining?"_ A 3-line inline solution is better than a premature abstraction. If the only consumer is one file, an interface/abstraction layer is overhead. Call it out when you choose NOT to abstract — this shows the decision was deliberate: _"Acceptable coupling — only `TaskItem` + `useSwipeToReveal` would need to change if the library were ever swapped."_
+
+### Manual Verification Steps
+
+Every phase ends with a **Manual verification** task. Unlike RED/GREEN/REFACTOR, this task isn't about code — it tells the user exactly what to do in the browser and what to expect. The steps are written **during plan creation**, not improvised at execution time.
+
+Write steps that are:
+- **Actionable:** "Add 3 tasks, start the first one, swipe the second left" — not "verify it works"
+- **Observable:** "A red Delete button appears behind the card" — not "the swipe works correctly"
+- **Specific to the phase:** Test what this phase introduced, not the whole app
+
+Example for a swipe-to-delete phase:
+```markdown
+- [ ] Task: Manual verification
+    - [ ] Add 3 tasks. Swipe the middle task from right to left → a red "Delete" button appears behind the card
+    - [ ] Tap "Delete" → the task is removed from the list
+    - [ ] Swipe a task left, then swipe it back right → the Delete button hides, task stays
+    - [ ] Start a task (make it active). Swipe it left → Delete still works on active tasks
+    - [ ] Complete a task. Try swiping it → nothing happens (completed tasks don't swipe)
+    - [ ] On mobile: swipe feels smooth, no conflict with vertical scrolling
+```
+
+For PWA/Service Worker changes, include build + preview steps:
+```markdown
+- [ ] Task: Manual verification
+    - [ ] Run `npm run build && npm run preview`, open `http://localhost:4173/done-at-timer/`
+    - [ ] DevTools → Application → Service Workers → SW is registered and active
+    - [ ] Toggle offline in DevTools Network tab → app still loads and functions
+```
+
+### Conflict and Strategy Sections
+
+When the feature involves interactions that could conflict (e.g., gestures competing for the same input surface), add a **strategy section** between Technical Context and the phases. This section:
+- Enumerates the conflicting layers and their priority order
+- Describes the resolution approach with enough detail that the developer doesn't need to re-derive it
+- Calls out non-obvious timing constraints (e.g., _"Direction is unknown at `pointerdown` time — determined only after first `pointermove`"_)
+
+### Methodology Notes
+
+If a phase uses a non-standard approach (e.g., skipping TDD for CSS, using a spike before RED), add a brief methodology note at the phase level. Example: _"Animation tuning is aesthetic (no tests needed), but haptic feedback is new functionality and follows TDD."_
+
 ## Task Workflow
 
 All tasks follow a strict lifecycle:
@@ -19,54 +137,48 @@ All tasks follow a strict lifecycle:
 
 2. **Mark In Progress:** Before beginning work, edit `plan.md` and change the task from `[ ]` to `[~]`
 
-3. **Write Failing Tests (Red Phase):**
-   - Create a new test file for the feature or bug fix.
-   - Write one or more unit tests that clearly define the expected behavior and acceptance criteria for the task.
-   - **CRITICAL:** Run the tests and confirm that they fail as expected. This is the "Red" phase of TDD. Do not proceed until you have failing tests.
+3. **Execute the Task:**
+   - The plan already specifies whether this task is **RED**, **GREEN**, **REFACTOR**, or non-TDD. Follow the plan's instructions — do not improvise the testing strategy.
+   - **RED tasks:** Write the tests exactly as described in the plan. Run them and confirm they fail. Do not proceed to the next task until the tests fail as expected.
+   - **GREEN tasks:** Write the minimum code to make the RED tests pass. Run the test suite and confirm all tests pass.
+   - **REFACTOR tasks:** Improve clarity, remove duplication, or simplify — without changing external behavior. Rerun tests to confirm they still pass.
+   - **Non-TDD tasks** (CSS-only, animation tuning, documentation): Execute as described. These tasks should be explicitly marked in the plan as not requiring TDD.
 
-4. **Implement to Pass Tests (Green Phase):**
-   - Write the minimum amount of application code necessary to make the failing tests pass.
-   - Run the test suite again and confirm that all tests now pass. This is the "Green" phase.
-
-5. **Refactor (Optional but Recommended):**
-   - With the safety of passing tests, refactor the implementation code and the test code to improve clarity, remove duplication, and enhance performance without changing the external behavior.
-   - Rerun tests to ensure they still pass after refactoring.
-
-6. **Verify Coverage:** Run coverage reports using the project's chosen tools. For example, in a Python project, this might look like:
+4. **Verify Coverage:** Run coverage reports:
 
    ```bash
-   pytest --cov=app --cov-report=html
+   npx vitest run --coverage
    ```
 
-   Target: >80% coverage for new code. The specific tools and commands will vary by language and framework.
+   Target: >80% coverage for new code.
 
-7. **Document Deviations:** If implementation differs from tech stack:
+5. **Document Deviations:** If implementation differs from tech stack:
    - **STOP** implementation
    - Update `tech-stack.md` with new design
    - Add dated note explaining the change
    - Resume implementation
 
-8. **Commit Code Changes:**
+6. **Commit Code Changes:**
    - Stage all code changes related to the task.
-   - Propose a clear, concise commit message e.g, `feat(ui): Create basic HTML structure for calculator`.
+   - Propose a clear, concise commit message e.g, `feat(ui): Add swipe-to-delete gesture on task cards`.
    - Perform the commit.
 
-9. **Attach Task Summary with Git Notes:**
-   - **Step 9.1: Get Commit Hash:** Obtain the hash of the _just-completed commit_ (`git log -1 --format="%H"`).
-   - **Step 9.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
-   - **Step 9.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
+7. **Attach Task Summary with Git Notes:**
+   - **Step 7.1: Get Commit Hash:** Obtain the hash of the _just-completed commit_ (`git log -1 --format="%H"`).
+   - **Step 7.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
+   - **Step 7.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
      ```bash
      # The note content from the previous step is passed via the -m flag.
      git notes add -m "<note content>" <commit_hash>
      ```
 
-10. **Get and Record Task Commit SHA:**
-    - **Step 10.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the _just-completed commit's_ commit hash.
-    - **Step 10.2: Write Plan:** Write the updated content back to `plan.md`.
+8. **Get and Record Task Commit SHA:**
+    - **Step 8.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the _just-completed commit's_ commit hash.
+    - **Step 8.2: Write Plan:** Write the updated content back to `plan.md`.
 
-11. **Commit Plan Update:**
+9. **Commit Plan Update:**
     - **Action:** Stage the modified `plan.md` file.
-    - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create user model' as complete`).
+    - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create swipe hook' as complete`).
 
 ### Phase Completion Verification and Checkpointing Protocol
 
@@ -88,35 +200,12 @@ All tasks follow a strict lifecycle:
     - Execute the announced command.
     - If tests fail, you **must** inform the user and begin debugging. You may attempt to propose a fix a **maximum of two times**. If the tests still fail after your second proposed fix, you **must stop**, report the persistent failure, and ask the user for guidance.
 
-4.  **Propose a Detailed, Actionable Manual Verification Plan:**
-    - **CRITICAL:** To generate the plan, first analyze `product.md`, `product-guidelines.md`, and `plan.md` to determine the user-facing goals of the completed phase.
-    - You **must** generate a step-by-step plan that walks the user through the verification process, including any necessary commands and specific, expected outcomes.
-    - The plan you present to the user **must** follow this format:
-
-      **For a Frontend Change:**
-
-      ```
-      The automated tests have passed. For manual verification, please follow these steps:
-
-      **Manual Verification Steps:**
-      1.  **Start the development server with the command:** `npm run dev`
-      2.  **Open your browser to:** `http://localhost:3000`
-      3.  **Confirm that you see:** The new user profile page, with the user's name and email displayed correctly.
-      ```
-
-      **For a Backend Change:**
-
-      ```
-      The automated tests have passed. For manual verification, please follow these steps:
-
-      **Manual Verification Steps:**
-      1.  **Ensure the server is running.**
-      2.  **Execute the following command in your terminal:** `curl -X POST http://localhost:8080/api/v1/users -d '{"name": "test"}'`
-      3.  **Confirm that you receive:** A JSON response with a status of `201 Created`.
-      ```
+4.  **Present Manual Verification Steps:**
+    - Read the **Manual verification** task from the phase in `plan.md` — the concrete steps were already defined during plan creation.
+    - Present these steps to the user and start the dev server if needed (`npm run dev`).
 
 5.  **Await Explicit User Feedback:**
-    - After presenting the detailed plan, ask the user for confirmation: "**Does this meet your expectations? Please confirm with yes or provide feedback on what needs to be changed.**"
+    - Ask the user for confirmation: "**Does this meet your expectations? Please confirm with yes or provide feedback on what needs to be changed.**"
     - **PAUSE** and await the user's response. Do not proceed without an explicit yes or confirmation.
 
 6.  **Create Checkpoint Commit:**
@@ -145,8 +234,8 @@ Before marking any task complete, verify:
 - [ ] All tests pass
 - [ ] Code coverage meets requirements (>80%)
 - [ ] Code follows project's code style guidelines (as defined in `code_styleguides/`)
-- [ ] All public functions/methods are documented (e.g., docstrings, JSDoc, GoDoc)
-- [ ] Type safety is enforced (e.g., type hints, TypeScript types, Go types)
+- [ ] All public functions/methods are documented (JSDoc where non-obvious)
+- [ ] Type safety is enforced (TypeScript strict mode, no `any`)
 - [ ] No linting or static analysis errors (using the project's configured tools)
 - [ ] Works correctly on mobile (if applicable)
 - [ ] Documentation updated if needed
@@ -154,30 +243,30 @@ Before marking any task complete, verify:
 
 ## Development Commands
 
-**AI AGENT INSTRUCTION: This section should be adapted to the project's specific language, framework, and build tools.**
-
 ### Setup
 
 ```bash
-# Example: Commands to set up the development environment (e.g., install dependencies, configure database)
-# e.g., for a Node.js project: npm install
-# e.g., for a Go project: go mod tidy
+npm install
 ```
 
 ### Daily Development
 
 ```bash
-# Example: Commands for common daily tasks (e.g., start dev server, run tests, lint, format)
-# e.g., for a Node.js project: npm run dev, npm test, npm run lint
-# e.g., for a Go project: go run main.go, go test ./..., go fmt ./...
+npm run dev              # Dev server at http://localhost:5173
+npm test                 # Run all tests (single pass)
+npm run test:watch       # Run tests in watch mode
+npm run lint             # ESLint check
+npm run format           # Prettier fix
+npx vitest run src/path/to/file.test.ts  # Run a single test file
 ```
 
 ### Before Committing
 
 ```bash
-# Example: Commands to run all pre-commit checks (e.g., format, lint, type check, run tests)
-# e.g., for a Node.js project: npm run check
-# e.g., for a Go project: make check (if a Makefile exists)
+npm run check            # Prettier check (no fix)
+npm run lint             # ESLint check
+CI=true npm test         # Full test suite
+npm run build            # TypeScript check + Vite build
 ```
 
 ## Testing Requirements
@@ -191,10 +280,10 @@ Before marking any task complete, verify:
 
 ### Integration Testing
 
-- Test complete user flows
-- Verify database transactions
-- Test authentication and authorization
-- Check form submissions
+- Test complete user flows (add tasks, start timer, complete routine)
+- Test state persistence across page reloads (localStorage/Zustand)
+- Test PWA lifecycle (install, offline, update)
+- Test drag-and-drop and touch gesture interactions
 
 ### Mobile Testing
 
@@ -227,15 +316,14 @@ Before requesting review:
    - Coverage adequate (>80%)
 
 4. **Security**
-   - No hardcoded secrets
-   - Input validation present
-   - SQL injection prevented
-   - XSS protection in place
+   - No hardcoded secrets or API keys
+   - User input sanitized (XSS prevention)
+   - Dependencies free of known vulnerabilities
 
 5. **Performance**
-   - Database queries optimized
-   - Images optimized
-   - Caching implemented where needed
+   - No unnecessary re-renders (React profiler)
+   - Assets optimized (images, bundle size)
+   - Timer/interval cleanup on unmount
 
 6. **Mobile Experience**
    - Touch targets adequate (44x44px)
@@ -268,10 +356,10 @@ Before requesting review:
 ### Examples
 
 ```bash
-git commit -m "feat(auth): Add remember me functionality"
-git commit -m "fix(posts): Correct excerpt generation for short posts"
-git commit -m "test(comments): Add tests for emoji reaction limits"
-git commit -m "style(mobile): Improve button touch targets"
+git commit -m "feat(timer): Add intermediate arrival times per task"
+git commit -m "fix(ui): Correct arrival clock z-index over modals"
+git commit -m "test(store): Add tests for routine save and load"
+git commit -m "refactor(ui): Remove drag handle in favor of whole-card drag"
 ```
 
 ## Definition of Done
@@ -296,51 +384,32 @@ A task is complete when:
 2. Write failing test for bug
 3. Implement minimal fix
 4. Test thoroughly including mobile
-5. Deploy immediately
+5. Deploy immediately via `npm run deploy`
 6. Document in plan.md
-
-### Data Loss
-
-1. Stop all write operations
-2. Restore from latest backup
-3. Verify data integrity
-4. Document incident
-5. Update backup procedures
-
-### Security Breach
-
-1. Rotate all secrets immediately
-2. Review access logs
-3. Patch vulnerability
-4. Notify affected users (if any)
-5. Document and update security procedures
 
 ## Deployment Workflow
 
 ### Pre-Deployment Checklist
 
-- [ ] All tests passing
+- [ ] All tests passing (`CI=true npm test`)
 - [ ] Coverage >80%
-- [ ] No linting errors
+- [ ] No linting errors (`npm run lint`)
+- [ ] Build succeeds (`npm run build`)
 - [ ] Mobile testing complete
-- [ ] Environment variables configured
-- [ ] Database migrations ready
-- [ ] Backup created
+- [ ] Service worker update verified
 
 ### Deployment Steps
 
 1. Merge feature branch to main
-2. Tag release with version
-3. Push to deployment service
-4. Run database migrations
-5. Verify deployment
-6. Test critical paths
-7. Monitor for errors
+2. Checkout main and pull latest
+3. Run `npm run deploy` (builds and pushes to `gh-pages` branch)
+4. Verify at https://\<username\>.github.io/done-at-timer/
+5. Test critical paths (add tasks, start timer, arrival clock, offline mode)
 
 ### Post-Deployment
 
-1. Monitor analytics
-2. Check error logs
+1. Verify PWA update prompt appears for returning users
+2. Test on mobile device (install, offline, notifications)
 3. Gather user feedback
 4. Plan next iteration
 
