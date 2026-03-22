@@ -126,7 +126,7 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
 - [x] Task: Refactor Phase 2 (TDD Refactor) b1bf5c8
     - [x] Review swipe implementation and test code for duplication and clarity.
     - [x] Run full test suite, confirm all tests pass.
-- [~] Task: Phase 2 Review Cleanup 4556bca, 07e0b74
+- [x] Task: Phase 2 Review Cleanup 4556bca, 07e0b74, 0838638
     - [x] Remove unused `Trash2` import from `TaskCard.tsx` — the inline delete button was removed but the import was left behind. (Note: keep `Trash2` available — it will be reused in the reveal layer below.)
     - [x] Stage and commit `src/components/InlineEdit.test.tsx` — test file was created but never tracked/committed.
     - [x] In `TaskItem.tsx`, move `onManualComplete` definition after the `useTimer` hook call — currently references `timeLeft` before it is defined (works via hoisting but is misleading).
@@ -136,39 +136,78 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
     - [x] Fix completed tasks appearing red — the reveal layer container applies `bg-red-500` unconditionally, bleeding through semi-transparent card backgrounds.
     - [x] Fix dragged tasks appearing red during reorder — `opacity-50` on drag exposes the red container.
     - [x] Consolidate red background fix — the current approach (excluding `bg-red-500` per-case with `!isCompleted && !isDragging`) is fragile; any animation that shifts or fades the card will leak red. Invert the logic: only apply `bg-red-500` when the swipe is active or revealed (`isSwipeActive || isRevealed`). These are the only two states where the red background needs to be visible. This replaces all per-case exclusions with a single positive condition.
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
-    - [ ] Add 3 tasks. Swipe a pending task from right to left → a red "Delete" button appears behind the card.
-    - [ ] Click "Delete" → the task is removed and list auto-advances if it was the active task.
-    - [ ] Swipe another task left, then swipe it back right → the Delete button hides, task stays.
-    - [ ] Start a task (Active). Swipe it left → Delete reveals, while "Done" button remains visible on the card.
-    - [ ] Complete a task. Try swiping it → nothing happens (completed tasks don't swipe).
-    - [ ] Focus a card (tab to it or click it) and press `Delete` key → task is removed.
-    - [ ] Focus an `InlineEdit` input, press `Delete` key → text is deleted but task remains.
-    - [ ] Swipe a task left (revealed), then start dragging another task to reorder → the swiped task automatically dismisses.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
+    - [x] Add 3 tasks. Swipe a pending task from right to left → a red "Delete" button appears behind the card.
+    - [x] Click "Delete" → the task is removed and list auto-advances if it was the active task.
+    - [x] Swipe another task left, then swipe it back right → the Delete button hides, task stays.
+    - [x] Start a task (Active). Swipe it left → Delete reveals, while "Done" button remains visible on the card.
+    - [x] Complete a task. Try swiping it → nothing happens (completed tasks don't swipe).
+    - [x] Focus a card (tab to it or click it) and press `Delete` key → task is removed.
+    - [x] Focus an `InlineEdit` input, press `Delete` key → text is deleted but task remains.
+    - [x] Swipe a task left (revealed), then start dragging another task to reorder → the swiped task automatically dismisses.
 
 
 ## Phase 3: Polish & Mobile Verification
-Refine the feel of interactions and verify they work well across devices. Animation tuning is aesthetic (no tests needed), but haptic feedback is new functionality and follows TDD.
+Refine the feel of interactions and verify they work well across devices.
 
-- [ ] Task: Tune swipe animation parameters
-    - [ ] Adjust `framer-motion` spring/tween config for the swipe reveal: test damping, stiffness, and duration to ensure the snap feels responsive but not jarring.
-    - [ ] Add elastic resistance when dragging beyond the reveal position (rubberband effect) so the user feels the boundary.
-    - [ ] Ensure the dismiss animation (snap back to `x: 0`) is quick and smooth (~200ms).
-- [ ] Task: Add haptic feedback on swipe reveal (TDD)
-    - [ ] **Red**: Write failing tests:
-        - Test that `triggerHaptic` (from `src/utils/haptics.ts`) is called when the swipe crosses the reveal threshold (mock the module via `vi.mock`).
-        - Test `triggerHaptic` unit: calls `navigator.vibrate(10)` when available, no-ops without error when unavailable.
+> **Blocks on**: Phase 2 manual verification must be completed first.
+
+- [ ] Task: Fix abrupt appearance of red background and trash icon during swipe (TDD)
+    - Root cause: `bg-red-500` and the trash icon are toggled on/off via late-activating conditions (`isSwipeActive` at 10px offset, `isRevealed` at drag-end). This causes the red to flash on suddenly and the icon to pop in, instead of being gradually revealed as the card slides.
+    - Fix: derive the red layer's opacity from the drag X offset using framer-motion's `useMotionValue` + `useTransform`. At x=0 → opacity=0 (invisible); at x=-revealWidth → opacity=1 (fully visible). The card naturally covers the reveal layer at rest — no toggling, no flash, no extra `bg-white` cover layer. During drag-to-reorder x stays at 0, so the red layer is invisible automatically.
+    - [x] Investigate root cause and document solution approach
+    - [ ] **Red**: Write/update failing tests:
+        - `TaskItem.swipe.test.tsx`: Keep existing `"does not render inline Trash2 button anymore"` test (still valid — inline TaskCard button is gone). Add **new** test: `"trash button is not keyboard-reachable when not revealed"` — assert delete button exists in DOM but has `tabIndex={-1}`.
+        - Add test: when `isRevealed: true`, the delete button has `tabIndex={0}` (keyboard-reachable).
+        - Add test: completed tasks have no delete button in the DOM (reveal layer not rendered).
+        - `useSwipeToReveal.test.ts`: Add test that the hook returns `x` (MotionValue) and `redOpacity` (derived MotionValue) in its output. (Pragmatic compromise — tests hook's public API surface consumed by `motion.div`, not pure behavior. Acceptable given JSDOM can't verify actual opacity transitions.)
+        - Run tests, confirm they fail.
     - [ ] **Green**: Implement:
-        - Create `src/utils/haptics.ts` with a `triggerHaptic(ms = 10)` wrapper that gates behind `'vibrate' in navigator`. This keeps the browser API behind a mockable module boundary (DIP-lite) without over-engineering an interface.
-        - Call `triggerHaptic()` from `useSwipeToReveal` when the swipe crosses the reveal threshold.
-    - [ ] **Limitation**: Vibration API is not supported on iOS Safari and has inconsistent support across browsers.
-- [ ] Task: Verify mobile touch targets and responsiveness
-    - [ ] Confirm the revealed Delete button meets 44x44px minimum on mobile viewports.
-    - [ ] Test that swipe and drag-to-reorder don't conflict on touch devices (especially the 250ms hold delay).
-    - [ ] Test on small screens (320px width) — ensure the revealed Delete area doesn't overflow or clip the card content.
-    - [ ] Verify that scrolling the task list vertically is not accidentally intercepted by swipe gestures.
-- [ ] Task: Run full test suite regression check
-    - [ ] Run `CI=true npm test` and confirm all Phase 1 and Phase 2 tests still pass after animation tuning.
-    - [ ] Verify no regressions were introduced by animation parameter changes.
+        - `useSwipeToReveal.ts`: Add `const x = useMotionValue(0)` and `const redOpacity = useTransform(x, [0, -revealWidth], [0, 1])`. Return `x` and `redOpacity` alongside existing outputs. Pass `x` into `dragProps.style`.
+        - `TaskItem.tsx` reveal layer: Replace conditional `(isSwipeActive || isRevealed)` bg-red-500 with an always-present (for non-completed) `<motion.div style={{ opacity: redOpacity }} className="absolute inset-0 bg-red-500 ...">` containing the trash button.
+        - `TaskItem.tsx` trash button: Add `tabIndex={isRevealed ? 0 : -1}`.
+        - Remove `isSwipeActive` from container className logic (no longer needed for red toggle).
+        - Run tests, confirm they pass.
+    - [ ] **Refactor**: Review that `isSwipeActive` is still needed only for `useSortable({ disabled })`. Check for dead code from the old toggle approach. Run full test suite.
+    - [ ] Verify (manual): swipe from first pixel → red and icon fade in smoothly (no flash). During drag-to-reorder, red layer is invisible (opacity=0).
+- [ ] Task: Tune swipe animation parameters (manual tuning — TDD exception)
+    - Depends on: "Fix abrupt appearance" task (modifies the same hook and motion.div).
+    - Animation parameter tuning is inherently subjective — config-value assertions (e.g., `dragElastic === 0.3`) test implementation, not behavior, and break on any feel adjustment. Entire task is manual tuning, exempt from TDD.
+    - [ ] Implement:
+        - Add `dragElastic: { left: 0.3, right: 0 }` to dragProps (rubberband past reveal boundary, no elasticity right).
+        - Set reveal/dismiss transition to `{ type: "tween", duration: 0.2 }`.
+    - [ ] **Visual tuning**: Adjust spring/tween values (damping, stiffness) until the snap feels responsive. Iterate on device.
+- [ ] Task: Add haptic feedback on swipe reveal (TDD)
+    - Depends on: "Fix abrupt appearance" task (both modify `useSwipeToReveal`'s drag handler).
+    - [ ] **Red**: Write failing tests:
+        - In new `src/utils/haptics.test.ts`: test `triggerHaptic` calls `navigator.vibrate(10)` when available, no-ops without error when unavailable.
+        - In `useSwipeToReveal.test.ts`: test that `triggerHaptic` (mocked via `vi.mock`) is called during `onDrag` when the swipe offset first crosses the reveal threshold. This gives tactile feedback *before* the user releases.
+        - Test that `triggerHaptic` is called only **once** even if `onDrag` fires multiple times past threshold in the same gesture (ref guard).
+        - Test that after a gesture ends and a **new** gesture crosses the threshold, `triggerHaptic` fires again (ref reset in `handleDragEnd`).
+        - Run tests, confirm they fail.
+    - [ ] **Green**: Implement:
+        - Create `src/utils/haptics.ts` with a `triggerHaptic(ms = 10)` wrapper that gates behind `'vibrate' in navigator` (DIP-lite — mockable module boundary without over-engineering an interface).
+        - Call `triggerHaptic()` from `useSwipeToReveal`'s `handleDrag` when the offset first crosses the threshold. Use a ref to fire only once per gesture, reset in `handleDragEnd`.
+    - [ ] **Refactor**: Review haptic integration — ensure threshold ref resets properly. Check for duplication between drag threshold logic and reveal threshold logic.
+    - **Limitation**: Vibration API is not supported on iOS Safari and has inconsistent support across browsers.
+- [ ] Task: Verify mobile touch targets and responsiveness (manual)
+    - Touch target sizing (44×44px) depends on padding + icon size, not specific CSS classes — JSDOM can't compute rendered dimensions. Verified manually only.
+    - [ ] Delete button has adequate touch target (≥44×44px) on device.
+    - [ ] Swipe and drag-to-reorder don't conflict on touch devices (especially the 250ms hold delay).
+    - [ ] On small screens (320px width) — revealed Delete area doesn't overflow or clip the card content.
+    - [ ] Scrolling the task list vertically is not accidentally intercepted by swipe gestures.
+- [ ] Task: Refactor Phase 3 (TDD Refactor)
+    - [ ] Review all Phase 3 changes holistically — opacity-from-X approach, animation config, haptic integration.
+    - [ ] Run full test suite (`CI=true npm test`), confirm all phases pass with no regressions.
 - [ ] Task: Update backlog — mark "Full Card Drag and Drop" and "Swipe to Delete" as done, referencing this track
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Polish & Mobile Verification' (Protocol in workflow.md)
+    - [ ] Swipe desde o primeiro pixel → red e ícone aparecem gradualmente (sem flash)
+    - [ ] Durante drag-to-reorder, sem vermelho visível (opacity=0 pois x=0)
+    - [ ] Drag-to-reorder com opacity-50 não vaza vermelho
+    - [ ] Animação de snap (reveal e dismiss) é fluida (~200ms)
+    - [ ] Rubberband: arrastar além do reveal width tem resistência elástica
+    - [ ] Haptic feedback funciona em Android/Chrome (vibração curta ao cruzar threshold)
+    - [ ] Delete button tem tamanho adequado para toque em mobile (≥44×44px)
+    - [ ] Em viewport 320px, reveal area não transborda
+    - [ ] Scroll vertical da lista não é interceptado pelo swipe horizontal
+    - [ ] Completed tasks: sem swipe, sem reveal layer, sem delete button

@@ -7,7 +7,7 @@ import { useTaskStore } from '../store/useTaskStore';
 // Mock framer-motion to check for LayoutGroup
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, layout, ...props }: any) => (
+    div: ({ children, layout, drag, dragConstraints, onDragStart, onDrag, onDragEnd, animate, ...props }: any) => (
       <div data-testid="motion-div" data-layout={layout?.toString()} {...props}>
         {children}
       </div>

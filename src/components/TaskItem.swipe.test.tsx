@@ -9,7 +9,7 @@ vi.mock('../hooks/useSwipeToReveal');
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: vi.fn(({ children, layout, ...props }) => (
+    div: vi.fn(({ children, layout, drag, dragConstraints, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
       <div data-testid="motion-div" data-layout={layout?.toString()} {...props}>
         {children}
       </div>
