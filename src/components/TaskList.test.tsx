@@ -15,6 +15,12 @@ vi.mock('framer-motion', () => ({
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   LayoutGroup: ({ children }: { children: React.ReactNode }) => <div data-testid="layout-group">{children}</div>,
+  useMotionValue: (initial: any) => ({
+    get: () => initial,
+    set: vi.fn(),
+    onChange: vi.fn(),
+  }),
+  useTransform: (_value: any, _input: any, output: any) => output[0],
 }));
 
 vi.mock('@dnd-kit/core', async (importOriginal) => {

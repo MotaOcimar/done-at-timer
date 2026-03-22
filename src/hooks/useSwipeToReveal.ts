@@ -1,4 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useMotionValue, useTransform } from 'framer-motion';
+import { triggerHaptic } from '../utils/haptics';
 
 export interface UseSwipeToRevealProps {
   id: string;
@@ -17,6 +19,10 @@ export const useSwipeToReveal = ({
 }: UseSwipeToRevealProps) => {
   const [isRevealed, setIsRevealed] = useState(false);
   const isSwipeActiveRef = useRef(false);
+  const hasTriggeredHapticRef = useRef(false);
+  
+  const x = useMotionValue(0);
+  const redOpacity = useTransform(x, [0, -revealWidth], [0, 1]);
 
   // Auto-dismiss when activeSwipeId changes to another task
   useEffect(() => {
@@ -24,6 +30,15 @@ export const useSwipeToReveal = ({
       setIsRevealed(false);
     }
   }, [activeSwipeId, id, isRevealed]);
+  
+  // Update x when isRevealed changes (for programmatic animation)
+  useEffect(() => {
+    if (!isRevealed) {
+      x.set(0);
+    } else {
+      x.set(-revealWidth);
+    }
+  }, [isRevealed, revealWidth, x]);
 
   const dismiss = useCallback(() => {
     setIsRevealed(false);
@@ -31,6 +46,7 @@ export const useSwipeToReveal = ({
 
   const handleDragStart = useCallback(() => {
     // Initial guess, will be refined in handleDrag
+    hasTriggeredHapticRef.current = false;
   }, []);
 
   const handleDrag = useCallback(
@@ -42,13 +58,21 @@ export const useSwipeToReveal = ({
         // Notify others to dismiss, passing our id as the new active swipe
         onSwipeDismissAll(id);
       }
+
+      // Trigger haptic when crossing threshold
+      const threshold = revealWidth / 2;
+      if (info.offset.x < -threshold && !hasTriggeredHapticRef.current) {
+        triggerHaptic(10);
+        hasTriggeredHapticRef.current = true;
+      }
     },
-    [id, onSwipeDismissAll]
+    [id, onSwipeDismissAll, revealWidth]
   );
 
   const handleDragEnd = useCallback(
     (_: any, info: any) => {
       isSwipeActiveRef.current = false;
+      hasTriggeredHapticRef.current = false;
       const threshold = revealWidth / 2;
       // If velocity is high or offset exceeds threshold
       const shouldReveal = info.offset.x < -threshold || info.velocity.x < -500;
@@ -65,13 +89,18 @@ export const useSwipeToReveal = ({
     isRevealed,
     isSwipeActive: isSwipeActiveRef.current,
     dismiss,
+    x,
+    redOpacity,
     dragProps: {
       drag: isEnabled ? ("x" as const) : false,
       dragConstraints: { left: -revealWidth, right: 0 },
+      dragElastic: { left: 0.3, right: 0 },
       onDragStart: handleDragStart,
       onDrag: handleDrag,
       onDragEnd: handleDragEnd,
       animate: { x: isRevealed ? -revealWidth : 0 },
+      style: { x },
+      transition: { type: "tween", duration: 0.2, ease: "easeOut" }
     },
   };
 };

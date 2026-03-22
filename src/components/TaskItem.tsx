@@ -43,6 +43,7 @@ const TaskItem = ({
   const {
     isRevealed,
     isSwipeActive,
+    redOpacity,
     dragProps
   } = useSwipeToReveal({
     id: task.id,
@@ -134,27 +135,32 @@ const TaskItem = ({
       data-testid="task-item-container"
       className="outline-none"
     >
-      <div className={`relative mb-3 rounded-2xl overflow-hidden ${(isSwipeActive || isRevealed) ? 'bg-red-500' : ''}`}>
+      <div className="relative mb-3 rounded-2xl overflow-hidden">
         {/* Reveal Area (Behind) */}
-        {isRevealed && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-6">
+        {!isCompleted && (
+          <motion.div 
+            style={{ opacity: redOpacity }}
+            className="absolute inset-0 bg-red-500 flex items-center justify-end pr-6"
+          >
             <button
               onClick={() => onDelete(task.id)}
               onPointerDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
               className="text-white hover:scale-110 transition-transform p-2"
               aria-label="Delete"
+              tabIndex={isRevealed ? 0 : -1}
+              aria-hidden={!isRevealed}
+              data-testid="delete-button"
             >
               <Trash2 size={24} strokeWidth={2.5} />
             </button>
-          </div>
+          </motion.div>
         )}
 
         {/* Swipeable Card */}
         <motion.div
           {...dragProps}
           layout={isDragging ? false : "position"}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
           className="relative"
         >
           <TaskCard

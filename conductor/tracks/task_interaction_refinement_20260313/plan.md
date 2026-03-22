@@ -77,7 +77,7 @@ Focus on removing the drag handles and enabling whole-card dragging while preser
     - [x] Remove redundant tests in `TaskCard.test.tsx`: `"hides drag handle for active tasks"` (line 280) and `"hides drag handle for completed tasks"` (line 296) — already covered more thoroughly by the Phase 1 test `"does not render GripHorizontal icon or spacer div for any task"` (line 313).
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Reordering & Cleanup' (Protocol in workflow.md) 9f7ff3f
 
-## Phase 2: Swipe-to-Delete Implementation
+## Phase 2: Swipe-to-Delete Implementation [checkpoint: b21e106]
 Introduce the swipe-to-delete gesture and the "Delete" button revealed behind the card. Swipe is available on all tasks **except completed**.
 
 - [x] Task: Spike — design `useSwipeToReveal` hook and validate test strategy 6d7fd21
@@ -152,7 +152,7 @@ Refine the feel of interactions and verify they work well across devices.
 
 > **Blocks on**: Phase 2 manual verification must be completed first.
 
-- [ ] Task: Fix abrupt appearance of red background and trash icon during swipe (TDD)
+- [~] Task: Fix abrupt appearance of red background and trash icon during swipe (TDD)
     - Root cause: `bg-red-500` and the trash icon are toggled on/off via late-activating conditions (`isSwipeActive` at 10px offset, `isRevealed` at drag-end). This causes the red to flash on suddenly and the icon to pop in, instead of being gradually revealed as the card slides.
     - Fix: derive the red layer's opacity from the drag X offset using framer-motion's `useMotionValue` + `useTransform`. At x=0 → opacity=0 (invisible); at x=-revealWidth → opacity=1 (fully visible). The card naturally covers the reveal layer at rest — no toggling, no flash, no extra `bg-white` cover layer. During drag-to-reorder x stays at 0, so the red layer is invisible automatically.
     - [x] Investigate root cause and document solution approach

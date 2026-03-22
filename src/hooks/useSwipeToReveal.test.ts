@@ -1,7 +1,12 @@
 // @vitest-environment happy-dom
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useSwipeToReveal } from './useSwipeToReveal';
+import { triggerHaptic } from '../utils/haptics';
+
+vi.mock('../utils/haptics', () => ({
+  triggerHaptic: vi.fn(),
+}));
 
 describe('useSwipeToReveal (Spike POC)', () => {
   const defaultProps = {
@@ -11,6 +16,10 @@ describe('useSwipeToReveal (Spike POC)', () => {
     onSwipeDismissAll: vi.fn(),
     revealWidth: 80,
   };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('initializes as not revealed', () => {
     const { result } = renderHook(() => useSwipeToReveal(defaultProps));
@@ -80,5 +89,55 @@ describe('useSwipeToReveal (Spike POC)', () => {
     rerender({ ...defaultProps, activeSwipeId: 'task-1' });
 
     expect(result.current.isRevealed).toBe(true);
+  });
+
+  it('returns x and redOpacity MotionValues', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    
+    expect(result.current.x).toBeDefined();
+    expect(result.current.redOpacity).toBeDefined();
+  });
+
+  it('triggers haptic feedback when crossing reveal threshold', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    
+    // Drag past threshold (40)
+    act(() => {
+      result.current.dragProps.onDrag(null as any, { offset: { x: -45 } } as any);
+    });
+
+    expect(triggerHaptic).toHaveBeenCalledOnce();
+  });
+
+  it('only triggers haptic feedback once per gesture', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    
+    // Drag past threshold multiple times in one gesture
+    act(() => {
+      result.current.dragProps.onDrag(null as any, { offset: { x: -45 } } as any);
+      result.current.dragProps.onDrag(null as any, { offset: { x: -50 } } as any);
+      result.current.dragProps.onDrag(null as any, { offset: { x: -55 } } as any);
+    });
+
+    expect(triggerHaptic).toHaveBeenCalledOnce();
+  });
+
+  it('resets haptic trigger for a new gesture', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    
+    // First gesture
+    act(() => {
+      result.current.dragProps.onDrag(null as any, { offset: { x: -45 } } as any);
+      result.current.dragProps.onDragEnd(null as any, { offset: { x: -45 }, velocity: { x: 0 } } as any);
+    });
+    
+    expect(triggerHaptic).toHaveBeenCalledTimes(1);
+
+    // Second gesture
+    act(() => {
+      result.current.dragProps.onDrag(null as any, { offset: { x: -50 } } as any);
+    });
+
+    expect(triggerHaptic).toHaveBeenCalledTimes(2);
   });
 });

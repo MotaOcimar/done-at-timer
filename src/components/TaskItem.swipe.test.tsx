@@ -44,6 +44,8 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isRevealed: false,
       isSwipeActive: false,
       dismiss: vi.fn(),
+      x: { set: vi.fn(), get: () => 0 },
+      redOpacity: 0,
       dragProps: {
         drag: "x",
         dragConstraints: { left: -80, right: 0 },
@@ -51,6 +53,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
         onDrag: vi.fn(),
         onDragEnd: vi.fn(),
         animate: { x: 0 },
+        style: { x: 0 },
       },
     } as any);
   });
@@ -60,17 +63,16 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isRevealed: true,
       isSwipeActive: false,
       dismiss: vi.fn(),
-      dragProps: { animate: { x: -80 } } as any,
+      x: { set: vi.fn(), get: () => -80 },
+      redOpacity: 1,
+      dragProps: { animate: { x: -80 }, style: { x: -80 } } as any,
     } as any);
 
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
-    // In Phase 2, the revealed Delete button should have text "Delete"
-    // and be distinct from the task content
-    const deleteButton = screen.getByRole('button', { name: /^Delete$/ });
+    // In Phase 2, the revealed Delete button should have Trash2 icon (checked via role)
+    const deleteButton = screen.getByRole('button', { name: /delete/i });
     expect(deleteButton).toBeInTheDocument();
-    // bg-red-500 is on the wrapper div (grandparent of the button)
-    expect(deleteButton.parentElement?.parentElement).toHaveClass('bg-red-500');
   });
 
   it('calls onDelete when the revealed Delete button is clicked', () => {
@@ -79,7 +81,9 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isRevealed: true,
       isSwipeActive: false,
       dismiss: vi.fn(),
-      dragProps: { animate: { x: -80 } } as any,
+      x: { set: vi.fn(), get: () => -80 },
+      redOpacity: 1,
+      dragProps: { animate: { x: -80 }, style: { x: -80 } } as any,
     } as any);
 
     render(<TaskItem task={task} onDelete={onDelete} />);
@@ -90,11 +94,47 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
     expect(onDelete).toHaveBeenCalledWith(task.id);
   });
 
-  it('does not render inline Trash2 button anymore', () => {
-    // When NOT revealed, there should be no delete button
+  it('trash button is not accessible when not revealed', () => {
+    // Reveal state is controlled by the hook's isRevealed output
+    vi.mocked(swipeHook.useSwipeToReveal).mockReturnValue({
+      isRevealed: false,
+      isSwipeActive: false,
+      dismiss: vi.fn(),
+      x: { set: vi.fn(), get: () => 0 },
+      redOpacity: 0,
+      dragProps: { animate: { x: 0 }, style: { x: 0 } } as any,
+    } as any);
+
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
-    // queryByRole returns null if not found
+    // The button exists in DOM (for opacity reveal) but is hidden from screen readers/keyboard
+    const deleteButton = screen.getByTestId('delete-button');
+    expect(deleteButton).toHaveAttribute('tabIndex', '-1');
+    expect(deleteButton).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('trash button is keyboard-reachable when revealed', () => {
+    vi.mocked(swipeHook.useSwipeToReveal).mockReturnValue({
+      isRevealed: true,
+      isSwipeActive: false,
+      dismiss: vi.fn(),
+      x: { set: vi.fn(), get: () => -80 },
+      redOpacity: 1,
+      dragProps: { animate: { x: -80 }, style: { x: -80 } } as any,
+    } as any);
+
+    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    
+    const deleteButton = screen.getByTestId('delete-button');
+    expect(deleteButton).toHaveAttribute('tabIndex', '0');
+    expect(deleteButton).toHaveAttribute('aria-hidden', 'false');
+  });
+
+  it('does not render reveal layer for completed tasks', () => {
+    const completedTask = { ...task, status: 'COMPLETED' };
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    
+    // The reveal layer (containing Delete button) should not be rendered at all
     expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
   });
 

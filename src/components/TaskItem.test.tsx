@@ -20,6 +20,12 @@ vi.mock('framer-motion', () => ({
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   LayoutGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useMotionValue: (initial: any) => ({
+    get: () => initial,
+    set: vi.fn(),
+    onChange: vi.fn(),
+  }),
+  useTransform: (_value: any, _input: any, output: any) => output[0],
 }));
 
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {
@@ -161,9 +167,12 @@ describe('TaskItem', () => {
   it('renders a motion.div wrapper with layout="position" prop for animations', () => {
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
-    const motionDiv = screen.getByTestId('motion-div');
-    expect(motionDiv).toBeInTheDocument();
-    expect(motionDiv.getAttribute('data-layout')).toBe('position');
+    // There are multiple motion.divs now (reveal layer and swipe layer)
+    const motionDivs = screen.getAllByTestId('motion-div');
+    const layoutDiv = motionDivs.find(div => div.hasAttribute('data-layout'));
+    
+    expect(layoutDiv).toBeDefined();
+    expect(layoutDiv?.getAttribute('data-layout')).toBe('position');
   });
 
   it('disables layout animation during dragging to prevent conflicts with dnd-kit transforms', async () => {
@@ -181,8 +190,10 @@ describe('TaskItem', () => {
 
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
-    const motionDiv = screen.getByTestId('motion-div');
+    const motionDivs = screen.getAllByTestId('motion-div');
+    const layoutDiv = motionDivs.find(div => div.hasAttribute('data-layout'));
+    
     // layout prop should be false when isDragging is true
-    expect(motionDiv.getAttribute('data-layout')).toBe('false');
+    expect(layoutDiv?.getAttribute('data-layout')).toBe('false');
   });
 });
