@@ -134,13 +134,14 @@ const TaskItem = ({
       data-testid="task-item-container"
       className="outline-none"
     >
-      <div className={`relative mb-3 rounded-2xl overflow-hidden ${!isCompleted ? 'bg-red-500' : ''}`}>
+      <div className={`relative mb-3 rounded-2xl overflow-hidden ${(!isCompleted && !isDragging) ? 'bg-red-500' : ''}`}>
         {/* Reveal Area (Behind) */}
         {isRevealed && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-6">
             <button
               onClick={() => onDelete(task.id)}
               onPointerDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               className="text-white hover:scale-110 transition-transform p-2"
               aria-label="Delete"
             >
