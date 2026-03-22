@@ -126,15 +126,16 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
 - [x] Task: Refactor Phase 2 (TDD Refactor) b1bf5c8
     - [x] Review swipe implementation and test code for duplication and clarity.
     - [x] Run full test suite, confirm all tests pass.
-- [~] Task: Phase 2 Review Cleanup 4556bca
+- [~] Task: Phase 2 Review Cleanup 4556bca, 07e0b74
     - [x] Remove unused `Trash2` import from `TaskCard.tsx` — the inline delete button was removed but the import was left behind. (Note: keep `Trash2` available — it will be reused in the reveal layer below.)
     - [x] Stage and commit `src/components/InlineEdit.test.tsx` — test file was created but never tracked/committed.
     - [x] In `TaskItem.tsx`, move `onManualComplete` definition after the `useTimer` hook call — currently references `timeLeft` before it is defined (works via hoisting but is misleading).
     - [x] Fix revealed Delete button not clickable (partial) — added `onPointerDown` stopPropagation but missed `onTouchStart`. dnd-kit's `MouseSensor` listens on `mousedown`/`pointerdown` and `TouchSensor` listens on `touchstart`. All other interactive elements (Play/Pause, Done, InlineEdit) have **both** `onPointerDown` and `onTouchStart` stopPropagation. The Delete button only has `onPointerDown`, so on touch devices the `touchstart` event still bubbles to the dnd-kit container, where the `TouchSensor` (delay: 250ms) intercepts it.
     - [x] Add `onTouchStart={(e) => e.stopPropagation()}` to the revealed Delete button in `TaskItem.tsx` (line 143), matching the pattern used by all other interactive elements.
     - [x] Replace "Delete" text label with `Trash2` icon in the reveal layer (`TaskItem.tsx`) — matches the original inline delete style. Move the `Trash2` import from `TaskCard.tsx` to `TaskItem.tsx`.
-    - [x] Fix completed tasks appearing red — the reveal layer container (`TaskItem.tsx` line 136) applies `bg-red-500` unconditionally, but `TaskCard.tsx` uses `bg-green-50/50` (semi-transparent green) for completed tasks. The red bleeds through the transparency. Fix: conditionally apply `bg-red-500` only when swipe is enabled (`!isCompleted`), or use a neutral/transparent background for completed tasks' container.
-    - [x] Fix dragged tasks appearing red during reorder — `TaskCard.tsx` applies `opacity-50` when `isDragging` is true (line 180), making the card semi-transparent and exposing the `bg-red-500` container behind it. Fix: also exclude `bg-red-500` when `isDragging` is true in the container className condition (`TaskItem.tsx` line 137): `!isCompleted && !isDragging`.
+    - [x] Fix completed tasks appearing red — the reveal layer container applies `bg-red-500` unconditionally, bleeding through semi-transparent card backgrounds.
+    - [x] Fix dragged tasks appearing red during reorder — `opacity-50` on drag exposes the red container.
+    - [x] Consolidate red background fix — the current approach (excluding `bg-red-500` per-case with `!isCompleted && !isDragging`) is fragile; any animation that shifts or fades the card will leak red. Invert the logic: only apply `bg-red-500` when the swipe is active or revealed (`isSwipeActive || isRevealed`). These are the only two states where the red background needs to be visible. This replaces all per-case exclusions with a single positive condition.
 - [~] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
     - [ ] Add 3 tasks. Swipe a pending task from right to left → a red "Delete" button appears behind the card.
     - [ ] Click "Delete" → the task is removed and list auto-advances if it was the active task.
