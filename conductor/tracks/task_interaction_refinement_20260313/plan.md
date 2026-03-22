@@ -44,35 +44,35 @@ Three interaction layers share the card surface. Resolution order (highest prior
 ## Phase 1: Reordering & Cleanup
 Focus on removing the drag handles and enabling whole-card dragging while preserving interactive element functionality.
 
-- [ ] Task: Write failing tests for Phase 1 (TDD Red)
-    - [ ] Update `TaskCard.test.tsx` — add tests asserting drag handle (`GripHorizontal`) icon and spacer div are **absent** from rendered output (these will fail against current code = Red).
-    - [ ] Add test: a non-completed task card has the `aria-roledescription="sortable"` attribute (or equivalent), confirming it is draggable — test observable behavior, not internal `listeners`/`attributes` wiring.
-    - [ ] Add test: clicking the Play/Pause button fires its handler and `onPointerDown` calls `stopPropagation()`.
-    - [ ] Add test: clicking the Done button fires its handler and `onPointerDown` calls `stopPropagation()`.
-    - [ ] Add test: clicking/focusing an InlineEdit input allows normal interaction and `onPointerDown` calls `stopPropagation()` (test in `InlineEdit.test.tsx` since the fix lives in the shared component).
-    - [ ] Add test: a completed task card does **not** have `aria-roledescription="sortable"` (it is not draggable).
-    - [ ] Run tests, confirm they fail (Red phase).
-- [ ] Task: Remove `GripHorizontal` drag handle and spacer from `TaskCard.tsx` (TDD Green)
-    - [ ] Remove the `GripHorizontal` import and icon rendering (line 200).
-    - [ ] Remove the empty spacer `<div className="w-5 flex-shrink-0" />` that renders for active/completed tasks (line 203).
-    - [ ] Remove the entire conditional block (lines 192-204) wrapping handle + spacer.
-    - [ ] Update CSS/Tailwind to reclaim the horizontal space previously occupied by the handle column.
-- [ ] Task: Move dnd-kit ownership from TaskCard to TaskItem (TDD Green)
-    - [ ] `TaskItem` creates an outer wrapper `<div ref={setNodeRef} style={dndStyle} {...attributes} {...listeners}>` around `TaskCard`. Set `touch-action: pan-y` on this wrapper (allows vertical scroll, captures horizontal gestures).
-    - [ ] Remove `setNodeRef`, `style`, `attributes`, `listeners` from `TaskCardProps` — TaskCard becomes a pure presentational component for dnd concerns.
-    - [ ] Do **not** apply `listeners`/`attributes` on completed task cards — pass `disabled: true` to `useSortable` for completed tasks.
-    - [ ] This restructuring prepares for Phase 2, where a swipe `motion.div` wrapper is inserted between the dnd-kit container and TaskCard.
-- [ ] Task: Add `onPointerDown` stopPropagation to all interactive elements (TDD Green)
-    - [ ] **`InlineEdit.tsx`** (shared component): add `onPointerDown={(e) => e.stopPropagation()}` to both the editing `<input>` (line 78) and the display `<span>` (line 97). The fix belongs inside InlineEdit itself, not in TaskCard wrappers.
-    - [ ] **`TaskCard.tsx` StatusIcon buttons**: add `onPointerDown={(e) => e.stopPropagation()}` to the Play/Pause button (line 83) and the idle Play button (line 100).
-    - [ ] **`TaskCard.tsx` Done button** (line 249): add `onPointerDown` with `e.stopPropagation()` (currently only `onClick` stops propagation).
-    - [ ] `onClick` stopPropagation alone is insufficient — dnd-kit sensors activate on `pointerdown`.
-    - [ ] Run tests, confirm they pass (Green phase).
-- [ ] Task: Refactor Phase 1 (TDD Refactor)
-    - [ ] Review implementation and test code for duplication and clarity.
-    - [ ] Ensure reordering tests in `TaskList.test.tsx` still pass with whole-card dragging.
-    - [ ] Run full test suite, confirm all tests pass.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Reordering & Cleanup' (Protocol in workflow.md)
+- [x] Task: Write failing tests for Phase 1 (TDD Red) 9f7ff3f
+    - [x] Update `TaskCard.test.tsx` — add tests asserting drag handle (`GripHorizontal`) icon and spacer div are **absent** from rendered output (these will fail against current code = Red).
+    - [x] Add test: a non-completed task card has the `aria-roledescription="sortable"` attribute (or equivalent), confirming it is draggable — test observable behavior, not internal `listeners`/`attributes` wiring.
+    - [x] Add test: clicking the Play/Pause button fires its handler and `onPointerDown` calls `stopPropagation()`.
+    - [x] Add test: clicking the Done button fires its handler and `onPointerDown` calls `stopPropagation()`.
+    - [x] Add test: clicking/focusing an InlineEdit input allows normal interaction and `onPointerDown` calls `stopPropagation()` (test in `InlineEdit.test.tsx` since the fix lives in the shared component).
+    - [x] Add test: a completed task card does **not** have `aria-roledescription="sortable"` (it is not draggable).
+    - [x] Run tests, confirm they fail (Red phase).
+- [x] Task: Remove `GripHorizontal` drag handle and spacer from `TaskCard.tsx` (TDD Green) 9f7ff3f
+    - [x] Remove the `GripHorizontal` import and icon rendering (line 200).
+    - [x] Remove the empty spacer `<div className="w-5 flex-shrink-0" />` that renders for active/completed tasks (line 203).
+    - [x] Remove the entire conditional block (lines 192-204) wrapping handle + spacer.
+    - [x] Update CSS/Tailwind to reclaim the horizontal space previously occupied by the handle column.
+- [x] Task: Move dnd-kit ownership from TaskCard to TaskItem (TDD Green) 9f7ff3f
+    - [x] `TaskItem` creates an outer wrapper `<div ref={setNodeRef} style={dndStyle} {...attributes} {...listeners}>` around `TaskCard`. Set `touch-action: pan-y` on this wrapper (allows vertical scroll, captures horizontal gestures).
+    - [x] Remove `setNodeRef`, `style`, `attributes`, `listeners` from `TaskCardProps` — TaskCard becomes a pure presentational component for dnd concerns.
+    - [x] Do **not** apply `listeners`/`attributes` on completed task cards — pass `disabled: true` to `useSortable` for completed tasks.
+    - [x] This restructuring prepares for Phase 2, where a swipe `motion.div` wrapper is inserted between the dnd-kit container and TaskCard.
+- [x] Task: Add `onPointerDown` stopPropagation to all interactive elements (TDD Green) 9f7ff3f
+    - [x] **`InlineEdit.tsx`** (shared component): add `onPointerDown={(e) => e.stopPropagation()}` to both the editing `<input>` (line 78) and the display `<span>` (line 97). The fix belongs inside InlineEdit itself, not in TaskCard wrappers.
+    - [x] **`TaskCard.tsx` StatusIcon buttons**: add `onPointerDown={(e) => e.stopPropagation()}` to the Play/Pause button (line 83) and the idle Play button (line 100).
+    - [x] **`TaskCard.tsx` Done button** (line 249): add `onPointerDown` with `e.stopPropagation()` (currently only `onClick` stops propagation).
+    - [x] `onClick` stopPropagation alone is insufficient — dnd-kit sensors activate on `pointerdown`.
+    - [x] Run tests, confirm they pass (Green phase).
+- [x] Task: Refactor Phase 1 (TDD Refactor) 9f7ff3f
+    - [x] Review implementation and test code for duplication and clarity.
+    - [x] Ensure reordering tests in `TaskList.test.tsx` still pass with whole-card dragging.
+    - [x] Run full test suite, confirm all tests pass.
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Reordering & Cleanup' (Protocol in workflow.md) 9f7ff3f
 
 ## Phase 2: Swipe-to-Delete Implementation
 Introduce the swipe-to-delete gesture and the "Delete" button revealed behind the card. Swipe is available on all tasks **except completed**.
