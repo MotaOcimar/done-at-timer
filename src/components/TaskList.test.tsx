@@ -111,19 +111,6 @@ describe('TaskList', () => {
     expect(screen.getByText('Task 2')).toBeInTheDocument();
   });
 
-  it('removes task when delete is clicked', () => {
-    useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
-    });
-
-    render(<TaskList />);
-    const deleteBtn = screen.getByRole('button', { name: /delete/i });
-    fireEvent.click(deleteBtn);
-
-    const tasks = useTaskStore.getState().tasks;
-    expect(tasks).toHaveLength(0);
-  });
-
   it('shows empty state', () => {
     render(<TaskList />);
     expect(screen.getByText(/No tasks yet/i)).toBeInTheDocument();

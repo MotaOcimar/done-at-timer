@@ -22,20 +22,11 @@ vi.mock('@dnd-kit/sortable', async (importOriginal) => {
 describe('Task Mobile Scroll Fix', () => {
   const task: Task = { id: '1', title: 'Test Task', duration: 30, status: 'PENDING' };
 
-  it('main container should NOT have touch-action: none', () => {
-    const { container } = render(<TaskItem task={task} onDelete={vi.fn()} />);
-    // container.firstChild is the main TaskCard div
-    const cardDiv = container.firstChild as HTMLElement;
-    
-    // CURRENTLY THIS WILL FAIL if our goal is to REMOVE it from here
-    expect(cardDiv.style.touchAction).not.toBe('none');
-  });
-
-  it('drag handle SHOULD have touch-action: none for reliable dragging', () => {
+  it('main container should have touch-action: pan-y for horizontal swipe compatibility', () => {
     render(<TaskItem task={task} onDelete={vi.fn()} />);
-    const handle = screen.getByLabelText(/drag to reorder/i);
+    // The container with sortable attributes (task-item-container) should have pan-y
+    const container = screen.getByTestId('task-item-container');
     
-    // CURRENTLY THIS WILL FAIL if it's not applied there yet
-    expect(handle.style.touchAction).toBe('none');
+    expect(container.style.touchAction).toBe('pan-y');
   });
 });

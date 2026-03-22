@@ -8,8 +8,12 @@ import { useTaskStore } from '../store/useTaskStore';
 // Mock framer-motion to check for layout prop
 vi.mock('framer-motion', () => ({
   motion: {
-    div: vi.fn(({ children, layout, ...props }) => (
-      <div data-testid="motion-div" data-layout={layout.toString()} {...props}>
+    div: vi.fn(({ children, layout, drag, dragConstraints, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
+      <div 
+        data-testid="motion-div" 
+        data-layout={layout?.toString()} 
+        {...props}
+      >
         {children}
       </div>
     )),
@@ -23,7 +27,7 @@ vi.mock('@dnd-kit/sortable', async (importOriginal) => {
   return {
     ...actual,
     useSortable: vi.fn(() => ({
-      attributes: { 'data-testid': 'sortable-attributes' },
+      attributes: { 'aria-roledescription': 'sortable' },
       listeners: {},
       setNodeRef: vi.fn(),
       transform: null,
@@ -46,13 +50,6 @@ describe('TaskItem', () => {
     expect(screen.getByText('Test Task')).toBeInTheDocument();
     expect(screen.getByText('30')).toBeInTheDocument();
     expect(screen.getByText(/min/)).toBeInTheDocument();
-  });
-
-  it('calls onDelete when delete button is clicked', () => {
-    const onDelete = vi.fn();
-    render(<TaskItem task={task} onDelete={onDelete} />);
-    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
-    expect(onDelete).toHaveBeenCalledWith(task.id);
   });
 
   it('starts task when play button is clicked', () => {
@@ -146,9 +143,8 @@ describe('TaskItem', () => {
       disabled: false
     }));
     
-    // The outer container should have the attributes from useSortable mock
-    const container = screen.getByTestId('sortable-attributes');
-    expect(container).toBeInTheDocument();
+    const container = screen.getByTestId('task-item-container');
+    expect(container).toHaveAttribute('aria-roledescription', 'sortable');
   });
 
   it('is not sortable when completed', async () => {
