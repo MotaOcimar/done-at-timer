@@ -137,12 +137,29 @@ describe('TaskItem', () => {
     expect(screen.queryByDisplayValue('Cancelled Change')).not.toBeInTheDocument();
   });
 
-  it('is sortable', () => {
+  it('is sortable when pending', async () => {
+    const { useSortable } = await import('@dnd-kit/sortable');
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
-    // The handle should have the attributes from useSortable mock
-    const handle = screen.getByLabelText(/drag to reorder/i);
-    expect(handle).toHaveAttribute('data-testid', 'sortable-attributes');
+    expect(useSortable).toHaveBeenCalledWith(expect.objectContaining({
+      id: task.id,
+      disabled: false
+    }));
+    
+    // The outer container should have the attributes from useSortable mock
+    const container = screen.getByTestId('sortable-attributes');
+    expect(container).toBeInTheDocument();
+  });
+
+  it('is not sortable when completed', async () => {
+    const { useSortable } = await import('@dnd-kit/sortable');
+    const completedTask: Task = { ...task, status: 'COMPLETED' };
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    
+    expect(useSortable).toHaveBeenCalledWith(expect.objectContaining({
+      id: task.id,
+      disabled: true
+    }));
   });
 
   it('renders a motion.div wrapper with layout="position" prop for animations', () => {
