@@ -2,7 +2,7 @@
 
 ## Guiding Principles
 
-1. **The Plan is the Source of Truth:** All work must be tracked in `plan.md`
+1. **The Plan is the Source of Truth:** All work must be tracked in the track's `plan.md` (located in `conductor/tracks/<track_id>/plan.md`)
 2. **The Tech Stack is Deliberate:** Changes to the tech stack must be documented in `tech-stack.md` _before_ implementation
 3. **Test-Driven Development:** Write unit tests before implementing functionality
 4. **High Code Coverage:** Aim for >80% code coverage for all modules
@@ -158,27 +158,26 @@ All tasks follow a strict lifecycle:
    - Add dated note explaining the change
    - Resume implementation
 
-6. **Commit Code Changes:**
-   - Stage all code changes related to the task.
-   - Propose a clear, concise commit message e.g, `feat(ui): Add swipe-to-delete gesture on task cards`.
-   - Perform the commit.
+6. **Update Plan with Completion:**
+    - Read `plan.md`, find the line for the completed task, and update its status from `[~]` to `[x]`.
 
-7. **Attach Task Summary with Git Notes:**
-   - **Step 7.1: Get Commit Hash:** Obtain the hash of the _just-completed commit_ (`git log -1 --format="%H"`).
-   - **Step 7.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
-   - **Step 7.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
+7. **Commit All Changes (code + plan):**
+   - Stage all code changes **and** the updated `plan.md` together.
+   - Propose a clear, concise commit message e.g, `feat(ui): Add swipe-to-delete gesture on task cards`.
+   - Perform a single commit.
+
+8. **Attach Task Summary with Git Notes:**
+   - **Step 8.1: Get Commit Hash:** Obtain the hash of the _just-completed commit_ (`git log -1 --format="%H"`).
+   - **Step 8.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
+   - **Step 8.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
      ```bash
      # The note content from the previous step is passed via the -m flag.
      git notes add -m "<note content>" <commit_hash>
      ```
 
-8. **Get and Record Task Commit SHA:**
-    - **Step 8.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the _just-completed commit's_ commit hash.
-    - **Step 8.2: Write Plan:** Write the updated content back to `plan.md`.
-
-9. **Commit Plan Update:**
-    - **Action:** Stage the modified `plan.md` file.
-    - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create swipe hook' as complete`).
+9. **Record Commit SHA in Plan (no commit needed):**
+    - Read `plan.md` again, find the completed task line, and append the first 7 characters of the commit hash.
+    - **Do not commit this change.** The SHA annotation will be included naturally in the next task's commit or during phase review.
 
 ### Phase Completion Verification and Checkpointing Protocol
 
@@ -216,16 +215,13 @@ All tasks follow a strict lifecycle:
     - **Step 7.1: Draft Note Content:** Create a detailed verification report including the automated test command, the manual verification steps, and the user's confirmation.
     - **Step 7.2: Attach Note:** Use the `git notes` command and the full commit hash from the previous step to attach the full report to the checkpoint commit.
 
-8.  **Get and Record Phase Checkpoint SHA:**
+8.  **Get and Record Phase Checkpoint SHA (no commit needed):**
     - **Step 8.1: Get Commit Hash:** Obtain the hash of the _just-created checkpoint commit_ (`git log -1 --format="%H"`).
     - **Step 8.2: Update Plan:** Read `plan.md`, find the heading for the completed phase, and append the first 7 characters of the commit hash in the format `[checkpoint: <sha>]`.
     - **Step 8.3: Write Plan:** Write the updated content back to `plan.md`.
+    - **Do not commit this change.** The checkpoint SHA annotation will be included naturally in the next phase's first task commit or during review.
 
-9.  **Commit Plan Update:**
-    - **Action:** Stage the modified `plan.md` file.
-    - **Action:** Commit this change with a descriptive message following the format `conductor(plan): Mark phase '<PHASE NAME>' as complete`.
-
-10. **Announce Completion:** Inform the user that the phase is complete and the checkpoint has been created, with the detailed verification report attached as a git note.
+9. **Announce Completion:** Inform the user that the phase is complete and the checkpoint has been created, with the detailed verification report attached as a git note.
 
 ### Quality Gates
 

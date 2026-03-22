@@ -13,5 +13,6 @@
 
 ## Management
 
+- [Backlog](./backlog.md)
 - [Tracks Registry](./tracks.md)
 - [Tracks Directory](./tracks/)

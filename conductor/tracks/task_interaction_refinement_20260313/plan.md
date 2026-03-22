@@ -126,7 +126,16 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
 - [x] Task: Refactor Phase 2 (TDD Refactor) b1bf5c8
     - [ ] Review swipe implementation and test code for duplication and clarity.
     - [ ] Run full test suite, confirm all tests pass.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
+    - [ ] Add 3 tasks. Swipe a pending task from right to left → a red "Delete" button appears behind the card.
+    - [ ] Click "Delete" → the task is removed and list auto-advances if it was the active task.
+    - [ ] Swipe another task left, then swipe it back right → the Delete button hides, task stays.
+    - [ ] Start a task (Active). Swipe it left → Delete reveals, while "Done" button remains visible on the card.
+    - [ ] Complete a task. Try swiping it → nothing happens (completed tasks don't swipe).
+    - [ ] Focus a card (tab to it or click it) and press `Delete` key → task is removed.
+    - [ ] Focus an `InlineEdit` input, press `Delete` key → text is deleted but task remains.
+    - [ ] Swipe a task left (revealed), then start dragging another task to reorder → the swiped task automatically dismisses.
+
 
 ## Phase 3: Polish & Mobile Verification
 Refine the feel of interactions and verify they work well across devices. Animation tuning is aesthetic (no tests needed), but haptic feedback is new functionality and follows TDD.
