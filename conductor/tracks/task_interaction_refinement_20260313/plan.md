@@ -72,12 +72,15 @@ Focus on removing the drag handles and enabling whole-card dragging while preser
     - [x] Review implementation and test code for duplication and clarity.
     - [x] Ensure reordering tests in `TaskList.test.tsx` still pass with whole-card dragging.
     - [x] Run full test suite, confirm all tests pass.
+- [x] Task: Phase 1 Review Cleanup be3a631
+    - [x] Remove dead imports in `TaskCard.tsx`: `GripHorizontal` (lucide-react), `DraggableAttributes` and `DraggableSyntheticListeners` (`@dnd-kit/core`) — no longer used after DnD ownership moved to `TaskItem`.
+    - [x] Remove redundant tests in `TaskCard.test.tsx`: `"hides drag handle for active tasks"` (line 280) and `"hides drag handle for completed tasks"` (line 296) — already covered more thoroughly by the Phase 1 test `"does not render GripHorizontal icon or spacer div for any task"` (line 313).
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Reordering & Cleanup' (Protocol in workflow.md) 9f7ff3f
 
 ## Phase 2: Swipe-to-Delete Implementation
 Introduce the swipe-to-delete gesture and the "Delete" button revealed behind the card. Swipe is available on all tasks **except completed**.
 
-- [ ] Task: Spike — design `useSwipeToReveal` hook and validate test strategy
+- [x] Task: Spike — design `useSwipeToReveal` hook and validate test strategy 6d7fd21
     - [ ] The `useSwipeToReveal` hook is an architectural decision (see Implementation Approach above). This spike defines its API and validates how to test it. Draft the hook's public interface: inputs (task id, enabled flag, dismiss signal) and outputs (`isRevealed`, `dismiss()`, framer-motion drag props).
     - [ ] `framer-motion` drag gestures are difficult to simulate with `fireEvent` in happy-dom/jsdom (no real pointer event sequences or animation frames). Investigate and decide on one of these test strategies:
         1. **Test the hook in isolation** with `renderHook` (state transitions, dismiss logic). Test the component with the hook mocked — verify conditional rendering of the Delete button based on `isRevealed` state.
