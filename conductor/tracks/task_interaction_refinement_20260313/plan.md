@@ -98,32 +98,32 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
     - [ ] Test swipe state reset: when a drag-to-reorder starts, all revealed swipe areas dismiss.
     - [ ] Test active task deletion: deleting an active task (via revealed Delete button) stops the timer and auto-advances to the next pending task.
     - [ ] Run tests, confirm they fail (Red phase).
-- [ ] Task: Implement `useSwipeToReveal` hook (TDD Green)
-    - [ ] Create `src/hooks/useSwipeToReveal.ts` with the API designed in the spike. The hook manages all swipe state and framer-motion drag props internally.
-    - [ ] Hook inputs: task id, enabled flag (false for completed tasks), `activeSwipeId` and `onSwipeDismissAll` (props from `TaskList` for coordination).
-    - [ ] Hook outputs: `isRevealed`, `isSwipeActive` (ref for disabling dnd-kit), `dismiss()`, framer-motion drag props (`drag`, `dragConstraints`, `onDragEnd`, `animate`, etc.).
-    - [ ] Constrain drag: only allow right-to-left (negative x), clamp to reveal width (e.g., `-80px`).
-    - [ ] Implement "Reveal & Stay" logic: right-to-left swipe past threshold (e.g., 40px) snaps to reveal position via `dragSnapToOrigin: false` + `onDragEnd` with `animate`.
-    - [ ] Implement dismiss: left-to-right swipe (or tap card) snaps back to `x: 0`. Auto-dismiss when `activeSwipeId` changes to another task's id.
-    - [ ] Intercept right-to-left gestures: direction is unknown at `pointerdown` time. Use framer-motion's `onDragStart`/`onDrag` callbacks to detect right-to-left direction from the drag offset. When the swipe layer claims the gesture, set an `isSwipeActive` ref — `TaskItem` passes this ref's value to `useSortable({ disabled: isSwipeActive })` so dnd-kit does not activate. Since framer-motion reacts immediately but dnd-kit waits for its sensor threshold (`distance: 10px` / `delay: 250ms`), the flag is set before dnd-kit tries to start.
-- [ ] Task: Integrate swipe layer in `TaskItem.tsx` and `TaskList.tsx` (TDD Green)
-    - [ ] `TaskItem`: consume `useSwipeToReveal`, insert a `motion.div` wrapper between the existing dnd-kit container (from Phase 1) and `TaskCard`. Pass the hook's `isSwipeActive` ref to `useSortable({ disabled })` to prevent dnd-kit from activating during swipe. Pass `activeSwipeId` and `onSwipeDismissAll` from props.
-    - [ ] `TaskList`: add `activeSwipeId` state. Pass it + setter to each `TaskItem`. In `onDragStart`, call dismiss-all before proceeding with reorder. Dismiss must be **instant** (no transition animation) to avoid visual distraction during drag initiation.
-- [ ] Task: Create "Reveal Behind" area with Delete button (TDD Green)
-    - [ ] Add a positioned layer (absolute, right-aligned) behind the task card containing a red "Delete" button.
-    - [ ] Ensure the button is only visible/clickable when the card is swiped open (`overflow: hidden` on the container, or conditional rendering based on swipe state).
-    - [ ] Delete button must meet min 44x44px touch target.
-- [ ] Task: Remove existing inline delete button from `TaskCard.tsx` (TDD Green)
-    - [ ] Remove the `Trash2` import (if no longer used elsewhere) and button rendering.
-    - [ ] Remove the associated `onDelete` prop from `TaskCardProps` if it's no longer needed (the delete action moves to the reveal layer in `TaskItem.tsx`).
-- [ ] Task: Connect revealed Delete button to `removeTask` in `useTaskStore` (TDD Green)
-    - [ ] Wire the onClick of the revealed Delete button to call `removeTask(id)`.
-    - [ ] `TaskItem.tsx` already receives `onDelete` prop — reuse it for the revealed button.
-- [ ] Task: Add keyboard accessibility fallback for delete (TDD Green)
-    - [ ] Allow `Delete` key to trigger task removal when the card container itself is focused (add `onKeyDown` handler to card container). **Guard**: only act when `e.target === e.currentTarget` — this prevents the `Delete` key from removing the task when the user is editing text inside an `InlineEdit` input.
-    - [ ] Ensure screen readers can discover the delete action (e.g., `aria-label` on the card or a visually hidden button).
-    - [ ] Run tests, confirm they pass (Green phase).
-- [ ] Task: Refactor Phase 2 (TDD Refactor)
+- [x] Task: Implement `useSwipeToReveal` hook (TDD Green) 6d7fd21
+    - [x] Create `src/hooks/useSwipeToReveal.ts` with the API designed in the spike. The hook manages all swipe state and framer-motion drag props internally.
+    - [x] Hook inputs: task id, enabled flag (false for completed tasks), `activeSwipeId` and `onSwipeDismissAll` (props from `TaskList` for coordination).
+    - [x] Hook outputs: `isRevealed`, `isSwipeActive` (ref for disabling dnd-kit), `dismiss()`, framer-motion drag props (`drag`, `dragConstraints`, `onDragEnd`, `animate`, etc.).
+    - [x] Constrain drag: only allow right-to-left (negative x), clamp to reveal width (e.g., `-80px`).
+    - [x] Implement "Reveal & Stay" logic: right-to-left swipe past threshold (e.g., 40px) snaps to reveal position via `dragSnapToOrigin: false` + `onDragEnd` with `animate`.
+    - [x] Implement dismiss: left-to-right swipe (or tap card) snaps back to `x: 0`. Auto-dismiss when `activeSwipeId` changes to another task's id.
+    - [x] Intercept right-to-left gestures: direction is unknown at `pointerdown` time. Use framer-motion's `onDragStart`/`onDrag` callbacks to detect right-to-left direction from the drag offset. When the swipe layer claims the gesture, set an `isSwipeActive` ref — `TaskItem` passes this ref's value to `useSortable({ disabled: isSwipeActive })` so dnd-kit does not activate. Since framer-motion reacts immediately but dnd-kit waits for its sensor threshold (`distance: 10px` / `delay: 250ms`), the flag is set before dnd-kit tries to start.
+- [x] Task: Integrate swipe layer in `TaskItem.tsx` and `TaskList.tsx` (TDD Green) e16473c
+    - [x] `TaskItem`: consume `useSwipeToReveal`, insert a `motion.div` wrapper between the existing dnd-kit container (from Phase 1) and `TaskCard`. Pass the hook's `isSwipeActive` ref to `useSortable({ disabled })` to prevent dnd-kit from activating during swipe. Pass `activeSwipeId` and `onSwipeDismissAll` from props.
+    - [x] `TaskList`: add `activeSwipeId` state. Pass it + setter to each `TaskItem`. In `onDragStart`, call dismiss-all before proceeding with reorder. Dismiss must be **instant** (no transition animation) to avoid visual distraction during drag initiation.
+- [x] Task: Create "Reveal Behind" area with Delete button (TDD Green) e16473c
+    - [x] Add a positioned layer (absolute, right-aligned) behind the task card containing a red "Delete" button.
+    - [x] Ensure the button is only visible/clickable when the card is swiped open (`overflow: hidden` on the container, or conditional rendering based on swipe state).
+    - [x] Delete button must meet min 44x44px touch target.
+- [x] Task: Remove existing inline delete button from `TaskCard.tsx` (TDD Green) e16473c
+    - [x] Remove the `Trash2` import (if no longer used elsewhere) and button rendering.
+    - [x] Remove the associated `onDelete` prop from `TaskCardProps` if it's no longer needed (the delete action moves to the reveal layer in `TaskItem.tsx`).
+- [x] Task: Connect revealed Delete button to `removeTask` in `useTaskStore` (TDD Green) e16473c
+    - [x] Wire the onClick of the revealed Delete button to call `removeTask(id)`.
+    - [x] `TaskItem.tsx` already receives `onDelete` prop — reuse it for the revealed button.
+- [x] Task: Add keyboard accessibility fallback for delete (TDD Green) e16473c
+    - [x] Allow `Delete` key to trigger task removal when the card container itself is focused (add `onKeyDown` handler to card container). **Guard**: only act when `e.target === e.currentTarget` — this prevents the `Delete` key from removing the task when the user is editing text inside an `InlineEdit` input.
+    - [x] Ensure screen readers can discover the delete action (e.g., `aria-label` on the card or a visually hidden button).
+    - [x] Run tests, confirm they pass (Green phase).
+- [x] Task: Refactor Phase 2 (TDD Refactor) b1bf5c8
     - [ ] Review swipe implementation and test code for duplication and clarity.
     - [ ] Run full test suite, confirm all tests pass.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
