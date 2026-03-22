@@ -126,6 +126,13 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
 - [x] Task: Refactor Phase 2 (TDD Refactor) b1bf5c8
     - [ ] Review swipe implementation and test code for duplication and clarity.
     - [ ] Run full test suite, confirm all tests pass.
+- [x] Task: Phase 2 Review Cleanup
+    - [x] Remove unused `Trash2` import from `TaskCard.tsx` — the inline delete button was removed but the import was left behind. (Note: keep `Trash2` available — it will be reused in the reveal layer below.)
+    - [x] Stage and commit `src/components/InlineEdit.test.tsx` — test file was created but never tracked/committed.
+    - [x] In `TaskItem.tsx`, move `onManualComplete` definition after the `useTimer` hook call — currently references `timeLeft` before it is defined (works via hoisting but is misleading).
+    - [x] Fix revealed Delete button not clickable — the button is inside the dnd-kit sortable container, so `onPointerDown` is captured by dnd-kit sensors before the click reaches the button. Add `onPointerDown={(e) => e.stopPropagation()}` to the Delete button (same fix applied to Play/Pause/Done buttons in Phase 1).
+    - [x] Replace "Delete" text label with `Trash2` icon in the reveal layer (`TaskItem.tsx`) — matches the original inline delete style. Move the `Trash2` import from `TaskCard.tsx` to `TaskItem.tsx`.
+    - [x] Fix completed tasks appearing red — the reveal layer container (`TaskItem.tsx` line 136) applies `bg-red-500` unconditionally, but `TaskCard.tsx` uses `bg-green-50/50` (semi-transparent green) for completed tasks. The red bleeds through the transparency. Fix: conditionally apply `bg-red-500` only when swipe is enabled (`!isCompleted`), or use a neutral/transparent background for completed tasks' container.
 - [~] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
     - [ ] Add 3 tasks. Swipe a pending task from right to left → a red "Delete" button appears behind the card.
     - [ ] Click "Delete" → the task is removed and list auto-advances if it was the active task.

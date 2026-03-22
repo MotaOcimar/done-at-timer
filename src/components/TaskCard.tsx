@@ -6,7 +6,6 @@ import {
   Clock, 
   Play, 
   Pause, 
-  Trash2, 
   MapPin,
   MapPinCheckInside
 } from 'lucide-react';
@@ -22,7 +21,6 @@ interface TaskCardProps {
   isActuallyPaused?: boolean;
   eta?: Date;
   // Callbacks
-  onDelete: (id: string) => void;
   onToggle: (e: React.MouseEvent) => void;
   onTitleSave: (newTitle: string) => void;
   onDurationSave: (newDuration: string) => void;
@@ -121,7 +119,6 @@ const TaskCard = ({
   progress = 0, 
   isActuallyPaused = false,
   eta,
-  onDelete,
   onToggle,
   onTitleSave,
   onDurationSave,

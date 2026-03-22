@@ -6,6 +6,7 @@ import { useEffect, useCallback } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { TaskCard } from './TaskCard';
+import { Trash2 } from 'lucide-react';
 import { useSwipeToReveal } from '../hooks/useSwipeToReveal';
 
 interface TaskItemProps {
@@ -66,15 +67,15 @@ const TaskItem = ({
     onTimeUpAction();
   };
 
-  const onManualComplete = () => {
-    completeActiveTask(timeLeft);
-  };
-
   const { timeLeft } = useTimer(
     isActive ? (task.duration * 60 - totalElapsedBeforePause) : 0,
     onTimeUp,
     isActive ? targetEndTime : null,
   );
+
+  const onManualComplete = () => {
+    completeActiveTask(timeLeft);
+  };
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -133,16 +134,17 @@ const TaskItem = ({
       data-testid="task-item-container"
       className="outline-none"
     >
-      <div className="relative mb-3 rounded-2xl overflow-hidden bg-red-500">
+      <div className={`relative mb-3 rounded-2xl overflow-hidden ${!isCompleted ? 'bg-red-500' : ''}`}>
         {/* Reveal Area (Behind) */}
         {isRevealed && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-6">
             <button
               onClick={() => onDelete(task.id)}
-              className="text-white font-black uppercase tracking-widest text-sm"
+              onPointerDown={(e) => e.stopPropagation()}
+              className="text-white hover:scale-110 transition-transform p-2"
               aria-label="Delete"
             >
-              Delete
+              <Trash2 size={24} strokeWidth={2.5} />
             </button>
           </div>
         )}
@@ -164,7 +166,6 @@ const TaskItem = ({
             progress={progress}
             isActuallyPaused={isActuallyPaused}
             eta={eta}
-            onDelete={onDelete}
             onToggle={handleToggle}
             onTitleSave={handleTitleSave}
             onDurationSave={handleDurationSave}
