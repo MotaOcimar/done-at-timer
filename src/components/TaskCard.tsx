@@ -76,6 +76,7 @@ const StatusIcon = ({
         <button
           onClick={onToggle}
           onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
           className={`flex items-center justify-center w-full h-full rounded-full transition-colors ${activeClass || ''}`}
           aria-label={isPaused ? 'Resume' : 'Pause'}
         >
@@ -94,6 +95,7 @@ const StatusIcon = ({
       <button
         onClick={onToggle}
         onPointerDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
         className={`flex items-center justify-center w-full h-full rounded-full group transition-colors ${iconButtonClasses.idle}`}
         aria-label="Play task"
       >
@@ -172,7 +174,8 @@ const TaskCard = ({
 
   return (
     <div 
-      className={`flex flex-col p-4 mb-3 rounded-2xl shadow-sm border transition-all duration-300 ${
+      data-testid="task-card"
+      className={`flex flex-col p-4 rounded-2xl shadow-sm border transition-all duration-300 ${
         cardClasses[cardState]
       } ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
     >
@@ -223,6 +226,7 @@ const TaskCard = ({
               <button
                 onClick={(e) => { e.stopPropagation(); onComplete(); }}
                 onPointerDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-wide transition-all shadow-lg ${
                   isTimeUp 
                     ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100' 
@@ -231,16 +235,6 @@ const TaskCard = ({
                 aria-label="Done"
               >
                 Done
-              </button>
-            )}
-            {!isActive && (
-              <button
-                onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
-                onPointerDown={(e) => e.stopPropagation()}
-                className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-                aria-label="Delete task"
-              >
-                <Trash2 size={20} strokeWidth={2} />
               </button>
             )}
           </div>

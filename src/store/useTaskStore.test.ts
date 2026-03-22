@@ -123,4 +123,24 @@ describe('useTaskStore', () => {
     expect(tasks[0].status).toBe('IN_PROGRESS');
     expect(tasks[1].status).toBe('PENDING');
   });
+
+  it('should auto-advance to next pending task when active task is removed', () => {
+    useTaskStore.setState({
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
+        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+      ],
+      activeTaskId: '1',
+      targetEndTime: Date.now() + 10 * 60 * 1000,
+    });
+
+    useTaskStore.getState().removeTask('1');
+
+    const { tasks, activeTaskId, targetEndTime } = useTaskStore.getState();
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].id).toBe('2');
+    expect(tasks[0].status).toBe('IN_PROGRESS');
+    expect(activeTaskId).toBe('2');
+    expect(targetEndTime).toBeGreaterThan(Date.now());
+  });
 });

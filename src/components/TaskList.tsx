@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { LayoutGroup } from 'framer-motion';
 import {
   DndContext,
@@ -62,6 +62,7 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeSwipeId, setActiveSwipeId] = useState<string | null>(null);
   const currentTime = useClock();
 
   // Calculate intermediate ETAs based on current time
@@ -70,7 +71,14 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
     [tasks, activeTaskTimeLeft, currentTime]
   );
 
+  const handleSwipeDismissAll = useCallback((newId?: string) => {
+    setActiveSwipeId(newId || null);
+  }, []);
+
   const handleDragStart = (event: DragStartEvent) => {
+    // Dismiss all swipes when starting a drag
+    handleSwipeDismissAll();
+    
     const task = tasks.find((t) => t.id === event.active.id);
     if (task) setActiveTask(task);
   };
@@ -166,7 +174,14 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
           <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
             <LayoutGroup>
               {tasks.map((task) => (
-                <TaskItem key={task.id} task={task} onDelete={removeTask} eta={etas.get(task.id)} />
+                <TaskItem 
+                  key={task.id} 
+                  task={task} 
+                  onDelete={removeTask} 
+                  eta={etas.get(task.id)}
+                  activeSwipeId={activeSwipeId}
+                  onSwipeDismissAll={handleSwipeDismissAll}
+                />
               ))}
             </LayoutGroup>
           </SortableContext>

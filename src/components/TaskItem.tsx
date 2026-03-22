@@ -2,33 +2,27 @@ import { motion } from 'framer-motion';
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { TaskCard } from './TaskCard';
+import { useSwipeToReveal } from '../hooks/useSwipeToReveal';
 
 interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
   eta?: Date;
+  activeSwipeId?: string | null;
+  onSwipeDismissAll?: (id?: string) => void;
 }
 
-const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    zIndex: isDragging ? 50 : 'auto',
-  };
-
+const TaskItem = ({ 
+  task, 
+  onDelete, 
+  eta, 
+  activeSwipeId, 
+  onSwipeDismissAll 
+}: TaskItemProps) => {
   const startTask = useTaskStore((state) => state.startTask);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
@@ -45,6 +39,29 @@ const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
   const isCompleted = task.status === 'COMPLETED';
   const isTimeUp = isActive && isTimeUpGlobal;
 
+  const {
+    isRevealed,
+    isSwipeActive,
+    dragProps
+  } = useSwipeToReveal({
+    id: task.id,
+    isEnabled: !isCompleted,
+    activeSwipeId: activeSwipeId || null,
+    onSwipeDismissAll: onSwipeDismissAll || (() => {}),
+  });
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ 
+    id: task.id,
+    disabled: isCompleted || isSwipeActive
+  });
+
   const onTimeUp = () => {
     onTimeUpAction();
   };
@@ -59,13 +76,20 @@ const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
     isActive ? targetEndTime : null,
   );
 
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+    touchAction: 'pan-y' as const
+  };
+
   useEffect(() => {
     if (isActive) {
       setActiveTaskTimeLeft(timeLeft);
     }
   }, [isActive, timeLeft, setActiveTaskTimeLeft]);
 
-  const handleToggle = (e: React.MouseEvent) => {
+  const handleToggle = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     if (isActive) {
       if (targetEndTime) pauseTask();
@@ -73,7 +97,7 @@ const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
     } else if (!isCompleted) {
       startTask(task.id);
     }
-  };
+  }, [isActive, isCompleted, pauseTask, resumeTask, startTask, targetEndTime, task.id]);
 
   const handleTitleSave = (newTitle: string) => {
     if (newTitle !== task.title) {
@@ -88,37 +112,69 @@ const TaskItem = ({ task, onDelete, eta }: TaskItemProps) => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Delete' && e.target === e.currentTarget) {
+      onDelete(task.id);
+    }
+  };
+
   const isActuallyPaused = isActive && !targetEndTime;
   const totalDurationSecs = task.duration * 60;
   const progress = Math.max(0, Math.min(1, 1 - (timeLeft / totalDurationSecs)));
 
   return (
-    <motion.div
-      layout={isDragging ? false : "position"}
-      transition={{ duration: 0.2, ease: 'easeInOut' }}
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      onKeyDown={handleKeyDown}
+      tabIndex={isCompleted ? -1 : 0}
+      data-testid="task-item-container"
+      className="outline-none"
     >
-      <TaskCard
-        task={task}
-        isActive={isActive}
-        isCompleted={isCompleted}
-        isDragging={isDragging}
-        isTimeUp={isTimeUp}
-        timeLeft={timeLeft}
-        progress={progress}
-        isActuallyPaused={isActuallyPaused}
-        eta={eta}
-        setNodeRef={setNodeRef}
-        style={style}
-        attributes={attributes}
-        listeners={listeners}
-        onDelete={onDelete}
-        onToggle={handleToggle}
-        onTitleSave={handleTitleSave}
-        onDurationSave={handleDurationSave}
-        onComplete={onManualComplete}
-      />
-    </motion.div>
+      <div className="relative mb-3 rounded-2xl overflow-hidden bg-red-500">
+        {/* Reveal Area (Behind) */}
+        {isRevealed && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-6">
+            <button
+              onClick={() => onDelete(task.id)}
+              className="text-white font-black uppercase tracking-widest text-sm"
+              aria-label="Delete"
+            >
+              Delete
+            </button>
+          </div>
+        )}
+
+        {/* Swipeable Card */}
+        <motion.div
+          {...dragProps}
+          layout={isDragging ? false : "position"}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          className="relative"
+        >
+          <TaskCard
+            task={task}
+            isActive={isActive}
+            isCompleted={isCompleted}
+            isDragging={isDragging}
+            isTimeUp={isTimeUp}
+            timeLeft={timeLeft}
+            progress={progress}
+            isActuallyPaused={isActuallyPaused}
+            eta={eta}
+            onDelete={onDelete}
+            onToggle={handleToggle}
+            onTitleSave={handleTitleSave}
+            onDurationSave={handleDurationSave}
+            onComplete={onManualComplete}
+          />
+        </motion.div>
+      </div>
+    </div>
   );
 };
+
 
 export { TaskItem };

@@ -60,13 +60,39 @@ export const useTaskStore = create<TaskState>()(
             },
           ],
         })),
-      removeTask: (id) =>
-        set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== id),
-          activeTaskId: state.activeTaskId === id ? null : state.activeTaskId,
-          targetEndTime: state.activeTaskId === id ? null : state.targetEndTime,
-          isTimeUp: state.activeTaskId === id ? false : state.isTimeUp,
-        })),
+      removeTask: (id) => {
+        const state = get();
+        const isActive = state.activeTaskId === id;
+        const newTasks = state.tasks.filter((task) => task.id !== id);
+        
+        if (isActive) {
+          const nextTask = newTasks.find((t) => t.status === 'PENDING');
+          if (nextTask) {
+            const finalTasks = newTasks.map((t) =>
+              t.id === nextTask.id ? { ...t, status: 'IN_PROGRESS' as const } : t
+            );
+            set({
+              tasks: finalTasks,
+              activeTaskId: nextTask.id,
+              targetEndTime: Date.now() + nextTask.duration * 60 * 1000,
+              totalElapsedBeforePause: 0,
+              isTimeUp: false,
+              activeTaskTimeLeft: nextTask.duration * 60,
+            });
+          } else {
+            set({
+              tasks: newTasks,
+              activeTaskId: null,
+              targetEndTime: null,
+              totalElapsedBeforePause: 0,
+              isTimeUp: false,
+              activeTaskTimeLeft: null,
+            });
+          }
+        } else {
+          set({ tasks: newTasks });
+        }
+      },
       updateTask: (id, updates) =>
         set((state) => {
           let activeTaskId = state.activeTaskId;
