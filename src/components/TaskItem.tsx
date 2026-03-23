@@ -8,6 +8,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { TaskCard } from './TaskCard';
 import { Trash2 } from 'lucide-react';
 import { useSwipeToReveal } from '../hooks/useSwipeToReveal';
+import { getCardState, cardBorderClasses } from '../utils/cardState';
 
 interface TaskItemProps {
   task: Task;
@@ -121,6 +122,7 @@ const TaskItem = ({
   };
 
   const isActuallyPaused = isActive && !targetEndTime;
+  const cardState = getCardState(task, isActive, isTimeUp, isActuallyPaused);
   const totalDurationSecs = task.duration * 60;
   const progress = Math.max(0, Math.min(1, 1 - (timeLeft / totalDurationSecs)));
 
@@ -135,7 +137,7 @@ const TaskItem = ({
       data-testid="task-item-container"
       className="outline-none"
     >
-      <div className="relative mb-3 rounded-2xl overflow-hidden">
+      <div className={`relative mb-3 rounded-2xl overflow-hidden border ${cardBorderClasses[cardState]}`}>
         {/* Reveal Area (Behind) */}
         {!isCompleted && (
           <motion.div 
@@ -146,7 +148,7 @@ const TaskItem = ({
               onClick={() => onDelete(task.id)}
               onPointerDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              className="text-white hover:scale-110 transition-transform p-2"
+              className="text-white hover:scale-110 transition-transform p-3"
               aria-label="Delete"
               tabIndex={isRevealed ? 0 : -1}
               aria-hidden={!isRevealed}
@@ -160,6 +162,7 @@ const TaskItem = ({
         {/* Swipeable Card */}
         <motion.div
           {...dragProps}
+          drag={isDragging ? false : dragProps.drag}
           layout={isDragging ? false : "position"}
           className="relative"
         >

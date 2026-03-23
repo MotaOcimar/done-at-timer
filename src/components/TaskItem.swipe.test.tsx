@@ -9,7 +9,7 @@ vi.mock('../hooks/useSwipeToReveal');
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: vi.fn(({ children, layout, drag, dragConstraints, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
+    div: vi.fn(({ children, layout, drag, dragConstraints, dragElastic, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
       <div data-testid="motion-div" data-layout={layout?.toString()} {...props}>
         {children}
       </div>
@@ -17,6 +17,7 @@ vi.mock('framer-motion', () => ({
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   LayoutGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  animate: vi.fn(() => ({ stop: () => {}, finished: Promise.resolve() })),
 }));
 
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {

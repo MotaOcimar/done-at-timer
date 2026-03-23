@@ -7,7 +7,7 @@ import { useTaskStore } from '../store/useTaskStore';
 // Mock framer-motion to check for LayoutGroup
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, layout, drag, dragConstraints, onDragStart, onDrag, onDragEnd, animate, ...props }: any) => (
+    div: ({ children, layout, drag, dragConstraints, dragElastic, onDragStart, onDrag, onDragEnd, animate, ...props }: any) => (
       <div data-testid="motion-div" data-layout={layout?.toString()} {...props}>
         {children}
       </div>
@@ -21,6 +21,7 @@ vi.mock('framer-motion', () => ({
     onChange: vi.fn(),
   }),
   useTransform: (_value: any, _input: any, output: any) => output[0],
+  animate: vi.fn(() => ({ stop: () => {}, finished: Promise.resolve() })),
 }));
 
 vi.mock('@dnd-kit/core', async (importOriginal) => {

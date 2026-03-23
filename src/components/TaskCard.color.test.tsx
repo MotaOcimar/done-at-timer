@@ -56,7 +56,6 @@ describe('TaskCard Color Refinements', () => {
       screen.getByText(/10 min left/i);
 
       // Card should be neutral gray
-      expect(card).toHaveClass('border-gray-300');
       expect(card).toHaveClass('bg-gray-50');
       
       // Status icon button should be neutral gray
@@ -98,7 +97,6 @@ describe('TaskCard Color Refinements', () => {
       screen.getByText(/10 min left/i);
 
       // Card should be active blue
-      expect(card).toHaveClass('border-blue-500');
       expect(card).toHaveClass('bg-blue-50');
 
       // Status icon button should be active blue
@@ -139,8 +137,7 @@ describe('TaskCard Color Refinements', () => {
       const doneButton = screen.getByRole('button', { name: /Done/i });
       screen.getByText(/1 min over/i);
 
-      // Card should be softer amber - currently it's border-amber-500
-      expect(card).toHaveClass('border-amber-300');
+      // Card should be softer amber
       expect(card).toHaveClass('bg-amber-50');
       expect(card).not.toHaveClass('border-amber-500');
 
@@ -191,7 +188,6 @@ describe('TaskCard Color Refinements', () => {
       expect(card).not.toHaveClass('opacity-70');
       
       // Card should be ultra soft green
-      expect(card).toHaveClass('border-green-100');
       expect(card).toHaveClass('bg-green-50/50');
 
       // Title should be very muted green and line-through

@@ -169,11 +169,11 @@ Refine the feel of interactions and verify they work well across devices.
       >
       ```
       This completes the bidirectional conflict resolution: swipe disables dnd-kit (`useSortable({ disabled: isSwipeActive })`), and now dnd-kit disables swipe (`drag={isDragging ? false : ...}`).
-    - [x] **Red**: Write failing test — simulate `isDragging=true` and verify that `dragProps.drag` is overridden to `false` (or that the motion.div receives `drag={false}`). 0000000
+    - [x] **Red**: Write failing test — simulate `isDragging=true` and verify that `dragProps.drag` is overridden to `false` (or that the motion.div receives `drag={false}`). 6366eea
     - [x] **Green**: Add the `drag={isDragging ? false : dragProps.drag}` override to the `<motion.div>` in `TaskItem.tsx` line 162 (the `layout` line is already correct). 4116907
-    - [x] **Refactor**: Consider adding a code comment explaining the bidirectional guard. 0000000
-    - [x] Run full test suite, confirm no regressions. 0000000
-- [ ] Task: Fix card stuck at intermediate position after slow drag release (TDD)
+    - [x] **Refactor**: Consider adding a code comment explaining the bidirectional guard. 6366eea
+    - [x] Run full test suite, confirm no regressions. 6366eea
+- [~] Task: Fix card stuck at intermediate position after slow drag release (TDD)
     - **Bug**: When the user drags a task card slowly to the left, stops before the reveal threshold (40px), and releases, the card stays at the exact release position instead of snapping back to `x: 0`. The card appears "stuck" in a half-revealed state.
     - **Root cause**: `handleDragEnd` calls `setIsRevealed(false)`, but `isRevealed` was **already `false`** — it was never set to `true` during this gesture. React treats `setState(sameValue)` as a no-op: no re-render, no useEffect trigger (line 35-41 `x.set(0)` doesn't fire), and the `animate` prop (`{ x: 0 }`) doesn't change so framer-motion doesn't re-animate. The `x` MotionValue stays at whatever position the drag left it.
     - **Fix — explicitly animate `x` to target in `handleDragEnd`**:

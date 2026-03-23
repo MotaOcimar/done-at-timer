@@ -2,6 +2,10 @@ import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
 import { 
+  getCardState, 
+  type CardState 
+} from '../utils/cardState';
+import { 
   CheckCircle2, 
   Clock, 
   Play, 
@@ -26,8 +30,6 @@ interface TaskCardProps {
   onDurationSave: (newDuration: string) => void;
   onComplete: () => void;
 }
-
-type CardState = 'completed' | 'idle' | 'overtime' | 'paused' | 'running';
 
 const StatusIcon = ({ 
   isCompleted, 
@@ -132,17 +134,14 @@ const TaskCard = ({
     ? `${mins} min over`
     : mins > 0 ? `${mins} min left` : '< 1 min left';
 
-  const cardState: CardState = isCompleted ? 'completed' :
-                    !isActive ? 'idle' :
-                    isTimeUp ? 'overtime' :
-                    isActuallyPaused ? 'paused' : 'running';
+  const cardState = getCardState(task, isActive, !!isTimeUp, isActuallyPaused);
 
   const cardClasses: Record<CardState, string> = {
-    completed: 'border-green-100 bg-green-50/50',
-    idle: 'border-gray-100 bg-white',
-    overtime: 'border-amber-300 bg-amber-50 ring-2 ring-amber-200/50',
-    paused: 'border-gray-300 bg-gray-50 ring-1 ring-gray-200/50',
-    running: 'border-blue-500 bg-blue-50 ring-1 ring-blue-500/20'
+    completed: 'bg-green-50/50',
+    idle: 'bg-white',
+    overtime: 'bg-amber-50 ring-2 ring-amber-200/50',
+    paused: 'bg-gray-50 ring-1 ring-gray-200/50',
+    running: 'bg-blue-50 ring-1 ring-blue-500/20'
   };
 
   const titleClasses: Record<CardState, string> = {
@@ -172,7 +171,7 @@ const TaskCard = ({
   return (
     <div 
       data-testid="task-card"
-      className={`flex flex-col p-4 rounded-2xl shadow-sm border transition-all duration-300 ${
+      className={`flex flex-col p-4 rounded-2xl shadow-sm transition-all duration-300 ${
         cardClasses[cardState]
       } ${isDragging ? 'opacity-50 transition-none select-none' : ''}`}
     >

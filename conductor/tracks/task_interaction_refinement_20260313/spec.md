@@ -43,6 +43,7 @@ Three interaction layers share the card surface: interactive elements (inputs, b
 - [ ] Keyboard `Delete` key only triggers task removal when the card itself is focused, not when an inner interactive element (e.g., InlineEdit input) has focus.
 - [ ] Deleting an active task (via swipe or keyboard) stops the timer and auto-advances to the next pending task (same behavior as completing a task).
 - [ ] Vertical scrolling of the task list is not intercepted by horizontal swipe gestures — `touch-action: pan-y` on the card container allows vertical scroll while capturing horizontal gestures.
+- [ ] During swipe-to-delete, the task card maintains a continuous visible border on all edges — including the clipped left edge where the card slides under the container boundary.
 
 ## Out of Scope
 - Changing the overall app layout (only task card-level interaction refinements).

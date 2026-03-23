@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useMotionValue, useTransform } from 'framer-motion';
+import { useMotionValue, useTransform, animate } from 'framer-motion';
 import { triggerHaptic } from '../utils/haptics';
 
 export interface UseSwipeToRevealProps {
@@ -33,11 +33,8 @@ export const useSwipeToReveal = ({
   
   // Update x when isRevealed changes (for programmatic animation)
   useEffect(() => {
-    if (!isRevealed) {
-      x.set(0);
-    } else {
-      x.set(-revealWidth);
-    }
+    const target = isRevealed ? -revealWidth : 0;
+    animate(x, target, { type: "tween", duration: 0.2, ease: "easeOut" });
   }, [isRevealed, revealWidth, x]);
 
   const dismiss = useCallback(() => {
@@ -76,13 +73,16 @@ export const useSwipeToReveal = ({
       const threshold = revealWidth / 2;
       // If velocity is high or offset exceeds threshold
       const shouldReveal = info.offset.x < -threshold || info.velocity.x < -500;
+      
       if (shouldReveal) {
         setIsRevealed(true);
+        animate(x, -revealWidth, { type: "tween", duration: 0.2, ease: "easeOut" });
       } else {
         setIsRevealed(false);
+        animate(x, 0, { type: "tween", duration: 0.2, ease: "easeOut" });
       }
     },
-    [revealWidth]
+    [revealWidth, x]
   );
 
   return {
@@ -98,9 +98,7 @@ export const useSwipeToReveal = ({
       onDragStart: handleDragStart,
       onDrag: handleDrag,
       onDragEnd: handleDragEnd,
-      animate: { x: isRevealed ? -revealWidth : 0 },
       style: { x },
-      transition: { type: "tween", duration: 0.2, ease: "easeOut" }
     },
   };
 };

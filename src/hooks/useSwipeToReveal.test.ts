@@ -3,10 +3,19 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useSwipeToReveal } from './useSwipeToReveal';
 import { triggerHaptic } from '../utils/haptics';
+import { animate } from 'framer-motion';
 
 vi.mock('../utils/haptics', () => ({
   triggerHaptic: vi.fn(),
 }));
+
+vi.mock('framer-motion', async (importOriginal) => {
+  const actual = await importOriginal() as any;
+  return {
+    ...actual,
+    animate: vi.fn(() => ({ stop: () => {}, finished: Promise.resolve() })),
+  };
+});
 
 describe('useSwipeToReveal (Spike POC)', () => {
   const defaultProps = {
@@ -139,5 +148,21 @@ describe('useSwipeToReveal (Spike POC)', () => {
     });
 
     expect(triggerHaptic).toHaveBeenCalledTimes(2);
+  });
+
+  it('animates back to 0 when drag ends below threshold even if already not revealed', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    
+    // Simulate drag that doesn't cross threshold
+    act(() => {
+      result.current.dragProps.onDragEnd(null as any, { offset: { x: -30 }, velocity: { x: 0 } } as any);
+    });
+
+    // Should call animate(x, 0, ...)
+    expect(animate).toHaveBeenCalledWith(
+      result.current.x,
+      0,
+      expect.objectContaining({ type: 'tween' })
+    );
   });
 });
