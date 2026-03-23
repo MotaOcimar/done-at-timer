@@ -197,7 +197,6 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
                   timeLeft={activeTask.id === activeTaskIdFromStore ? (activeTaskTimeLeft ?? 0) : 0}
                   progress={activeTask.id === activeTaskIdFromStore ? (1 - ((activeTaskTimeLeft ?? 0) / (activeTask.duration * 60))) : 0}
                   eta={etas.get(activeTask.id)}
-                  onDelete={() => {}}
                   onToggle={() => {}}
                   onTitleSave={() => {}}
                   onDurationSave={() => {}}

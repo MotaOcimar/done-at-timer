@@ -87,6 +87,9 @@ export const useSwipeToReveal = ({
 
   return {
     isRevealed,
+    // isSwipeActive: isSwipeActiveRef.current returns a render-time snapshot.
+    // This works because handleDrag calls onSwipeDismissAll(id) -> TaskList sets state -> 
+    // re-render propagates fresh .current before dnd-kit's sensors activate.
     isSwipeActive: isSwipeActiveRef.current,
     dismiss,
     x,

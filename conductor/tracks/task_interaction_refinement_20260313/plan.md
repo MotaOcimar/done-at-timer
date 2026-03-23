@@ -235,7 +235,7 @@ Refine the feel of interactions and verify they work well across devices.
     - [x] Card stuck: arrastar lentamente para a esquerda, parar antes do threshold e soltar → card volta suavemente para x=0 (sem ficar preso em posição intermediária) 42b0fdd
     - [x] Borda contínua: durante swipe, a edge esquerda do card mantém borda visível (sem corte abrupto onde o card sai da área visível) 42b0fdd
     - [x] Completed tasks: sem swipe, sem reveal layer, sem delete button 42b0fdd
-- [x] Task: Fix swipe red flash after drag-to-reorder release (TDD) [sha]
+- [x] Task: Fix swipe red flash after drag-to-reorder release (TDD) 1db7da0
     - **Bug**: After reordering a task via dnd-kit drag, the red delete background flashes on release if the finger was offset to the left during the drag.
     - **Root cause**: Between `pointerdown` and dnd-kit's activation threshold (10px mouse / 250ms touch), framer-motion's drag system starts tracking immediately (~3px internal threshold). If the pointer moves left during this window, the `x` MotionValue goes negative. When dnd-kit activates and `drag` flips to `false`, framer-motion stops tracking but does **NOT** fire `onDragEnd` — so `handleDragEnd` never runs and `x` is never animated back to 0. The existing dismiss path also fails: `handleSwipeDismissAll()` (called in `TaskList.handleDragStart`) sets `activeSwipeId` to `null`, but the auto-dismiss effect (line 28-32 of `useSwipeToReveal.ts`) requires `activeSwipeId !== null` — condition is false. And `isRevealed` was never set to `true`, so the isRevealed effect (line 35-38) doesn't fire either. When `isDragging` goes back to `false` after the reorder, `x` still has the stale negative value → `redOpacity > 0` → red flashes.
     - **Fix**: Reset the `x` MotionValue to 0 when `isDragging` becomes `true`. This goes in `TaskItem.tsx` (not the hook) because it coordinates the two gesture systems — same pattern as `drag={isDragging ? false : dragProps.drag}` at line 165. Cannot pass `isDragging` into `useSwipeToReveal` because of circular call order: `useSwipeToReveal` (line 44) is called before `useSortable` (line 56), and `useSortable` depends on `isSwipeActive` from the hook.
@@ -268,7 +268,7 @@ Refine the feel of interactions and verify they work well across devices.
     - [ ] **Refactor**: Review for consistency with the existing `drag={isDragging ? false : dragProps.drag}` guard. Consider adding a comment grouping both lines as "bidirectional dnd-kit ↔ swipe conflict resolution".
     - [ ] Run full test suite, confirm no regressions.
     - [ ] Manual verification: reorder a task with finger offset to the left during drag → on release, no red flash.
-- [ ] Task: Phase 3 Review Cleanup
+- [x] Task: Phase 3 Review Cleanup [sha]
     > **Blocks on**: "Fix swipe red flash" must be completed first — it exposes `x` from `useSwipeToReveal`, which changes the mock shape fixed below.
     - **Context**: `onDelete` was removed from `TaskCardProps` in Phase 2, but several call sites and tests still pass it. Also, one test has an empty body and mock shapes diverged from the real hook after the card-stuck fix and the red flash fix.
     - [ ] **Remove stale `onDelete` prop from `TaskList.tsx` DragOverlay** — line 200 passes `onDelete={() => {}}` to `<TaskCard>` inside `<DragOverlay>`. `TaskCardProps` no longer has `onDelete`. Delete the line. This is a TypeScript error that `tsc --noEmit` would catch.

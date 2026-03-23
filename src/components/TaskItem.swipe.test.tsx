@@ -47,14 +47,14 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isSwipeActive: false,
       dismiss: vi.fn(),
       x: { set: vi.fn(), get: () => 0 },
-      redOpacity: 0,
+      redOpacity: { get: () => 0 },
       dragProps: {
         drag: "x",
         dragConstraints: { left: -80, right: 0 },
+        dragElastic: { left: 0.3, right: 0 },
         onDragStart: vi.fn(),
         onDrag: vi.fn(),
         onDragEnd: vi.fn(),
-        animate: { x: 0 },
         style: { x: 0 },
       },
     } as any);
@@ -66,8 +66,8 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isSwipeActive: false,
       dismiss: vi.fn(),
       x: { set: vi.fn(), get: () => -80 },
-      redOpacity: 1,
-      dragProps: { animate: { x: -80 }, style: { x: -80 } } as any,
+      redOpacity: { get: () => 1 },
+      dragProps: { style: { x: -80 } } as any,
     } as any);
 
     render(<TaskItem task={task} onDelete={vi.fn()} />);
@@ -84,8 +84,8 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isSwipeActive: false,
       dismiss: vi.fn(),
       x: { set: vi.fn(), get: () => -80 },
-      redOpacity: 1,
-      dragProps: { animate: { x: -80 }, style: { x: -80 } } as any,
+      redOpacity: { get: () => 1 },
+      dragProps: { style: { x: -80 } } as any,
     } as any);
 
     render(<TaskItem task={task} onDelete={onDelete} />);
@@ -103,8 +103,8 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isSwipeActive: false,
       dismiss: vi.fn(),
       x: { set: vi.fn(), get: () => 0 },
-      redOpacity: 0,
-      dragProps: { animate: { x: 0 }, style: { x: 0 } } as any,
+      redOpacity: { get: () => 0 },
+      dragProps: { style: { x: 0 } } as any,
     } as any);
 
     render(<TaskItem task={task} onDelete={vi.fn()} />);
@@ -121,8 +121,8 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isSwipeActive: false,
       dismiss: vi.fn(),
       x: { set: vi.fn(), get: () => -80 },
-      redOpacity: 1,
-      dragProps: { animate: { x: -80 }, style: { x: -80 } } as any,
+      redOpacity: { get: () => 1 },
+      dragProps: { style: { x: -80 } } as any,
     } as any);
 
     render(<TaskItem task={task} onDelete={vi.fn()} />);

@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TaskList } from './TaskList';
 import { useTaskStore } from '../store/useTaskStore';
+import { TaskItem } from './TaskItem';
 
 // Mock framer-motion to check for LayoutGroup
 vi.mock('framer-motion', () => ({
@@ -28,9 +29,10 @@ vi.mock('@dnd-kit/core', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
-    DndContext: vi.fn(({ children, onDragEnd }) => (
+    DndContext: vi.fn(({ children, onDragStart, onDragEnd }) => (
       <div 
         data-testid="dnd-context" 
+        onMouseDown={() => onDragStart && onDragStart({ active: { id: '1' } })}
         onClick={(e: any) => {
           // Access properties from the native event
           const activeId = e.nativeEvent.activeId || '1';
@@ -54,6 +56,20 @@ vi.mock('@dnd-kit/sortable', async (importOriginal) => {
   };
 });
 
+vi.mock('./TaskItem', () => ({
+  TaskItem: vi.fn(({ task, eta, activeSwipeId, onSwipeDismissAll }: any) => (
+    <div 
+      data-testid={`task-item-${task.id}`} 
+      data-active-swipe={activeSwipeId || ''}
+      data-trigger-swipe-set={task.id}
+      onClick={() => onSwipeDismissAll && onSwipeDismissAll(task.id)}
+    >
+      <span>{task.title}</span>
+      {eta && <span>{eta.getHours().toString().padStart(2, '0')}:{eta.getMinutes().toString().padStart(2, '0')}</span>}
+    </div>
+  )),
+}));
+
 describe('TaskList', () => {
   beforeEach(() => {
     useTaskStore.setState({ tasks: [] });
@@ -71,6 +87,32 @@ describe('TaskList', () => {
     Object.defineProperty(event, 'overId', { value: overId });
     dndContext.dispatchEvent(event);
   };
+
+  it('dismisses all swipes when a drag-to-reorder starts', () => {
+    useTaskStore.setState({
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+    });
+
+    render(<TaskList />);
+    
+    // First, simulate a swipe reveal by clicking the mocked task item
+    // which calls onSwipeDismissAll('1')
+    act(() => {
+      fireEvent.click(screen.getByTestId('task-item-1'));
+    });
+    
+    // Verify it set the active swipe
+    expect(screen.getByTestId('task-item-1').getAttribute('data-active-swipe')).toBe('1');
+
+    // Trigger onDragStart via DndContext mock (onMouseDown calls onDragStart)
+    const dndContext = screen.getByTestId('dnd-context');
+    act(() => {
+      fireEvent.mouseDown(dndContext);
+    });
+
+    // Check that activeSwipeId was reset to null (empty string in data attribute)
+    expect(screen.getByTestId('task-item-1').getAttribute('data-active-swipe')).toBe('');
+  });
 
   it('computes and passes ETA to TaskItems', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
