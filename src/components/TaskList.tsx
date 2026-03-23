@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { LayoutGroup } from 'framer-motion';
+import { LayoutGroup, motion } from 'framer-motion';
 import {
   DndContext,
   closestCenter,
@@ -30,9 +30,10 @@ import { useClock } from '../hooks/useClock';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
+  children?: React.ReactNode;
 }
 
-const TaskList = ({ onSaveRoutine }: TaskListProps) => {
+const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
   const tasks = useTaskStore((state) => state.tasks);
   const removeTask = useTaskStore((state) => state.removeTask);
   const clearTasks = useTaskStore((state) => state.clearTasks);
@@ -114,8 +115,11 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
 
   if (tasks.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400">
-        No tasks yet. Add one below!
+      <div className="space-y-2">
+        <div className="text-center py-8 text-gray-400">
+          No tasks yet. Add one below!
+        </div>
+        {children}
       </div>
     );
   }
@@ -183,6 +187,11 @@ const TaskList = ({ onSaveRoutine }: TaskListProps) => {
                   onSwipeDismissAll={handleSwipeDismissAll}
                 />
               ))}
+              {children && (
+                <motion.div layout="position">
+                  {children}
+                </motion.div>
+              )}
             </LayoutGroup>
           </SortableContext>
           <DragOverlay adjustScale={false}>

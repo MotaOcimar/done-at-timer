@@ -215,11 +215,11 @@ describe('TaskItem', () => {
     render(<TaskItem task={task} onDelete={vi.fn()} />);
     
     const motionDivs = screen.getAllByTestId('motion-div');
-    // Find the swipe layer - it's the second motion.div and it has data-layout="false" when isDragging=true
-    const swipeLayer = motionDivs.find(div => div.getAttribute('data-layout') === 'false');
+    // The swipeable card is the one that receives the drag prop (which we expect to be 'false' now)
+    // The container motion.div has data-layout="false" but no data-drag.
+    const swipeLayer = motionDivs.find(div => div.hasAttribute('data-drag'));
     
     expect(swipeLayer).toBeDefined();
-    // drag={isDragging ? false : dragProps.drag}
     expect(swipeLayer?.getAttribute('data-drag')).toBe('false');
   });
 });

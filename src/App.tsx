@@ -39,10 +39,11 @@ function App() {
         <div className="mt-8 pt-8 border-t border-gray-100">
           <TaskList 
             onSaveRoutine={() => setIsSavingActive(true)} 
-          />
-          <div className="mt-6">
-            <TaskInput />
-          </div>
+          >
+            <div className="mt-6">
+              <TaskInput />
+            </div>
+          </TaskList>
         </div>
 
         <ControlCenter 

@@ -47,7 +47,7 @@ export const useSwipeToReveal = ({
   }, []);
 
   const handleDrag = useCallback(
-    (_: any, info: any) => {
+    (_: unknown, info: { offset: { x: number }; velocity?: { x: number } }) => {
       // Determine if it's a right-to-left swipe
       const isRightToLeft = info.offset.x < -10;
       if (isRightToLeft) {
@@ -67,7 +67,7 @@ export const useSwipeToReveal = ({
   );
 
   const handleDragEnd = useCallback(
-    (_: any, info: any) => {
+    (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
       isSwipeActiveRef.current = false;
       hasTriggeredHapticRef.current = false;
       const threshold = revealWidth / 2;

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { TaskCard } from './TaskCard';
@@ -67,21 +67,27 @@ const TaskItem = ({
   });
 
   // Bidirectional dnd-kit <-> swipe conflict resolution:
-  // 1. Swipe resets any dnd-kit offset when it activates (handled in useSwipeToReveal)
-  // 2. dnd-kit resets any swipe offset when it activates
-  useEffect(() => {
+  // When dnd-kit drag ends and `drag` re-enables to "x", framer-motion may fire
+  // a stale onDragEnd from the PanSession created on the original pointerdown.
+  // The accumulated offset includes all horizontal movement during the dnd-kit drag,
+  // which would falsely trigger a swipe reveal. This ref gates the drag callbacks
+  // so stale events are discarded.
+  const wasDndDragRef = useRef(false);
+
+  useLayoutEffect(() => {
     if (isDragging) {
+      wasDndDragRef.current = true;
       x.set(0);
+    } else if (wasDndDragRef.current) {
+      x.set(0);
+      const timer = setTimeout(() => { wasDndDragRef.current = false; }, 50);
+      return () => clearTimeout(timer);
     }
   }, [isDragging, x]);
 
-  const onTimeUp = () => {
-    onTimeUpAction();
-  };
-
   const { timeLeft } = useTimer(
     isActive ? (task.duration * 60 - totalElapsedBeforePause) : 0,
-    onTimeUp,
+    onTimeUpAction,
     isActive ? targetEndTime : null,
   );
 
@@ -147,12 +153,15 @@ const TaskItem = ({
       data-testid="task-item-container"
       className="outline-none"
     >
-      <div className={`relative mb-3 rounded-2xl overflow-hidden border ${cardBorderClasses[cardState]}`}>
+      <motion.div
+        layout={isDragging ? false : "position"}
+        className={`relative mb-3 rounded-2xl overflow-hidden border ${cardBorderClasses[cardState]}`}
+      >
         {/* Reveal Area (Behind) */}
         {!isCompleted && (
           <motion.div 
             style={{ opacity: redOpacity }}
-            className="absolute inset-0 bg-red-500 flex items-center justify-end pr-6"
+            className="absolute inset-0 bg-red-400 flex items-center justify-end pr-6"
           >
             <button
               onClick={() => onDelete(task.id)}
@@ -164,7 +173,7 @@ const TaskItem = ({
               aria-hidden={!isRevealed}
               data-testid="delete-button"
             >
-              <Trash2 size={24} strokeWidth={2.5} />
+              <Trash2 size={20} strokeWidth={2} />
             </button>
           </motion.div>
         )}
@@ -173,7 +182,22 @@ const TaskItem = ({
         <motion.div
           {...dragProps}
           drag={isDragging ? false : dragProps.drag}
-          layout={isDragging ? false : "position"}
+          onDragStart={(...args) => {
+            if (wasDndDragRef.current) return;
+            dragProps.onDragStart(...args);
+          }}
+          onDrag={(...args) => {
+            if (wasDndDragRef.current) return;
+            dragProps.onDrag(...args);
+          }}
+          onDragEnd={(...args) => {
+            if (wasDndDragRef.current) {
+              wasDndDragRef.current = false;
+              x.set(0);
+              return;
+            }
+            dragProps.onDragEnd(...args);
+          }}
           className="relative"
         >
           <TaskCard
@@ -192,7 +216,7 @@ const TaskItem = ({
             onComplete={onManualComplete}
           />
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 };

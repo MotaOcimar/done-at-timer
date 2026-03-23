@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TaskItem } from './TaskItem';
 import * as swipeHook from '../hooks/useSwipeToReveal';
 import { useSortable } from '@dnd-kit/sortable';
+import { motion } from 'framer-motion';
 
 vi.mock('../hooks/useSwipeToReveal');
 
@@ -176,18 +177,25 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
   it('resets x motion value to 0 when drag-to-reorder starts (isDragging=true)', () => {
     const xSetSpy = vi.fn();
     const mockX = { set: xSetSpy, get: () => -10 }; // Simulate partial swipe
-    
-    // Initial render with isDragging: false (default in mock)
+
     vi.mocked(swipeHook.useSwipeToReveal).mockReturnValue({
       isRevealed: false,
       isSwipeActive: false,
       x: mockX,
       redOpacity: { get: () => 0.1 },
-      dragProps: { style: { x: mockX } } as any,
+      dragProps: {
+        drag: "x",
+        dragConstraints: { left: -80, right: 0 },
+        dragElastic: { left: 0.3, right: 0 },
+        onDragStart: vi.fn(),
+        onDrag: vi.fn(),
+        onDragEnd: vi.fn(),
+        style: { x: mockX },
+      } as any,
     } as any);
 
     const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} />);
-    expect(xSetSpy).not.toHaveBeenCalledWith(0);
+    xSetSpy.mockClear();
 
     // Re-mock useSortable to return isDragging: true
     vi.mocked(useSortable).mockReturnValue({
@@ -200,8 +208,60 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
     } as any);
 
     rerender(<TaskItem task={task} onDelete={vi.fn()} />);
-    
-    // The fix: useEffect in TaskItem should call x.set(0) when isDragging becomes true
+
     expect(xSetSpy).toHaveBeenCalledWith(0);
+  });
+
+  it('blocks stale framer-motion onDragEnd after dnd-kit drag release', () => {
+    const hookDragEnd = vi.fn();
+    const xSetSpy = vi.fn();
+    const mockX = { set: xSetSpy, get: () => 0 };
+
+    vi.mocked(swipeHook.useSwipeToReveal).mockReturnValue({
+      isRevealed: false,
+      isSwipeActive: false,
+      x: mockX,
+      redOpacity: { get: () => 0 },
+      dragProps: {
+        drag: "x",
+        dragConstraints: { left: -80, right: 0 },
+        dragElastic: { left: 0.3, right: 0 },
+        onDragStart: vi.fn(),
+        onDrag: vi.fn(),
+        onDragEnd: hookDragEnd,
+        style: { x: mockX },
+      },
+    } as any);
+
+    // Start with isDragging: true (dnd-kit drag active)
+    vi.mocked(useSortable).mockReturnValue({
+      attributes: {},
+      listeners: {},
+      setNodeRef: vi.fn(),
+      transform: null,
+      transition: null,
+      isDragging: true,
+    } as any);
+
+    const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} />);
+
+    // Release: isDragging → false (drag re-enables to "x")
+    vi.mocked(useSortable).mockReturnValue({
+      attributes: {},
+      listeners: {},
+      setNodeRef: vi.fn(),
+      transform: null,
+      transition: null,
+      isDragging: false,
+    } as any);
+    rerender(<TaskItem task={task} onDelete={vi.fn()} />);
+
+    // Simulate framer-motion firing a stale onDragEnd from the PanSession
+    const motionDiv = vi.mocked(motion.div) as any;
+    const lastCallProps = motionDiv.mock.calls[motionDiv.mock.calls.length - 1][0];
+    lastCallProps.onDragEnd(null, { offset: { x: -60 }, velocity: { x: 0 } });
+
+    // The hook's onDragEnd must NOT have been called
+    expect(hookDragEnd).not.toHaveBeenCalled();
   });
 });
