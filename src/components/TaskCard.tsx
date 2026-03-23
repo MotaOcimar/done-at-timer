@@ -2,7 +2,6 @@ import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
 import { 
-  getCardState, 
   type CardState 
 } from '../utils/cardState';
 import { 
@@ -18,6 +17,7 @@ interface TaskCardProps {
   task: Task;
   isActive: boolean;
   isCompleted: boolean;
+  cardState: CardState;
   isDragging?: boolean;
   isTimeUp?: boolean;
   timeLeft?: number;
@@ -115,6 +115,7 @@ const TaskCard = ({
   task, 
   isActive, 
   isCompleted, 
+  cardState,
   isDragging, 
   isTimeUp,
   timeLeft = 0, 
@@ -133,8 +134,6 @@ const TaskCard = ({
   const timeDisplay = isOvertime 
     ? `${mins} min over`
     : mins > 0 ? `${mins} min left` : '< 1 min left';
-
-  const cardState = getCardState(task, isActive, !!isTimeUp, isActuallyPaused);
 
   const cardClasses: Record<CardState, string> = {
     completed: 'bg-green-50/50',

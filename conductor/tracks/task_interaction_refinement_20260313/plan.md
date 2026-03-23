@@ -280,14 +280,14 @@ Post-implementation review identified architectural and correctness issues from 
 
 > **Blocks on**: Phase 3 must be fully complete (all tasks checked, checkpoint committed).
 
-- [~] Task: 4.1 — Fix double animation in `useSwipeToReveal` (TDD)
+- [x] Task: 4.1 — Fix double animation in `useSwipeToReveal` (TDD) 24f1dd2
     - **Bug**: `handleDragEnd` calls `animate(x, target)` explicitly (lines 79/82), then `setIsRevealed(true/false)` triggers the `useEffect` (line 36) which calls `animate(x, target)` again. Two competing animations fire on the same MotionValue every drag end.
     - **Fix**: The `useEffect` at line 36 exists for **programmatic** dismiss (when `activeSwipeId` changes to another task). Split the concerns: the useEffect should only run for external dismiss, not for `handleDragEnd`-driven state changes. Use a `skipNextAnimateRef` — set it to `true` in `handleDragEnd` before calling `setIsRevealed`, check and reset it in the useEffect to skip the redundant `animate` call.
     - **Red**: Write a test that verifies `animate` is called exactly once (not twice) when `handleDragEnd` fires with `shouldReveal=true`. Mock `animate` from framer-motion, invoke the hook's `handleDragEnd` via `renderHook`, assert call count.
     - **Green**: Add `skipNextAnimateRef` to the hook. Set `true` before `setIsRevealed` in `handleDragEnd`. In the useEffect, if ref is `true`, reset it and return early.
     - **Refactor**: Verify programmatic dismiss (activeSwipeId change) still animates correctly — it should, because `skipNextAnimateRef` is only set in `handleDragEnd`.
 
-- [ ] Task: 4.2 — Eliminate duplicate `cardState` computation (TDD)
+- [x] Task: 4.2 — Eliminate duplicate cardState computation (TDD) e4b0fdd
     - **Problem**: `getCardState()` is called in both `TaskItem.tsx:141` (for border classes) and `TaskCard.tsx:137` (for card/title/label styling). Same inputs, same result, computed twice per render.
     - **Fix**: `TaskItem` already computes `cardState`. Pass it as a prop to `TaskCard`. Remove the `getCardState` call inside `TaskCard`.
     - **Red**: In `TaskCard.test.tsx`, add a test that renders `TaskCard` with an explicit `cardState` prop and verifies the correct card background class is applied. This will fail because `TaskCard` doesn't accept `cardState` as a prop yet.

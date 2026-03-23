@@ -204,6 +204,7 @@ const TaskItem = ({
             task={task}
             isActive={isActive}
             isCompleted={isCompleted}
+            cardState={cardState}
             isDragging={isDragging}
             isTimeUp={isTimeUp}
             timeLeft={timeLeft}

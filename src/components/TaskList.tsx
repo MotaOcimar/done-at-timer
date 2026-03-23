@@ -27,6 +27,7 @@ import { TaskCard } from './TaskCard';
 import type { Task } from '../types';
 import { calculateIntermediateETAs } from '../utils/time';
 import { useClock } from '../hooks/useClock';
+import { getCardState } from '../utils/cardState';
 
 interface TaskListProps {
   onSaveRoutine?: () => void;
@@ -195,24 +196,33 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
             </LayoutGroup>
           </SortableContext>
           <DragOverlay adjustScale={false}>
-            {activeTask ? (
-              <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
-                <TaskCard 
-                  task={activeTask} 
-                  isActive={activeTask.id === activeTaskIdFromStore}
-                  isCompleted={activeTask.status === 'COMPLETED'}
-                  isDragging={true}
-                  isTimeUp={activeTask.id === activeTaskIdFromStore && isTimeUpGlobal}
-                  timeLeft={activeTask.id === activeTaskIdFromStore ? (activeTaskTimeLeft ?? 0) : 0}
-                  progress={activeTask.id === activeTaskIdFromStore ? (1 - ((activeTaskTimeLeft ?? 0) / (activeTask.duration * 60))) : 0}
-                  eta={etas.get(activeTask.id)}
-                  onToggle={() => {}}
-                  onTitleSave={() => {}}
-                  onDurationSave={() => {}}
-                  onComplete={() => {}}
-                />
-              </div>
-            ) : null}
+            {activeTask ? (() => {
+              const isActive = activeTask.id === activeTaskIdFromStore;
+              const isTimeUp = isActive && isTimeUpGlobal;
+              const timeLeft = isActive ? (activeTaskTimeLeft ?? 0) : 0;
+              const progress = isActive ? (1 - (timeLeft / (activeTask.duration * 60))) : 0;
+              const cardState = getCardState(activeTask, isActive, isTimeUp, false);
+              
+              return (
+                <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
+                  <TaskCard 
+                    task={activeTask} 
+                    isActive={isActive}
+                    isCompleted={activeTask.status === 'COMPLETED'}
+                    cardState={cardState}
+                    isDragging={true}
+                    isTimeUp={isTimeUp}
+                    timeLeft={timeLeft}
+                    progress={progress}
+                    eta={etas.get(activeTask.id)}
+                    onToggle={() => {}}
+                    onTitleSave={() => {}}
+                    onDurationSave={() => {}}
+                    onComplete={() => {}}
+                  />
+                </div>
+              );
+            })() : null}
           </DragOverlay>
         </DndContext>
       ) : (
