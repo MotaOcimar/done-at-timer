@@ -287,14 +287,14 @@ Post-implementation review identified architectural and correctness issues from 
     - **Green**: Add `skipNextAnimateRef` to the hook. Set `true` before `setIsRevealed` in `handleDragEnd`. In the useEffect, if ref is `true`, reset it and return early.
     - **Refactor**: Verify programmatic dismiss (activeSwipeId change) still animates correctly — it should, because `skipNextAnimateRef` is only set in `handleDragEnd`.
 
-- [x] Task: 4.2 — Eliminate duplicate cardState computation (TDD) e4b0fdd
+- [x] Task: 4.2 — Eliminate duplicate cardState computation (TDD) 600ecfb
     - **Problem**: `getCardState()` is called in both `TaskItem.tsx:141` (for border classes) and `TaskCard.tsx:137` (for card/title/label styling). Same inputs, same result, computed twice per render.
     - **Fix**: `TaskItem` already computes `cardState`. Pass it as a prop to `TaskCard`. Remove the `getCardState` call inside `TaskCard`.
     - **Red**: In `TaskCard.test.tsx`, add a test that renders `TaskCard` with an explicit `cardState` prop and verifies the correct card background class is applied. This will fail because `TaskCard` doesn't accept `cardState` as a prop yet.
     - **Green**: Add `cardState: CardState` to `TaskCardProps`. Use it directly instead of calling `getCardState`. Update `TaskItem` to pass the already-computed value. Remove `getCardState` import from `TaskCard.tsx`.
     - **Refactor**: Verify `TaskCard` no longer imports `getCardState`. Remove the now-unused parameters that were only needed for `getCardState` inside TaskCard (`isActive`, `isTimeUp`, `isActuallyPaused`) **only if** they are not used for anything else in TaskCard. Check each usage before removing.
 
-- [ ] Task: 4.3 — Hoist static style maps out of `TaskCard` render (no TDD needed — pure move, no logic change)
+- [x] Task: 4.3 — Hoist static style maps out of `TaskCard` render (no TDD needed — pure move, no logic change) d5b6e7f
     - **Problem**: Four `Record<CardState, string>` constants (`cardClasses`, `titleClasses`, `labelClasses`, `timeDisplayClasses`) are defined inside the `TaskCard` component body (lines 139–169), recreated every render. They are static — no dependency on props or state.
     - **Fix**: Move all four to module scope (above the component definition), matching the pattern already used by `cardBorderClasses` in `cardState.ts`.
     - No tests needed — this is a mechanical move of constant declarations. Run the full test suite to confirm no regressions.

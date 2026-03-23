@@ -111,6 +111,38 @@ const timeFormatter = new Intl.DateTimeFormat('default', {
   hour12: false
 });
 
+const cardClasses: Record<CardState, string> = {
+  completed: 'bg-green-50/50',
+  idle: 'bg-white',
+  overtime: 'bg-amber-50 ring-2 ring-amber-200/50',
+  paused: 'bg-gray-50 ring-1 ring-gray-200/50',
+  running: 'bg-blue-50 ring-1 ring-blue-500/20'
+};
+
+const titleClasses: Record<CardState, string> = {
+  completed: 'line-through text-green-800/40 font-medium',
+  idle: 'text-gray-800',
+  overtime: 'text-amber-600',
+  paused: 'text-gray-600',
+  running: 'text-blue-700 text-lg'
+};
+
+const labelClasses: Record<CardState, string> = {
+  completed: 'text-green-700/30',
+  idle: 'text-gray-400',
+  overtime: 'text-amber-400',
+  paused: 'text-gray-400',
+  running: 'text-blue-400'
+};
+
+const timeDisplayClasses: Record<CardState, string> = {
+  completed: 'text-green-700/30',
+  idle: 'text-gray-400',
+  overtime: 'text-amber-500 animate-pulse',
+  paused: 'text-gray-500',
+  running: 'text-blue-600'
+};
+
 const TaskCard = ({ 
   task, 
   isActive, 
@@ -134,38 +166,6 @@ const TaskCard = ({
   const timeDisplay = isOvertime 
     ? `${mins} min over`
     : mins > 0 ? `${mins} min left` : '< 1 min left';
-
-  const cardClasses: Record<CardState, string> = {
-    completed: 'bg-green-50/50',
-    idle: 'bg-white',
-    overtime: 'bg-amber-50 ring-2 ring-amber-200/50',
-    paused: 'bg-gray-50 ring-1 ring-gray-200/50',
-    running: 'bg-blue-50 ring-1 ring-blue-500/20'
-  };
-
-  const titleClasses: Record<CardState, string> = {
-    completed: 'line-through text-green-800/40 font-medium',
-    idle: 'text-gray-800',
-    overtime: 'text-amber-600',
-    paused: 'text-gray-600',
-    running: 'text-blue-700 text-lg'
-  };
-
-  const labelClasses: Record<CardState, string> = {
-    completed: 'text-green-700/30',
-    idle: 'text-gray-400',
-    overtime: 'text-amber-400',
-    paused: 'text-gray-400',
-    running: 'text-blue-400'
-  };
-
-  const timeDisplayClasses: Record<CardState, string> = {
-    completed: 'text-green-700/30',
-    idle: 'text-gray-400',
-    overtime: 'text-amber-500 animate-pulse',
-    paused: 'text-gray-500',
-    running: 'text-blue-600'
-  };
 
   return (
     <div 
