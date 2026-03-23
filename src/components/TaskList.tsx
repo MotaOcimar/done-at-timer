@@ -95,9 +95,6 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
     setActiveTask(null);
   };
 
-  const allCompleted =
-    tasks.length > 0 && tasks.every((t) => t.status === 'COMPLETED');
-
   const handleClearClick = () => {
     if (isConfirmingClear) {
       if (clearTimeoutId) clearTimeout(clearTimeoutId);
@@ -125,15 +122,16 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
     );
   }
 
+  const allCompleted = tasks.every((t) => t.status === 'COMPLETED');
 
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center mb-4 px-1">
         <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wide">
-          {tasks.length > 0 ? `Tasks (${tasks.length})` : 'Plan your routine'}
+          Tasks ({tasks.length})
         </h2>
         <div className="flex gap-4 items-center">
-          {onSaveRoutine && tasks.length > 0 && (
+          {onSaveRoutine && (
             <button
               onClick={onSaveRoutine}
               className="text-xs font-bold text-green-400 hover:text-green-600 uppercase tracking-wide transition-colors flex items-center gap-1"
@@ -142,18 +140,16 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
               Save
             </button>
           )}
-          {tasks.length > 0 && (
-            <button
-              onClick={handleClearClick}
-              className={`text-xs font-bold uppercase tracking-wide transition-all duration-500 ease-in-out whitespace-nowrap text-center ${
-                isConfirmingClear 
-                  ? 'text-red-600 w-28' 
-                  : 'text-red-300 sm:hover:text-red-500 w-20'
-              }`}
-            >
-              {isConfirmingClear ? 'Are you sure?' : 'Clear All'}
-            </button>
-          )}
+          <button
+            onClick={handleClearClick}
+            className={`text-xs font-bold uppercase tracking-wide transition-all duration-500 ease-in-out whitespace-nowrap text-center ${
+              isConfirmingClear 
+                ? 'text-red-600 w-28' 
+                : 'text-red-300 sm:hover:text-red-500 w-20'
+            }`}
+          >
+            {isConfirmingClear ? 'Are you sure?' : 'Clear All'}
+          </button>
         </div>
       </div>
       
@@ -169,67 +165,61 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
         </div>
       )}
 
-      {tasks.length > 0 ? (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-            <LayoutGroup>
-              {tasks.map((task) => (
-                <TaskItem 
-                  key={task.id} 
-                  task={task} 
-                  onDelete={removeTask} 
-                  eta={etas.get(task.id)}
-                  activeSwipeId={activeSwipeId}
-                  onSwipeDismissAll={handleSwipeDismissAll}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
+          <LayoutGroup>
+            {tasks.map((task) => (
+              <TaskItem 
+                key={task.id} 
+                task={task} 
+                onDelete={removeTask} 
+                eta={etas.get(task.id)}
+                activeSwipeId={activeSwipeId}
+                onSwipeDismissAll={handleSwipeDismissAll}
+              />
+            ))}
+            {children && (
+              <motion.div layout="position">
+                {children}
+              </motion.div>
+            )}
+          </LayoutGroup>
+        </SortableContext>
+        <DragOverlay adjustScale={false}>
+          {activeTask ? (() => {
+            const isActive = activeTask.id === activeTaskIdFromStore;
+            const isTimeUp = isActive && isTimeUpGlobal;
+            const timeLeft = isActive ? (activeTaskTimeLeft ?? 0) : 0;
+            const progress = isActive ? (1 - (timeLeft / (activeTask.duration * 60))) : 0;
+            const cardState = getCardState(activeTask, isActive, isTimeUp, false);
+            
+            return (
+              <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
+                <TaskCard 
+                  task={activeTask} 
+                  isActive={isActive}
+                  isCompleted={activeTask.status === 'COMPLETED'}
+                  cardState={cardState}
+                  isDragging={true}
+                  isTimeUp={isTimeUp}
+                  timeLeft={timeLeft}
+                  progress={progress}
+                  eta={etas.get(activeTask.id)}
+                  onToggle={() => {}}
+                  onTitleSave={() => {}}
+                  onDurationSave={() => {}}
+                  onComplete={() => {}}
                 />
-              ))}
-              {children && (
-                <motion.div layout="position">
-                  {children}
-                </motion.div>
-              )}
-            </LayoutGroup>
-          </SortableContext>
-          <DragOverlay adjustScale={false}>
-            {activeTask ? (() => {
-              const isActive = activeTask.id === activeTaskIdFromStore;
-              const isTimeUp = isActive && isTimeUpGlobal;
-              const timeLeft = isActive ? (activeTaskTimeLeft ?? 0) : 0;
-              const progress = isActive ? (1 - (timeLeft / (activeTask.duration * 60))) : 0;
-              const cardState = getCardState(activeTask, isActive, isTimeUp, false);
-              
-              return (
-                <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
-                  <TaskCard 
-                    task={activeTask} 
-                    isActive={isActive}
-                    isCompleted={activeTask.status === 'COMPLETED'}
-                    cardState={cardState}
-                    isDragging={true}
-                    isTimeUp={isTimeUp}
-                    timeLeft={timeLeft}
-                    progress={progress}
-                    eta={etas.get(activeTask.id)}
-                    onToggle={() => {}}
-                    onTitleSave={() => {}}
-                    onDurationSave={() => {}}
-                    onComplete={() => {}}
-                  />
-                </div>
-              );
-            })() : null}
-          </DragOverlay>
-        </DndContext>
-      ) : (
-        <div className="text-center py-8 text-gray-400">
-          No tasks yet. Add one above!
-        </div>
-      )}
+              </div>
+            );
+          })() : null}
+        </DragOverlay>
+      </DndContext>
     </div>
   );
 };

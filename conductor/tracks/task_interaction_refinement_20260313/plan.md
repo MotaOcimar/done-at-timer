@@ -294,12 +294,12 @@ Post-implementation review identified architectural and correctness issues from 
     - **Green**: Add `cardState: CardState` to `TaskCardProps`. Use it directly instead of calling `getCardState`. Update `TaskItem` to pass the already-computed value. Remove `getCardState` import from `TaskCard.tsx`.
     - **Refactor**: Verify `TaskCard` no longer imports `getCardState`. Remove the now-unused parameters that were only needed for `getCardState` inside TaskCard (`isActive`, `isTimeUp`, `isActuallyPaused`) **only if** they are not used for anything else in TaskCard. Check each usage before removing.
 
-- [x] Task: 4.3 — Hoist static style maps out of `TaskCard` render (no TDD needed — pure move, no logic change) d5b6e7f
+- [x] Task: 4.3 — Hoist static style maps out of `TaskCard` render (no TDD needed — pure move, no logic change) 1307af1
     - **Problem**: Four `Record<CardState, string>` constants (`cardClasses`, `titleClasses`, `labelClasses`, `timeDisplayClasses`) are defined inside the `TaskCard` component body (lines 139–169), recreated every render. They are static — no dependency on props or state.
     - **Fix**: Move all four to module scope (above the component definition), matching the pattern already used by `cardBorderClasses` in `cardState.ts`.
     - No tests needed — this is a mechanical move of constant declarations. Run the full test suite to confirm no regressions.
 
-- [ ] Task: 4.4 — Remove dead code in `TaskList` (no TDD needed — deletion only)
+- [x] Task: 4.4 — Remove dead code in `TaskList` (no TDD needed — deletion only) b6e7f8a
     - **Problem**: `TaskList.tsx` line 116 returns early when `tasks.length === 0`. After this guard, line 171 (`tasks.length > 0 ?`) is always true — the else branch (lines 218–221, "No tasks yet. Add one above!") is dead code. Additionally, `allCompleted` (line 97) is computed *before* the early return with a `tasks.length > 0 &&` guard — this guard is necessary at its current location (since `[].every()` returns `true`), but can be removed if the computation is moved below the early return where `tasks.length > 0` is guaranteed.
     - **Fix**:
         1. Remove the ternary at line 171 — keep only the truthy branch (the `<DndContext>` block). Delete the dead else branch (lines 218–221).
