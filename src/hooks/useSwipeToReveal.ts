@@ -20,6 +20,7 @@ export const useSwipeToReveal = ({
   const [isRevealed, setIsRevealed] = useState(false);
   const isSwipeActiveRef = useRef(false);
   const hasTriggeredHapticRef = useRef(false);
+  const skipNextAnimateRef = useRef(false);
   
   const x = useMotionValue(0);
   const redOpacity = useTransform(x, [0, -revealWidth], [0, 1]);
@@ -33,6 +34,10 @@ export const useSwipeToReveal = ({
   
   // Update x when isRevealed changes (for programmatic animation)
   useEffect(() => {
+    if (skipNextAnimateRef.current) {
+      skipNextAnimateRef.current = false;
+      return;
+    }
     const target = isRevealed ? -revealWidth : 0;
     animate(x, target, { type: "tween", duration: 0.2, ease: "easeOut" });
   }, [isRevealed, revealWidth, x]);
@@ -75,14 +80,20 @@ export const useSwipeToReveal = ({
       const shouldReveal = info.offset.x < -threshold || info.velocity.x < -500;
       
       if (shouldReveal) {
-        setIsRevealed(true);
+        if (!isRevealed) {
+          skipNextAnimateRef.current = true;
+          setIsRevealed(true);
+        }
         animate(x, -revealWidth, { type: "tween", duration: 0.2, ease: "easeOut" });
       } else {
-        setIsRevealed(false);
+        if (isRevealed) {
+          skipNextAnimateRef.current = true;
+          setIsRevealed(false);
+        }
         animate(x, 0, { type: "tween", duration: 0.2, ease: "easeOut" });
       }
     },
-    [revealWidth, x]
+    [isRevealed, revealWidth, x]
   );
 
   return {

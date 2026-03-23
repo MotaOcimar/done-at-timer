@@ -165,4 +165,53 @@ describe('useSwipeToReveal (Spike POC)', () => {
       expect.objectContaining({ type: 'tween' })
     );
   });
+
+  it('calls animate exactly once during drag end (prevents double animation)', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    
+    // Clear initial animate calls from render/useEffect
+    vi.clearAllMocks();
+    
+    act(() => {
+      result.current.dragProps.onDragEnd(null as any, { offset: { x: -50 }, velocity: { x: 0 } } as any);
+    });
+
+    // Should call animate once in handleDragEnd. 
+    // Currently it also calls it in useEffect triggered by setIsRevealed.
+    expect(animate).toHaveBeenCalledTimes(1);
+  });
+
+  it('still animates programmatically after a no-op drag end', () => {
+    const { result, rerender } = renderHook(
+      (props) => useSwipeToReveal(props),
+      { initialProps: defaultProps }
+    );
+
+    // 1. Reveal it
+    act(() => {
+      result.current.dragProps.onDragEnd(null as any, { offset: { x: -50 }, velocity: { x: 0 } } as any);
+    });
+    expect(result.current.isRevealed).toBe(true);
+    vi.clearAllMocks();
+
+    // 2. Drag it again (already revealed)
+    act(() => {
+      result.current.dragProps.onDragEnd(null as any, { offset: { x: -50 }, velocity: { x: 0 } } as any);
+    });
+    // animate should be called once in handleDragEnd
+    expect(animate).toHaveBeenCalledTimes(1);
+    vi.clearAllMocks();
+
+    // 3. Programmatic dismiss
+    rerender({ ...defaultProps, activeSwipeId: 'task-2' });
+    expect(result.current.isRevealed).toBe(false);
+
+    // If skipNextAnimateRef leaked, this will be 0.
+    expect(animate).toHaveBeenCalledTimes(1);
+    expect(animate).toHaveBeenCalledWith(
+      result.current.x,
+      0,
+      expect.anything()
+    );
+  });
 });

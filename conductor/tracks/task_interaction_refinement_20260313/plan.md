@@ -273,3 +273,49 @@ Refine the feel of interactions and verify they work well across devices.
 - [x] Task: Commit Phase 3 final fixes 3e6545c
     - Staged changes: `TaskItem.tsx` (wasDndDragRef gate, useLayoutEffect, callback guards, layout="position" moved to clip container, visual tweaks bg-red-400/icon size), `useSwipeToReveal.ts` (typed drag callback params), `TaskList.tsx` (added children for coordinated animation), `App.tsx` (passed TaskInput as child), `TaskItem.test.tsx` (updated selector), `TaskItem.swipe.test.tsx` (stale onDragEnd guard test), `plan.md`
 [checkpoint: 3e6545c]
+
+## Phase 4: Code Quality Review Fixes
+
+Post-implementation review identified architectural and correctness issues from Phases 1–3. No new features — only structural improvements to existing code.
+
+> **Blocks on**: Phase 3 must be fully complete (all tasks checked, checkpoint committed).
+
+- [~] Task: 4.1 — Fix double animation in `useSwipeToReveal` (TDD)
+    - **Bug**: `handleDragEnd` calls `animate(x, target)` explicitly (lines 79/82), then `setIsRevealed(true/false)` triggers the `useEffect` (line 36) which calls `animate(x, target)` again. Two competing animations fire on the same MotionValue every drag end.
+    - **Fix**: The `useEffect` at line 36 exists for **programmatic** dismiss (when `activeSwipeId` changes to another task). Split the concerns: the useEffect should only run for external dismiss, not for `handleDragEnd`-driven state changes. Use a `skipNextAnimateRef` — set it to `true` in `handleDragEnd` before calling `setIsRevealed`, check and reset it in the useEffect to skip the redundant `animate` call.
+    - **Red**: Write a test that verifies `animate` is called exactly once (not twice) when `handleDragEnd` fires with `shouldReveal=true`. Mock `animate` from framer-motion, invoke the hook's `handleDragEnd` via `renderHook`, assert call count.
+    - **Green**: Add `skipNextAnimateRef` to the hook. Set `true` before `setIsRevealed` in `handleDragEnd`. In the useEffect, if ref is `true`, reset it and return early.
+    - **Refactor**: Verify programmatic dismiss (activeSwipeId change) still animates correctly — it should, because `skipNextAnimateRef` is only set in `handleDragEnd`.
+
+- [ ] Task: 4.2 — Eliminate duplicate `cardState` computation (TDD)
+    - **Problem**: `getCardState()` is called in both `TaskItem.tsx:141` (for border classes) and `TaskCard.tsx:137` (for card/title/label styling). Same inputs, same result, computed twice per render.
+    - **Fix**: `TaskItem` already computes `cardState`. Pass it as a prop to `TaskCard`. Remove the `getCardState` call inside `TaskCard`.
+    - **Red**: In `TaskCard.test.tsx`, add a test that renders `TaskCard` with an explicit `cardState` prop and verifies the correct card background class is applied. This will fail because `TaskCard` doesn't accept `cardState` as a prop yet.
+    - **Green**: Add `cardState: CardState` to `TaskCardProps`. Use it directly instead of calling `getCardState`. Update `TaskItem` to pass the already-computed value. Remove `getCardState` import from `TaskCard.tsx`.
+    - **Refactor**: Verify `TaskCard` no longer imports `getCardState`. Remove the now-unused parameters that were only needed for `getCardState` inside TaskCard (`isActive`, `isTimeUp`, `isActuallyPaused`) **only if** they are not used for anything else in TaskCard. Check each usage before removing.
+
+- [ ] Task: 4.3 — Hoist static style maps out of `TaskCard` render (no TDD needed — pure move, no logic change)
+    - **Problem**: Four `Record<CardState, string>` constants (`cardClasses`, `titleClasses`, `labelClasses`, `timeDisplayClasses`) are defined inside the `TaskCard` component body (lines 139–169), recreated every render. They are static — no dependency on props or state.
+    - **Fix**: Move all four to module scope (above the component definition), matching the pattern already used by `cardBorderClasses` in `cardState.ts`.
+    - No tests needed — this is a mechanical move of constant declarations. Run the full test suite to confirm no regressions.
+
+- [ ] Task: 4.4 — Remove dead code in `TaskList` (no TDD needed — deletion only)
+    - **Problem**: `TaskList.tsx` line 116 returns early when `tasks.length === 0`. After this guard, line 171 (`tasks.length > 0 ?`) is always true — the else branch (lines 218–221, "No tasks yet. Add one above!") is dead code. Additionally, `allCompleted` (line 97) is computed *before* the early return with a `tasks.length > 0 &&` guard — this guard is necessary at its current location (since `[].every()` returns `true`), but can be removed if the computation is moved below the early return where `tasks.length > 0` is guaranteed.
+    - **Fix**:
+        1. Remove the ternary at line 171 — keep only the truthy branch (the `<DndContext>` block). Delete the dead else branch (lines 218–221).
+        2. Move `allCompleted` computation below the `tasks.length === 0` early return (line 116), then simplify to `const allCompleted = tasks.every((t) => t.status === 'COMPLETED');`.
+    - Run full test suite to confirm no regressions.
+
+- [ ] Task: 4.5 — Make swipe props required in `TaskItemProps` (TDD)
+    - **Problem**: `activeSwipeId` and `onSwipeDismissAll` are declared optional (`?`) in `TaskItemProps` but are always passed by `TaskList` (the only consumer). `TaskItem` then applies defensive defaults (`|| null`, `|| (() => {})`), adding noise.
+    - **Red**: TypeScript compilation is the test — after making the props required, any call site missing them will fail `tsc --noEmit`. Run it and confirm it passes (all call sites already provide the props). For test files that render `<TaskItem>` without these props, the compiler error is the red signal — fix them in the green step.
+    - **Green**: Remove `?` from both props in `TaskItemProps`. Remove the `|| null` and `|| (() => {})` defaults in the `useSwipeToReveal` call. Update any test renders of `<TaskItem>` that omit these props — add `activeSwipeId={null} onSwipeDismissAll={() => {}}` explicitly.
+    - **Refactor**: Verify no other component renders `<TaskItem>` — only `TaskList` should.
+
+### Task order
+Execute 4.1 → 4.2 → 4.3 → 4.4 → 4.5. Each is independent, but this order starts with the highest-risk fix (animation correctness) and ends with the lowest-risk (type tightening). Commit after each task.
+
+### Final validation
+- [ ] `npx tsc --noEmit` — zero errors
+- [ ] `CI=true npm test` — all tests pass
+- [ ] Manual smoke: swipe reveal, dismiss, delete, drag-to-reorder, completed task behavior — all unchanged
