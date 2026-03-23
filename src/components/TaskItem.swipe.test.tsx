@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TaskItem } from './TaskItem';
 import * as swipeHook from '../hooks/useSwipeToReveal';
+import { useSortable } from '@dnd-kit/sortable';
 
 vi.mock('../hooks/useSwipeToReveal');
 
@@ -172,16 +173,35 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
     expect(onDelete).not.toHaveBeenCalled();
   });
 
-  it('resets swipe state when drag-to-reorder starts', () => {
-    const onSwipeDismissAll = vi.fn();
-    // In actual implementation, TaskList passes this
-    render(<TaskItem task={task} onDelete={vi.fn()} onSwipeDismissAll={onSwipeDismissAll} />);
+  it('resets x motion value to 0 when drag-to-reorder starts (isDragging=true)', () => {
+    const xSetSpy = vi.fn();
+    const mockX = { set: xSetSpy, get: () => -10 }; // Simulate partial swipe
     
-    // To test this we need TaskList integration or just check TaskItem handles dnd-kit events
-    // Actually, plan says: "TaskList: ... In onDragStart, call dismiss-all"
-    // So TaskItem should receive onSwipeDismissAll and use it.
-    // Wait, TaskItem.tsx doesn't have onDragStart handler, TaskList does.
-    // The plan says: "Test swipe state reset: when a drag-to-reorder starts, all revealed swipe areas dismiss."
-    // This is better tested in an integration test or TaskList test.
+    // Initial render with isDragging: false (default in mock)
+    vi.mocked(swipeHook.useSwipeToReveal).mockReturnValue({
+      isRevealed: false,
+      isSwipeActive: false,
+      x: mockX,
+      redOpacity: { get: () => 0.1 },
+      dragProps: { style: { x: mockX } } as any,
+    } as any);
+
+    const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} />);
+    expect(xSetSpy).not.toHaveBeenCalledWith(0);
+
+    // Re-mock useSortable to return isDragging: true
+    vi.mocked(useSortable).mockReturnValue({
+      attributes: {},
+      listeners: {},
+      setNodeRef: vi.fn(),
+      transform: null,
+      transition: null,
+      isDragging: true,
+    } as any);
+
+    rerender(<TaskItem task={task} onDelete={vi.fn()} />);
+    
+    // The fix: useEffect in TaskItem should call x.set(0) when isDragging becomes true
+    expect(xSetSpy).toHaveBeenCalledWith(0);
   });
 });

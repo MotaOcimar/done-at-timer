@@ -44,6 +44,7 @@ const TaskItem = ({
   const {
     isRevealed,
     isSwipeActive,
+    x,
     redOpacity,
     dragProps
   } = useSwipeToReveal({
@@ -64,6 +65,15 @@ const TaskItem = ({
     id: task.id,
     disabled: isCompleted || isSwipeActive
   });
+
+  // Bidirectional dnd-kit <-> swipe conflict resolution:
+  // 1. Swipe resets any dnd-kit offset when it activates (handled in useSwipeToReveal)
+  // 2. dnd-kit resets any swipe offset when it activates
+  useEffect(() => {
+    if (isDragging) {
+      x.set(0);
+    }
+  }, [isDragging, x]);
 
   const onTimeUp = () => {
     onTimeUpAction();
