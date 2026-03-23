@@ -35,7 +35,7 @@ Three interaction layers share the card surface. Resolution order (highest prior
 - **Direction detection**: Direction is **not** known at `pointerdown` time — it is only determined after the pointer moves. Therefore, the swipe layer must **not** call `stopPropagation()` on `pointerdown`. Instead, the approach is:
     1. Let `pointerdown` propagate normally (both framer-motion and dnd-kit receive it).
     2. On the first `pointermove`, determine gesture direction from the delta.
-    3. If the direction is right-to-left: the framer-motion drag layer claims the gesture (its `drag="x"` constraint naturally handles this). To prevent dnd-kit from also activating, the swipe layer sets a `isSwipeActive` ref that `useSortable` reads via its `disabled` option. Since framer-motion reacts immediately but dnd-kit waits for `distance: 10px` / `delay: 250ms`, the ref is set before dnd-kit's sensor activates.
+    3. If the direction is right-to-left: the framer-motion drag layer claims the gesture (its `drag="x"` constraint naturally handles this). To prevent dnd-kit from also activating, the swipe layer sets a `isSwipeActive` ref that `useSortable` reads via its `disabled` option. Since framer-motion reacts immediately but dnd-kit waits for `distance: 10px` / `delay: 250ms`, the flag is set before dnd-kit's sensor activates.
     4. If the direction is not right-to-left: let dnd-kit handle it normally (framer-motion's drag constraint will not engage for vertical/left-to-right movement beyond the snap threshold).
 - **Swipe state coordination (props)**: `TaskList` owns an `activeSwipeId` state and passes `activeSwipeId` + `onSwipeDismissAll` as props to each `TaskItem`. When a dnd-kit drag starts (`onDragStart` in `TaskList.tsx`), it calls `onSwipeDismissAll()` to reset all revealed cards. This is only 1 level of prop passing (TaskList → TaskItem) — a React Context would be overhead for this depth.
 - **DnD layer**: Keep `@dnd-kit` `useSortable` in `TaskItem.tsx`. Apply `listeners` and `attributes` to the card's outer container. The existing `MouseSensor` distance constraint (10px) and `TouchSensor` delay (250ms) provide natural hold-to-drag behavior.
@@ -81,23 +81,23 @@ Focus on removing the drag handles and enabling whole-card dragging while preser
 Introduce the swipe-to-delete gesture and the "Delete" button revealed behind the card. Swipe is available on all tasks **except completed**.
 
 - [x] Task: Spike — design `useSwipeToReveal` hook and validate test strategy 6d7fd21
-    - [ ] The `useSwipeToReveal` hook is an architectural decision (see Implementation Approach above). This spike defines its API and validates how to test it. Draft the hook's public interface: inputs (task id, enabled flag, dismiss signal) and outputs (`isRevealed`, `dismiss()`, framer-motion drag props).
-    - [ ] `framer-motion` drag gestures are difficult to simulate with `fireEvent` in happy-dom/jsdom (no real pointer event sequences or animation frames). Investigate and decide on one of these test strategies:
+    - [x] The `useSwipeToReveal` hook is an architectural decision (see Implementation Approach above). This spike defines its API and validates how to test it. Draft the hook's public interface: inputs (task id, enabled flag, dismiss signal) and outputs (`isRevealed`, `dismiss()`, framer-motion drag props).
+    - [x] `framer-motion` drag gestures are difficult to simulate with `fireEvent` in happy-dom/jsdom (no real pointer event sequences or animation frames). Investigate and decide on one of these test strategies:
         1. **Test the hook in isolation** with `renderHook` (state transitions, dismiss logic). Test the component with the hook mocked — verify conditional rendering of the Delete button based on `isRevealed` state.
         2. **Mock `framer-motion`'s `motion.div`** to a plain `div` that exposes `onDragEnd` as a callable prop, then invoke it directly in tests with synthetic drag info.
         3. **Use `@testing-library/user-event`** with pointer event sequences if the environment supports it.
-    - [ ] Write a small proof-of-concept test using the chosen strategy. Confirm it can: (a) trigger a swipe reveal, (b) verify the Delete button appears, (c) dismiss the reveal.
-    - [ ] Document the hook API and chosen test strategy in this task's commit note so Phase 2 follows consistently.
+    - [x] Write a small proof-of-concept test using the chosen strategy. Confirm it can: (a) trigger a swipe reveal, (b) verify the Delete button appears, (c) dismiss the reveal.
+    - [x] Document the hook API and chosen test strategy in this task's commit note so Phase 2 follows consistently.
 - [x] Task: Write failing tests for Phase 2 (TDD Red) 48fafbd
-    - [ ] Using the strategy validated in the spike, test that right-to-left swipe on a non-completed task reveals a "Delete" button.
-    - [ ] Test that clicking the revealed Delete button calls `removeTask`.
-    - [ ] Test that completed tasks do not have swipe-to-delete (no Delete button rendered, swipe has no effect).
-    - [ ] Test that the inline Trash2 delete button no longer exists in `TaskCard`.
-    - [ ] Test that dismissing the swipe (left-to-right or tap) hides the Delete button.
-    - [ ] Test keyboard delete fallback (`Delete` key on focused card removes task).
-    - [ ] Test swipe state reset: when a drag-to-reorder starts, all revealed swipe areas dismiss.
-    - [ ] Test active task deletion: deleting an active task (via revealed Delete button) stops the timer and auto-advances to the next pending task.
-    - [ ] Run tests, confirm they fail (Red phase).
+    - [x] Using the strategy validated in the spike, test that right-to-left swipe on a non-completed task reveals a "Delete" button.
+    - [x] Test that clicking the revealed Delete button calls `removeTask`.
+    - [x] Test that completed tasks do not have swipe-to-delete (no Delete button rendered, swipe has no effect).
+    - [x] Test that the inline Trash2 delete button no longer exists in `TaskCard`.
+    - [x] Test that dismissing the swipe (left-to-right or tap) hides the Delete button.
+    - [x] Test keyboard delete fallback (`Delete` key on focused card removes task).
+    - [x] Test swipe state reset: when a drag-to-reorder starts, all revealed swipe areas dismiss.
+    - [x] Test active task deletion: deleting an active task (via revealed Delete button) stops the timer and auto-advances to the next pending task.
+    - [x] Run tests, confirm they fail (Red phase).
 - [x] Task: Implement `useSwipeToReveal` hook (TDD Green) 6d7fd21
     - [x] Create `src/hooks/useSwipeToReveal.ts` with the API designed in the spike. The hook manages all swipe state and framer-motion drag props internally.
     - [x] Hook inputs: task id, enabled flag (false for completed tasks), `activeSwipeId` and `onSwipeDismissAll` (props from `TaskList` for coordination).
@@ -136,73 +136,95 @@ Introduce the swipe-to-delete gesture and the "Delete" button revealed behind th
     - [x] Fix completed tasks appearing red — the reveal layer container applies `bg-red-500` unconditionally, bleeding through semi-transparent card backgrounds.
     - [x] Fix dragged tasks appearing red during reorder — `opacity-50` on drag exposes the red container.
     - [x] Consolidate red background fix — the current approach (excluding `bg-red-500` per-case with `!isCompleted && !isDragging`) is fragile; any animation that shifts or fades the card will leak red. Invert the logic: only apply `bg-red-500` when the swipe is active or revealed (`isSwipeActive || isRevealed`). These are the only two states where the red background needs to be visible. This replaces all per-case exclusions with a single positive condition.
-- [x] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md)
-    - [x] Add 3 tasks. Swipe a pending task from right to left → a red "Delete" button appears behind the card.
-    - [x] Click "Delete" → the task is removed and list auto-advances if it was the active task.
-    - [x] Swipe another task left, then swipe it back right → the Delete button hides, task stays.
-    - [x] Start a task (Active). Swipe it left → Delete reveals, while "Done" button remains visible on the card.
-    - [x] Complete a task. Try swiping it → nothing happens (completed tasks don't swipe).
-    - [x] Focus a card (tab to it or click it) and press `Delete` key → task is removed.
-    - [x] Focus an `InlineEdit` input, press `Delete` key → text is deleted but task remains.
-    - [x] Swipe a task left (revealed), then start dragging another task to reorder → the swiped task automatically dismisses.
-
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Swipe-to-Delete Implementation' (Protocol in workflow.md) 9f7ff3f
 
 ## Phase 3: Polish & Mobile Verification
 Refine the feel of interactions and verify they work well across devices.
 
 > **Blocks on**: Phase 2 manual verification must be completed first.
 
-- [~] Task: Fix abrupt appearance of red background and trash icon during swipe (TDD)
-    - Root cause: `bg-red-500` and the trash icon are toggled on/off via late-activating conditions (`isSwipeActive` at 10px offset, `isRevealed` at drag-end). This causes the red to flash on suddenly and the icon to pop in, instead of being gradually revealed as the card slides.
-    - Fix: derive the red layer's opacity from the drag X offset using framer-motion's `useMotionValue` + `useTransform`. At x=0 → opacity=0 (invisible); at x=-revealWidth → opacity=1 (fully visible). The card naturally covers the reveal layer at rest — no toggling, no flash, no extra `bg-white` cover layer. During drag-to-reorder x stays at 0, so the red layer is invisible automatically.
+- [x] Task: Fix abrupt appearance of red background and trash icon during swipe (TDD) 4116907
     - [x] Investigate root cause and document solution approach
-    - [ ] **Red**: Write/update failing tests:
-        - `TaskItem.swipe.test.tsx`: Keep existing `"does not render inline Trash2 button anymore"` test (still valid — inline TaskCard button is gone). Add **new** test: `"trash button is not keyboard-reachable when not revealed"` — assert delete button exists in DOM but has `tabIndex={-1}`.
-        - Add test: when `isRevealed: true`, the delete button has `tabIndex={0}` (keyboard-reachable).
-        - Add test: completed tasks have no delete button in the DOM (reveal layer not rendered).
-        - `useSwipeToReveal.test.ts`: Add test that the hook returns `x` (MotionValue) and `redOpacity` (derived MotionValue) in its output. (Pragmatic compromise — tests hook's public API surface consumed by `motion.div`, not pure behavior. Acceptable given JSDOM can't verify actual opacity transitions.)
-        - Run tests, confirm they fail.
-    - [ ] **Green**: Implement:
-        - `useSwipeToReveal.ts`: Add `const x = useMotionValue(0)` and `const redOpacity = useTransform(x, [0, -revealWidth], [0, 1])`. Return `x` and `redOpacity` alongside existing outputs. Pass `x` into `dragProps.style`.
-        - `TaskItem.tsx` reveal layer: Replace conditional `(isSwipeActive || isRevealed)` bg-red-500 with an always-present (for non-completed) `<motion.div style={{ opacity: redOpacity }} className="absolute inset-0 bg-red-500 ...">` containing the trash button.
-        - `TaskItem.tsx` trash button: Add `tabIndex={isRevealed ? 0 : -1}`.
-        - Remove `isSwipeActive` from container className logic (no longer needed for red toggle).
-        - Run tests, confirm they pass.
-    - [ ] **Refactor**: Review that `isSwipeActive` is still needed only for `useSortable({ disabled })`. Check for dead code from the old toggle approach. Run full test suite.
-    - [ ] Verify (manual): swipe from first pixel → red and icon fade in smoothly (no flash). During drag-to-reorder, red layer is invisible (opacity=0).
-- [ ] Task: Tune swipe animation parameters (manual tuning — TDD exception)
-    - Depends on: "Fix abrupt appearance" task (modifies the same hook and motion.div).
-    - Animation parameter tuning is inherently subjective — config-value assertions (e.g., `dragElastic === 0.3`) test implementation, not behavior, and break on any feel adjustment. Entire task is manual tuning, exempt from TDD.
-    - [ ] Implement:
+    - [x] **Red**: Write/update failing tests 4116907
+    - [x] **Green**: Implement 4116907
+    - [x] **Refactor**: Review implementation and test code 4116907
+    - [x] Verify (manual): swipe from first pixel → red and icon fade in smoothly (no flash). During drag-to-reorder, red layer is invisible (opacity=0).
+- [x] Task: Tune swipe animation parameters (manual tuning — TDD exception) 4116907
+    - [x] Implement: 4116907
         - Add `dragElastic: { left: 0.3, right: 0 }` to dragProps (rubberband past reveal boundary, no elasticity right).
         - Set reveal/dismiss transition to `{ type: "tween", duration: 0.2 }`.
-    - [ ] **Visual tuning**: Adjust spring/tween values (damping, stiffness) until the snap feels responsive. Iterate on device.
-- [ ] Task: Add haptic feedback on swipe reveal (TDD)
-    - Depends on: "Fix abrupt appearance" task (both modify `useSwipeToReveal`'s drag handler).
-    - [ ] **Red**: Write failing tests:
-        - In new `src/utils/haptics.test.ts`: test `triggerHaptic` calls `navigator.vibrate(10)` when available, no-ops without error when unavailable.
-        - In `useSwipeToReveal.test.ts`: test that `triggerHaptic` (mocked via `vi.mock`) is called during `onDrag` when the swipe offset first crosses the reveal threshold. This gives tactile feedback *before* the user releases.
-        - Test that `triggerHaptic` is called only **once** even if `onDrag` fires multiple times past threshold in the same gesture (ref guard).
-        - Test that after a gesture ends and a **new** gesture crosses the threshold, `triggerHaptic` fires again (ref reset in `handleDragEnd`).
-        - Run tests, confirm they fail.
-    - [ ] **Green**: Implement:
-        - Create `src/utils/haptics.ts` with a `triggerHaptic(ms = 10)` wrapper that gates behind `'vibrate' in navigator` (DIP-lite — mockable module boundary without over-engineering an interface).
-        - Call `triggerHaptic()` from `useSwipeToReveal`'s `handleDrag` when the offset first crosses the threshold. Use a ref to fire only once per gesture, reset in `handleDragEnd`.
-    - [ ] **Refactor**: Review haptic integration — ensure threshold ref resets properly. Check for duplication between drag threshold logic and reveal threshold logic.
-    - **Limitation**: Vibration API is not supported on iOS Safari and has inconsistent support across browsers.
+    - [x] **Visual tuning**: Adjust spring/tween values (damping, stiffness) until the snap feels responsive. Iterate on device.
+- [x] Task: Add haptic feedback on swipe reveal (TDD) 4116907
+    - [x] **Red**: Write failing tests 4116907
+    - [x] **Green**: Implement 4116907
+    - [x] **Refactor**: Review haptic integration 4116907
+- [x] Task: Fix swipe-to-delete activating during drag-to-reorder (TDD) 4116907
+    - **Bug**: When reordering a task (dnd-kit drag active, `isDragging=true`), moving the finger horizontally causes the red delete background to appear. Root cause: the inner `<motion.div>` keeps `drag="x"` active during dnd-kit drag — framer-motion processes the horizontal component of pointer movement and updates the `x` motion value, which drives `redOpacity`.
+    - **Fix**: Override `dragProps.drag` to `false` when `isDragging` is `true` in `TaskItem.tsx`. Note: `layout={isDragging ? false : "position"}` is already applied (line 163) — only the `drag` override is missing:
+      ```tsx
+      <motion.div
+        {...dragProps}
+        drag={isDragging ? false : dragProps.drag}
+        layout={isDragging ? false : "position"}   // already present
+      >
+      ```
+      This completes the bidirectional conflict resolution: swipe disables dnd-kit (`useSortable({ disabled: isSwipeActive })`), and now dnd-kit disables swipe (`drag={isDragging ? false : ...}`).
+    - [x] **Red**: Write failing test — simulate `isDragging=true` and verify that `dragProps.drag` is overridden to `false` (or that the motion.div receives `drag={false}`). 0000000
+    - [x] **Green**: Add the `drag={isDragging ? false : dragProps.drag}` override to the `<motion.div>` in `TaskItem.tsx` line 162 (the `layout` line is already correct). 4116907
+    - [x] **Refactor**: Consider adding a code comment explaining the bidirectional guard. 0000000
+    - [x] Run full test suite, confirm no regressions. 0000000
+- [ ] Task: Fix card stuck at intermediate position after slow drag release (TDD)
+    - **Bug**: When the user drags a task card slowly to the left, stops before the reveal threshold (40px), and releases, the card stays at the exact release position instead of snapping back to `x: 0`. The card appears "stuck" in a half-revealed state.
+    - **Root cause**: `handleDragEnd` calls `setIsRevealed(false)`, but `isRevealed` was **already `false`** — it was never set to `true` during this gesture. React treats `setState(sameValue)` as a no-op: no re-render, no useEffect trigger (line 35-41 `x.set(0)` doesn't fire), and the `animate` prop (`{ x: 0 }`) doesn't change so framer-motion doesn't re-animate. The `x` MotionValue stays at whatever position the drag left it.
+    - **Fix — explicitly animate `x` to target in `handleDragEnd`**:
+        1. Import `animate` (the imperative animation function) from `framer-motion`.
+        2. In `handleDragEnd`, after deciding `shouldReveal`, call `animate(x, target, transition)` directly on the MotionValue instead of relying on the state change → useEffect → `x.set()` chain:
+           ```typescript
+           if (shouldReveal) {
+             setIsRevealed(true);
+             animate(x, -revealWidth, { type: "tween", duration: 0.2, ease: "easeOut" });
+           } else {
+             setIsRevealed(false);
+             animate(x, 0, { type: "tween", duration: 0.2, ease: "easeOut" });
+           }
+           ```
+        3. This guarantees the card always snaps to either `0` or `-revealWidth` with a smooth 200ms tween, even when the state value didn't change.
+        4. The useEffect at lines 35-41 (`x.set(0)` / `x.set(-revealWidth)`) still handles **programmatic** dismiss (e.g., auto-dismiss when another card's swipe activates). Consider also upgrading it to use `animate()` for consistency, but this is optional.
+    - [ ] **Red**: Write failing test — simulate drag end below threshold with `isRevealed` already `false`, verify `x` animates back to 0.
+    - [ ] **Green**: Import `animate` from framer-motion, update `handleDragEnd` to imperatively animate `x`. **Also remove the declarative `animate` prop from `dragProps` (line 101)** — keeping both the imperative `animate(x, ...)` call and the declarative `animate: { x: ... }` prop creates two conflicting animation sources on the same MotionValue; the imperative call is now the single source of truth for drag-end animations.
+    - [ ] **Refactor**: Review useEffect at lines 35-41 for consistency — consider upgrading `x.set()` to `animate()` for smoother programmatic dismiss transitions.
+    - [ ] Run full test suite, confirm no regressions.
+- [ ] Task: Fix border disappearing on clipped left edge during swipe (TDD)
+    - **Bug**: When swiping a task left, the card's left border exits the visible area (clipped by `overflow: hidden` on the container). The left edge of the visible area has no border, so the task looks visually "cut off" without closure.
+    - **Root cause**: The `border` + `border-{color}` classes live on `TaskCard`'s root div (line 175), which moves with the swipe. The clip container (`TaskItem.tsx` line 138, `<div className="relative mb-3 rounded-2xl overflow-hidden">`) has no border — so when the card slides, nothing provides a left-edge border.
+    - **Fix — move border ownership from TaskCard to the clip container**:
+        1. **Extract `cardState` computation** to a shared utility (e.g. `src/utils/cardState.ts`) to avoid duplicating the state-derivation logic between TaskCard and TaskItem. The function takes `{ isCompleted, isActive, isTimeUp, isActuallyPaused }` and returns the `CardState` enum value.
+        2. **Create a border-only class mapping** (separate from `cardClasses`): `Record<CardState, string>` with only the `border-{color}` values (no `bg-*`, no `ring-*`).
+        3. **In `TaskItem.tsx`**: compute `cardState` using the shared utility, apply `border` + the state-specific `border-{color}` to the clip container (line 138).
+        4. **In `TaskCard.tsx`**: remove `border` and `border-{color}` from `cardClasses` — keep `bg-*` and `ring-*` only. Remove the base `border` class from the card div (line 175).
+    - **Result at x=0 (no swipe)**: container border visible on all sides, card has no border → visually identical to today (both share `rounded-2xl`, container clips exactly at card edges).
+    - **Result during swipe**: container's left border stays in place → continuous visual closure on the left edge. Right side (red area): also gets the container border, which provides additional visual cohesion.
+    - **Note on `ring` classes**: `ring-*` (CSS box-shadow) on TaskCard is also clipped on the left during swipe, but this is a subtle secondary effect. Leave it on TaskCard for now; revisit if it becomes visually noticeable.
+    - [ ] **Red**: Write failing tests — verify the clip container has state-dependent border classes; verify TaskCard no longer has `border` class.
+    - [ ] **Green**: Extract `cardState`, create border mapping, apply to container, remove from TaskCard.
+    - [ ] **Refactor**: Review for duplication; ensure `cardClasses` in TaskCard is clean.
+    - [ ] Run full test suite, confirm no regressions.
 - [ ] Task: Verify mobile touch targets and responsiveness (manual)
     - Touch target sizing (44×44px) depends on padding + icon size, not specific CSS classes — JSDOM can't compute rendered dimensions. Verified manually only.
     - [ ] Delete button has adequate touch target (≥44×44px) on device.
     - [ ] Swipe and drag-to-reorder don't conflict on touch devices (especially the 250ms hold delay).
     - [ ] On small screens (320px width) — revealed Delete area doesn't overflow or clip the card content.
     - [ ] Scrolling the task list vertically is not accidentally intercepted by swipe gestures.
-- [ ] Task: Refactor Phase 3 (TDD Refactor)
-    - [ ] Review all Phase 3 changes holistically — opacity-from-X approach, animation config, haptic integration.
+- [x] Task: Refactor Phase 3 — initial pass (TDD Refactor) 4116907
+    - [x] Review all Phase 3 changes holistically — opacity-from-X approach, animation config, haptic integration.
+    - [x] Run full test suite (`CI=true npm test`), confirm all phases pass with no regressions.
+- [ ] Task: Refactor Phase 3 — final pass (TDD Refactor)
+    - [ ] Review the three bug fix implementations holistically for duplication, naming consistency, and interaction between the fixes.
     - [ ] Run full test suite (`CI=true npm test`), confirm all phases pass with no regressions.
-- [ ] Task: Update backlog — mark "Full Card Drag and Drop" and "Swipe to Delete" as done, referencing this track
+- [x] Task: Update backlog — mark "Full Card Drag and Drop" and "Swipe to Delete" as done, referencing this track 4116907
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Polish & Mobile Verification' (Protocol in workflow.md)
     - [ ] Swipe desde o primeiro pixel → red e ícone aparecem gradualmente (sem flash)
-    - [ ] Durante drag-to-reorder, sem vermelho visível (opacity=0 pois x=0)
+    - [ ] Durante drag-to-reorder, sem vermelho visível — mover o dedo horizontalmente durante reorder não revela o fundo vermelho
     - [ ] Drag-to-reorder com opacity-50 não vaza vermelho
     - [ ] Animação de snap (reveal e dismiss) é fluida (~200ms)
     - [ ] Rubberband: arrastar além do reveal width tem resistência elástica
@@ -210,4 +232,6 @@ Refine the feel of interactions and verify they work well across devices.
     - [ ] Delete button tem tamanho adequado para toque em mobile (≥44×44px)
     - [ ] Em viewport 320px, reveal area não transborda
     - [ ] Scroll vertical da lista não é interceptado pelo swipe horizontal
+    - [ ] Card stuck: arrastar lentamente para a esquerda, parar antes do threshold e soltar → card volta suavemente para x=0 (sem ficar preso em posição intermediária)
+    - [ ] Borda contínua: durante swipe, a edge esquerda do card mantém borda visível (sem corte abrupto onde o card sai da área visível)
     - [ ] Completed tasks: sem swipe, sem reveal layer, sem delete button

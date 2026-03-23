@@ -5,13 +5,14 @@ import { TaskItem } from './TaskItem';
 import type { Task } from '../types';
 import { useTaskStore } from '../store/useTaskStore';
 
-// Mock framer-motion to check for layout prop
+// Mock framer-motion to check for layout and drag props
 vi.mock('framer-motion', () => ({
   motion: {
-    div: vi.fn(({ children, layout, drag, dragConstraints, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
+    div: vi.fn(({ children, layout, drag, dragConstraints, dragElastic, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
       <div 
         data-testid="motion-div" 
         data-layout={layout?.toString()} 
+        data-drag={drag?.toString()}
         {...props}
       >
         {children}
@@ -26,6 +27,7 @@ vi.mock('framer-motion', () => ({
     onChange: vi.fn(),
   }),
   useTransform: (_value: any, _input: any, output: any) => output[0],
+  animate: vi.fn(() => ({ stop: () => {}, finished: Promise.resolve() })),
 }));
 
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {
@@ -195,5 +197,29 @@ describe('TaskItem', () => {
     
     // layout prop should be false when isDragging is true
     expect(layoutDiv?.getAttribute('data-layout')).toBe('false');
+  });
+
+  it('disables swipe drag when dnd-kit drag is active', async () => {
+    const { useSortable } = await import('@dnd-kit/sortable');
+    
+    // Mock isDragging as true
+    vi.mocked(useSortable).mockReturnValue({
+      attributes: {},
+      listeners: {},
+      setNodeRef: vi.fn(),
+      transform: null,
+      transition: null,
+      isDragging: true,
+    } as any);
+
+    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    
+    const motionDivs = screen.getAllByTestId('motion-div');
+    // Find the swipe layer - it's the second motion.div and it has data-layout="false" when isDragging=true
+    const swipeLayer = motionDivs.find(div => div.getAttribute('data-layout') === 'false');
+    
+    expect(swipeLayer).toBeDefined();
+    // drag={isDragging ? false : dragProps.drag}
+    expect(swipeLayer?.getAttribute('data-drag')).toBe('false');
   });
 });
