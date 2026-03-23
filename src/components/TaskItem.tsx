@@ -13,17 +13,17 @@ import { getCardState, cardBorderClasses } from '../utils/cardState';
 interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
+  activeSwipeId: string | null;
+  onSwipeDismissAll: (id?: string) => void;
   eta?: Date;
-  activeSwipeId?: string | null;
-  onSwipeDismissAll?: (id?: string) => void;
 }
 
 const TaskItem = ({ 
   task, 
   onDelete, 
-  eta, 
   activeSwipeId, 
-  onSwipeDismissAll 
+  onSwipeDismissAll,
+  eta 
 }: TaskItemProps) => {
   const startTask = useTaskStore((state) => state.startTask);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
@@ -50,8 +50,8 @@ const TaskItem = ({
   } = useSwipeToReveal({
     id: task.id,
     isEnabled: !isCompleted,
-    activeSwipeId: activeSwipeId || null,
-    onSwipeDismissAll: onSwipeDismissAll || (() => {}),
+    activeSwipeId,
+    onSwipeDismissAll,
   });
 
   const {

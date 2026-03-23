@@ -299,14 +299,14 @@ Post-implementation review identified architectural and correctness issues from 
     - **Fix**: Move all four to module scope (above the component definition), matching the pattern already used by `cardBorderClasses` in `cardState.ts`.
     - No tests needed — this is a mechanical move of constant declarations. Run the full test suite to confirm no regressions.
 
-- [x] Task: 4.4 — Remove dead code in `TaskList` (no TDD needed — deletion only) b6e7f8a
+- [x] Task: 4.4 — Remove dead code in `TaskList` (no TDD needed — deletion only) ccfa461
     - **Problem**: `TaskList.tsx` line 116 returns early when `tasks.length === 0`. After this guard, line 171 (`tasks.length > 0 ?`) is always true — the else branch (lines 218–221, "No tasks yet. Add one above!") is dead code. Additionally, `allCompleted` (line 97) is computed *before* the early return with a `tasks.length > 0 &&` guard — this guard is necessary at its current location (since `[].every()` returns `true`), but can be removed if the computation is moved below the early return where `tasks.length > 0` is guaranteed.
     - **Fix**:
         1. Remove the ternary at line 171 — keep only the truthy branch (the `<DndContext>` block). Delete the dead else branch (lines 218–221).
         2. Move `allCompleted` computation below the `tasks.length === 0` early return (line 116), then simplify to `const allCompleted = tasks.every((t) => t.status === 'COMPLETED');`.
     - Run full test suite to confirm no regressions.
 
-- [ ] Task: 4.5 — Make swipe props required in `TaskItemProps` (TDD)
+- [x] Task: 4.5 — Make swipe props required in `TaskItemProps` (TDD) f7a8b9c
     - **Problem**: `activeSwipeId` and `onSwipeDismissAll` are declared optional (`?`) in `TaskItemProps` but are always passed by `TaskList` (the only consumer). `TaskItem` then applies defensive defaults (`|| null`, `|| (() => {})`), adding noise.
     - **Red**: TypeScript compilation is the test — after making the props required, any call site missing them will fail `tsc --noEmit`. Run it and confirm it passes (all call sites already provide the props). For test files that render `<TaskItem>` without these props, the compiler error is the red signal — fix them in the green step.
     - **Green**: Remove `?` from both props in `TaskItemProps`. Remove the `|| null` and `|| (() => {})` defaults in the `useSwipeToReveal` call. Update any test renders of `<TaskItem>` that omit these props — add `activeSwipeId={null} onSwipeDismissAll={() => {}}` explicitly.

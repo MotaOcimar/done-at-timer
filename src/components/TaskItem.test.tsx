@@ -54,7 +54,7 @@ describe('TaskItem', () => {
   });
 
   it('renders task details', () => {
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     expect(screen.getByText('Test Task')).toBeInTheDocument();
     expect(screen.getByText('30')).toBeInTheDocument();
     expect(screen.getByText(/min/)).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('TaskItem', () => {
 
   it('starts task when play button is clicked', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} />);
+    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     const playButton = screen.getByRole('button', { name: /play/i });
     fireEvent.click(playButton);
@@ -72,7 +72,7 @@ describe('TaskItem', () => {
 
   it('renders correctly when task is completed', () => {
     const completedTask: Task = { ...task, status: 'COMPLETED' };
-    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     // Title should have line-through (applied to h3 parent)
     const title = screen.getByText('Test Task');
@@ -85,7 +85,7 @@ describe('TaskItem', () => {
 
   it('enters edit mode when clicking title', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} />);
+    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     const titleElement = screen.getByText('Test Task');
     fireEvent.click(titleElement);
@@ -97,7 +97,7 @@ describe('TaskItem', () => {
 
   it('updates title on blur', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} />);
+    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     const titleElement = screen.getByText('Test Task');
     fireEvent.click(titleElement);
@@ -112,7 +112,7 @@ describe('TaskItem', () => {
 
   it('updates duration on enter', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} />);
+    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     const durationElement = screen.getByText('30');
     fireEvent.click(durationElement);
@@ -127,7 +127,7 @@ describe('TaskItem', () => {
 
   it('reverts changes on escape', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} />);
+    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     const titleElement = screen.getByText('Test Task');
     fireEvent.click(titleElement);
@@ -144,7 +144,7 @@ describe('TaskItem', () => {
 
   it('is sortable when pending', async () => {
     const { useSortable } = await import('@dnd-kit/sortable');
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     expect(useSortable).toHaveBeenCalledWith(expect.objectContaining({
       id: task.id,
@@ -158,7 +158,7 @@ describe('TaskItem', () => {
   it('is not sortable when completed', async () => {
     const { useSortable } = await import('@dnd-kit/sortable');
     const completedTask: Task = { ...task, status: 'COMPLETED' };
-    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     expect(useSortable).toHaveBeenCalledWith(expect.objectContaining({
       id: task.id,
@@ -167,7 +167,7 @@ describe('TaskItem', () => {
   });
 
   it('renders a motion.div wrapper with layout="position" prop for animations', () => {
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     // There are multiple motion.divs now (reveal layer and swipe layer)
     const motionDivs = screen.getAllByTestId('motion-div');
@@ -190,7 +190,7 @@ describe('TaskItem', () => {
       isDragging: true,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     const motionDivs = screen.getAllByTestId('motion-div');
     const layoutDiv = motionDivs.find(div => div.hasAttribute('data-layout'));
@@ -212,7 +212,7 @@ describe('TaskItem', () => {
       isDragging: true,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     const motionDivs = screen.getAllByTestId('motion-div');
     // The swipeable card is the one that receives the drag prop (which we expect to be 'false' now)

@@ -48,7 +48,7 @@ describe('TaskItem Notifications', () => {
     render(
       <>
         <NotificationManager />
-        <TaskItem task={task} onDelete={vi.fn()} />
+        <TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />
       </>
     );
     
@@ -83,7 +83,7 @@ describe('TaskItem Notifications', () => {
     render(
       <>
         <NotificationManager />
-        <TaskItem task={task} onDelete={vi.fn()} />
+        <TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />
       </>
     );
     

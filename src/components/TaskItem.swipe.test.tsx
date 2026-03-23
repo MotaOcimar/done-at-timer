@@ -71,7 +71,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       dragProps: { style: { x: -80 } } as any,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     // In Phase 2, the revealed Delete button should have Trash2 icon (checked via role)
     const deleteButton = screen.getByRole('button', { name: /delete/i });
@@ -89,7 +89,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       dragProps: { style: { x: -80 } } as any,
     } as any);
 
-    render(<TaskItem task={task} onDelete={onDelete} />);
+    render(<TaskItem task={task} onDelete={onDelete} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     const deleteButton = screen.getByRole('button', { name: /^Delete$/ });
     fireEvent.click(deleteButton);
@@ -108,7 +108,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       dragProps: { style: { x: 0 } } as any,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     // The button exists in DOM (for opacity reveal) but is hidden from screen readers/keyboard
     const deleteButton = screen.getByTestId('delete-button');
@@ -126,7 +126,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       dragProps: { style: { x: -80 } } as any,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} />);
+    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     const deleteButton = screen.getByTestId('delete-button');
     expect(deleteButton).toHaveAttribute('tabIndex', '0');
@@ -135,7 +135,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
 
   it('does not render reveal layer for completed tasks', () => {
     const completedTask = { ...task, status: 'COMPLETED' };
-    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     // The reveal layer (containing Delete button) should not be rendered at all
     expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
@@ -143,7 +143,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
 
   it('disables swipe-to-delete for completed tasks', () => {
     const completedTask = { ...task, status: 'COMPLETED' };
-    render(<TaskItem task={completedTask} onDelete={vi.fn()} />);
+    render(<TaskItem task={completedTask} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     expect(swipeHook.useSwipeToReveal).toHaveBeenCalledWith(expect.objectContaining({
       isEnabled: false
@@ -152,7 +152,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
 
   it('triggers onDelete on Delete key down if card is focused', () => {
     const onDelete = vi.fn();
-    render(<TaskItem task={task} onDelete={onDelete} />);
+    render(<TaskItem task={task} onDelete={onDelete} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     const card = screen.getByTestId('task-item-container');
     fireEvent.keyDown(card, { key: 'Delete', code: 'Delete' });
@@ -162,7 +162,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
 
   it('does NOT trigger onDelete on Delete key if an input is focused', () => {
     const onDelete = vi.fn();
-    render(<TaskItem task={task} onDelete={onDelete} />);
+    render(<TaskItem task={task} onDelete={onDelete} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     
     // We'll use the title which is an InlineEdit (renders input when clicked)
     const title = screen.getByText('Test Task');
@@ -194,7 +194,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       } as any,
     } as any);
 
-    const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} />);
+    const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
     xSetSpy.mockClear();
 
     // Re-mock useSortable to return isDragging: true
@@ -207,7 +207,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isDragging: true,
     } as any);
 
-    rerender(<TaskItem task={task} onDelete={vi.fn()} />);
+    rerender(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     expect(xSetSpy).toHaveBeenCalledWith(0);
   });
@@ -243,7 +243,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       isDragging: true,
     } as any);
 
-    const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} />);
+    const { rerender } = render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     // Release: isDragging → false (drag re-enables to "x")
     vi.mocked(useSortable).mockReturnValue({
@@ -254,7 +254,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
       transition: null,
       isDragging: false,
     } as any);
-    rerender(<TaskItem task={task} onDelete={vi.fn()} />);
+    rerender(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
 
     // Simulate framer-motion firing a stale onDragEnd from the PanSession
     const motionDiv = vi.mocked(motion.div) as any;
