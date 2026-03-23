@@ -270,6 +270,6 @@ Refine the feel of interactions and verify they work well across devices.
         3. No changes to `TaskInput` itself — it remains a pure input component, unaware of animation.
     - [x] Implement fix
     - [x] Manual verification: delete a task → input slides up smoothly together with the remaining cards
-- [x] Task: Commit Phase 3 final fixes 721516e
+- [x] Task: Commit Phase 3 final fixes 3e6545c
     - Staged changes: `TaskItem.tsx` (wasDndDragRef gate, useLayoutEffect, callback guards, layout="position" moved to clip container, visual tweaks bg-red-400/icon size), `useSwipeToReveal.ts` (typed drag callback params), `TaskList.tsx` (added children for coordinated animation), `App.tsx` (passed TaskInput as child), `TaskItem.test.tsx` (updated selector), `TaskItem.swipe.test.tsx` (stale onDragEnd guard test), `plan.md`
-[checkpoint: 721516e]
+[checkpoint: 3e6545c]
