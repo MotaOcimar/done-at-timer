@@ -69,16 +69,16 @@ Currently `npm test` runs only `vitest run` — it does not type-check. This mea
         - [x] Deploy to GitHub Pages (`actions/deploy-pages@v4`).
 3. [x] Task: Manual verification
     - [x] Validate YAML syntax (e.g., paste into https://www.yamllint.com/ or use a local linter)
-    - [x] Review the file to confirm trigger, permissions, and steps match the spec
+    - [x] Review the file to confirm trigger, permissions, and steps match the spec 7b91298
 
 ### Phase 3: Verification and Finalization
 **Prerequisite:** Phase 1 step 1 (GitHub Pages source set to "GitHub Actions") must be completed by a repo admin before the first workflow run will succeed.
 
-1. [~] **Push to Main:** Merge/push the workflow file to `main` to trigger the first automated deployment.
-2. [ ] **Monitor Action:** Check the "Actions" tab in the repository for the triggered workflow run.
-3. [ ] Task: Manual verification
-    - [ ] Open the repository's "Actions" tab → the "Deploy" workflow appears and the run shows a green checkmark
-    - [ ] Inspect the run steps → test, build, upload artifact, and deploy steps all succeeded
-    - [ ] Open https://MotaOcimar.github.io/done-at-timer/ → site loads with the latest changes
-    - [ ] DevTools → Application → Service Workers → SW is registered and active
-    - [ ] DevTools → Application → Manifest → manifest loaded with correct icons
+1. [x] **Push to Main:** Merge/push the workflow file to `main` to trigger the first automated deployment. 7b91298
+2. [x] **Monitor Action:** Check the "Actions" tab in the repository for the triggered workflow run. 7b91298
+3. [x] Task: Manual verification
+    - [x] Open the repository's "Actions" tab → the "Deploy" workflow appears and the run shows a green checkmark 7b91298
+    - [x] Inspect the run steps → test, build, upload artifact, and deploy steps all succeeded 7b91298
+    - [x] Open https://MotaOcimar.github.io/done-at-timer/ → site loads with the latest changes 7b91298
+    - [x] DevTools → Application → Service Workers → SW is registered and active 7b91298
+    - [x] DevTools → Application → Manifest → manifest loaded with correct icons 7b91298
