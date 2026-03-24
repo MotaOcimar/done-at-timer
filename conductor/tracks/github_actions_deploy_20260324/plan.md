@@ -30,7 +30,7 @@ Implement a GitHub Actions workflow to automate building, testing, and deploying
 ### Phase 0: Tighten the Test Loop & Fix Existing Type Errors
 Currently `npm test` runs only `vitest run` — it does not type-check. This means type errors go unnoticed until `npm run build`, which developers run less frequently. We close this gap first, then fix the errors it surfaces.
 
-1. [ ] **Add type-checking to `npm test`:** In `package.json`, change `"test": "vitest run"` → `"test": "tsc -b && vitest run"`.
+1. [x] **Add type-checking to `npm test`**: In `package.json`, change `"test": "vitest run"` → `"test": "tsc -b && vitest run"`.
 2. [ ] **Verify `npm test` now catches type errors:** Run `npm test` — it should fail with the known TS errors (confirming the new gate works).
 3. [ ] **Fix all TypeScript errors** surfaced by the tighter test command:
     - `src/components/TaskCard.test.tsx` — `onDelete` prop no longer exists in `TaskCardProps` (multiple occurrences).
