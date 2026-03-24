@@ -4,13 +4,13 @@ Registry of all tracks (feature, enhancement, bug, chore) in this project. Activ
 
 ## Active
 
-- [~] **Track: Configurar deploy automático via GitHub Actions para o GitHub Pages sempre que houver um commit na branch main.**
-*Link: [./tracks/github_actions_deploy_20260324/](./tracks/github_actions_deploy_20260324/)*
+*(No active tracks)*
 
 ## Completed
 
 | # | Track | Type | Date |
 |---|-------|------|------|
+| 18 | [GitHub Actions Deployment Automation](./archive/github_actions_deploy_20260324/) | infra | 2026-03-24 |
 | 17 | [Task Interaction Refinement & Cleanup](./archive/task_interaction_refinement_20260313/) | feature | 2026-03-23 |
 | 16 | [Unified Sidebar Menu](./archive/unified_sidebar_menu_20260309/) | enhancement | 2026-03-09 |
 | 15 | [PWA PC Detection Fix](./archive/pwa_pc_detection_20260309/) | bug | 2026-03-09 |
