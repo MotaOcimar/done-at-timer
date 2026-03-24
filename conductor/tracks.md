@@ -4,14 +4,13 @@ Registry of all tracks (feature, enhancement, bug, chore) in this project. Activ
 
 ## Active
 
-- [~] **Task Interaction Refinement & Cleanup** `feature`
-  Whole-card dragging + swipe-to-delete replacing drag handles and inline delete button.
-  [→ track](./tracks/task_interaction_refinement_20260313/)
+- (None)
 
 ## Completed
 
 | # | Track | Type | Date |
 |---|-------|------|------|
+| 17 | [Task Interaction Refinement & Cleanup](./archive/task_interaction_refinement_20260313/) | feature | 2026-03-23 |
 | 16 | [Unified Sidebar Menu](./archive/unified_sidebar_menu_20260309/) | enhancement | 2026-03-09 |
 | 15 | [PWA PC Detection Fix](./archive/pwa_pc_detection_20260309/) | bug | 2026-03-09 |
 | 14 | [Polish & Consistency Refinement](./archive/polish_refinement_20260307/) | chore | 2026-03-07 |
