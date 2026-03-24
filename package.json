@@ -12,8 +12,7 @@
     "check": "prettier --check .",
     "test": "tsc -b && vitest run",
     "test:watch": "vitest",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy:manual": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
