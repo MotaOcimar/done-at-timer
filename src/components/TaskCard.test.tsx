@@ -285,13 +285,13 @@ describe('TaskCard (Pure Visual)', () => {
           isActive={false} 
           isCompleted={false} 
           cardState="idle"
-            onToggle={vi.fn()}
+          onToggle={vi.fn()}
           onTitleSave={vi.fn()}
           onDurationSave={vi.fn()}
           onComplete={vi.fn()}
         />
       );
-      
+
       // GripHorizontal is typically rendered as an svg or a div with aria-label
       expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
       // Check for spacer div (w-5 flex-shrink-0)
@@ -305,7 +305,7 @@ describe('TaskCard (Pure Visual)', () => {
           isActive={true} 
           isCompleted={false} 
           cardState="running"
-            onToggle={vi.fn()}
+          onToggle={vi.fn()}
           onTitleSave={vi.fn()}
           onDurationSave={vi.fn()}
           onComplete={vi.fn()}
@@ -325,7 +325,7 @@ describe('TaskCard (Pure Visual)', () => {
             isCompleted={false} 
             cardState="idle"
             onToggle={onToggle}
-                onTitleSave={vi.fn()}
+            onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
             onComplete={vi.fn()}
           />
@@ -353,7 +353,7 @@ describe('TaskCard (Pure Visual)', () => {
             isCompleted={false} 
             cardState="running"
             onComplete={onComplete}
-                onToggle={vi.fn()}
+            onToggle={vi.fn()}
             onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
           />
@@ -380,7 +380,7 @@ describe('TaskCard (Pure Visual)', () => {
             isCompleted={false}
             cardState="idle"
             onToggle={vi.fn()}
-                onTitleSave={vi.fn()}
+            onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
             onComplete={vi.fn()}
           />
@@ -407,7 +407,7 @@ describe('TaskCard (Pure Visual)', () => {
             isCompleted={false}
             cardState="running"
             onComplete={vi.fn()}
-                onToggle={vi.fn()}
+            onToggle={vi.fn()}
             onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
           />
@@ -431,7 +431,7 @@ describe('TaskCard (Pure Visual)', () => {
           isActive={false} 
           isCompleted={false} 
           cardState="running"
-            onToggle={vi.fn()}
+          onToggle={vi.fn()}
           onTitleSave={vi.fn()}
           onDurationSave={vi.fn()}
           onComplete={vi.fn()}
