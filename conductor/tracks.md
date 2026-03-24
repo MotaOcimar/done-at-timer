@@ -4,7 +4,8 @@ Registry of all tracks (feature, enhancement, bug, chore) in this project. Activ
 
 ## Active
 
-- (None)
+- [ ] **Track: Configurar deploy automático via GitHub Actions para o GitHub Pages sempre que houver um commit na branch main.**
+*Link: [./tracks/github_actions_deploy_20260324/](./tracks/github_actions_deploy_20260324/)*
 
 ## Completed
 
