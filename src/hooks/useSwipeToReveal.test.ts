@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useSwipeToReveal } from './useSwipeToReveal';
+import { useSwipeToReveal, type UseSwipeToRevealProps } from './useSwipeToReveal';
 import { triggerHaptic } from '../utils/haptics';
 import { animate } from 'framer-motion';
 
@@ -18,7 +18,7 @@ vi.mock('framer-motion', async (importOriginal) => {
 });
 
 describe('useSwipeToReveal (Spike POC)', () => {
-  const defaultProps = {
+  const defaultProps: UseSwipeToRevealProps = {
     id: 'task-1',
     isEnabled: true,
     activeSwipeId: null,

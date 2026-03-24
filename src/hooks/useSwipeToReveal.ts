@@ -46,7 +46,7 @@ export const useSwipeToReveal = ({
     setIsRevealed(false);
   }, []);
 
-  const handleDragStart = useCallback(() => {
+  const handleDragStart = useCallback((_: unknown, __: unknown) => {
     // Initial guess, will be refined in handleDrag
     hasTriggeredHapticRef.current = false;
   }, []);

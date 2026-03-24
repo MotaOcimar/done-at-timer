@@ -3,7 +3,6 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TaskList } from './TaskList';
 import { useTaskStore } from '../store/useTaskStore';
-import { TaskItem } from './TaskItem';
 
 // Mock framer-motion to check for LayoutGroup
 vi.mock('framer-motion', () => ({
