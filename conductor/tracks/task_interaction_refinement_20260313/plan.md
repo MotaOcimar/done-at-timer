@@ -306,7 +306,7 @@ Post-implementation review identified architectural and correctness issues from 
         2. Move `allCompleted` computation below the `tasks.length === 0` early return (line 116), then simplify to `const allCompleted = tasks.every((t) => t.status === 'COMPLETED');`.
     - Run full test suite to confirm no regressions.
 
-- [x] Task: 4.5 — Make swipe props required in `TaskItemProps` (TDD) f7a8b9c
+- [x] Task: 4.5 — Make swipe props required in `TaskItemProps` (TDD) 1f5e57b
     - **Problem**: `activeSwipeId` and `onSwipeDismissAll` are declared optional (`?`) in `TaskItemProps` but are always passed by `TaskList` (the only consumer). `TaskItem` then applies defensive defaults (`|| null`, `|| (() => {})`), adding noise.
     - **Red**: TypeScript compilation is the test — after making the props required, any call site missing them will fail `tsc --noEmit`. Run it and confirm it passes (all call sites already provide the props). For test files that render `<TaskItem>` without these props, the compiler error is the red signal — fix them in the green step.
     - **Green**: Remove `?` from both props in `TaskItemProps`. Remove the `|| null` and `|| (() => {})` defaults in the `useSwipeToReveal` call. Update any test renders of `<TaskItem>` that omit these props — add `activeSwipeId={null} onSwipeDismissAll={() => {}}` explicitly.
