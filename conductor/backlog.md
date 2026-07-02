@@ -1,5 +1,10 @@
 # Project Backlog
 
+> **FROZEN — superseded by [`project/tickets/`](../project/tickets/INDEX.md) (2026-07-02, TK-001).**
+> New work is tracked as tickets there. Unchecked items below are migrated lazily:
+> convert to a ticket when someone wants to work on one (already migrated:
+> per-task progress → TK-002, device sync → TK-003).
+
 This file tracks all ideas, requested improvements, and roadmap items for future implementation.
 
 ## Priority Improvements (Current Focus)
