@@ -2,7 +2,7 @@
 id: SPEC-001
 title: Product vision & constraints
 status: implemented
-links: [SPEC-005, SPEC-006]
+links: [SPEC-005, SPEC-006, SPEC-012]
 ---
 
 # Product vision & constraints
@@ -19,6 +19,11 @@ for everyday routines.
   I free?" ([SPEC-005]). The answer is always visible ([SPEC-006]).
 - **Tone:** positive coaching, not alarm. Colors and copy avoid punishing the user for
   running late (e.g. soft amber for overtime, not red).
+- **Focus over discoverability:** the main screen holds only the tasks and the
+  arrival time. Everything secondary (routines, preferences, install) lives in the
+  Control Center ([SPEC-012]) and never demands attention on the main screen — no
+  banners, badges or unprompted prompts. This deliberately trades discoverability
+  for calm, and future UI decisions follow the same rule.
 
 ## Hard constraints
 
@@ -30,3 +35,5 @@ for everyday routines.
 
 ## Log
 - Seeded from code + conductor archive (2026-07-02)
+- TK-004: added the focus-over-discoverability principle, stated by the unified
+  sidebar track but missing here (2026-07-02)
