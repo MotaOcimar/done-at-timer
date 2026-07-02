@@ -22,7 +22,7 @@ progress, no completion records: a routine is a template, not a session.
 
 ## Known limitations
 - No edit-in-place: "load → tweak → save" duplicates instead of updating, which
-  surprises users. An update/"save as" flow is a backlog idea (not yet a ticket).
+  surprises users. An update/"save as" flow is TK-017.
 - Routines exist on one device only; sharing/sync is TK-003.
 
 ## Implementation pointers
@@ -30,3 +30,4 @@ progress, no completion records: a routine is a template, not a session.
 
 ## Log
 - Seeded from code + conductor archive (2026-07-02)
+- TK-001: pointed the edit-in-place limitation at TK-017 (2026-07-02)

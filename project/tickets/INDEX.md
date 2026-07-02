@@ -2,7 +2,22 @@
 
 One line per ticket: `ID — title (status)`. Content lives in the files, never here.
 
-- TK-001 — Migrate conductor backlog into tickets (open)
+- TK-001 — Migrate conductor backlog into tickets (done)
 - TK-002 — Remember partial progress per task (open)
 - TK-003 — Routine sharing/sync between devices — viability research (open)
 - TK-004 — Audit specs against the conductor archive (done)
+- TK-005 — Arrival status icons (locked vs drifting) (open)
+- TK-006 — Media-style notifications with progress and controls (open)
+- TK-007 — Track paused time and show it in the progress bar (open)
+- TK-008 — Mini time timers (circular remaining-time indicators) (open)
+- TK-009 — Expand routine in the library to preview its tasks (open)
+- TK-010 — Dark mode with manual toggle (open)
+- TK-011 — Unify entry/exit animations for menus and modals (open)
+- TK-012 — Quick-complete a task without starting it (open)
+- TK-013 — Toggle for auto-advance vs manual completion confirmation (open)
+- TK-014 — Automated screenshot generation for visual documentation (open)
+- TK-015 — Replace progress-bar pulse with a shimmer/wave animation (open)
+- TK-016 — Routine chaining (queue routines with per-routine arrival times) (open)
+- TK-017 — Routine edit-in-place (save updates the loaded routine) (open)
+- TK-018 — Translate Portuguese comments in useTimer.ts to English (open)
+- TK-019 — Unify timer ticks — useTimer consumes useClock's now (open)
