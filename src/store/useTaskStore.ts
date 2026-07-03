@@ -31,6 +31,7 @@ interface TaskState {
   resetTasks: () => void;
   clearTasks: () => void;
   saveRoutine: (name: string) => void;
+  importRoutine: (name: string, tasks: Routine['tasks']) => void;
   loadRoutine: (id: string) => void;
   deleteRoutine: (id: string) => void;
   reorderTasks: (activeId: string, overId: string) => void;
@@ -274,6 +275,15 @@ export const useTaskStore = create<TaskState>()(
         };
 
         set({ routines: [...state.routines, newRoutine] });
+      },
+      importRoutine: (name, tasks) => {
+        const newRoutine: Routine = {
+          id: generateId(),
+          name,
+          tasks: tasks.map(({ title, duration }) => ({ title, duration })),
+        };
+
+        set((state) => ({ routines: [...state.routines, newRoutine] }));
       },
       loadRoutine: (id) => {
         const state = get();

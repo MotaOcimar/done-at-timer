@@ -63,6 +63,41 @@ describe('useTaskStore Routines', () => {
     expect(state.activeTaskId).toBeNull();
   });
 
+  it('should import a routine without touching the current task list', () => {
+    const store = useTaskStore.getState();
+    store.addTask('Current Task', 5);
+
+    store.importRoutine('Shared Routine', [
+      { title: 'Imported Task 1', duration: 15 },
+      { title: 'Imported Task 2', duration: 25 },
+    ]);
+
+    const state = useTaskStore.getState();
+    expect(state.routines).toHaveLength(1);
+    expect(state.routines[0].id).toBeDefined();
+    expect(state.routines[0].name).toBe('Shared Routine');
+    expect(state.routines[0].tasks).toEqual([
+      { title: 'Imported Task 1', duration: 15 },
+      { title: 'Imported Task 2', duration: 25 },
+    ]);
+    expect(state.tasks).toHaveLength(1);
+    expect(state.tasks[0].title).toBe('Current Task');
+  });
+
+  it('should import as a new routine even when the name already exists', () => {
+    useTaskStore.setState({
+      routines: [{ id: 'existing', name: 'Morning', tasks: [{ title: 'Old', duration: 10 }] }],
+    });
+
+    useTaskStore.getState().importRoutine('Morning', [{ title: 'New', duration: 20 }]);
+
+    const state = useTaskStore.getState();
+    expect(state.routines).toHaveLength(2);
+    expect(state.routines[0].tasks[0].title).toBe('Old');
+    expect(state.routines[1].tasks[0].title).toBe('New');
+    expect(state.routines[1].id).not.toBe('existing');
+  });
+
   it('should delete a routine', () => {
     useTaskStore.setState({
       routines: [
