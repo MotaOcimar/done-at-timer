@@ -100,6 +100,28 @@ describe('useSwipeToReveal (Spike POC)', () => {
     expect(result.current.isRevealed).toBe(true);
   });
 
+  it('exposes isSwipeActive = true while a right-to-left swipe is in progress', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+    expect(result.current.isSwipeActive).toBe(false);
+
+    act(() => {
+      result.current.dragProps.onDrag(null as any, { offset: { x: -15 } } as any);
+    });
+
+    expect(result.current.isSwipeActive).toBe(true);
+  });
+
+  it('resets isSwipeActive when the gesture ends', () => {
+    const { result } = renderHook(() => useSwipeToReveal(defaultProps));
+
+    act(() => {
+      result.current.dragProps.onDrag(null as any, { offset: { x: -15 } } as any);
+      result.current.dragProps.onDragEnd(null as any, { offset: { x: -15 }, velocity: { x: 0 } } as any);
+    });
+
+    expect(result.current.isSwipeActive).toBe(false);
+  });
+
   it('returns x and redOpacity MotionValues', () => {
     const { result } = renderHook(() => useSwipeToReveal(defaultProps));
     

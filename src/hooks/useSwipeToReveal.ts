@@ -18,19 +18,23 @@ export const useSwipeToReveal = ({
   revealWidth = 80,
 }: UseSwipeToRevealProps) => {
   const [isRevealed, setIsRevealed] = useState(false);
-  const isSwipeActiveRef = useRef(false);
+  const [isSwipeActive, setIsSwipeActive] = useState(false);
   const hasTriggeredHapticRef = useRef(false);
   const skipNextAnimateRef = useRef(false);
   
   const x = useMotionValue(0);
   const redOpacity = useTransform(x, [0, -revealWidth], [0, 1]);
 
-  // Auto-dismiss when activeSwipeId changes to another task
-  useEffect(() => {
+  // Auto-dismiss when another task becomes the active swipe. Render-time
+  // adjustment guarded by the previous value (the React-documented pattern
+  // for deriving state from a prop change) instead of an effect.
+  const [prevActiveSwipeId, setPrevActiveSwipeId] = useState(activeSwipeId);
+  if (prevActiveSwipeId !== activeSwipeId) {
+    setPrevActiveSwipeId(activeSwipeId);
     if (activeSwipeId !== null && activeSwipeId !== id && isRevealed) {
       setIsRevealed(false);
     }
-  }, [activeSwipeId, id, isRevealed]);
+  }
   
   // Update x when isRevealed changes (for programmatic animation)
   useEffect(() => {
@@ -46,7 +50,7 @@ export const useSwipeToReveal = ({
     setIsRevealed(false);
   }, []);
 
-  const handleDragStart = useCallback((_: unknown, __: unknown) => {
+  const handleDragStart = useCallback((_event: unknown, _info: unknown) => {
     // Initial guess, will be refined in handleDrag
     hasTriggeredHapticRef.current = false;
   }, []);
@@ -56,7 +60,7 @@ export const useSwipeToReveal = ({
       // Determine if it's a right-to-left swipe
       const isRightToLeft = info.offset.x < -10;
       if (isRightToLeft) {
-        isSwipeActiveRef.current = true;
+        setIsSwipeActive(true);
         // Notify others to dismiss, passing our id as the new active swipe
         onSwipeDismissAll(id);
       }
@@ -73,7 +77,7 @@ export const useSwipeToReveal = ({
 
   const handleDragEnd = useCallback(
     (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
-      isSwipeActiveRef.current = false;
+      setIsSwipeActive(false);
       hasTriggeredHapticRef.current = false;
       const threshold = revealWidth / 2;
       // If velocity is high or offset exceeds threshold
@@ -98,10 +102,7 @@ export const useSwipeToReveal = ({
 
   return {
     isRevealed,
-    // isSwipeActive: isSwipeActiveRef.current returns a render-time snapshot.
-    // This works because handleDrag calls onSwipeDismissAll(id) -> TaskList sets state -> 
-    // re-render propagates fresh .current before dnd-kit's sensors activate.
-    isSwipeActive: isSwipeActiveRef.current,
+    isSwipeActive,
     dismiss,
     x,
     redOpacity,

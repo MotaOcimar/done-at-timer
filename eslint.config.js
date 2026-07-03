@@ -19,6 +19,14 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // Destructuring props only to strip them before a rest spread
+      // (e.g. framer-motion mocks in tests) is intentional, not dead code.
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { ignoreRestSiblings: true, argsIgnorePattern: '^_' },
+      ],
+    },
   },
   {
     files: ['**/*.test.{ts,tsx}', 'src/setupTests.ts', 'src/**/*.test.{ts,tsx}'],

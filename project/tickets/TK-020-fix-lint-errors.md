@@ -2,7 +2,7 @@
 id: TK-020
 title: Fix the 25 lint errors breaking npm run lint
 type: chore
-status: open
+status: done
 specs: []
 ---
 
@@ -27,12 +27,33 @@ touched none of the affected files). Three groups:
 A broken lint hides new errors, so this rots fast — that's the "why now".
 
 ## Acceptance criteria
-- [ ] `npm run lint` exits clean (0 errors, 0 warnings).
-- [ ] Group 3 is resolved by fixing the render-time ref access (or, if analysis
+- [x] `npm run lint` exits clean (0 errors, 0 warnings).
+- [x] Group 3 is resolved by fixing the render-time ref access (or, if analysis
       shows the pattern is safe and intended, by an explicitly justified disable
       comment — not a blanket rule change).
-- [ ] No behavior change: full test suite passes unchanged.
+- [x] No behavior change: full test suite passes unchanged.
 
 ## Notes
 For groups 1–2, prefer the idiomatic fixes (rest-destructuring with a lint-aware
 pattern, omitting the unused catch binding) over disable comments.
+
+### Resolution (2026-07-03)
+- **Group 1**: tuned `@typescript-eslint/no-unused-vars` with
+  `ignoreRestSiblings: true` + `argsIgnorePattern: '^_'` in `eslint.config.js` —
+  the standard options for the destructure-to-strip and intentionally-unused-arg
+  idioms, not a rule disable.
+- **Group 2**: `catch (e)` → bare `catch` in `haptics.ts`; `handleDragStart`
+  params renamed to `_event`/`_info` (kept for framer-motion signature
+  compatibility — `TaskItem` forwards args uniformly).
+- **Group 3**: the render-time ref read was genuinely fragile — it relied on the
+  parent re-rendering to propagate a fresh value. Converted `isSwipeActiveRef` to
+  `useState` (TDD: the new hook test failed against the ref version, passed with
+  state; repeated `setState(true)` during drag is a React bailout, so no render
+  cost). No observable misbehavior existed in the UI path, so no bug against
+  SPEC-009 and `specs:` stays empty.
+- **Unmasked error**: fixing group 3 let the react-hooks compiler analysis
+  continue and flag a pre-existing `set-state-in-effect` in the auto-dismiss
+  effect of `useSwipeToReveal`. Replaced the effect with the React-documented
+  render-time adjustment guarded by the previous `activeSwipeId` (behavior
+  covered by existing auto-dismiss tests).
+- 231 tests pass (229 pre-existing + 2 new for `isSwipeActive`).
