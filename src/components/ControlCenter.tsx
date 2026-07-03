@@ -1,20 +1,25 @@
 import { useState } from 'react';
-import { 
-  X, 
-  ChevronRight, 
-  Trash2, 
-  Bell, 
-  BellOff, 
-  Save, 
-  Download, 
-  Check, 
-  AlertTriangle, 
+import {
+  X,
+  ChevronRight,
+  Trash2,
+  Bell,
+  BellOff,
+  Save,
+  Download,
+  Check,
+  AlertTriangle,
   Info,
-  Ban
+  Ban,
+  Share2
 } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
+import { buildRoutineShareUrl } from '../utils/routineShare';
+import { shareService } from '../utils/shareService';
+import type { ShareOutcome } from '../utils/shareService';
+import type { Routine } from '../types';
 
 interface ControlCenterProps {
   isOpen: boolean;
@@ -38,6 +43,7 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const [routineName, setRoutineName] = useState('');
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [shareFeedback, setShareFeedback] = useState<{ id: string; outcome: ShareOutcome } | null>(null);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,6 +79,19 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
   const initiateDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     setConfirmDeleteId(id);
+  };
+
+  const handleShare = async (e: React.MouseEvent, routine: Routine) => {
+    e.stopPropagation();
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+    const url = buildRoutineShareUrl(routine, baseUrl);
+
+    const outcome = await shareService.shareUrl(routine.name, url);
+
+    if (outcome === 'copied' || outcome === 'failed') {
+      setShareFeedback({ id: routine.id, outcome });
+      setTimeout(() => setShareFeedback(null), 2500);
+    }
   };
 
   const confirmDelete = () => {
@@ -168,14 +187,27 @@ const ControlCenter = ({ isOpen, onClose, isSavingExternal, onSaveComplete }: Co
                     >
                       <div className="flex-1 min-w-0">
                         <h4 className="font-bold text-gray-800 truncate group-hover:text-blue-600 transition-colors">{routine.name}</h4>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
-                          {routine.tasks.length} tasks • {routine.tasks.reduce((sum, t) => sum + t.duration, 0)}m
-                        </p>
+                        {shareFeedback?.id === routine.id ? (
+                          <p className={`text-[10px] font-bold uppercase tracking-tight ${shareFeedback.outcome === 'copied' ? 'text-green-500' : 'text-red-400'}`}>
+                            {shareFeedback.outcome === 'copied' ? 'Link copied!' : "Couldn't share"}
+                          </p>
+                        ) : (
+                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+                            {routine.tasks.length} tasks • {routine.tasks.reduce((sum, t) => sum + t.duration, 0)}m
+                          </p>
+                        )}
                       </div>
                       <div className="flex items-center gap-1">
                         <div className="p-2 text-blue-500 opacity-60">
                           <ChevronRight size={20} strokeWidth={2} />
                         </div>
+                        <button
+                          onClick={(e) => handleShare(e, routine)}
+                          className="p-2 text-gray-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                          aria-label="Share routine"
+                        >
+                          <Share2 size={20} strokeWidth={2} />
+                        </button>
                         <button
                           onClick={(e) => initiateDelete(e, routine.id)}
                           className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"

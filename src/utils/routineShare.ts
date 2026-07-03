@@ -38,6 +38,9 @@ export const encodeRoutinePayload = (routine: SharedRoutine): string => {
   return toBase64Url(new TextEncoder().encode(json));
 };
 
+export const buildRoutineShareUrl = (routine: SharedRoutine, baseUrl: string): string =>
+  `${baseUrl}#r=${encodeRoutinePayload(routine)}`;
+
 const parseTask = (value: unknown): SharedRoutine['tasks'][number] | null => {
   if (typeof value !== 'object' || value === null) return null;
   const { title, duration } = value as Record<string, unknown>;

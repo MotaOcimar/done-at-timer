@@ -5,10 +5,16 @@ import { ControlCenter } from './ControlCenter';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
+import { shareService } from '../utils/shareService';
 
 // Mock the task store
 vi.mock('../store/useTaskStore', () => ({
   useTaskStore: vi.fn(),
+}));
+
+// Mock the share service
+vi.mock('../utils/shareService', () => ({
+  shareService: { shareUrl: vi.fn() },
 }));
 
 // Mock useNotification hook
@@ -218,6 +224,60 @@ describe('ControlCenter', () => {
       fireEvent.click(backdrop);
       expect(screen.queryByText(/Delete this routine\?/i)).not.toBeInTheDocument();
     }
+  });
+
+  describe('Share', () => {
+    beforeEach(() => {
+      (shareService.shareUrl as any).mockResolvedValue('shared');
+    });
+
+    it('should render a share button for each routine', () => {
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+
+      expect(screen.getByLabelText(/Share routine/i)).toBeInTheDocument();
+    });
+
+    it('should share a URL carrying the routine payload, without loading the routine', () => {
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+
+      fireEvent.click(screen.getByLabelText(/Share routine/i));
+
+      expect(shareService.shareUrl).toHaveBeenCalledWith(
+        'Morning Routine',
+        expect.stringContaining('#r=')
+      );
+      expect(mockLoadRoutine).not.toHaveBeenCalled();
+      expect(screen.queryByText(/Replace current tasks\?/i)).not.toBeInTheDocument();
+    });
+
+    it('should show feedback when the link is copied to the clipboard', async () => {
+      (shareService.shareUrl as any).mockResolvedValue('copied');
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+
+      fireEvent.click(screen.getByLabelText(/Share routine/i));
+
+      expect(await screen.findByText(/Link copied/i)).toBeInTheDocument();
+    });
+
+    it('should show feedback when sharing fails', async () => {
+      (shareService.shareUrl as any).mockResolvedValue('failed');
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+
+      fireEvent.click(screen.getByLabelText(/Share routine/i));
+
+      expect(await screen.findByText(/Couldn't share/i)).toBeInTheDocument();
+    });
+
+    it('should show no feedback when the system share sheet handled it', async () => {
+      (shareService.shareUrl as any).mockResolvedValue('shared');
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+
+      fireEvent.click(screen.getByLabelText(/Share routine/i));
+      await vi.waitFor(() => expect(shareService.shareUrl).toHaveBeenCalled());
+
+      expect(screen.queryByText(/Link copied/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Couldn't share/i)).not.toBeInTheDocument();
+    });
   });
 
   describe('Notifications', () => {

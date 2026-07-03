@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest';
-import { encodeRoutinePayload, decodeRoutinePayload } from './routineShare';
+import { encodeRoutinePayload, decodeRoutinePayload, buildRoutineShareUrl } from './routineShare';
 import type { SharedRoutine } from './routineShare';
 
 const routine: SharedRoutine = {
@@ -26,6 +26,14 @@ describe('encodeRoutinePayload', () => {
     });
 
     expect(payload).toMatch(/^[A-Za-z0-9_-]+$/);
+  });
+});
+
+describe('buildRoutineShareUrl', () => {
+  it('appends the payload as the #r fragment of the base URL', () => {
+    const url = buildRoutineShareUrl(routine, 'https://example.com/done-at-timer/');
+
+    expect(url).toBe(`https://example.com/done-at-timer/#r=${encodeRoutinePayload(routine)}`);
   });
 });
 
