@@ -4,7 +4,7 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 
 - TK-001 — Migrate conductor backlog into tickets (done)
 - TK-002 — Remember partial progress per task (open)
-- TK-003 — Routine sharing/sync between devices — viability research (open)
+- TK-003 — Routine sharing/sync between devices — viability research (done)
 - TK-004 — Audit specs against the conductor archive (done)
 - TK-005 — Arrival status icons (locked vs drifting) (open)
 - TK-006 — Media-style notifications with progress and controls (open)
@@ -22,3 +22,4 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-018 — Translate Portuguese comments in useTimer.ts to English (done)
 - TK-019 — Unify timer ticks — useTimer consumes useClock's now (open)
 - TK-020 — Fix the 25 lint errors breaking npm run lint (done)
+- TK-021 — Share and import routines via a shareable URL (open)

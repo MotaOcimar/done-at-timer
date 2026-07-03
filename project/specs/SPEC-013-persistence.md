@@ -20,11 +20,12 @@ and no server ([SPEC-001]):
 Boundaries the user should understand:
 
 - Data lives **in this browser on this device**. Clearing the browser's site data
-  erases everything; another browser or device starts empty (sharing/sync is
-  TK-003).
+  erases everything; another browser or device starts empty (one-shot routine
+  sharing via URL is TK-021).
 
 ## Implementation pointers
 - `src/store/useTaskStore.ts` (persistence configuration)
 
 ## Log
 - Seeded from code + conductor archive (2026-07-02)
+- TK-003: sharing research concluded — URL sharing planned as TK-021 (2026-07-03)
