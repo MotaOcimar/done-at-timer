@@ -88,6 +88,13 @@ vs. doing — and must not be blended:
 
 Rules:
 
+- **Important decisions are made with the team, never solo.** Design, UX, UI, and
+  product dilemmas — and important tradeoffs in general — are closed *with* the
+  user, not by whoever happens to be planning. Surface each dilemma as concrete
+  options with a recommendation and its rationale, and let the user choose. Only
+  details with a single obvious answer already settled by the codebase or an
+  existing spec may be proposed directly — and even those are written into Design
+  so they can be reviewed and vetoed.
 - A ticket moves to `in-progress` only when Design has no open dilemmas and Plan
   exists. Trivial tickets (one-line fixes, chores) may skip both — use judgment;
   planning is proportional to the risk of the change, not a ritual.
