@@ -2,7 +2,7 @@
 id: TK-018
 title: Translate Portuguese comments in useTimer.ts to English
 type: chore
-status: open
+status: done
 specs: []
 ---
 
@@ -13,7 +13,7 @@ specs: []
 English. Trivial consistency chore. Migrated from `conductor/backlog.md` (TK-001).
 
 ## Acceptance criteria
-- [ ] No Portuguese comments remain in `src/hooks/useTimer.ts` (or elsewhere in
+- [x] No Portuguese comments remain in `src/hooks/useTimer.ts` (or elsewhere in
       `src/`, while at it).
 
 ## Notes

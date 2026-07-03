@@ -164,7 +164,7 @@ export const useTaskStore = create<TaskState>()(
         const state = get();
         if (!state.targetEndTime) return;
         
-        // Forma mais simples: calcular quanto tempo RESTA e subtrair da duração total
+        // Simplest approach: compute how much time REMAINS and subtract it from the total duration
         const task = state.tasks.find(t => t.id === state.activeTaskId);
         if (!task) return;
 

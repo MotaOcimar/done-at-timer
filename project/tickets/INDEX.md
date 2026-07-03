@@ -19,5 +19,5 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-015 — Replace progress-bar pulse with a shimmer/wave animation (open)
 - TK-016 — Routine chaining (queue routines with per-routine arrival times) (open)
 - TK-017 — Routine edit-in-place (save updates the loaded routine) (open)
-- TK-018 — Translate Portuguese comments in useTimer.ts to English (open)
+- TK-018 — Translate Portuguese comments in useTimer.ts to English (done)
 - TK-019 — Unify timer ticks — useTimer consumes useClock's now (open)

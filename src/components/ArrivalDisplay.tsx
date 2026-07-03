@@ -59,9 +59,9 @@ const ArrivalDisplay = () => {
     );
   }
 
-  // Se houver tarefa ativa (mesmo pausada), o timeLeft do hook é o que conta.
-  // IMPORTANTE: Se o tempo acabou (timeLeft <= 0), usamos 0 para o cálculo do ETA,
-  // pois as próximas tarefas começarão a partir de "Agora".
+  // If there is an active task (even paused), the hook's timeLeft is what counts.
+  // IMPORTANT: if time is up (timeLeft <= 0), we use 0 for the ETA calculation,
+  // since the next tasks will start from "Now".
   const effectiveTimeLeft = activeTaskId ? Math.max(0, timeLeft) : null;
   const arrivalTime = calculateArrivalTime(tasks, effectiveTimeLeft, now);
 

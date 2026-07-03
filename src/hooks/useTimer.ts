@@ -34,7 +34,7 @@ export const useTimer = (
     }
   }, [targetEndTime, hasNotifiedComplete]);
 
-  // Lógica legada para quando não há targetEndTime (fallback ou modo manual)
+  // Legacy logic for when there is no targetEndTime (fallback or manual mode)
   useEffect(() => {
     if (targetEndTime || isPaused) return;
 
