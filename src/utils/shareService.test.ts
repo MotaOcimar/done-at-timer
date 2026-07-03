@@ -1,6 +1,10 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ShareService, NavigatorSystemShare, NavigatorClipboard } from './shareService';
+import {
+  ShareService,
+  NavigatorSystemShare,
+  NavigatorClipboard,
+} from './shareService';
 import type { ISystemShare, IClipboard } from './shareService';
 
 describe('ShareService', () => {
@@ -9,7 +13,10 @@ describe('ShareService', () => {
   let clipboard: IClipboard;
 
   beforeEach(() => {
-    systemShare = { canShare: vi.fn().mockReturnValue(true), share: vi.fn().mockResolvedValue(undefined) };
+    systemShare = {
+      canShare: vi.fn().mockReturnValue(true),
+      share: vi.fn().mockResolvedValue(undefined),
+    };
     clipboard = { writeText: vi.fn().mockResolvedValue(undefined) };
   });
 

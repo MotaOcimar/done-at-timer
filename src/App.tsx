@@ -5,6 +5,7 @@ import { TaskInput } from './components/TaskInput';
 import { TaskList } from './components/TaskList';
 import { ArrivalDisplay } from './components/ArrivalDisplay';
 import { ControlCenter } from './components/ControlCenter';
+import { RoutineImport } from './components/RoutineImport';
 
 import { NotificationProvider } from './NotificationContext';
 import { NotificationManager } from './components/NotificationManager';
@@ -46,12 +47,14 @@ function App() {
           </TaskList>
         </div>
 
-        <ControlCenter 
-          isOpen={isLibraryOpen} 
+        <ControlCenter
+          isOpen={isLibraryOpen}
           onClose={() => setIsLibraryOpen(false)}
           isSavingExternal={isSavingActive}
           onSaveComplete={() => setIsSavingActive(false)}
         />
+
+        <RoutineImport />
       </div>
     </Layout>
     </NotificationProvider>

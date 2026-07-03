@@ -1,6 +1,10 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest';
-import { encodeRoutinePayload, decodeRoutinePayload, buildRoutineShareUrl } from './routineShare';
+import {
+  encodeRoutinePayload,
+  decodeRoutinePayload,
+  buildRoutineShareUrl,
+} from './routineShare';
 import type { SharedRoutine } from './routineShare';
 
 const routine: SharedRoutine = {
@@ -31,9 +35,14 @@ describe('encodeRoutinePayload', () => {
 
 describe('buildRoutineShareUrl', () => {
   it('appends the payload as the #r fragment of the base URL', () => {
-    const url = buildRoutineShareUrl(routine, 'https://example.com/done-at-timer/');
+    const url = buildRoutineShareUrl(
+      routine,
+      'https://example.com/done-at-timer/',
+    );
 
-    expect(url).toBe(`https://example.com/done-at-timer/#r=${encodeRoutinePayload(routine)}`);
+    expect(url).toBe(
+      `https://example.com/done-at-timer/#r=${encodeRoutinePayload(routine)}`,
+    );
   });
 });
 
@@ -82,7 +91,11 @@ describe('decodeRoutinePayload', () => {
     Buffer.from(JSON.stringify(value), 'utf-8').toString('base64url');
 
   it('rejects a payload from an unsupported future version', () => {
-    const payload = encodeRaw({ v: 2, name: 'Future', tasks: [{ title: 'T', duration: 5 }] });
+    const payload = encodeRaw({
+      v: 2,
+      name: 'Future',
+      tasks: [{ title: 'T', duration: 5 }],
+    });
 
     const result = decodeRoutinePayload(payload);
 
@@ -93,15 +106,33 @@ describe('decodeRoutinePayload', () => {
     ['a non-object', 42],
     ['a missing version', { name: 'X', tasks: [{ title: 'T', duration: 5 }] }],
     ['a missing name', { v: 1, tasks: [{ title: 'T', duration: 5 }] }],
-    ['a blank name', { v: 1, name: '   ', tasks: [{ title: 'T', duration: 5 }] }],
+    [
+      'a blank name',
+      { v: 1, name: '   ', tasks: [{ title: 'T', duration: 5 }] },
+    ],
     ['missing tasks', { v: 1, name: 'X' }],
     ['an empty task list', { v: 1, name: 'X', tasks: [] }],
     ['a task without a title', { v: 1, name: 'X', tasks: [{ duration: 5 }] }],
-    ['a task with a non-string title', { v: 1, name: 'X', tasks: [{ title: 7, duration: 5 }] }],
-    ['a task with a string duration', { v: 1, name: 'X', tasks: [{ title: 'T', duration: '5' }] }],
-    ['a task with a zero duration', { v: 1, name: 'X', tasks: [{ title: 'T', duration: 0 }] }],
-    ['a task with a negative duration', { v: 1, name: 'X', tasks: [{ title: 'T', duration: -5 }] }],
-    ['a task with an infinite duration', { v: 1, name: 'X', tasks: [{ title: 'T', duration: Infinity }] }],
+    [
+      'a task with a non-string title',
+      { v: 1, name: 'X', tasks: [{ title: 7, duration: 5 }] },
+    ],
+    [
+      'a task with a string duration',
+      { v: 1, name: 'X', tasks: [{ title: 'T', duration: '5' }] },
+    ],
+    [
+      'a task with a zero duration',
+      { v: 1, name: 'X', tasks: [{ title: 'T', duration: 0 }] },
+    ],
+    [
+      'a task with a negative duration',
+      { v: 1, name: 'X', tasks: [{ title: 'T', duration: -5 }] },
+    ],
+    [
+      'a task with an infinite duration',
+      { v: 1, name: 'X', tasks: [{ title: 'T', duration: Infinity }] },
+    ],
   ])('rejects a hand-edited payload with %s', (_label, raw) => {
     const result = decodeRoutinePayload(encodeRaw(raw));
 

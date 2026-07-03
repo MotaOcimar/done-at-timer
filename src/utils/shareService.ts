@@ -11,7 +11,9 @@ export interface IClipboard {
 
 export class NavigatorSystemShare implements ISystemShare {
   canShare(): boolean {
-    return typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+    return (
+      typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+    );
   }
 
   async share(data: { title: string; url: string }): Promise<void> {
@@ -29,10 +31,16 @@ export class NavigatorClipboard implements IClipboard {
 }
 
 export class ShareService {
+  private systemShare: ISystemShare;
+  private clipboard: IClipboard;
+
   constructor(
-    private systemShare: ISystemShare = new NavigatorSystemShare(),
-    private clipboard: IClipboard = new NavigatorClipboard()
-  ) {}
+    systemShare: ISystemShare = new NavigatorSystemShare(),
+    clipboard: IClipboard = new NavigatorClipboard(),
+  ) {
+    this.systemShare = systemShare;
+    this.clipboard = clipboard;
+  }
 
   async shareUrl(title: string, url: string): Promise<ShareOutcome> {
     if (this.systemShare.canShare()) {
