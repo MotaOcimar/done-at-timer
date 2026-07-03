@@ -52,18 +52,70 @@ Settled by TK-003 (not to be reopened):
 - The payload travels in the URL **fragment** (`#…`) so it never reaches server
   logs.
 
-Open dilemmas (must be resolved before in-progress):
+Dilemmas resolved with the user (2026-07-03):
 
-- Encoding format (e.g. JSON → base64url vs. a compressed variant) and a version
-  marker for forward compatibility.
-- Name-collision behavior on import (auto-rename vs. prompt).
-- Where the Share action lives in the Control Center UI ([SPEC-012]) and what the
-  import preview looks like.
-- How the fragment is cleared after handling so refresh doesn't re-prompt.
+- **Encoding: JSON → UTF-8 → base64url, carried as `#r=<payload>`, with a version
+  field inside the JSON (`{ v: 1, name, tasks }`).** No compression: a realistic
+  routine is a few hundred bytes (TK-003), so a compression library would add a
+  dependency to save nothing that matters. The `v` field lets a future format
+  change keep old links importable. base64url (not plain base64) because `+`/`/`
+  are unsafe in URLs and messengers.
+- **Name collision: allow duplicates, no rename, no prompt.** The app already
+  permits duplicate names — [SPEC-011] "saving always creates a new routine" and
+  the store keys routines by generated `id`, never by name. Import behaves exactly
+  like save: fresh `id`, name kept as-is. Nothing can be overwritten by
+  construction, which satisfies the "never silently overwrites" criterion.
+- **Share action: an icon button on each routine row in the Control Center,
+  next to the existing delete button ([SPEC-012]).** Tapping it uses the system
+  share sheet (`navigator.share`) when available, otherwise copies the URL to the
+  clipboard with brief visual feedback. Import preview is a centered confirmation
+  modal in the same style as the existing load/delete confirmations (name, task
+  list with durations, total minutes, Import / Cancel).
+- **Fragment lifecycle: read `location.hash` once on app load; after the user
+  imports or declines, remove the fragment via `history.replaceState`** so reload
+  and bookmark don't re-prompt. A malformed payload shows an error modal and the
+  fragment is cleared the same way.
+- **SOLID note:** `navigator.share`/clipboard and URL/history access go behind
+  small abstractions (same pattern as `src/utils/notificationService.ts`) so tests
+  can mock them.
+
+Out of scope:
+
+- File export/import (deferred by TK-003).
+- Sharing anything other than a single routine (no bulk export, no task-list
+  sharing, no preferences).
+- Any change to routine load/save/delete semantics ([SPEC-011] core behavior).
 
 ## Plan
 
-(to be written when Design closes)
+Phase 1 — payload codec (pure logic):
+- [ ] TDD `src/utils/routineShare.ts`: encode (routine → base64url string) and
+      decode (string → validated `{ name, tasks }` or typed error). Cases:
+      round-trip, unicode titles, version field, truncated/corrupted/hand-edited
+      payloads, empty task list rejected.
+
+Phase 2 — store:
+- [ ] TDD an `importRoutine(name, tasks)` action in `useTaskStore`: appends with a
+      fresh `id`; duplicate names allowed; persisted like any routine.
+
+Phase 3 — share action:
+- [ ] TDD a share-target abstraction (share sheet / clipboard fallback) following
+      the `notificationService` pattern.
+- [ ] TDD the Share button on each routine row in `ControlCenter`, wiring codec +
+      abstraction; feedback state when falling back to clipboard copy.
+
+Phase 4 — import flow:
+- [ ] TDD a URL-fragment abstraction (read hash on load, clear via
+      `history.replaceState`).
+- [ ] TDD the import preview modal (routine name, tasks, durations, total; Import
+      / Cancel) and the malformed-payload error state; fragment cleared on every
+      outcome.
+
+Phase 5 — close out:
+- [ ] Update [SPEC-011] (share/import behavior, rewrite the one-device
+      limitation) and [SPEC-013] (share-link exception to the on-device
+      boundary), with log lines; verify `npm run lint`, `npm run check`,
+      `npm test`, `npm run build`; mark this ticket done.
 
 ## Notes
 
