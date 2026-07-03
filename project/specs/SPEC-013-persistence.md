@@ -20,8 +20,9 @@ and no server ([SPEC-001]):
 Boundaries the user should understand:
 
 - Data lives **in this browser on this device**. Clearing the browser's site data
-  erases everything; another browser or device starts empty (one-shot routine
-  sharing via URL is TK-021).
+  erases everything; another browser or device starts empty. The one sanctioned
+  way to move a routine across devices is a share link ([SPEC-011]) — a one-shot
+  copy, not sync.
 
 ## Implementation pointers
 - `src/store/useTaskStore.ts` (persistence configuration)
@@ -29,3 +30,4 @@ Boundaries the user should understand:
 ## Log
 - Seeded from code + conductor archive (2026-07-02)
 - TK-003: sharing research concluded — URL sharing planned as TK-021 (2026-07-03)
+- TK-021: the on-device boundary gained the share-link exception (2026-07-03)

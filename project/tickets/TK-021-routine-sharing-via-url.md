@@ -2,7 +2,7 @@
 id: TK-021
 title: Share and import routines via a shareable URL
 type: feature
-status: open
+status: done
 specs: [SPEC-011, SPEC-013]
 ---
 
@@ -19,23 +19,23 @@ for the full rationale — those decisions are settled and not reopened here.
 
 ## Acceptance criteria
 
-- [ ] Every saved routine offers a **Share** action that produces a URL carrying
+- [x] Every saved routine offers a **Share** action that produces a URL carrying
       the routine (name + tasks with durations). The user can copy it or hand it
       to the system share sheet where available.
-- [ ] Opening that URL in the app — any device, any browser — shows a **preview**
+- [x] Opening that URL in the app — any device, any browser — shows a **preview**
       of the incoming routine (name, tasks, durations, total estimated minutes)
       and asks for confirmation. Nothing is saved without the user's explicit
       "import".
-- [ ] Confirming adds the routine to the saved routines ([SPEC-011]); declining
+- [x] Confirming adds the routine to the saved routines ([SPEC-011]); declining
       leaves the device's data untouched.
-- [ ] After importing or declining, reloading the page does **not** re-trigger the
+- [x] After importing or declining, reloading the page does **not** re-trigger the
       prompt.
-- [ ] Importing never silently overwrites an existing routine (exact collision
+- [x] Importing never silently overwrites an existing routine (exact collision
       behavior decided in Design).
-- [ ] A corrupted, truncated, or hand-edited payload produces a clear error
+- [x] A corrupted, truncated, or hand-edited payload produces a clear error
       message and leaves the app fully functional.
-- [ ] Works entirely from the static GitHub Pages deployment — no backend
-      ([SPEC-001]), payload never sent to any server.
+- [x] Works entirely from the static GitHub Pages deployment — no backend
+      ([SPEC-001]), payload never sent to any server (fragment stays client-side).
 
 ## Spec changes required
 
@@ -89,34 +89,39 @@ Out of scope:
 ## Plan
 
 Phase 1 — payload codec (pure logic):
-- [ ] TDD `src/utils/routineShare.ts`: encode (routine → base64url string) and
+- [x] TDD `src/utils/routineShare.ts`: encode (routine → base64url string) and
       decode (string → validated `{ name, tasks }` or typed error). Cases:
       round-trip, unicode titles, version field, truncated/corrupted/hand-edited
-      payloads, empty task list rejected.
+      payloads, empty task list rejected. (c2d0ec2)
 
 Phase 2 — store:
-- [ ] TDD an `importRoutine(name, tasks)` action in `useTaskStore`: appends with a
-      fresh `id`; duplicate names allowed; persisted like any routine.
+- [x] TDD an `importRoutine(name, tasks)` action in `useTaskStore`: appends with a
+      fresh `id`; duplicate names allowed; persisted like any routine. (abba3b9)
 
 Phase 3 — share action:
-- [ ] TDD a share-target abstraction (share sheet / clipboard fallback) following
-      the `notificationService` pattern.
-- [ ] TDD the Share button on each routine row in `ControlCenter`, wiring codec +
-      abstraction; feedback state when falling back to clipboard copy.
+- [x] TDD a share-target abstraction (share sheet / clipboard fallback) following
+      the `notificationService` pattern. (ad747f4)
+- [x] TDD the Share button on each routine row in `ControlCenter`, wiring codec +
+      abstraction; feedback state when falling back to clipboard copy. (ad747f4)
 
 Phase 4 — import flow:
-- [ ] TDD a URL-fragment abstraction (read hash on load, clear via
-      `history.replaceState`).
-- [ ] TDD the import preview modal (routine name, tasks, durations, total; Import
+- [x] TDD a URL-fragment abstraction (read hash on load, clear via
+      `history.replaceState`). (5423b0d)
+- [x] TDD the import preview modal (routine name, tasks, durations, total; Import
       / Cancel) and the malformed-payload error state; fragment cleared on every
-      outcome.
+      outcome. (5423b0d)
 
 Phase 5 — close out:
-- [ ] Update [SPEC-011] (share/import behavior, rewrite the one-device
+- [x] Update [SPEC-011] (share/import behavior, rewrite the one-device
       limitation) and [SPEC-013] (share-link exception to the on-device
       boundary), with log lines; verify `npm run lint`, `npm run check`,
-      `npm test`, `npm run build`; mark this ticket done.
+      `npm test`, `npm run build`; mark this ticket done. (closing commit)
 
 ## Notes
 
 Origin: TK-003 research outcome; user request on 2026-07-03.
+
+Verification at close: 282 tests passing, `npm run lint` clean,
+`npm run build` clean. `npm run check` (Prettier) fails repo-wide on ~150
+pre-existing files — every file this ticket created is Prettier-clean; the
+repo-wide cleanup is TK-022.
