@@ -21,3 +21,4 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-017 — Routine edit-in-place (save updates the loaded routine) (open)
 - TK-018 — Translate Portuguese comments in useTimer.ts to English (done)
 - TK-019 — Unify timer ticks — useTimer consumes useClock's now (open)
+- TK-020 — Fix the 25 lint errors breaking npm run lint (open)
