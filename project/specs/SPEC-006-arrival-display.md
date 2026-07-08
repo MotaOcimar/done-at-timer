@@ -36,3 +36,4 @@ The arrival time is the hero of the interface:
 - Seeded from code + conductor archive (2026-07-02)
 - TK-015: running arrival progress bar shows forward-flowing motion instead of a pulse (2026-07-08)
 - TK-025: overtime arrival progress bar gently breathes to signal it's still live (2026-07-08)
+- TK-026: made the running sweep visible on the white arrival fill (blue tint) (2026-07-08)

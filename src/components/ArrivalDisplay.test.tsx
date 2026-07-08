@@ -35,6 +35,18 @@ describe('ArrivalDisplay', () => {
     expect(screen.getByText('10:30')).toBeInTheDocument();
   });
 
+  it('uses a visible (blue-tinted) shimmer on the white running fill', () => {
+    useTaskStore.getState().addTask('T1', 30);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().startTask(taskId);
+
+    render(<ArrivalDisplay />);
+
+    const fill = screen.getByRole('progressbar').firstChild;
+    expect(fill).toHaveClass('shimmer');
+    expect(fill).toHaveClass('shimmer-blue');
+  });
+
   it('maintains arrival time when task is paused', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;

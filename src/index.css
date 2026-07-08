@@ -57,10 +57,17 @@ input[type='number'] {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.45) 50%,
+    var(--shimmer-color, rgba(255, 255, 255, 0.45)) 50%,
     transparent 100%
   );
   animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* Sweep tint for shimmer over a light/white fill (e.g. the arrival card's white
+   running bar), where a white highlight would be invisible: a soft blue that
+   stays on-palette with the blue card (TK-026). */
+.shimmer-blue {
+  --shimmer-color: rgba(37, 99, 235, 0.6);
 }
 
 /* Overtime progress bar: a gentle breathing (pulsing brightness) signaling the
