@@ -14,7 +14,9 @@ Visual states mirror the arrival display's palette:
 
 - **To-do:** neutral, with a play button to start the task.
 - **Running:** highlighted in blue, with live countdown and progress; controls to
-  pause/resume and a "Done" button to confirm completion ([SPEC-004]).
+  pause/resume and a "Done" button to confirm completion ([SPEC-004]). While
+  actively running, the progress bar shows continuous forward-flowing motion,
+  signaling live momentum (only in this state — paused/overtime bars are static).
 - **Paused:** muted gray (pausing is a neutral, intentional act — not a warning).
 - **Overtime:** soft amber, still awaiting the user's confirmation.
 - **Done:** subtle green (readable, not washed out), showing the moment it was
@@ -30,3 +32,4 @@ Title and duration are editable in place ([SPEC-008]).
 ## Log
 
 - Seeded from code + conductor archive (2026-07-02)
+- TK-015: running progress bar shows forward-flowing motion instead of a pulse (2026-07-08)

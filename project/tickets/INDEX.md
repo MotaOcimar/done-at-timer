@@ -16,7 +16,7 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-012 — Quick-complete a task without starting it (open)
 - TK-013 — Toggle for auto-advance vs manual completion confirmation (open)
 - TK-014 — Automated screenshot generation for visual documentation (open)
-- TK-015 — Replace progress-bar pulse with a shimmer/wave animation (open)
+- TK-015 — Replace progress-bar pulse with a shimmer/wave animation (done)
 - TK-016 — Routine chaining (queue routines with per-routine arrival times) (open)
 - TK-017 — Routine edit-in-place (save updates the loaded routine) (open)
 - TK-018 — Translate Portuguese comments in useTimer.ts to English (done)

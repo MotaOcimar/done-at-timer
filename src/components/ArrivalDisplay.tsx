@@ -165,7 +165,7 @@ const ArrivalDisplay = () => {
           aria-valuemax={100}
         >
           <div
-            className={`h-full rounded-full transition-all duration-1000 ease-linear ${activeTaskId && !isDrifting ? 'animate-pulse' : ''} ${
+            className={`h-full rounded-full transition-all duration-1000 ease-linear ${activeTaskId && !isDrifting ? 'shimmer' : ''} ${
               progressFillClasses[displayState]
             }`}
             style={{ width: `${progressPercentage}%` }}

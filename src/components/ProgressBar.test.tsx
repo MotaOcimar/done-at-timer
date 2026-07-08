@@ -29,14 +29,14 @@ describe('ProgressBar', () => {
     expect(bar).toHaveAttribute('aria-valuemax', '100');
   });
 
-  it('renders pulse animation when active', () => {
+  it('renders shimmer animation when active', () => {
     const { rerender } = render(<ProgressBar progress={0.5} isActive={true} />);
     const bar = screen.getByRole('progressbar').firstChild;
-    expect(bar).toHaveClass('animate-pulse');
+    expect(bar).toHaveClass('shimmer');
 
     rerender(<ProgressBar progress={0.5} isActive={false} />);
     const inactiveBar = screen.getByRole('progressbar').firstChild;
-    expect(inactiveBar).not.toHaveClass('animate-pulse');
+    expect(inactiveBar).not.toHaveClass('shimmer');
   });
 
   it('applies correct color classes based on state', () => {

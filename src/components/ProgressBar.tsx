@@ -26,7 +26,7 @@ const ProgressBar = ({
       aria-valuemax={100}
     >
       <div
-        className={`${stateClasses[state]} h-full rounded-full transition-all duration-1000 ease-linear ${isActive ? 'animate-pulse' : ''}`}
+        className={`${stateClasses[state]} h-full rounded-full transition-all duration-1000 ease-linear ${isActive ? 'shimmer' : ''}`}
         style={{ width: `${percentage}%` }}
       ></div>
     </div>
