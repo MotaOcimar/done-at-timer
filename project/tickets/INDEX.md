@@ -24,4 +24,5 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-020 — Fix the 25 lint errors breaking npm run lint (done)
 - TK-021 — Share and import routines via a shareable URL (done)
 - TK-022 — Make npm run check pass — Prettier the whole repo (done)
-- TK-023 — Refine the active-bar shimmer to a single soft sweep (open)
+- TK-023 — Refine the active-bar shimmer to a single soft sweep (done)
+- TK-024 — Shimmer polish — constant-width beam and a slightly slower sweep (done)

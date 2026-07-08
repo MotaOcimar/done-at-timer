@@ -26,18 +26,20 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-/* Active progress bar: a single soft highlight that glides left→right over the
-   solid state color, then briefly rests before repeating — signaling live forward
-   progress without the stripe/barber-pole look (TK-015, refined in TK-023). */
+/* Active progress bar: a single soft, fixed-width highlight that glides left→right
+   over the solid state color, then briefly rests before repeating — signaling live
+   forward progress without the stripe/barber-pole look. The band has a constant
+   absolute width (it does not grow with progress) and is clipped to the fill by
+   overflow:hidden (TK-015, refined in TK-023 and TK-024). */
 @keyframes shimmer {
   0% {
-    transform: translateX(-100%);
+    left: -6rem;
   }
   60% {
-    transform: translateX(100%);
+    left: 100%;
   }
   100% {
-    transform: translateX(100%);
+    left: 100%;
   }
 }
 
@@ -49,12 +51,14 @@ input[type='number'] {
 .shimmer::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rem;
   background: linear-gradient(
     90deg,
     transparent 0%,
     rgba(255, 255, 255, 0.45) 50%,
     transparent 100%
   );
-  animation: shimmer 1.9s ease-in-out infinite;
+  animation: shimmer 2.5s ease-in-out infinite;
 }
