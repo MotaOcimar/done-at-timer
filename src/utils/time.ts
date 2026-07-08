@@ -3,7 +3,7 @@ import type { Task } from '../types';
 export const calculateIntermediateETAs = (
   tasks: Task[],
   activeTimeLeftSeconds: number | null,
-  currentTime: Date
+  currentTime: Date,
 ): Map<string, Date> => {
   const etas = new Map<string, Date>();
   let currentAccumulatedTime = currentTime.getTime();
@@ -29,14 +29,18 @@ export const calculateIntermediateETAs = (
 export const calculateArrivalTime = (
   tasks: Task[],
   activeTimeLeftSeconds: number | null,
-  currentTime: Date
+  currentTime: Date,
 ): Date => {
-  const etas = calculateIntermediateETAs(tasks, activeTimeLeftSeconds, currentTime);
-  
+  const etas = calculateIntermediateETAs(
+    tasks,
+    activeTimeLeftSeconds,
+    currentTime,
+  );
+
   // Find the last non-completed task (Active or Pending)
   // If all tasks are completed, or no tasks, arrival time is 'now'
   let lastEta = currentTime;
-  
+
   // Tasks are ordered, so we can just iterate and pick the last one that isn't COMPLETED
   // or specifically, the last one in the map that corresponds to a non-completed task.
   for (const task of tasks) {

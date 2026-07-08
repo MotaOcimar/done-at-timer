@@ -1,0 +1,6 @@
+# Frozen historical archive — never edit (see project/workflow.md)
+conductor/
+
+# Build and tooling output
+dist/
+coverage/

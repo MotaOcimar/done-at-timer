@@ -54,7 +54,7 @@ export const InlineEdit = ({
     if (trimmed !== String(value)) {
       onSave(trimmed);
     } else {
-        setCurrentValue(String(value));
+      setCurrentValue(String(value));
     }
     setIsEditing(false);
   };

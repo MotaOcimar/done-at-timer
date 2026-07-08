@@ -9,7 +9,7 @@ describe('InlineEdit', () => {
     render(
       <div onPointerDown={containerOnPointerDown}>
         <InlineEdit value="Test" onSave={vi.fn()} ariaLabel="test" />
-      </div>
+      </div>,
     );
 
     const displayElement = screen.getByText('Test');
@@ -27,7 +27,7 @@ describe('InlineEdit', () => {
     render(
       <div onPointerDown={containerOnPointerDown}>
         <InlineEdit value="Test" onSave={vi.fn()} ariaLabel="test" />
-      </div>
+      </div>,
     );
 
     // Enter edit mode
@@ -51,7 +51,7 @@ describe('InlineEdit', () => {
     render(
       <div onTouchStart={containerOnTouchStart}>
         <InlineEdit value="Test" onSave={vi.fn()} ariaLabel="test" />
-      </div>
+      </div>,
     );
 
     const displayElement = screen.getByText('Test');
@@ -69,7 +69,7 @@ describe('InlineEdit', () => {
     render(
       <div onTouchStart={containerOnTouchStart}>
         <InlineEdit value="Test" onSave={vi.fn()} ariaLabel="test" />
-      </div>
+      </div>,
     );
 
     // Enter edit mode

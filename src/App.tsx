@@ -21,42 +21,40 @@ function App() {
         <NotificationManager />
         <PWAUpdateNotification />
         <div className="flex flex-col relative">
-        {/* Sticky Header - Simples e Limpo */}
-        <div className="sticky top-0 z-30 bg-gray-50 -mx-4 px-4 pt-3 pb-6 pointer-events-none">
-          <div className="relative pointer-events-auto">
-            <ArrivalDisplay />
-            <div className="absolute top-4 right-4">
-              <button 
-                onClick={() => setIsLibraryOpen(true)}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-all active:scale-90"
-                aria-label="Open menu"
-              >
-                <Menu size={24} />
-              </button>
+          {/* Sticky Header - Simples e Limpo */}
+          <div className="sticky top-0 z-30 bg-gray-50 -mx-4 px-4 pt-3 pb-6 pointer-events-none">
+            <div className="relative pointer-events-auto">
+              <ArrivalDisplay />
+              <div className="absolute top-4 right-4">
+                <button
+                  onClick={() => setIsLibraryOpen(true)}
+                  className="p-2 text-gray-400 hover:text-gray-600 transition-all active:scale-90"
+                  aria-label="Open menu"
+                >
+                  <Menu size={24} />
+                </button>
+              </div>
             </div>
           </div>
+
+          <div className="mt-8 pt-8 border-t border-gray-100">
+            <TaskList onSaveRoutine={() => setIsSavingActive(true)}>
+              <div className="mt-6">
+                <TaskInput />
+              </div>
+            </TaskList>
+          </div>
+
+          <ControlCenter
+            isOpen={isLibraryOpen}
+            onClose={() => setIsLibraryOpen(false)}
+            isSavingExternal={isSavingActive}
+            onSaveComplete={() => setIsSavingActive(false)}
+          />
+
+          <RoutineImport />
         </div>
-
-        <div className="mt-8 pt-8 border-t border-gray-100">
-          <TaskList 
-            onSaveRoutine={() => setIsSavingActive(true)} 
-          >
-            <div className="mt-6">
-              <TaskInput />
-            </div>
-          </TaskList>
-        </div>
-
-        <ControlCenter
-          isOpen={isLibraryOpen}
-          onClose={() => setIsLibraryOpen(false)}
-          isSavingExternal={isSavingActive}
-          onSaveComplete={() => setIsSavingActive(false)}
-        />
-
-        <RoutineImport />
-      </div>
-    </Layout>
+      </Layout>
     </NotificationProvider>
   );
 }

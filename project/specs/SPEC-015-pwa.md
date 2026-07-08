@@ -22,10 +22,12 @@ links: [SPEC-001, SPEC-012]
   a non-blocking prompt letting the user refresh into the new version.
 
 ## Implementation pointers
+
 - `vite.config.ts` / `pwa-manifest.ts`, `src/components/PWAUpdateNotification.tsx`,
   `src/hooks/useInstallPrompt.ts`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: added in-tab installed detection (pwa_pc_detection track) and the
   installation-unavailable state (2026-07-02)

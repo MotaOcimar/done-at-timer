@@ -5,7 +5,9 @@ describe('PWA Manifest Configuration', () => {
   it('should have the correct name and description', () => {
     expect(pwaManifest.name).toBe('Done-At Timer');
     expect(pwaManifest.short_name).toBe('Done-At');
-    expect(pwaManifest.description).toBe('A simple task timer to know when you will be done.');
+    expect(pwaManifest.description).toBe(
+      'A simple task timer to know when you will be done.',
+    );
   });
 
   it('should have correct PWA settings', () => {
@@ -25,10 +27,10 @@ describe('PWA Manifest Configuration', () => {
   it('should have mandatory icons', () => {
     expect(pwaManifest.icons).toBeDefined();
     expect(pwaManifest.icons!.length).toBeGreaterThanOrEqual(2);
-    
-    const icon192 = pwaManifest.icons!.find(i => i.sizes === '192x192');
-    const icon512 = pwaManifest.icons!.find(i => i.sizes === '512x512');
-    
+
+    const icon192 = pwaManifest.icons!.find((i) => i.sizes === '192x192');
+    const icon512 = pwaManifest.icons!.find((i) => i.sizes === '512x512');
+
     expect(icon192).toBeDefined();
     expect(icon512).toBeDefined();
   });

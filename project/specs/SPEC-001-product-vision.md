@@ -34,6 +34,7 @@ for everyday routines.
 - Fully functional offline after first visit ([SPEC-015]).
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: added the focus-over-discoverability principle, stated by the unified
   sidebar track but missing here (2026-07-02)

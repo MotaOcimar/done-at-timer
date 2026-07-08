@@ -1,16 +1,14 @@
 import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
-import { 
-  type CardState 
-} from '../utils/cardState';
-import { 
-  CheckCircle2, 
-  Clock, 
-  Play, 
-  Pause, 
+import { type CardState } from '../utils/cardState';
+import {
+  CheckCircle2,
+  Clock,
+  Play,
+  Pause,
   MapPin,
-  MapPinCheckInside
+  MapPinCheckInside,
 } from 'lucide-react';
 
 interface TaskCardProps {
@@ -31,32 +29,36 @@ interface TaskCardProps {
   onComplete: () => void;
 }
 
-const StatusIcon = ({ 
-  isCompleted, 
-  isActive, 
-  isPaused, 
+const StatusIcon = ({
+  isCompleted,
+  isActive,
+  isPaused,
   isTimeUp,
   cardState,
-  onToggle 
-}: { 
-  isCompleted: boolean, 
-  isActive: boolean, 
-  isPaused: boolean, 
-  isTimeUp?: boolean,
-  cardState: CardState,
-  onToggle: (e: React.MouseEvent) => void 
+  onToggle,
+}: {
+  isCompleted: boolean;
+  isActive: boolean;
+  isPaused: boolean;
+  isTimeUp?: boolean;
+  cardState: CardState;
+  onToggle: (e: React.MouseEvent) => void;
 }) => {
-  const baseClasses = "flex items-center justify-center w-10 h-10 rounded-full transition-colors";
-  
+  const baseClasses =
+    'flex items-center justify-center w-10 h-10 rounded-full transition-colors';
+
   const iconButtonClasses: Partial<Record<CardState, string>> = {
     idle: 'bg-gray-100 text-gray-400 hover:bg-blue-50 hover:text-blue-500',
     paused: 'bg-gray-100 text-gray-500 hover:bg-gray-200',
-    running: 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+    running: 'bg-blue-100 text-blue-600 hover:bg-blue-200',
   };
 
   if (isCompleted) {
     return (
-      <div className={`${baseClasses} text-green-500`} data-testid="checkmark-icon">
+      <div
+        className={`${baseClasses} text-green-500`}
+        data-testid="checkmark-icon"
+      >
         <CheckCircle2 size={24} strokeWidth={2} />
       </div>
     );
@@ -105,10 +107,10 @@ const StatusIcon = ({
   );
 };
 
-const timeFormatter = new Intl.DateTimeFormat('default', { 
-  hour: '2-digit', 
+const timeFormatter = new Intl.DateTimeFormat('default', {
+  hour: '2-digit',
   minute: '2-digit',
-  hour12: false
+  hour12: false,
 });
 
 const cardClasses: Record<CardState, string> = {
@@ -116,7 +118,7 @@ const cardClasses: Record<CardState, string> = {
   idle: 'bg-white',
   overtime: 'bg-amber-50 ring-2 ring-amber-200/50',
   paused: 'bg-gray-50 ring-1 ring-gray-200/50',
-  running: 'bg-blue-50 ring-1 ring-blue-500/20'
+  running: 'bg-blue-50 ring-1 ring-blue-500/20',
 };
 
 const titleClasses: Record<CardState, string> = {
@@ -124,7 +126,7 @@ const titleClasses: Record<CardState, string> = {
   idle: 'text-gray-800',
   overtime: 'text-amber-600',
   paused: 'text-gray-600',
-  running: 'text-blue-700 text-lg'
+  running: 'text-blue-700 text-lg',
 };
 
 const labelClasses: Record<CardState, string> = {
@@ -132,7 +134,7 @@ const labelClasses: Record<CardState, string> = {
   idle: 'text-gray-400',
   overtime: 'text-amber-400',
   paused: 'text-gray-400',
-  running: 'text-blue-400'
+  running: 'text-blue-400',
 };
 
 const timeDisplayClasses: Record<CardState, string> = {
@@ -140,35 +142,37 @@ const timeDisplayClasses: Record<CardState, string> = {
   idle: 'text-gray-400',
   overtime: 'text-amber-500 animate-pulse',
   paused: 'text-gray-500',
-  running: 'text-blue-600'
+  running: 'text-blue-600',
 };
 
-const TaskCard = ({ 
-  task, 
-  isActive, 
-  isCompleted, 
+const TaskCard = ({
+  task,
+  isActive,
+  isCompleted,
   cardState,
-  isDragging, 
+  isDragging,
   isTimeUp,
-  timeLeft = 0, 
-  progress = 0, 
+  timeLeft = 0,
+  progress = 0,
   isActuallyPaused = false,
   eta,
   onToggle,
   onTitleSave,
   onDurationSave,
-  onComplete
+  onComplete,
 }: TaskCardProps) => {
   const isOvertime = timeLeft < 0;
   const absSeconds = Math.abs(timeLeft);
   const mins = Math.ceil(absSeconds / 60);
-  
-  const timeDisplay = isOvertime 
+
+  const timeDisplay = isOvertime
     ? `${mins} min over`
-    : mins > 0 ? `${mins} min left` : '< 1 min left';
+    : mins > 0
+      ? `${mins} min left`
+      : '< 1 min left';
 
   return (
-    <div 
+    <div
       data-testid="task-card"
       className={`flex flex-col p-4 rounded-2xl shadow-sm transition-all duration-300 ${
         cardClasses[cardState]
@@ -177,10 +181,10 @@ const TaskCard = ({
       <div className="flex items-center gap-4">
         {/* Consistent Status Icon Area */}
         <div className="flex-shrink-0">
-          <StatusIcon 
-            isCompleted={isCompleted} 
-            isActive={isActive} 
-            isPaused={isActuallyPaused} 
+          <StatusIcon
+            isCompleted={isCompleted}
+            isActive={isActive}
+            isPaused={isActuallyPaused}
             isTimeUp={isTimeUp}
             cardState={cardState}
             onToggle={onToggle}
@@ -189,14 +193,18 @@ const TaskCard = ({
 
         {/* Task Info Area */}
         <div className="flex-1 min-w-0">
-          <h3 className={`font-bold transition-all truncate ${titleClasses[cardState]}`}>
+          <h3
+            className={`font-bold transition-all truncate ${titleClasses[cardState]}`}
+          >
             <InlineEdit
               value={task.title}
               onSave={onTitleSave}
               ariaLabel="Task title"
             />
           </h3>
-          <div className={`text-xs font-bold uppercase tracking-wide transition-colors flex items-center justify-between ${labelClasses[cardState]}`}>
+          <div
+            className={`text-xs font-bold uppercase tracking-wide transition-colors flex items-center justify-between ${labelClasses[cardState]}`}
+          >
             <div>
               <InlineEdit
                 value={task.duration}
@@ -204,7 +212,8 @@ const TaskCard = ({
                 type="number"
                 ariaLabel="Task duration"
                 className="mr-0"
-              /> min {isActive ? `total · ${timeDisplay}` : ''}
+              />{' '}
+              min {isActive ? `total · ${timeDisplay}` : ''}
               {isCompleted && task.actualDuration !== undefined && (
                 <span className="ml-2 text-green-700/50 lowercase font-medium">
                   (took {task.actualDuration} min)
@@ -219,12 +228,15 @@ const TaskCard = ({
           <div className="flex items-center gap-1">
             {isActive && (
               <button
-                onClick={(e) => { e.stopPropagation(); onComplete(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onComplete();
+                }}
                 onPointerDown={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
                 className={`px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-wide transition-all shadow-lg ${
-                  isTimeUp 
-                    ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100' 
+                  isTimeUp
+                    ? 'bg-amber-400 hover:bg-amber-500 shadow-amber-100'
                     : 'bg-green-500 hover:bg-green-600 shadow-green-200'
                 }`}
                 aria-label="Done"
@@ -234,9 +246,15 @@ const TaskCard = ({
             )}
           </div>
           {!isActive && eta && (
-            <span className={`text-xs font-bold tabular-nums flex items-center gap-1 pr-1 whitespace-nowrap ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}>
+            <span
+              className={`text-xs font-bold tabular-nums flex items-center gap-1 pr-1 whitespace-nowrap ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}
+            >
               {isCompleted ? (
-                <MapPinCheckInside size={10} strokeWidth={2.5} className="opacity-60" />
+                <MapPinCheckInside
+                  size={10}
+                  strokeWidth={2.5}
+                  className="opacity-60"
+                />
               ) : (
                 <MapPin size={10} strokeWidth={2.5} className="opacity-70" />
               )}
@@ -247,19 +265,25 @@ const TaskCard = ({
       </div>
 
       {isActive && (
-        <div className={`mt-4 pt-4 border-t animate-in fade-in slide-in-from-top-2 duration-500 ${
-          isActuallyPaused ? 'border-gray-200' : 'border-blue-100/50'
-        }`}>
-          <ProgressBar 
-            progress={progress} 
-            isActive={!isActuallyPaused && !isTimeUp} 
-            state={isTimeUp ? 'overtime' : isActuallyPaused ? 'paused' : 'running'}
+        <div
+          className={`mt-4 pt-4 border-t animate-in fade-in slide-in-from-top-2 duration-500 ${
+            isActuallyPaused ? 'border-gray-200' : 'border-blue-100/50'
+          }`}
+        >
+          <ProgressBar
+            progress={progress}
+            isActive={!isActuallyPaused && !isTimeUp}
+            state={
+              isTimeUp ? 'overtime' : isActuallyPaused ? 'paused' : 'running'
+            }
           />
           {eta && (
             <div className="flex justify-end mt-2">
-              <span className={`text-sm font-bold tabular-nums tracking-tight flex items-center gap-1.5 whitespace-nowrap ${
-                timeDisplayClasses[cardState]
-              }`}>
+              <span
+                className={`text-sm font-bold tabular-nums tracking-tight flex items-center gap-1.5 whitespace-nowrap ${
+                  timeDisplayClasses[cardState]
+                }`}
+              >
                 <MapPin size={14} strokeWidth={2.5} className="opacity-70" />
                 {timeFormatter.format(eta)}
               </span>

@@ -29,7 +29,7 @@ describe('TaskItem Notifications', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useTaskStore.getState().clearTasks();
-    
+
     (useNotification as any).mockReturnValue({
       permission: 'granted',
       requestPermission: vi.fn(),
@@ -39,19 +39,24 @@ describe('TaskItem Notifications', () => {
 
   it('should call notifyTaskComplete when timer finishes and permission is granted', async () => {
     vi.useFakeTimers();
-    
+
     // Add task and start it
     const taskTitle = 'Notification Task';
     useTaskStore.getState().addTask(taskTitle, 1); // 1 minute
     const task = useTaskStore.getState().tasks[0];
-    
+
     render(
       <>
         <NotificationManager />
-        <TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />
-      </>
+        <TaskItem
+          task={task}
+          onDelete={vi.fn()}
+          activeSwipeId={null}
+          onSwipeDismissAll={vi.fn()}
+        />
+      </>,
     );
-    
+
     // Start task
     act(() => {
       useTaskStore.getState().startTask(task.id);
@@ -64,29 +69,34 @@ describe('TaskItem Notifications', () => {
 
     // Verify notifyTaskComplete was called
     expect(mockNotifyTaskComplete).toHaveBeenCalledWith(taskTitle);
-    
+
     vi.useRealTimers();
   });
 
   it('should NOT call notifyTaskComplete when permission is denied', async () => {
     vi.useFakeTimers();
-    
+
     (useNotification as any).mockReturnValue({
       permission: 'denied',
       requestPermission: vi.fn(),
       notifyTaskComplete: mockNotifyTaskComplete,
     });
-    
+
     useTaskStore.getState().addTask('Denied Task', 1);
     const task = useTaskStore.getState().tasks[0];
-    
+
     render(
       <>
         <NotificationManager />
-        <TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />
-      </>
+        <TaskItem
+          task={task}
+          onDelete={vi.fn()}
+          activeSwipeId={null}
+          onSwipeDismissAll={vi.fn()}
+        />
+      </>,
     );
-    
+
     act(() => {
       useTaskStore.getState().startTask(task.id);
     });
@@ -97,7 +107,7 @@ describe('TaskItem Notifications', () => {
 
     // Verify notifyTaskComplete was NOT called
     expect(mockNotifyTaskComplete).not.toHaveBeenCalled();
-    
+
     vi.useRealTimers();
   });
 });

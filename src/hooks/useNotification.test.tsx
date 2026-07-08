@@ -31,7 +31,9 @@ describe('useNotification', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useTaskStore as any).mockImplementation((selector: any) => selector({ isNotificationsEnabled: true }));
+    (useTaskStore as any).mockImplementation((selector: any) =>
+      selector({ isNotificationsEnabled: true }),
+    );
     Object.defineProperty(window, 'Notification', {
       value: { permission: 'default' },
       configurable: true,
@@ -73,7 +75,9 @@ describe('useNotification', () => {
   });
 
   it('should not call service.notify when notifications are disabled in store', async () => {
-    (useTaskStore as any).mockImplementation((selector: any) => selector({ isNotificationsEnabled: false }));
+    (useTaskStore as any).mockImplementation((selector: any) =>
+      selector({ isNotificationsEnabled: false }),
+    );
     const { result } = renderHook(() => useNotification(), { wrapper });
 
     await act(async () => {

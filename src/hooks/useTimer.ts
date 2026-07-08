@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 export const useTimer = (
   initialSeconds: number,
   onComplete?: () => void,
-  targetEndTime?: number | null
+  targetEndTime?: number | null,
 ) => {
   const [timeLeft, setTimeLeft] = useState(initialSeconds);
   const [isPaused, setIsPaused] = useState(true);
@@ -21,7 +21,7 @@ export const useTimer = (
         // Allow it to go negative for overtime
         const remaining = Math.ceil((targetEndTime - Date.now()) / 1000);
         setTimeLeft(remaining);
-        
+
         if (remaining <= 0 && !hasNotifiedComplete) {
           setHasNotifiedComplete(true);
           onCompleteRef.current?.();

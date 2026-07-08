@@ -22,9 +22,11 @@ links: [SPEC-004, SPEC-012]
   browser settings), or unsupported (section hidden).
 
 ## Implementation pointers
+
 - `src/components/NotificationManager.tsx`, `src/hooks/useNotification.ts`,
   `src/utils/notificationService.ts` (browser-API abstraction, see workflow's
   engineering rules)
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

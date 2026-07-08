@@ -25,7 +25,9 @@ The arrival time is the hero of the interface:
   ("Well Done") and confetti fires once.
 
 ## Implementation pointers
+
 - `src/components/ArrivalDisplay.tsx`, `src/App.tsx` (sticky wrapper)
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

@@ -38,20 +38,20 @@ describe('ArrivalDisplay', () => {
   it('maintains arrival time when task is paused', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
-    
+
     useTaskStore.getState().startTask(taskId);
     vi.advanceTimersByTime(600000); // 10 mins passed
-    
+
     useTaskStore.getState().pauseTask();
-    
+
     render(<ArrivalDisplay />);
-    
+
     // Ainda deve ser 10:30 (10:10 atual + 20 restantes)
     expect(screen.getByText('10:30')).toBeInTheDocument();
 
     // Check for remaining time text (20 min left)
     expect(screen.getByText(/20 min left/i)).toBeInTheDocument();
-    
+
     // Check for progress bar
     const bar = screen.getByRole('progressbar');
     expect(bar).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe('ArrivalDisplay', () => {
     useTaskStore.getState().pauseTask();
 
     const { container } = render(<ArrivalDisplay />);
-    
+
     expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('bg-gray-50');
   });
@@ -84,12 +84,12 @@ describe('ArrivalDisplay', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
     useTaskStore.getState().startTask(taskId);
-    
+
     // Simulate time up
     useTaskStore.getState().onTimeUp();
 
     const { container } = render(<ArrivalDisplay />);
-    
+
     expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('bg-amber-50');
   });
@@ -103,7 +103,7 @@ describe('ArrivalDisplay', () => {
 
     // Fast forward 5 minutes (4 mins past T1's estimate)
     // Clock is now 10:05. T1 is in overtime.
-    vi.advanceTimersByTime(300000); 
+    vi.advanceTimersByTime(300000);
     useTaskStore.getState().onTimeUp();
 
     render(<ArrivalDisplay />);

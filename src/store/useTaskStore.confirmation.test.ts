@@ -10,7 +10,7 @@ describe('useTaskStore: Manual Completion', () => {
   it('should track when time is up for the active task', () => {
     useTaskStore.getState().addTask('Task 1', 10);
     const taskId = useTaskStore.getState().tasks[0].id;
-    
+
     useTaskStore.getState().startTask(taskId);
     expect(useTaskStore.getState().isTimeUp).toBe(false);
 
@@ -32,16 +32,16 @@ describe('useTaskStore: Manual Completion', () => {
     useTaskStore.getState().completeActiveTask(300);
 
     const { tasks, activeTaskId, isTimeUp } = useTaskStore.getState();
-    
+
     // Task 1 should be COMPLETED and have actualDuration
-    const task1 = tasks.find(t => t.id === '1');
+    const task1 = tasks.find((t) => t.id === '1');
     expect(task1?.status).toBe('COMPLETED');
     expect(task1?.actualDuration).toBe(5);
-    
+
     // Task 2 should be IN_PROGRESS
-    expect(tasks.find(t => t.id === '2')?.status).toBe('IN_PROGRESS');
+    expect(tasks.find((t) => t.id === '2')?.status).toBe('IN_PROGRESS');
     expect(activeTaskId).toBe('2');
-    
+
     // isTimeUp should be reset
     expect(isTimeUp).toBe(false);
   });
@@ -60,7 +60,7 @@ describe('useTaskStore: Manual Completion', () => {
     useTaskStore.getState().completeActiveTask(-300);
 
     const { tasks } = useTaskStore.getState();
-    const task1 = tasks.find(t => t.id === '1');
+    const task1 = tasks.find((t) => t.id === '1');
     expect(task1?.actualDuration).toBe(15);
   });
 });

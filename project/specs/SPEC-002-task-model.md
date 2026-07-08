@@ -24,7 +24,9 @@ Rules the user can rely on:
   cleared) or **clear** it (remove all tasks). Both stop any running timer.
 
 ## Implementation pointers
+
 - `src/types/index.ts`, `src/store/useTaskStore.ts`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

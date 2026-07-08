@@ -22,11 +22,14 @@ links: [SPEC-002, SPEC-003]
   automatically (or the session goes idle).
 
 ## Known limitations
+
 - Chaining is always on; an option to require a manual "start next" between tasks is
   a backlog idea (not yet a ticket).
 
 ## Implementation pointers
+
 - `src/store/useTaskStore.ts`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

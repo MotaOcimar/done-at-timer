@@ -16,7 +16,7 @@ describe('ArrivalDisplay Color Refinements', () => {
     // Task is added but not started (activeTaskId is null)
 
     const { container } = render(<ArrivalDisplay />);
-    
+
     // Main container should be neutral gray, but with border and shadow for contrast
     expect(container.firstChild).toHaveClass('bg-white');
     expect(container.firstChild).toHaveClass('border-gray-200');
@@ -40,7 +40,7 @@ describe('ArrivalDisplay Color Refinements', () => {
     useTaskStore.getState().startTask(taskId);
 
     const { container } = render(<ArrivalDisplay />);
-    
+
     // Main container should be active blue (no border, blue shadow)
     expect(container.firstChild).toHaveClass('bg-blue-600');
     expect(container.firstChild).not.toHaveClass('bg-amber-500');
@@ -62,7 +62,7 @@ describe('ArrivalDisplay Color Refinements', () => {
     useTaskStore.getState().pauseTask();
 
     const { container } = render(<ArrivalDisplay />);
-    
+
     // Main container should be neutral gray with border and shadow
     expect(container.firstChild).toHaveClass('bg-gray-50');
     expect(container.firstChild).toHaveClass('border-gray-300');
@@ -84,12 +84,12 @@ describe('ArrivalDisplay Color Refinements', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
     useTaskStore.getState().startTask(taskId);
-    
+
     // Simulate time up
     useTaskStore.getState().onTimeUp();
 
     const { container } = render(<ArrivalDisplay />);
-    
+
     // Main container should be softer amber with border and shadow
     expect(container.firstChild).toHaveClass('bg-amber-50');
     expect(container.firstChild).toHaveClass('border-amber-300');

@@ -18,9 +18,11 @@ links: [SPEC-002, SPEC-003]
   the due moment shifts ([SPEC-003]).
 
 ## Implementation pointers
+
 - `src/components/InlineEdit.tsx`, `src/components/TaskCard.tsx`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: added save/cancel and validation rules from the inline_editing track,
   verified in code (2026-07-02)

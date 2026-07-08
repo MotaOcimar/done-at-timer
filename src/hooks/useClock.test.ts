@@ -16,26 +16,26 @@ describe('useClock', () => {
 
   it('updates every second', () => {
     const { result } = renderHook(() => useClock());
-    
+
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    
+
     expect(result.current).toEqual(new Date('2026-03-04T12:00:01Z'));
-    
+
     act(() => {
       vi.advanceTimersByTime(5000);
     });
-    
+
     expect(result.current).toEqual(new Date('2026-03-04T12:00:06Z'));
   });
 
   it('cleans up the interval on unmount', () => {
     const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
     const { unmount } = renderHook(() => useClock());
-    
+
     unmount();
-    
+
     expect(clearIntervalSpy).toHaveBeenCalled();
     clearIntervalSpy.mockRestore();
   });
@@ -74,7 +74,7 @@ describe('useClock', () => {
 
     // Now mount again
     const { result } = renderHook(() => useClock());
-    
+
     act(() => {
       vi.advanceTimersByTime(1000);
     });

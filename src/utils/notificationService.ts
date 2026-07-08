@@ -1,4 +1,6 @@
-export type NotificationPermissionStatus = NotificationPermission | 'unsupported';
+export type NotificationPermissionStatus =
+  | NotificationPermission
+  | 'unsupported';
 
 export interface ExtendedNotificationOptions extends NotificationOptions {
   vibrate?: number[];
@@ -9,7 +11,10 @@ export interface INotifier {
 }
 
 export class BrowserNotifier implements INotifier {
-  async notify(title: string, options?: ExtendedNotificationOptions): Promise<void> {
+  async notify(
+    title: string,
+    options?: ExtendedNotificationOptions,
+  ): Promise<void> {
     if (
       typeof window === 'undefined' ||
       !window.Notification ||
@@ -66,8 +71,13 @@ export class NotificationService {
   /**
    * Show a notification using all registered notifiers.
    */
-  async notify(title: string, options?: ExtendedNotificationOptions): Promise<void> {
-    await Promise.all(this.notifiers.map((notifier) => notifier.notify(title, options)));
+  async notify(
+    title: string,
+    options?: ExtendedNotificationOptions,
+  ): Promise<void> {
+    await Promise.all(
+      this.notifiers.map((notifier) => notifier.notify(title, options)),
+    );
   }
 
   /**

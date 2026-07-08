@@ -19,9 +19,11 @@ describe('useTimer: Overtime', () => {
     });
 
     // Wait for initial completion
-    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 2000 });
+    await waitFor(() => expect(onComplete).toHaveBeenCalled(), {
+      timeout: 2000,
+    });
     expect(result.current.timeLeft).toBeLessThanOrEqual(0);
-    
+
     vi.useFakeTimers();
   });
 });

@@ -5,20 +5,25 @@ import { TaskCard } from './TaskCard';
 import type { Task } from '../types';
 
 describe('TaskCard (Pure Visual)', () => {
-  const mockTask: Task = { id: '1', title: 'Test Task', duration: 10, status: 'PENDING' };
+  const mockTask: Task = {
+    id: '1',
+    title: 'Test Task',
+    duration: 10,
+    status: 'PENDING',
+  };
 
   it('renders title and duration', () => {
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={false} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={false}
+        isCompleted={false}
         cardState="idle"
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     expect(screen.getByText('Test Task')).toBeInTheDocument();
     expect(screen.getByText('10')).toBeInTheDocument();
@@ -26,10 +31,10 @@ describe('TaskCard (Pure Visual)', () => {
 
   it('shows progress bar and time left when active', () => {
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
         cardState="running"
         timeLeft={300} // 5 min
         progress={0.5}
@@ -38,7 +43,7 @@ describe('TaskCard (Pure Visual)', () => {
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
     expect(screen.getByText(/5 min left/i)).toBeInTheDocument();
@@ -47,16 +52,16 @@ describe('TaskCard (Pure Visual)', () => {
 
   it('shows checkmark when completed', () => {
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={false} 
-        isCompleted={true} 
+      <TaskCard
+        task={mockTask}
+        isActive={false}
+        isCompleted={true}
         cardState="completed"
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     expect(screen.getByTestId('checkmark-icon')).toBeInTheDocument();
     expect(screen.queryByLabelText(/Play/i)).not.toBeInTheDocument();
@@ -64,17 +69,17 @@ describe('TaskCard (Pure Visual)', () => {
 
   it('applies dragging styles', () => {
     const { container } = render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={false} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={false}
+        isCompleted={false}
         cardState="idle"
         isDragging={true}
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     // Should have opacity class for dragging
     expect(container.firstChild).toHaveClass('opacity-50');
@@ -82,45 +87,49 @@ describe('TaskCard (Pure Visual)', () => {
 
   it('shows Done button when isTimeUp is true', () => {
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
         cardState="overtime"
         isTimeUp={true}
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     // The "Done" button should be visible and prominent
     expect(screen.getByRole('button', { name: /Done/i })).toBeInTheDocument();
   });
 
   it('shows actual duration when completed', () => {
-    const completedTask: Task = { ...mockTask, status: 'COMPLETED', actualDuration: 15 };
+    const completedTask: Task = {
+      ...mockTask,
+      status: 'COMPLETED',
+      actualDuration: 15,
+    };
     render(
-      <TaskCard 
-        task={completedTask} 
-        isActive={false} 
+      <TaskCard
+        task={completedTask}
+        isActive={false}
         isCompleted={true}
         cardState="completed"
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     expect(screen.getByText('(took 15 min)')).toBeInTheDocument();
   });
 
   it('shows remaining time in subtitle when active', () => {
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
         cardState="running"
         timeLeft={300} // 5 min left
         progress={0.5}
@@ -129,7 +138,7 @@ describe('TaskCard (Pure Visual)', () => {
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     // the label should be e.g. "10 min total · 5 min left" or something similar with these parts
     expect(screen.getByText(/· 5 min left/i)).toBeInTheDocument();
@@ -137,10 +146,10 @@ describe('TaskCard (Pure Visual)', () => {
 
   it('shows overtime in subtitle when active and in overtime', () => {
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
         cardState="overtime"
         isTimeUp={true}
         timeLeft={-120} // 2 min over
@@ -150,7 +159,7 @@ describe('TaskCard (Pure Visual)', () => {
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     expect(screen.getByText(/· 2 min over/i)).toBeInTheDocument();
   });
@@ -158,10 +167,10 @@ describe('TaskCard (Pure Visual)', () => {
   it('shows formatted ETA in progress footer when active', () => {
     const eta = new Date('2026-01-01T08:35:00Z');
     render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
         cardState="running"
         timeLeft={300}
         progress={0.5}
@@ -171,9 +180,13 @@ describe('TaskCard (Pure Visual)', () => {
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(eta);
+    const expectedTime = new Intl.DateTimeFormat('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(eta);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
 
@@ -190,9 +203,13 @@ describe('TaskCard (Pure Visual)', () => {
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(eta);
+    const expectedTime = new Intl.DateTimeFormat('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(eta);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
   it('shows actual finish time for completed cards', () => {
@@ -209,30 +226,38 @@ describe('TaskCard (Pure Visual)', () => {
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(completionTime);
+    const expectedTime = new Intl.DateTimeFormat('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(completionTime);
     expect(screen.getByText(new RegExp(expectedTime))).toBeInTheDocument();
   });
 
   it('uses consistent styling for ETA across states', () => {
     const eta = new Date('2026-01-01T08:35:00Z');
-    
+
     // Active state
     const { rerender } = render(
-      <TaskCard 
-        task={mockTask} 
-        isActive={true} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
         cardState="running"
         eta={eta}
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
-    const expectedTime = new Intl.DateTimeFormat('default', { hour: '2-digit', minute: '2-digit', hour12: false }).format(eta);
+    const expectedTime = new Intl.DateTimeFormat('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(eta);
     const activeEta = screen.getByText(new RegExp(expectedTime));
     expect(activeEta).toHaveClass('text-sm');
     expect(activeEta).toHaveClass('font-bold');
@@ -240,17 +265,17 @@ describe('TaskCard (Pure Visual)', () => {
 
     // Pending state
     rerender(
-      <TaskCard 
-        task={mockTask} 
-        isActive={false} 
-        isCompleted={false} 
+      <TaskCard
+        task={mockTask}
+        isActive={false}
+        isCompleted={false}
         cardState="idle"
         eta={eta}
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     const pendingEta = screen.getByText(new RegExp(expectedTime));
     expect(pendingEta).toHaveClass('text-xs');
@@ -259,17 +284,17 @@ describe('TaskCard (Pure Visual)', () => {
 
     // Completed state
     rerender(
-      <TaskCard 
-        task={{ ...mockTask, status: 'COMPLETED' }} 
-        isActive={false} 
-        isCompleted={true} 
+      <TaskCard
+        task={{ ...mockTask, status: 'COMPLETED' }}
+        isActive={false}
+        isCompleted={true}
         cardState="completed"
         eta={eta}
         onToggle={vi.fn()}
         onTitleSave={vi.fn()}
         onDurationSave={vi.fn()}
         onComplete={vi.fn()}
-      />
+      />,
     );
     const completedEta = screen.getByText(new RegExp(expectedTime));
     expect(completedEta).toHaveClass('text-xs');
@@ -280,38 +305,42 @@ describe('TaskCard (Pure Visual)', () => {
   describe('Phase 1: Reordering & Cleanup', () => {
     it('does not render GripHorizontal icon or spacer div for any task', () => {
       const { container, rerender } = render(
-        <TaskCard 
-          task={mockTask} 
-          isActive={false} 
-          isCompleted={false} 
+        <TaskCard
+          task={mockTask}
+          isActive={false}
+          isCompleted={false}
           cardState="idle"
           onToggle={vi.fn()}
           onTitleSave={vi.fn()}
           onDurationSave={vi.fn()}
           onComplete={vi.fn()}
-        />
+        />,
       );
 
       // GripHorizontal is typically rendered as an svg or a div with aria-label
-      expect(screen.queryByLabelText(/Drag to reorder/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText(/Drag to reorder/i),
+      ).not.toBeInTheDocument();
       // Check for spacer div (w-5 flex-shrink-0)
       const spacer = container.querySelector('.w-5.flex-shrink-0');
       expect(spacer).not.toBeInTheDocument();
 
       // Rerender as active
       rerender(
-        <TaskCard 
-          task={mockTask} 
-          isActive={true} 
-          isCompleted={false} 
+        <TaskCard
+          task={mockTask}
+          isActive={true}
+          isCompleted={false}
           cardState="running"
           onToggle={vi.fn()}
           onTitleSave={vi.fn()}
           onDurationSave={vi.fn()}
           onComplete={vi.fn()}
-        />
+        />,
       );
-      expect(container.querySelector('.w-5.flex-shrink-0')).not.toBeInTheDocument();
+      expect(
+        container.querySelector('.w-5.flex-shrink-0'),
+      ).not.toBeInTheDocument();
     });
 
     it('stops propagation on onPointerDown for Play/Pause button', () => {
@@ -319,17 +348,17 @@ describe('TaskCard (Pure Visual)', () => {
       const containerOnPointerDown = vi.fn();
       render(
         <div onPointerDown={containerOnPointerDown}>
-          <TaskCard 
-            task={mockTask} 
-            isActive={false} 
-            isCompleted={false} 
+          <TaskCard
+            task={mockTask}
+            isActive={false}
+            isCompleted={false}
             cardState="idle"
             onToggle={onToggle}
             onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
             onComplete={vi.fn()}
           />
-        </div>
+        </div>,
       );
 
       const playButton = screen.getByLabelText(/Play task/i);
@@ -338,7 +367,7 @@ describe('TaskCard (Pure Visual)', () => {
         cancelable: true,
       });
       playButton.dispatchEvent(event);
-      
+
       expect(containerOnPointerDown).not.toHaveBeenCalled();
     });
 
@@ -347,17 +376,17 @@ describe('TaskCard (Pure Visual)', () => {
       const containerOnPointerDown = vi.fn();
       render(
         <div onPointerDown={containerOnPointerDown}>
-          <TaskCard 
-            task={mockTask} 
-            isActive={true} 
-            isCompleted={false} 
+          <TaskCard
+            task={mockTask}
+            isActive={true}
+            isCompleted={false}
             cardState="running"
             onComplete={onComplete}
             onToggle={vi.fn()}
             onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
           />
-        </div>
+        </div>,
       );
 
       const doneButton = screen.getByRole('button', { name: /Done/i });
@@ -366,7 +395,7 @@ describe('TaskCard (Pure Visual)', () => {
         cancelable: true,
       });
       doneButton.dispatchEvent(event);
-      
+
       expect(containerOnPointerDown).not.toHaveBeenCalled();
     });
 
@@ -384,7 +413,7 @@ describe('TaskCard (Pure Visual)', () => {
             onDurationSave={vi.fn()}
             onComplete={vi.fn()}
           />
-        </div>
+        </div>,
       );
 
       const playButton = screen.getByLabelText(/Play task/i);
@@ -411,7 +440,7 @@ describe('TaskCard (Pure Visual)', () => {
             onTitleSave={vi.fn()}
             onDurationSave={vi.fn()}
           />
-        </div>
+        </div>,
       );
 
       const doneButton = screen.getByRole('button', { name: /Done/i });
@@ -426,16 +455,16 @@ describe('TaskCard (Pure Visual)', () => {
 
     it('respects cardState prop if provided (overriding internal computation)', () => {
       const { container } = render(
-        <TaskCard 
-          task={mockTask} 
-          isActive={false} 
-          isCompleted={false} 
+        <TaskCard
+          task={mockTask}
+          isActive={false}
+          isCompleted={false}
           cardState="running"
           onToggle={vi.fn()}
           onTitleSave={vi.fn()}
           onDurationSave={vi.fn()}
           onComplete={vi.fn()}
-        />
+        />,
       );
       // 'running' state should have 'bg-blue-50' class regardless of isActive/isCompleted
       expect(container.firstChild).toHaveClass('bg-blue-50');

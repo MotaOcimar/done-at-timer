@@ -32,17 +32,20 @@ progress, no completion records: a routine is a template, not a session.
   task count and total estimated minutes. They persist on the device ([SPEC-013]).
 
 ## Known limitations
+
 - No edit-in-place: "load → tweak → save" duplicates instead of updating, which
   surprises users. An update/"save as" flow is TK-017.
 - No live sync between devices: a share link is a one-shot copy; edits made after
   sharing do not propagate (ruled out by the TK-003 research).
 
 ## Implementation pointers
+
 - `src/store/useTaskStore.ts`, `src/components/ControlCenter.tsx`
 - Sharing: `src/utils/routineShare.ts`, `src/utils/shareService.ts`,
   `src/utils/urlFragment.ts`, `src/components/RoutineImport.tsx`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-001: pointed the edit-in-place limitation at TK-017 (2026-07-02)
 - TK-003: sharing research concluded — URL sharing planned as TK-021 (2026-07-03)

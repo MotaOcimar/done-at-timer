@@ -9,13 +9,15 @@ specs: [SPEC-011]
 # Routine edit-in-place (save updates the loaded routine)
 
 ## Context
-Loading a routine, editing it, and saving creates a *new* routine instead of
+
+Loading a routine, editing it, and saving creates a _new_ routine instead of
 updating the original ([SPEC-011] documents this as a known limitation). Users
 expect load → edit → save to update the same routine. The app would keep a link to
 the loaded routine's identity so saving updates it in place. Migrated from
 `conductor/backlog.md` (TK-001).
 
 ## Notes
+
 Idea stage — must graduate before any work. Open design questions from the
 original backlog discussion:
 

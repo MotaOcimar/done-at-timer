@@ -44,6 +44,8 @@ describe('PWAUpdateNotification', () => {
     render(<PWAUpdateNotification />);
     const closeButton = screen.getByRole('button', { name: /Close/i });
     fireEvent.click(closeButton);
-    expect(screen.queryByText(/New content available/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/New content available/i),
+    ).not.toBeInTheDocument();
   });
 });

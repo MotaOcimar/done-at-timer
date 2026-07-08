@@ -24,7 +24,9 @@ Visual states mirror the arrival display's palette:
 Title and duration are editable in place ([SPEC-008]).
 
 ## Implementation pointers
+
 - `src/components/TaskCard.tsx`, `src/utils/cardState.ts`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

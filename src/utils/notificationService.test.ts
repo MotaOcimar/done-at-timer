@@ -8,7 +8,7 @@ describe('BrowserNotifier', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     browserNotifier = new BrowserNotifier();
-    
+
     // Mock Notification API
     vi.stubGlobal('Notification', {
       permission: 'default',
@@ -67,7 +67,7 @@ describe('NotificationService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     notificationService = new NotificationService();
-    
+
     // Mock Notification API
     vi.stubGlobal('Notification', {
       permission: 'default',
@@ -81,7 +81,7 @@ describe('NotificationService', () => {
         permission: 'granted',
         requestPermission: vi.fn(),
       });
-      
+
       const result = await notificationService.requestPermission();
       expect(result).toBe('granted');
       expect(window.Notification.requestPermission).not.toHaveBeenCalled();
@@ -101,7 +101,7 @@ describe('NotificationService', () => {
 
     it('should handle browsers that do not support Notification', async () => {
       vi.stubGlobal('Notification', undefined);
-      
+
       const result = await notificationService.requestPermission();
       expect(result).toBe('unsupported');
     });
@@ -112,9 +112,11 @@ describe('NotificationService', () => {
         requestPermission: vi.fn().mockRejectedValue(new Error('Test error')),
       });
 
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       const result = await notificationService.requestPermission();
-      
+
       expect(result).toBe('default');
       expect(consoleSpy).toHaveBeenCalled();
       consoleSpy.mockRestore();
@@ -130,8 +132,14 @@ describe('NotificationService', () => {
 
       await service.notify('Test Title');
 
-      expect(mockNotifier1.notify).toHaveBeenCalledWith('Test Title', undefined);
-      expect(mockNotifier2.notify).toHaveBeenCalledWith('Test Title', undefined);
+      expect(mockNotifier1.notify).toHaveBeenCalledWith(
+        'Test Title',
+        undefined,
+      );
+      expect(mockNotifier2.notify).toHaveBeenCalledWith(
+        'Test Title',
+        undefined,
+      );
     });
 
     it('should use BrowserNotifier by default', async () => {

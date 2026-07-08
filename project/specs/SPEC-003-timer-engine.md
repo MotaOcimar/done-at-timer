@@ -24,13 +24,16 @@ links: [SPEC-002, SPEC-004]
   due moment moves by the difference (e.g. +5 min of estimate = due 5 min later).
 
 ## Known limitations
+
 - Only the currently running task's partial progress is remembered. If the user
   switches to another task (or the running task is sent back to "to do"), that
   partial progress is discarded and the task will later restart from zero. Accepted
   for now; TK-002 proposes remembering progress per task.
 
 ## Implementation pointers
+
 - `src/hooks/useTimer.ts`, `src/store/useTaskStore.ts`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

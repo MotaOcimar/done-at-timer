@@ -21,7 +21,7 @@ export const useSwipeToReveal = ({
   const [isSwipeActive, setIsSwipeActive] = useState(false);
   const hasTriggeredHapticRef = useRef(false);
   const skipNextAnimateRef = useRef(false);
-  
+
   const x = useMotionValue(0);
   const redOpacity = useTransform(x, [0, -revealWidth], [0, 1]);
 
@@ -35,7 +35,7 @@ export const useSwipeToReveal = ({
       setIsRevealed(false);
     }
   }
-  
+
   // Update x when isRevealed changes (for programmatic animation)
   useEffect(() => {
     if (skipNextAnimateRef.current) {
@@ -43,7 +43,7 @@ export const useSwipeToReveal = ({
       return;
     }
     const target = isRevealed ? -revealWidth : 0;
-    animate(x, target, { type: "tween", duration: 0.2, ease: "easeOut" });
+    animate(x, target, { type: 'tween', duration: 0.2, ease: 'easeOut' });
   }, [isRevealed, revealWidth, x]);
 
   const dismiss = useCallback(() => {
@@ -72,7 +72,7 @@ export const useSwipeToReveal = ({
         hasTriggeredHapticRef.current = true;
       }
     },
-    [id, onSwipeDismissAll, revealWidth]
+    [id, onSwipeDismissAll, revealWidth],
   );
 
   const handleDragEnd = useCallback(
@@ -82,22 +82,26 @@ export const useSwipeToReveal = ({
       const threshold = revealWidth / 2;
       // If velocity is high or offset exceeds threshold
       const shouldReveal = info.offset.x < -threshold || info.velocity.x < -500;
-      
+
       if (shouldReveal) {
         if (!isRevealed) {
           skipNextAnimateRef.current = true;
           setIsRevealed(true);
         }
-        animate(x, -revealWidth, { type: "tween", duration: 0.2, ease: "easeOut" });
+        animate(x, -revealWidth, {
+          type: 'tween',
+          duration: 0.2,
+          ease: 'easeOut',
+        });
       } else {
         if (isRevealed) {
           skipNextAnimateRef.current = true;
           setIsRevealed(false);
         }
-        animate(x, 0, { type: "tween", duration: 0.2, ease: "easeOut" });
+        animate(x, 0, { type: 'tween', duration: 0.2, ease: 'easeOut' });
       }
     },
-    [isRevealed, revealWidth, x]
+    [isRevealed, revealWidth, x],
   );
 
   return {
@@ -107,7 +111,7 @@ export const useSwipeToReveal = ({
     x,
     redOpacity,
     dragProps: {
-      drag: isEnabled ? ("x" as const) : false,
+      drag: isEnabled ? ('x' as const) : false,
       dragConstraints: { left: -revealWidth, right: 0 },
       dragElastic: { left: 0.3, right: 0 },
       onDragStart: handleDragStart,

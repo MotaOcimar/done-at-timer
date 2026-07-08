@@ -85,7 +85,9 @@ describe('useTimer', () => {
       result.current.start();
     });
 
-    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 2000 });
+    await waitFor(() => expect(onComplete).toHaveBeenCalled(), {
+      timeout: 2000,
+    });
     vi.useFakeTimers();
   });
 });

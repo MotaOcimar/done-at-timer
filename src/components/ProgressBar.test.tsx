@@ -7,7 +7,7 @@ describe('ProgressBar', () => {
   it('renders with the correct width based on progress', () => {
     render(<ProgressBar progress={0.3} />);
     const bar = screen.getByRole('progressbar');
-    
+
     // Check if the inner bar has the correct style width (30%)
     expect(bar.firstChild).toHaveStyle('width: 30%');
   });
@@ -42,16 +42,26 @@ describe('ProgressBar', () => {
   it('applies correct color classes based on state', () => {
     // Default should be running (blue)
     const { rerender } = render(<ProgressBar progress={0.5} />);
-    expect(screen.getByRole('progressbar').firstChild).toHaveClass('bg-blue-500');
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass(
+      'bg-blue-500',
+    );
 
     // Paused state
     rerender(<ProgressBar progress={0.5} state="paused" />);
-    expect(screen.getByRole('progressbar').firstChild).toHaveClass('bg-gray-400');
-    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass('bg-blue-500');
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass(
+      'bg-gray-400',
+    );
+    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass(
+      'bg-blue-500',
+    );
 
     // Overtime state
     rerender(<ProgressBar progress={0.5} state="overtime" />);
-    expect(screen.getByRole('progressbar').firstChild).toHaveClass('bg-amber-400');
-    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass('bg-blue-500');
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass(
+      'bg-amber-400',
+    );
+    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass(
+      'bg-blue-500',
+    );
   });
 });

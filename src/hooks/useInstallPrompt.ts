@@ -20,15 +20,21 @@ interface NavigatorWithRelatedApps extends Navigator {
 }
 
 export const useInstallPrompt = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [isAlreadyInstalled, setIsAlreadyInstalled] = useState(false);
-  
+
   const [isStandalone, setIsStandalone] = useState(() => {
-    return !!(window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone);
+    return !!(
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (navigator as Navigator & { standalone?: boolean }).standalone
+    );
   });
 
   const [isIOS, setIsIOS] = useState(() => {
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: boolean }).MSStream;
+    const isIOSDevice =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as Window & { MSStream?: boolean }).MSStream;
     return !!(isIOSDevice && !isStandalone);
   });
 
@@ -67,7 +73,10 @@ export const useInstallPrompt = () => {
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt,
+      );
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
@@ -80,7 +89,7 @@ export const useInstallPrompt = () => {
 
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     // We've used the prompt, and can't use it again, throw it away
     setDeferredPrompt(null);
     setIsInstallable(false);
@@ -92,5 +101,12 @@ export const useInstallPrompt = () => {
     setIsInstallable(false);
   };
 
-  return { isInstallable, isIOS, isStandalone, isAlreadyInstalled, promptInstall, hideInstall };
+  return {
+    isInstallable,
+    isIOS,
+    isStandalone,
+    isAlreadyInstalled,
+    promptInstall,
+    hideInstall,
+  };
 };

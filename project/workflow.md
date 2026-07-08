@@ -3,21 +3,21 @@
 This directory is the project's planning and documentation system. It is designed to be
 usable by a human working alone, by an AI agent, or both together. It replaces the
 `conductor/` system, which is now a **frozen historical archive** (never edit it; consult
-it only for archaeology on *when/how* a decision evolved).
+it only for archaeology on _when/how_ a decision evolved).
 
 ## The two record types
 
-| | Tickets (`tickets/`) | Specs (`specs/`) |
-|---|---|---|
-| **Describe** | A *change* (delta) | The *intended current state* |
-| **Analogy** | Jira issue / git commit | Living documentation / working tree |
-| **Lifecycle** | Immutable after `done` (except status) | Edited forever, always up to date |
-| **Answers** | "What are we doing and why now?" | "How is the product *supposed* to behave today?" |
+|               | Tickets (`tickets/`)                   | Specs (`specs/`)                                 |
+| ------------- | -------------------------------------- | ------------------------------------------------ |
+| **Describe**  | A _change_ (delta)                     | The _intended current state_                     |
+| **Analogy**   | Jira issue / git commit                | Living documentation / working tree              |
+| **Lifecycle** | Immutable after `done` (except status) | Edited forever, always up to date                |
+| **Answers**   | "What are we doing and why now?"       | "How is the product _supposed_ to behave today?" |
 
 Specs are the safe harbor for the question "is this behavior expected?". If observed
 behavior diverges from a spec, that divergence is by definition a **bug** — open a
 ticket citing the spec it violates; never silently bend the spec to match broken code
-(changing the *intent* is legitimate, but happens through a ticket, decided on purpose).
+(changing the _intent_ is legitimate, but happens through a ticket, decided on purpose).
 
 To understand how the app should behave, read specs — never reconstruct it from ticket
 history. To understand why it got that way, follow the ticket references in the spec's log.
@@ -50,11 +50,11 @@ if you do only one thing right in this system, do this.
   behavior. No variable/function/state names, no library mechanics — describe what a
   user (or a black-box test) can observe, plus its consequences. The only place code
   may be mentioned is the optional "Implementation pointers" section, restricted to
-  file paths that help the reader find their way — it documents *where*, never *how*.
+  file paths that help the reader find their way — it documents _where_, never _how_.
 - `status:` is `implemented` or `planned` (agreed but not built). A **bug is not a spec
   status** — a bug is a ticket citing the spec it violates. If the spec matches the
-  code but the behavior is wrong *by design*, fix the spec via a ticket.
-- Known limitations that are *accepted current behavior* belong in the spec (with a
+  code but the behavior is wrong _by design_, fix the spec via a ticket.
+- Known limitations that are _accepted current behavior_ belong in the spec (with a
   pointer to the ticket that will change them, if one exists).
 - Each spec ends with a short `## Log` — one line per ticket that shaped it. This is
   the only place history lives inside a spec.
@@ -89,7 +89,7 @@ vs. doing — and must not be blended:
 Rules:
 
 - **Important decisions are made with the team, never solo.** Design, UX, UI, and
-  product dilemmas — and important tradeoffs in general — are closed *with* the
+  product dilemmas — and important tradeoffs in general — are closed _with_ the
   user, not by whoever happens to be planning. Surface each dilemma as concrete
   options with a recommendation and its rationale, and let the user choose. Only
   details with a single obvious answer already settled by the codebase or an
@@ -102,7 +102,7 @@ Rules:
   are"**. If you stop mid-task, leave a one-line `> State:` note under the plan
   saying what's half-done or surprising.
 - When the ticket is `done`, Design and Plan freeze with it — the historical record
-  of *what was decided* and *how it was carried out*.
+  of _what was decided_ and _how it was carried out_.
 
 **Resume protocol** (for a new agent or a cleared context): read `workflow.md`, then
 `tickets/INDEX.md` to find the `in-progress` ticket, then that ticket — Design for
@@ -133,12 +133,15 @@ links: [SPEC-XXX]
 Present-tense statements of intended behavior.
 
 ## Known limitations
+
 (optional — accepted behavior that a ticket may later change)
 
 ## Implementation pointers
+
 (optional — file paths only, to orient the reader; may rot, verify before trusting)
 
 ## Log
+
 - TK-NNN: what it changed here (YYYY-MM-DD)
 ```
 
@@ -156,23 +159,29 @@ specs: [SPEC-XXX]
 # Title
 
 ## Context
+
 Why this, why now. Cite specs by ID.
 
 ## Acceptance criteria
+
 - [ ] Observable outcomes, not implementation steps.
 
 ## Design
+
 (required before in-progress, unless trivial — see "Planning & handoff")
 Resolved dilemmas + decisions with rationale, citing specs by ID. Out of scope list.
 
 ## Plan
+
 (required before in-progress, unless trivial)
+
 - [ ] Ordered steps only — no rationale here. Checked = done (append commit hash).
 - [ ] Unchecked = where to resume.
 
 > State: (optional one-liner when stopping mid-work)
 
 ## Notes
+
 (optional, frozen with the ticket when done)
 ```
 

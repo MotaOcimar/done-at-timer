@@ -65,12 +65,14 @@ export const useTaskStore = create<TaskState>()(
         const state = get();
         const isActive = state.activeTaskId === id;
         const newTasks = state.tasks.filter((task) => task.id !== id);
-        
+
         if (isActive) {
           const nextTask = newTasks.find((t) => t.status === 'PENDING');
           if (nextTask) {
             const finalTasks = newTasks.map((t) =>
-              t.id === nextTask.id ? { ...t, status: 'IN_PROGRESS' as const } : t
+              t.id === nextTask.id
+                ? { ...t, status: 'IN_PROGRESS' as const }
+                : t,
             );
             set({
               tasks: finalTasks,
@@ -116,32 +118,49 @@ export const useTaskStore = create<TaskState>()(
           }
 
           let newTasks = tasks.map((task) =>
-            task.id === id ? { ...task, ...updates } : task
+            task.id === id ? { ...task, ...updates } : task,
           );
 
           if (updates.status === 'IN_PROGRESS') {
             activeTaskId = id;
-            const task = newTasks.find(t => t.id === id);
+            const task = newTasks.find((t) => t.id === id);
             if (task) {
-              targetEndTime = Date.now() + (task.duration * 60 * 1000);
+              targetEndTime = Date.now() + task.duration * 60 * 1000;
               totalElapsedBeforePause = 0;
               isTimeUp = false;
 
               // Reorder: newly active task moves after all COMPLETED tasks
               // Ensure other tasks are not IN_PROGRESS
-              const tasksWithCorrectStatus = newTasks.map(t => 
-                t.id === id ? t : (t.status === 'IN_PROGRESS' ? { ...t, status: 'PENDING' as const } : t)
+              const tasksWithCorrectStatus = newTasks.map((t) =>
+                t.id === id
+                  ? t
+                  : t.status === 'IN_PROGRESS'
+                    ? { ...t, status: 'PENDING' as const }
+                    : t,
               );
 
-              const completedTasks = tasksWithCorrectStatus.filter(t => t.status === 'COMPLETED');
-              const nonCompletedTasks = tasksWithCorrectStatus.filter(t => t.status !== 'COMPLETED');
-              
-              const taskToStart = nonCompletedTasks.find(t => t.id === id)!;
-              const remainingNonCompleted = nonCompletedTasks.filter(t => t.id !== id);
-              
-              newTasks = [...completedTasks, taskToStart, ...remainingNonCompleted];
+              const completedTasks = tasksWithCorrectStatus.filter(
+                (t) => t.status === 'COMPLETED',
+              );
+              const nonCompletedTasks = tasksWithCorrectStatus.filter(
+                (t) => t.status !== 'COMPLETED',
+              );
+
+              const taskToStart = nonCompletedTasks.find((t) => t.id === id)!;
+              const remainingNonCompleted = nonCompletedTasks.filter(
+                (t) => t.id !== id,
+              );
+
+              newTasks = [
+                ...completedTasks,
+                taskToStart,
+                ...remainingNonCompleted,
+              ];
             }
-          } else if (id === state.activeTaskId && updates.status === 'COMPLETED') {
+          } else if (
+            id === state.activeTaskId &&
+            updates.status === 'COMPLETED'
+          ) {
             activeTaskId = null;
             targetEndTime = null;
             totalElapsedBeforePause = 0;
@@ -153,7 +172,7 @@ export const useTaskStore = create<TaskState>()(
             activeTaskId,
             targetEndTime,
             totalElapsedBeforePause,
-            isTimeUp
+            isTimeUp,
           };
         }),
       setActiveTaskTimeLeft: (seconds) => set({ activeTaskTimeLeft: seconds }),
@@ -164,13 +183,13 @@ export const useTaskStore = create<TaskState>()(
       pauseTask: () => {
         const state = get();
         if (!state.targetEndTime) return;
-        
+
         // Simplest approach: compute how much time REMAINS and subtract it from the total duration
-        const task = state.tasks.find(t => t.id === state.activeTaskId);
+        const task = state.tasks.find((t) => t.id === state.activeTaskId);
         if (!task) return;
 
         const remainingMs = Math.max(0, state.targetEndTime - Date.now());
-        const elapsedMs = (task.duration * 60 * 1000) - remainingMs;
+        const elapsedMs = task.duration * 60 * 1000 - remainingMs;
 
         set({
           targetEndTime: null,
@@ -181,13 +200,14 @@ export const useTaskStore = create<TaskState>()(
         const state = get();
         if (!state.activeTaskId || state.targetEndTime) return;
 
-        const task = state.tasks.find(t => t.id === state.activeTaskId);
+        const task = state.tasks.find((t) => t.id === state.activeTaskId);
         if (!task) return;
 
-        const remainingSeconds = (task.duration * 60) - state.totalElapsedBeforePause;
-        
+        const remainingSeconds =
+          task.duration * 60 - state.totalElapsedBeforePause;
+
         set({
-          targetEndTime: Date.now() + (remainingSeconds * 1000),
+          targetEndTime: Date.now() + remainingSeconds * 1000,
         });
       },
       onTimeUp: () => {
@@ -198,19 +218,27 @@ export const useTaskStore = create<TaskState>()(
         const { activeTaskId, tasks } = state;
         if (!activeTaskId) return;
 
-        const activeTaskOriginal = tasks.find(t => t.id === activeTaskId);
+        const activeTaskOriginal = tasks.find((t) => t.id === activeTaskId);
         if (!activeTaskOriginal) return;
 
         // Calculate actual duration in minutes
         // actualSeconds = originalDurationSeconds - timeLeftSeconds (timeLeft is negative if overtime)
-        const actualSeconds = (activeTaskOriginal.duration * 60) - timeLeftSeconds;
-        const actualDurationMinutes = Math.ceil(Math.max(0, actualSeconds) / 60);
+        const actualSeconds =
+          activeTaskOriginal.duration * 60 - timeLeftSeconds;
+        const actualDurationMinutes = Math.ceil(
+          Math.max(0, actualSeconds) / 60,
+        );
 
         // 1. Mark current task as COMPLETED and store actualDuration and completedAt
         const newTasks = tasks.map((t) =>
-          t.id === activeTaskId 
-            ? { ...t, status: 'COMPLETED' as const, actualDuration: actualDurationMinutes, completedAt: Date.now() } 
-            : t
+          t.id === activeTaskId
+            ? {
+                ...t,
+                status: 'COMPLETED' as const,
+                actualDuration: actualDurationMinutes,
+                completedAt: Date.now(),
+              }
+            : t,
         );
 
         // 2. Find next PENDING task
@@ -219,7 +247,7 @@ export const useTaskStore = create<TaskState>()(
         if (nextTask) {
           // 3. Start next task
           const finalTasks = newTasks.map((t) =>
-            t.id === nextTask.id ? { ...t, status: 'IN_PROGRESS' as const } : t
+            t.id === nextTask.id ? { ...t, status: 'IN_PROGRESS' as const } : t,
           );
           set({
             tasks: finalTasks,
@@ -243,11 +271,11 @@ export const useTaskStore = create<TaskState>()(
       },
       resetTasks: () =>
         set((state) => ({
-          tasks: state.tasks.map((task) => ({ 
-            ...task, 
+          tasks: state.tasks.map((task) => ({
+            ...task,
             status: 'PENDING',
             completedAt: undefined,
-            actualDuration: undefined 
+            actualDuration: undefined,
           })),
           activeTaskTimeLeft: null,
           activeTaskId: null,
@@ -271,7 +299,10 @@ export const useTaskStore = create<TaskState>()(
         const newRoutine: Routine = {
           id: generateId(),
           name,
-          tasks: state.tasks.map(({ title, duration }) => ({ title, duration })),
+          tasks: state.tasks.map(({ title, duration }) => ({
+            title,
+            duration,
+          })),
         };
 
         set({ routines: [...state.routines, newRoutine] });
@@ -321,7 +352,9 @@ export const useTaskStore = create<TaskState>()(
             if (activeTask.status !== 'PENDING') return state;
 
             // Find valid range for PENDING tasks (after COMPLETED and IN_PROGRESS)
-            const firstPendingIndex = state.tasks.findIndex(t => t.status === 'PENDING');
+            const firstPendingIndex = state.tasks.findIndex(
+              (t) => t.status === 'PENDING',
+            );
             let lastPendingIndex = state.tasks.length - 1;
             for (let i = state.tasks.length - 1; i >= 0; i--) {
               if (state.tasks[i].status === 'PENDING') {
@@ -331,7 +364,10 @@ export const useTaskStore = create<TaskState>()(
             }
 
             // Clamp newIndex to pending range
-            const clampedIndex = Math.max(firstPendingIndex, Math.min(lastPendingIndex, newIndex));
+            const clampedIndex = Math.max(
+              firstPendingIndex,
+              Math.min(lastPendingIndex, newIndex),
+            );
 
             if (oldIndex !== clampedIndex) {
               return {
@@ -343,11 +379,14 @@ export const useTaskStore = create<TaskState>()(
           return state;
         });
       },
-      toggleNotifications: () => set((state) => ({ isNotificationsEnabled: !state.isNotificationsEnabled })),
+      toggleNotifications: () =>
+        set((state) => ({
+          isNotificationsEnabled: !state.isNotificationsEnabled,
+        })),
     }),
     {
       name: 'done-at-timer-storage',
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );

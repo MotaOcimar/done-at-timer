@@ -8,7 +8,7 @@ describe('Layout', () => {
     render(
       <Layout>
         <div>Test Content</div>
-      </Layout>
+      </Layout>,
     );
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });

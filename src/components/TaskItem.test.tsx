@@ -8,18 +8,33 @@ import { useTaskStore } from '../store/useTaskStore';
 // Mock framer-motion to check for layout and drag props
 vi.mock('framer-motion', () => ({
   motion: {
-    div: vi.fn(({ children, layout, drag, dragConstraints, dragElastic, onDragStart, onDrag, onDragEnd, animate, ...props }) => (
-      <div 
-        data-testid="motion-div" 
-        data-layout={layout?.toString()} 
-        data-drag={drag?.toString()}
-        {...props}
-      >
-        {children}
-      </div>
-    )),
+    div: vi.fn(
+      ({
+        children,
+        layout,
+        drag,
+        dragConstraints,
+        dragElastic,
+        onDragStart,
+        onDrag,
+        onDragEnd,
+        animate,
+        ...props
+      }) => (
+        <div
+          data-testid="motion-div"
+          data-layout={layout?.toString()}
+          data-drag={drag?.toString()}
+          {...props}
+        >
+          {children}
+        </div>
+      ),
+    ),
   },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
   LayoutGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useMotionValue: (initial: any) => ({
     get: () => initial,
@@ -31,7 +46,7 @@ vi.mock('framer-motion', () => ({
 }));
 
 vi.mock('@dnd-kit/sortable', async (importOriginal) => {
-  const actual = await importOriginal() as Record<string, unknown>;
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     useSortable: vi.fn(() => ({
@@ -46,7 +61,12 @@ vi.mock('@dnd-kit/sortable', async (importOriginal) => {
 });
 
 describe('TaskItem', () => {
-  const task: Task = { id: '1', title: 'Test Task', duration: 30, status: 'PENDING' };
+  const task: Task = {
+    id: '1',
+    title: 'Test Task',
+    duration: 30,
+    status: 'PENDING',
+  };
 
   beforeEach(() => {
     useTaskStore.getState().clearTasks();
@@ -54,7 +74,14 @@ describe('TaskItem', () => {
   });
 
   it('renders task details', () => {
-    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
+    render(
+      <TaskItem
+        task={task}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
     expect(screen.getByText('Test Task')).toBeInTheDocument();
     expect(screen.getByText('30')).toBeInTheDocument();
     expect(screen.getByText(/min/)).toBeInTheDocument();
@@ -62,30 +89,53 @@ describe('TaskItem', () => {
 
   it('starts task when play button is clicked', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
+    render(
+      <TaskItem
+        task={taskFromStore}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
     const playButton = screen.getByRole('button', { name: /play/i });
     fireEvent.click(playButton);
-    
+
     expect(useTaskStore.getState().activeTaskId).toBe(taskFromStore.id);
   });
 
   it('renders correctly when task is completed', () => {
     const completedTask: Task = { ...task, status: 'COMPLETED' };
-    render(<TaskItem task={completedTask} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
+    render(
+      <TaskItem
+        task={completedTask}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
     // Title should have line-through (applied to h3 parent)
     const title = screen.getByText('Test Task');
     expect(title.closest('h3')).toHaveClass('line-through');
-    
+
     // Should have a checkmark icon instead of play button
-    expect(screen.queryByRole('button', { name: /play/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /play/i }),
+    ).not.toBeInTheDocument();
     expect(screen.getByTestId('checkmark-icon')).toBeInTheDocument();
   });
 
   it('enters edit mode when clicking title', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
+    render(
+      <TaskItem
+        task={taskFromStore}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
 
     const titleElement = screen.getByText('Test Task');
     fireEvent.click(titleElement);
@@ -97,7 +147,14 @@ describe('TaskItem', () => {
 
   it('updates title on blur', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
+    render(
+      <TaskItem
+        task={taskFromStore}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
 
     const titleElement = screen.getByText('Test Task');
     fireEvent.click(titleElement);
@@ -112,7 +169,14 @@ describe('TaskItem', () => {
 
   it('updates duration on enter', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
+    render(
+      <TaskItem
+        task={taskFromStore}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
 
     const durationElement = screen.getByText('30');
     fireEvent.click(durationElement);
@@ -127,7 +191,14 @@ describe('TaskItem', () => {
 
   it('reverts changes on escape', () => {
     const taskFromStore = useTaskStore.getState().tasks[0];
-    render(<TaskItem task={taskFromStore} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
+    render(
+      <TaskItem
+        task={taskFromStore}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
 
     const titleElement = screen.getByText('Test Task');
     fireEvent.click(titleElement);
@@ -139,18 +210,29 @@ describe('TaskItem', () => {
     const updatedTask = useTaskStore.getState().tasks[0];
     expect(updatedTask.title).toBe('Test Task');
     expect(screen.getByText('Test Task')).toBeInTheDocument();
-    expect(screen.queryByDisplayValue('Cancelled Change')).not.toBeInTheDocument();
+    expect(
+      screen.queryByDisplayValue('Cancelled Change'),
+    ).not.toBeInTheDocument();
   });
 
   it('is sortable when pending', async () => {
     const { useSortable } = await import('@dnd-kit/sortable');
-    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
-    expect(useSortable).toHaveBeenCalledWith(expect.objectContaining({
-      id: task.id,
-      disabled: false
-    }));
-    
+    render(
+      <TaskItem
+        task={task}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
+    expect(useSortable).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: task.id,
+        disabled: false,
+      }),
+    );
+
     const container = screen.getByTestId('task-item-container');
     expect(container).toHaveAttribute('aria-roledescription', 'sortable');
   });
@@ -158,28 +240,44 @@ describe('TaskItem', () => {
   it('is not sortable when completed', async () => {
     const { useSortable } = await import('@dnd-kit/sortable');
     const completedTask: Task = { ...task, status: 'COMPLETED' };
-    render(<TaskItem task={completedTask} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
-    expect(useSortable).toHaveBeenCalledWith(expect.objectContaining({
-      id: task.id,
-      disabled: true
-    }));
+    render(
+      <TaskItem
+        task={completedTask}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
+    expect(useSortable).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: task.id,
+        disabled: true,
+      }),
+    );
   });
 
   it('renders a motion.div wrapper with layout="position" prop for animations', () => {
-    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
+    render(
+      <TaskItem
+        task={task}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
     // There are multiple motion.divs now (reveal layer and swipe layer)
     const motionDivs = screen.getAllByTestId('motion-div');
-    const layoutDiv = motionDivs.find(div => div.hasAttribute('data-layout'));
-    
+    const layoutDiv = motionDivs.find((div) => div.hasAttribute('data-layout'));
+
     expect(layoutDiv).toBeDefined();
     expect(layoutDiv?.getAttribute('data-layout')).toBe('position');
   });
 
   it('disables layout animation during dragging to prevent conflicts with dnd-kit transforms', async () => {
     const { useSortable } = await import('@dnd-kit/sortable');
-    
+
     // Mock isDragging as true
     vi.mocked(useSortable).mockReturnValueOnce({
       attributes: {},
@@ -190,18 +288,25 @@ describe('TaskItem', () => {
       isDragging: true,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
+    render(
+      <TaskItem
+        task={task}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
     const motionDivs = screen.getAllByTestId('motion-div');
-    const layoutDiv = motionDivs.find(div => div.hasAttribute('data-layout'));
-    
+    const layoutDiv = motionDivs.find((div) => div.hasAttribute('data-layout'));
+
     // layout prop should be false when isDragging is true
     expect(layoutDiv?.getAttribute('data-layout')).toBe('false');
   });
 
   it('disables swipe drag when dnd-kit drag is active', async () => {
     const { useSortable } = await import('@dnd-kit/sortable');
-    
+
     // Mock isDragging as true
     vi.mocked(useSortable).mockReturnValue({
       attributes: {},
@@ -212,13 +317,20 @@ describe('TaskItem', () => {
       isDragging: true,
     } as any);
 
-    render(<TaskItem task={task} onDelete={vi.fn()} activeSwipeId={null} onSwipeDismissAll={vi.fn()} />);
-    
+    render(
+      <TaskItem
+        task={task}
+        onDelete={vi.fn()}
+        activeSwipeId={null}
+        onSwipeDismissAll={vi.fn()}
+      />,
+    );
+
     const motionDivs = screen.getAllByTestId('motion-div');
     // The swipeable card is the one that receives the drag prop (which we expect to be 'false' now)
     // The container motion.div has data-layout="false" but no data-drag.
-    const swipeLayer = motionDivs.find(div => div.hasAttribute('data-drag'));
-    
+    const swipeLayer = motionDivs.find((div) => div.hasAttribute('data-drag'));
+
     expect(swipeLayer).toBeDefined();
     expect(swipeLayer?.getAttribute('data-drag')).toBe('false');
   });

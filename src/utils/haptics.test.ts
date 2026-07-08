@@ -24,9 +24,9 @@ describe('triggerHaptic', () => {
   it('no-ops when navigator.vibrate is not available', () => {
     const originalVibrate = navigator.vibrate;
     delete (navigator as any).vibrate;
-    
+
     expect(() => triggerHaptic()).not.toThrow();
-    
+
     // Restore for other tests
     (navigator as any).vibrate = originalVibrate;
   });

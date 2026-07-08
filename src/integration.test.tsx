@@ -21,22 +21,24 @@ describe('Playlist Execution Integration', () => {
     // Deve haver botões de Play para as tarefas
     const playButtons = screen.getAllByRole('button', { name: /Play task/i });
     expect(playButtons).toHaveLength(2);
-    
+
     // Inicia a primeira tarefa
     fireEvent.click(playButtons[0]);
 
     // Task 1 should be IN_PROGRESS
     expect(useTaskStore.getState().tasks[0].status).toBe('IN_PROGRESS');
-    
+
     // Verifica se o título da tarefa ativa está destacado (agora é SPAN dentro de H3 com font-bold)
     const task1Title = screen.getByText('Task 1');
     // InlineEdit wraps text in a span
-    expect(task1Title.tagName).toBe('SPAN'); 
+    expect(task1Title.tagName).toBe('SPAN');
     expect(task1Title.parentElement?.tagName).toBe('H3');
     expect(task1Title.parentElement).toHaveClass('font-bold');
 
     // Mark as Done - Use a more specific selector because the card container also has role="button" from dnd-kit
-    const doneBtn = screen.getAllByRole('button', { name: /Done/i }).find(el => el.tagName === 'BUTTON');
+    const doneBtn = screen
+      .getAllByRole('button', { name: /Done/i })
+      .find((el) => el.tagName === 'BUTTON');
     if (!doneBtn) throw new Error('Done button not found');
     fireEvent.click(doneBtn);
 

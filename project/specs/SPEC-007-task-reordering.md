@@ -21,9 +21,11 @@ links: [SPEC-002, SPEC-009]
 - Reordering while a timer runs never disturbs the running task or its countdown.
 
 ## Implementation pointers
+
 - `src/components/TaskList.tsx`, `src/components/TaskItem.tsx`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: removed stale known-limitation — the drag handle was already gone and
   whole-card dragging implemented (conductor track task_interaction_refinement,

@@ -29,7 +29,7 @@ describe('useTaskStore Playlist Logic', () => {
     const taskId = useTaskStore.getState().tasks[0].id;
 
     useTaskStore.getState().startTask(taskId);
-    
+
     // Advance 1 minute (60 seconds)
     vi.advanceTimersByTime(60000);
 
@@ -49,7 +49,7 @@ describe('useTaskStore Playlist Logic', () => {
     useTaskStore.getState().startTask(taskId);
     vi.advanceTimersByTime(60000); // 1 min passed
     useTaskStore.getState().pauseTask();
-    
+
     // Wait some time while paused
     vi.advanceTimersByTime(300000); // 5 mins later
 

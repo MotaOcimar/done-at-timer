@@ -89,22 +89,26 @@ Out of scope:
 ## Plan
 
 Phase 1 — payload codec (pure logic):
+
 - [x] TDD `src/utils/routineShare.ts`: encode (routine → base64url string) and
       decode (string → validated `{ name, tasks }` or typed error). Cases:
       round-trip, unicode titles, version field, truncated/corrupted/hand-edited
       payloads, empty task list rejected. (c2d0ec2)
 
 Phase 2 — store:
+
 - [x] TDD an `importRoutine(name, tasks)` action in `useTaskStore`: appends with a
       fresh `id`; duplicate names allowed; persisted like any routine. (abba3b9)
 
 Phase 3 — share action:
+
 - [x] TDD a share-target abstraction (share sheet / clipboard fallback) following
       the `notificationService` pattern. (ad747f4)
 - [x] TDD the Share button on each routine row in `ControlCenter`, wiring codec +
       abstraction; feedback state when falling back to clipboard copy. (ad747f4)
 
 Phase 4 — import flow:
+
 - [x] TDD a URL-fragment abstraction (read hash on load, clear via
       `history.replaceState`). (5423b0d)
 - [x] TDD the import preview modal (routine name, tasks, durations, total; Import
@@ -112,6 +116,7 @@ Phase 4 — import flow:
       outcome. (5423b0d)
 
 Phase 5 — close out:
+
 - [x] Update [SPEC-011] (share/import behavior, rewrite the one-device
       limitation) and [SPEC-013] (share-link exception to the on-device
       boundary), with log lines; verify `npm run lint`, `npm run check`,

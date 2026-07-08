@@ -17,10 +17,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { 
-  Save, 
-  RotateCcw 
-} from 'lucide-react';
+import { Save, RotateCcw } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import { TaskItem } from './TaskItem';
 import { TaskCard } from './TaskCard';
@@ -62,15 +59,17 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
 
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
-  const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [clearTimeoutId, setClearTimeoutId] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [activeSwipeId, setActiveSwipeId] = useState<string | null>(null);
   const currentTime = useClock();
 
   // Calculate intermediate ETAs based on current time
-  const etas = useMemo(() => 
-    calculateIntermediateETAs(tasks, activeTaskTimeLeft, currentTime),
-    [tasks, activeTaskTimeLeft, currentTime]
+  const etas = useMemo(
+    () => calculateIntermediateETAs(tasks, activeTaskTimeLeft, currentTime),
+    [tasks, activeTaskTimeLeft, currentTime],
   );
 
   const handleSwipeDismissAll = useCallback((newId?: string) => {
@@ -80,7 +79,7 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
   const handleDragStart = (event: DragStartEvent) => {
     // Dismiss all swipes when starting a drag
     handleSwipeDismissAll();
-    
+
     const task = tasks.find((t) => t.id === event.active.id);
     if (task) setActiveTask(task);
   };
@@ -143,8 +142,8 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
           <button
             onClick={handleClearClick}
             className={`text-xs font-bold uppercase tracking-wide transition-all duration-500 ease-in-out whitespace-nowrap text-center ${
-              isConfirmingClear 
-                ? 'text-red-600 w-28' 
+              isConfirmingClear
+                ? 'text-red-600 w-28'
                 : 'text-red-300 sm:hover:text-red-500 w-20'
             }`}
           >
@@ -152,7 +151,7 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
           </button>
         </div>
       </div>
-      
+
       {allCompleted && (
         <div className="mb-6 animate-in fade-in zoom-in duration-500">
           <button
@@ -174,50 +173,55 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
         <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
           <LayoutGroup>
             {tasks.map((task) => (
-              <TaskItem 
-                key={task.id} 
-                task={task} 
-                onDelete={removeTask} 
+              <TaskItem
+                key={task.id}
+                task={task}
+                onDelete={removeTask}
                 eta={etas.get(task.id)}
                 activeSwipeId={activeSwipeId}
                 onSwipeDismissAll={handleSwipeDismissAll}
               />
             ))}
-            {children && (
-              <motion.div layout="position">
-                {children}
-              </motion.div>
-            )}
+            {children && <motion.div layout="position">{children}</motion.div>}
           </LayoutGroup>
         </SortableContext>
         <DragOverlay adjustScale={false}>
-          {activeTask ? (() => {
-            const isActive = activeTask.id === activeTaskIdFromStore;
-            const isTimeUp = isActive && isTimeUpGlobal;
-            const timeLeft = isActive ? (activeTaskTimeLeft ?? 0) : 0;
-            const progress = isActive ? (1 - (timeLeft / (activeTask.duration * 60))) : 0;
-            const cardState = getCardState(activeTask, isActive, isTimeUp, false);
-            
-            return (
-              <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
-                <TaskCard 
-                  task={activeTask} 
-                  isActive={isActive}
-                  isCompleted={activeTask.status === 'COMPLETED'}
-                  cardState={cardState}
-                  isDragging={true}
-                  isTimeUp={isTimeUp}
-                  timeLeft={timeLeft}
-                  progress={progress}
-                  eta={etas.get(activeTask.id)}
-                  onToggle={() => {}}
-                  onTitleSave={() => {}}
-                  onDurationSave={() => {}}
-                  onComplete={() => {}}
-                />
-              </div>
-            );
-          })() : null}
+          {activeTask
+            ? (() => {
+                const isActive = activeTask.id === activeTaskIdFromStore;
+                const isTimeUp = isActive && isTimeUpGlobal;
+                const timeLeft = isActive ? (activeTaskTimeLeft ?? 0) : 0;
+                const progress = isActive
+                  ? 1 - timeLeft / (activeTask.duration * 60)
+                  : 0;
+                const cardState = getCardState(
+                  activeTask,
+                  isActive,
+                  isTimeUp,
+                  false,
+                );
+
+                return (
+                  <div className="w-full opacity-90 shadow-2xl rounded-2xl transition-none pointer-events-none bg-white">
+                    <TaskCard
+                      task={activeTask}
+                      isActive={isActive}
+                      isCompleted={activeTask.status === 'COMPLETED'}
+                      cardState={cardState}
+                      isDragging={true}
+                      isTimeUp={isTimeUp}
+                      timeLeft={timeLeft}
+                      progress={progress}
+                      eta={etas.get(activeTask.id)}
+                      onToggle={() => {}}
+                      onTitleSave={() => {}}
+                      onDurationSave={() => {}}
+                      onComplete={() => {}}
+                    />
+                  </div>
+                );
+              })()
+            : null}
         </DragOverlay>
       </DndContext>
     </div>

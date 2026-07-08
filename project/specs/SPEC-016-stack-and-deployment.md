@@ -29,6 +29,7 @@ choices so tickets don't relitigate them.
 - **Constraint reminder:** static hosting only, no backend ([SPEC-001]).
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: corrected test setup (node + happy-dom, not jsdom; type-check inside
   `npm test`) and detailed the CI gate, per the test_optimization and

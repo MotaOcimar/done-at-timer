@@ -53,7 +53,9 @@ describe('useTaskStore', () => {
     const now = Date.now();
     useTaskStore.getState().completeActiveTask(0);
 
-    const completedTask = useTaskStore.getState().tasks.find(t => t.id === '1');
+    const completedTask = useTaskStore
+      .getState()
+      .tasks.find((t) => t.id === '1');
     expect(completedTask?.status).toBe('COMPLETED');
     expect(completedTask?.completedAt).toBeGreaterThanOrEqual(now);
     expect(completedTask?.completedAt).toBeLessThanOrEqual(Date.now());

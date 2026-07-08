@@ -18,41 +18,40 @@ interface TaskItemProps {
   eta?: Date;
 }
 
-const TaskItem = ({ 
-  task, 
-  onDelete, 
-  activeSwipeId, 
+const TaskItem = ({
+  task,
+  onDelete,
+  activeSwipeId,
   onSwipeDismissAll,
-  eta 
+  eta,
 }: TaskItemProps) => {
   const startTask = useTaskStore((state) => state.startTask);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
   const targetEndTime = useTaskStore((state) => state.targetEndTime);
-  const totalElapsedBeforePause = useTaskStore((state) => state.totalElapsedBeforePause);
+  const totalElapsedBeforePause = useTaskStore(
+    (state) => state.totalElapsedBeforePause,
+  );
   const updateTask = useTaskStore((state) => state.updateTask);
   const pauseTask = useTaskStore((state) => state.pauseTask);
   const resumeTask = useTaskStore((state) => state.resumeTask);
-  const setActiveTaskTimeLeft = useTaskStore((state) => state.setActiveTaskTimeLeft);
+  const setActiveTaskTimeLeft = useTaskStore(
+    (state) => state.setActiveTaskTimeLeft,
+  );
   const onTimeUpAction = useTaskStore((state) => state.onTimeUp);
   const completeActiveTask = useTaskStore((state) => state.completeActiveTask);
   const isTimeUpGlobal = useTaskStore((state) => state.isTimeUp);
-  
+
   const isActive = activeTaskId === task.id;
   const isCompleted = task.status === 'COMPLETED';
   const isTimeUp = isActive && isTimeUpGlobal;
 
-  const {
-    isRevealed,
-    isSwipeActive,
-    x,
-    redOpacity,
-    dragProps
-  } = useSwipeToReveal({
-    id: task.id,
-    isEnabled: !isCompleted,
-    activeSwipeId,
-    onSwipeDismissAll,
-  });
+  const { isRevealed, isSwipeActive, x, redOpacity, dragProps } =
+    useSwipeToReveal({
+      id: task.id,
+      isEnabled: !isCompleted,
+      activeSwipeId,
+      onSwipeDismissAll,
+    });
 
   const {
     attributes,
@@ -61,9 +60,9 @@ const TaskItem = ({
     transform,
     transition,
     isDragging,
-  } = useSortable({ 
+  } = useSortable({
     id: task.id,
-    disabled: isCompleted || isSwipeActive
+    disabled: isCompleted || isSwipeActive,
   });
 
   // Bidirectional dnd-kit <-> swipe conflict resolution:
@@ -80,13 +79,15 @@ const TaskItem = ({
       x.set(0);
     } else if (wasDndDragRef.current) {
       x.set(0);
-      const timer = setTimeout(() => { wasDndDragRef.current = false; }, 50);
+      const timer = setTimeout(() => {
+        wasDndDragRef.current = false;
+      }, 50);
       return () => clearTimeout(timer);
     }
   }, [isDragging, x]);
 
   const { timeLeft } = useTimer(
-    isActive ? (task.duration * 60 - totalElapsedBeforePause) : 0,
+    isActive ? task.duration * 60 - totalElapsedBeforePause : 0,
     onTimeUpAction,
     isActive ? targetEndTime : null,
   );
@@ -99,7 +100,7 @@ const TaskItem = ({
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : 'auto',
-    touchAction: 'pan-y' as const
+    touchAction: 'pan-y' as const,
   };
 
   useEffect(() => {
@@ -108,15 +109,26 @@ const TaskItem = ({
     }
   }, [isActive, timeLeft, setActiveTaskTimeLeft]);
 
-  const handleToggle = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isActive) {
-      if (targetEndTime) pauseTask();
-      else resumeTask();
-    } else if (!isCompleted) {
-      startTask(task.id);
-    }
-  }, [isActive, isCompleted, pauseTask, resumeTask, startTask, targetEndTime, task.id]);
+  const handleToggle = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (isActive) {
+        if (targetEndTime) pauseTask();
+        else resumeTask();
+      } else if (!isCompleted) {
+        startTask(task.id);
+      }
+    },
+    [
+      isActive,
+      isCompleted,
+      pauseTask,
+      resumeTask,
+      startTask,
+      targetEndTime,
+      task.id,
+    ],
+  );
 
   const handleTitleSave = (newTitle: string) => {
     if (newTitle !== task.title) {
@@ -140,7 +152,7 @@ const TaskItem = ({
   const isActuallyPaused = isActive && !targetEndTime;
   const cardState = getCardState(task, isActive, isTimeUp, isActuallyPaused);
   const totalDurationSecs = task.duration * 60;
-  const progress = Math.max(0, Math.min(1, 1 - (timeLeft / totalDurationSecs)));
+  const progress = Math.max(0, Math.min(1, 1 - timeLeft / totalDurationSecs));
 
   return (
     <div
@@ -154,12 +166,12 @@ const TaskItem = ({
       className="outline-none"
     >
       <motion.div
-        layout={isDragging ? false : "position"}
+        layout={isDragging ? false : 'position'}
         className={`relative mb-3 rounded-2xl overflow-hidden border ${cardBorderClasses[cardState]}`}
       >
         {/* Reveal Area (Behind) */}
         {!isCompleted && (
-          <motion.div 
+          <motion.div
             style={{ opacity: redOpacity }}
             className="absolute inset-0 bg-red-400 flex items-center justify-end pr-6"
           >
@@ -221,6 +233,5 @@ const TaskItem = ({
     </div>
   );
 };
-
 
 export { TaskItem };

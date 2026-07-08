@@ -5,7 +5,7 @@ let interval: ReturnType<typeof setInterval> | null = null;
 
 const updateTime = () => {
   const now = new Date();
-  listeners.forEach(listener => listener(now));
+  listeners.forEach((listener) => listener(now));
 };
 
 /**
@@ -17,11 +17,11 @@ export const useClock = () => {
 
   useEffect(() => {
     listeners.add(setNow);
-    
+
     if (!interval) {
       interval = setInterval(updateTime, 1000);
     }
-    
+
     return () => {
       listeners.delete(setNow);
       if (listeners.size === 0 && interval) {

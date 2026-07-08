@@ -24,7 +24,9 @@ The projection updates every second: any pause, overtime or edit is reflected
 immediately in all ETAs.
 
 ## Implementation pointers
+
 - `src/utils/time.ts`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

@@ -22,7 +22,9 @@ Destructive or replacing actions triggered from here (load over a non-empty list
 delete routine) always ask for confirmation in a modal.
 
 ## Implementation pointers
+
 - `src/components/ControlCenter.tsx`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)

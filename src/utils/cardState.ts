@@ -1,12 +1,17 @@
 import type { Task } from '../types';
 
-export type CardState = 'completed' | 'idle' | 'overtime' | 'paused' | 'running';
+export type CardState =
+  | 'completed'
+  | 'idle'
+  | 'overtime'
+  | 'paused'
+  | 'running';
 
 export const getCardState = (
-  task: Task, 
-  isActive: boolean, 
-  isTimeUp: boolean, 
-  isActuallyPaused: boolean
+  task: Task,
+  isActive: boolean,
+  isTimeUp: boolean,
+  isActuallyPaused: boolean,
 ): CardState => {
   if (task.status === 'COMPLETED') return 'completed';
   if (!isActive) return 'idle';
@@ -20,5 +25,5 @@ export const cardBorderClasses: Record<CardState, string> = {
   idle: 'border-gray-100',
   overtime: 'border-amber-300',
   paused: 'border-gray-300',
-  running: 'border-blue-500'
+  running: 'border-blue-500',
 };

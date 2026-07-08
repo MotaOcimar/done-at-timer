@@ -21,9 +21,11 @@ links: [SPEC-002, SPEC-004]
 - Deleting the running task behaves like skipping it ([SPEC-004]).
 
 ## Implementation pointers
+
 - `src/hooks/useSwipeToReveal.ts`, `src/components/TaskItem.tsx`
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: added done-tasks exclusion and keyboard Delete fallback from the
   task_interaction_refinement track, verified in code (2026-07-02)

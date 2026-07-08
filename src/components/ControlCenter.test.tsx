@@ -29,10 +29,14 @@ vi.mock('../hooks/useInstallPrompt', () => ({
 
 describe('ControlCenter', () => {
   const mockTasks = [
-    { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }
+    { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
   ];
   const mockRoutines = [
-    { id: 'r1', name: 'Morning Routine', tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }] }
+    {
+      id: 'r1',
+      name: 'Morning Routine',
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+    },
   ];
 
   const mockSaveRoutine = vi.fn();
@@ -43,14 +47,14 @@ describe('ControlCenter', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useTaskStore as any).mockImplementation((selector: any) => 
+    (useTaskStore as any).mockImplementation((selector: any) =>
       selector({
         tasks: mockTasks,
         routines: mockRoutines,
         saveRoutine: mockSaveRoutine,
         loadRoutine: mockLoadRoutine,
         deleteRoutine: mockDeleteRoutine,
-      })
+      }),
     );
 
     (useNotification as any).mockReturnValue({
@@ -67,7 +71,9 @@ describe('ControlCenter', () => {
   });
 
   it('should not render anything when closed', () => {
-    const { container } = render(<ControlCenter isOpen={false} onClose={vi.fn()} />);
+    const { container } = render(
+      <ControlCenter isOpen={false} onClose={vi.fn()} />,
+    );
     expect(container.firstChild).toBeNull();
   });
 
@@ -78,14 +84,14 @@ describe('ControlCenter', () => {
   });
 
   it('should call loadRoutine immediately if there are no tasks', () => {
-    (useTaskStore as any).mockImplementation((selector: any) => 
+    (useTaskStore as any).mockImplementation((selector: any) =>
       selector({
         tasks: [],
         routines: mockRoutines,
         saveRoutine: mockSaveRoutine,
         loadRoutine: mockLoadRoutine,
         deleteRoutine: mockDeleteRoutine,
-      })
+      }),
     );
     const mockOnClose = vi.fn();
     render(<ControlCenter isOpen={true} onClose={mockOnClose} />);
@@ -99,9 +105,11 @@ describe('ControlCenter', () => {
   it('should call onClose when clicking the main backdrop', () => {
     const mockOnClose = vi.fn();
     render(<ControlCenter isOpen={true} onClose={mockOnClose} />);
-    
+
     // The main backdrop is the first child with backdrop-blur-sm
-    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-sm'));
+    const backdrop = screen
+      .getAllByRole('presentation', { hidden: true })
+      .find((el) => el.className.includes('backdrop-blur-sm'));
     if (backdrop) {
       fireEvent.click(backdrop);
       expect(mockOnClose).toHaveBeenCalled();
@@ -110,9 +118,18 @@ describe('ControlCenter', () => {
 
   it('should call handleCancelSave when clicking the backdrop during external saving', () => {
     const mockOnSaveComplete = vi.fn();
-    render(<ControlCenter isOpen={false} isSavingExternal={true} onSaveComplete={mockOnSaveComplete} onClose={vi.fn()} />);
-    
-    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-sm'));
+    render(
+      <ControlCenter
+        isOpen={false}
+        isSavingExternal={true}
+        onSaveComplete={mockOnSaveComplete}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const backdrop = screen
+      .getAllByRole('presentation', { hidden: true })
+      .find((el) => el.className.includes('backdrop-blur-sm'));
     if (backdrop) {
       fireEvent.click(backdrop);
       expect(mockOnSaveComplete).toHaveBeenCalled();
@@ -120,13 +137,27 @@ describe('ControlCenter', () => {
   });
 
   it('should render the save modal when isSavingExternal is true', () => {
-    render(<ControlCenter isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
+    render(
+      <ControlCenter
+        isOpen={false}
+        isSavingExternal={true}
+        onClose={vi.fn()}
+      />,
+    );
     expect(screen.getByText(/Save Routine/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/e.g., Morning Focus/i)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/e.g., Morning Focus/i),
+    ).toBeInTheDocument();
   });
 
   it('should call saveRoutine when submitting the save form', () => {
-    render(<ControlCenter isOpen={false} isSavingExternal={true} onClose={vi.fn()} />);
+    render(
+      <ControlCenter
+        isOpen={false}
+        isSavingExternal={true}
+        onClose={vi.fn()}
+      />,
+    );
     const input = screen.getByPlaceholderText(/e.g., Morning Focus/i);
     const saveButton = screen.getByRole('button', { name: /Save/i });
 
@@ -161,12 +192,16 @@ describe('ControlCenter', () => {
     fireEvent.click(routineItem);
 
     expect(screen.getByText(/Replace current tasks\?/i)).toBeInTheDocument();
-    
+
     // Backdrop for confirmation modal
-    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-md'));
+    const backdrop = screen
+      .getAllByRole('presentation', { hidden: true })
+      .find((el) => el.className.includes('backdrop-blur-md'));
     if (backdrop) {
       fireEvent.click(backdrop);
-      expect(screen.queryByText(/Replace current tasks\?/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Replace current tasks\?/i),
+      ).not.toBeInTheDocument();
     }
   });
 
@@ -178,7 +213,9 @@ describe('ControlCenter', () => {
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     fireEvent.click(cancelButton);
 
-    expect(screen.queryByText(/Replace current tasks\?/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Replace current tasks\?/i),
+    ).not.toBeInTheDocument();
   });
 
   it('should show confirmation when trying to delete a routine', () => {
@@ -194,7 +231,9 @@ describe('ControlCenter', () => {
     const deleteButton = screen.getByLabelText(/Delete routine/i);
     fireEvent.click(deleteButton);
 
-    const confirmDeleteButton = screen.getByRole('button', { name: /^Delete$/ });
+    const confirmDeleteButton = screen.getByRole('button', {
+      name: /^Delete$/,
+    });
     fireEvent.click(confirmDeleteButton);
 
     expect(mockDeleteRoutine).toHaveBeenCalledWith('r1');
@@ -208,7 +247,9 @@ describe('ControlCenter', () => {
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     fireEvent.click(cancelButton);
 
-    expect(screen.queryByText(/Delete this routine\?/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Delete this routine\?/i),
+    ).not.toBeInTheDocument();
   });
 
   it('should close the delete confirmation modal when clicking the backdrop', () => {
@@ -217,12 +258,16 @@ describe('ControlCenter', () => {
     fireEvent.click(deleteButton);
 
     expect(screen.getByText(/Delete this routine\?/i)).toBeInTheDocument();
-    
+
     // Backdrop for confirmation modal
-    const backdrop = screen.getAllByRole('presentation', { hidden: true }).find(el => el.className.includes('backdrop-blur-md'));
+    const backdrop = screen
+      .getAllByRole('presentation', { hidden: true })
+      .find((el) => el.className.includes('backdrop-blur-md'));
     if (backdrop) {
       fireEvent.click(backdrop);
-      expect(screen.queryByText(/Delete this routine\?/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Delete this routine\?/i),
+      ).not.toBeInTheDocument();
     }
   });
 
@@ -244,10 +289,12 @@ describe('ControlCenter', () => {
 
       expect(shareService.shareUrl).toHaveBeenCalledWith(
         'Morning Routine',
-        expect.stringContaining('#r=')
+        expect.stringContaining('#r='),
       );
       expect(mockLoadRoutine).not.toHaveBeenCalled();
-      expect(screen.queryByText(/Replace current tasks\?/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Replace current tasks\?/i),
+      ).not.toBeInTheDocument();
     });
 
     it('should show feedback when the link is copied to the clipboard', async () => {
@@ -287,7 +334,7 @@ describe('ControlCenter', () => {
         requestPermission: mockRequestPermission,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/Preferences/i)).toBeInTheDocument();
       expect(screen.getByText(/Enable Notifications/i)).toBeInTheDocument();
     });
@@ -298,10 +345,10 @@ describe('ControlCenter', () => {
         requestPermission: mockRequestPermission,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       const toggle = screen.getByText(/Enable Notifications/i);
       fireEvent.click(toggle);
-      
+
       expect(mockRequestPermission).toHaveBeenCalled();
     });
 
@@ -311,18 +358,20 @@ describe('ControlCenter', () => {
         permission: 'granted',
         requestPermission: mockRequestPermission,
       });
-      (useTaskStore as any).mockImplementation((selector: any) => 
+      (useTaskStore as any).mockImplementation((selector: any) =>
         selector({
           tasks: [],
           routines: [],
           isNotificationsEnabled: true,
           toggleNotifications: mockToggleNotifications,
-        })
+        }),
       );
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/Notifications/i)).toBeInTheDocument();
-      const toggle = screen.getByRole('switch', { name: /Toggle Notifications/i });
+      const toggle = screen.getByRole('switch', {
+        name: /Toggle Notifications/i,
+      });
       expect(toggle).toBeChecked();
     });
 
@@ -332,18 +381,20 @@ describe('ControlCenter', () => {
         permission: 'granted',
         requestPermission: mockRequestPermission,
       });
-      (useTaskStore as any).mockImplementation((selector: any) => 
+      (useTaskStore as any).mockImplementation((selector: any) =>
         selector({
           tasks: [],
           routines: [],
           isNotificationsEnabled: false,
           toggleNotifications: mockToggleNotifications,
-        })
+        }),
       );
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/Notifications/i)).toBeInTheDocument();
-      const toggle = screen.getByRole('switch', { name: /Toggle Notifications/i });
+      const toggle = screen.getByRole('switch', {
+        name: /Toggle Notifications/i,
+      });
       expect(toggle).not.toBeChecked();
     });
 
@@ -353,58 +404,60 @@ describe('ControlCenter', () => {
         permission: 'granted',
         requestPermission: mockRequestPermission,
       });
-      (useTaskStore as any).mockImplementation((selector: any) => 
+      (useTaskStore as any).mockImplementation((selector: any) =>
         selector({
           tasks: [],
           routines: [],
           isNotificationsEnabled: true,
           toggleNotifications: mockToggleNotifications,
-        })
+        }),
       );
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
-      const toggle = screen.getByRole('switch', { name: /Toggle Notifications/i });
+
+      const toggle = screen.getByRole('switch', {
+        name: /Toggle Notifications/i,
+      });
       fireEvent.click(toggle);
-      
+
       expect(mockToggleNotifications).toHaveBeenCalled();
     });
 
     it('should show coherent icons when notifications are enabled vs disabled', () => {
       const mockToggleNotifications = vi.fn();
-      
+
       // Test case 1: Enabled
       const { rerender } = render(
-        <ControlCenter isOpen={true} onClose={vi.fn()} />
+        <ControlCenter isOpen={true} onClose={vi.fn()} />,
       );
       (useNotification as any).mockReturnValue({
         permission: 'granted',
         requestPermission: mockRequestPermission,
       });
-      (useTaskStore as any).mockImplementation((selector: any) => 
+      (useTaskStore as any).mockImplementation((selector: any) =>
         selector({
           tasks: [],
           routines: [],
           isNotificationsEnabled: true,
           toggleNotifications: mockToggleNotifications,
-        })
+        }),
       );
       rerender(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       // Check for Bell icon
       expect(screen.getByText(/Notifications Enabled/i)).toBeInTheDocument();
       expect(screen.getByTestId('icon-bell')).toBeInTheDocument();
 
       // Test case 2: Disabled
-      (useTaskStore as any).mockImplementation((selector: any) => 
+      (useTaskStore as any).mockImplementation((selector: any) =>
         selector({
           tasks: [],
           routines: [],
           isNotificationsEnabled: false,
           toggleNotifications: mockToggleNotifications,
-        })
+        }),
       );
       rerender(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/Notifications Paused/i)).toBeInTheDocument();
       expect(screen.getByTestId('icon-bell-off')).toBeInTheDocument();
     });
@@ -415,9 +468,11 @@ describe('ControlCenter', () => {
         requestPermission: mockRequestPermission,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/Notifications Blocked/i)).toBeInTheDocument();
-      expect(screen.getByText(/To enable, update your browser's site settings./i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/To enable, update your browser's site settings./i),
+      ).toBeInTheDocument();
     });
 
     it('should hide notification section entirely when permission is unsupported', () => {
@@ -426,9 +481,13 @@ describe('ControlCenter', () => {
         requestPermission: mockRequestPermission,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
-      expect(screen.queryByText(/Enable Notifications/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/Notifications Enabled/i)).not.toBeInTheDocument();
+
+      expect(
+        screen.queryByText(/Enable Notifications/i),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Notifications Enabled/i),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -441,7 +500,7 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/^App$/i)).toBeInTheDocument();
       expect(screen.getByText(/Install App/i)).toBeInTheDocument();
     });
@@ -454,10 +513,10 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       const installButton = screen.getByText(/Install App/i);
       fireEvent.click(installButton);
-      
+
       expect(mockPromptInstall).toHaveBeenCalled();
     });
 
@@ -469,9 +528,11 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/^App$/i)).toBeInTheDocument();
-      expect(screen.getByText(/Tap the share icon and select/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Tap the share icon and select/i),
+      ).toBeInTheDocument();
       expect(screen.getByText(/Add to Home Screen/i)).toBeInTheDocument();
     });
 
@@ -483,9 +544,11 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
-      expect(screen.getByText(/Installation not available/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Installation not available/i),
+      ).toBeInTheDocument();
     });
 
     it('should show "App Installed" indicator when isStandalone is true', () => {
@@ -497,7 +560,7 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
     });
@@ -511,7 +574,7 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
     });
@@ -525,7 +588,7 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/App Installed/i)).toBeInTheDocument();
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
     });
@@ -539,7 +602,7 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
+
       expect(screen.getByText(/Install App/i)).toBeInTheDocument();
       expect(screen.queryByText(/App Installed/i)).not.toBeInTheDocument();
     });
@@ -553,8 +616,10 @@ describe('ControlCenter', () => {
         promptInstall: mockPromptInstall,
       });
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-      
-      expect(screen.getByText(/Installation not available/i)).toBeInTheDocument();
+
+      expect(
+        screen.getByText(/Installation not available/i),
+      ).toBeInTheDocument();
       expect(screen.queryByText(/App Installed/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Install App/i)).not.toBeInTheDocument();
     });

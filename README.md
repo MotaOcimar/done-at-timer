@@ -2,9 +2,9 @@
 
 **Know exactly when you'll be done. Stop racing against the clock and start arriving on time.**
 
-Most timers tell you how much time is *left*. **Done-At Timer** tells you when you will *arrive*. 
+Most timers tell you how much time is _left_. **Done-At Timer** tells you when you will _arrive_.
 
-Whether it's your morning routine, a focused work session, or getting ready for a night out, we often suffer from **Time Blindness**—the inability to sense how long a sequence of tasks will actually take. We see "20 minutes for a shower" and "15 minutes for breakfast" as abstract numbers, failing to realize that if we start *now*, we won't be out the door until 8:35 AM.
+Whether it's your morning routine, a focused work session, or getting ready for a night out, we often suffer from **Time Blindness**—the inability to sense how long a sequence of tasks will actually take. We see "20 minutes for a shower" and "15 minutes for breakfast" as abstract numbers, failing to realize that if we start _now_, we won't be out the door until 8:35 AM.
 
 **Done-At Timer is your GPS for daily life.** It calculates your "ETA" (Estimated Time of Arrival) for your entire list of tasks in real-time.
 
@@ -13,7 +13,7 @@ Whether it's your morning routine, a focused work session, or getting ready for 
 ## 🌟 Why use Done-At Timer?
 
 - **Eliminate Guesswork**: Stop doing mental math. See your exact completion time update instantly as you add, remove, or reorder tasks.
-- **Beat Time Blindness**: By shifting the focus from *duration* to *wall-clock time*, the app provides a concrete anchor for your day.
+- **Beat Time Blindness**: By shifting the focus from _duration_ to _wall-clock time_, the app provides a concrete anchor for your day.
 - **Stay Flexible**: Life doesn't happen in a straight line. Start any task in your list, in any order. The "Arrival Clock" adjusts to your pace.
 - **Visual Clarity**: A minimalist, high-contrast interface designed to keep you focused on the current task and the finish line.
 
@@ -35,6 +35,7 @@ Whether it's your morning routine, a focused work session, or getting ready for 
 Built with a focus on modern web standards, performance, and a robust testing suite.
 
 ### Tech Stack
+
 - **Framework**: React 19 + TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
@@ -61,4 +62,4 @@ npm run build
 
 ---
 
-*Designed for clarity. Built for focus. Your time, visualized.*
+_Designed for clarity. Built for focus. Your time, visualized._

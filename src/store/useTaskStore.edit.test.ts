@@ -17,7 +17,9 @@ describe('useTaskStore - Edit Task', () => {
     const { tasks } = useTaskStore.getState();
     const taskId = tasks[0].id;
 
-    useTaskStore.getState().updateTask(taskId, { title: 'Updated Task', duration: 45 });
+    useTaskStore
+      .getState()
+      .updateTask(taskId, { title: 'Updated Task', duration: 45 });
 
     const updatedTasks = useTaskStore.getState().tasks;
     expect(updatedTasks[0].title).toBe('Updated Task');
@@ -33,21 +35,21 @@ describe('useTaskStore - Edit Task', () => {
     vi.setSystemTime(startTime);
 
     useTaskStore.getState().startTask(taskId);
-    
+
     // Advance 10 mins (50% done)
     vi.advanceTimersByTime(10 * 60 * 1000);
-    
+
     const oldTarget = useTaskStore.getState().targetEndTime!;
     expect(oldTarget).toBeDefined();
 
     // Update duration to 30 mins (increase by 10m)
     useTaskStore.getState().updateTask(taskId, { duration: 30 });
-    
+
     const newTarget = useTaskStore.getState().targetEndTime!;
-    
+
     // Duration increased by 10 mins (600,000ms)
     // The target time should move forward by 10 mins
-    expect(newTarget).toBe(oldTarget + (10 * 60 * 1000));
+    expect(newTarget).toBe(oldTarget + 10 * 60 * 1000);
   });
 
   it('should adjust targetEndTime when active task duration is decreased', () => {
@@ -59,19 +61,19 @@ describe('useTaskStore - Edit Task', () => {
     vi.setSystemTime(startTime);
 
     useTaskStore.getState().startTask(taskId);
-    
+
     // Advance 5 mins
     vi.advanceTimersByTime(5 * 60 * 1000);
-    
+
     const oldTarget = useTaskStore.getState().targetEndTime!;
-    
+
     // Decrease duration to 15 mins (decrease by 5m)
     useTaskStore.getState().updateTask(taskId, { duration: 15 });
-    
+
     const newTarget = useTaskStore.getState().targetEndTime!;
-    
+
     // Duration decreased by 5 mins
     // The target time should move backward by 5 mins
-    expect(newTarget).toBe(oldTarget - (5 * 60 * 1000));
+    expect(newTarget).toBe(oldTarget - 5 * 60 * 1000);
   });
 });

@@ -25,9 +25,11 @@ Boundaries the user should understand:
   copy, not sync.
 
 ## Implementation pointers
+
 - `src/store/useTaskStore.ts` (persistence configuration)
 
 ## Log
+
 - Seeded from code + conductor archive (2026-07-02)
 - TK-003: sharing research concluded — URL sharing planned as TK-021 (2026-07-03)
 - TK-021: the on-device boundary gained the share-link exception (2026-07-03)

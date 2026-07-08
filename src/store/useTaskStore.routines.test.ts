@@ -35,7 +35,7 @@ describe('useTaskStore Routines', () => {
   it('should load a saved routine', () => {
     const store = useTaskStore.getState();
     store.addTask('Original Task', 5);
-    
+
     // Setup a routine manually in state
     useTaskStore.setState({
       routines: [
@@ -58,7 +58,7 @@ describe('useTaskStore Routines', () => {
     expect(state.tasks[0].status).toBe('PENDING');
     expect(state.tasks[0].id).toBeDefined();
     expect(state.tasks[1].title).toBe('Routine Task 2');
-    
+
     // Ensure state is reset
     expect(state.activeTaskId).toBeNull();
   });
@@ -86,10 +86,18 @@ describe('useTaskStore Routines', () => {
 
   it('should import as a new routine even when the name already exists', () => {
     useTaskStore.setState({
-      routines: [{ id: 'existing', name: 'Morning', tasks: [{ title: 'Old', duration: 10 }] }],
+      routines: [
+        {
+          id: 'existing',
+          name: 'Morning',
+          tasks: [{ title: 'Old', duration: 10 }],
+        },
+      ],
     });
 
-    useTaskStore.getState().importRoutine('Morning', [{ title: 'New', duration: 20 }]);
+    useTaskStore
+      .getState()
+      .importRoutine('Morning', [{ title: 'New', duration: 20 }]);
 
     const state = useTaskStore.getState();
     expect(state.routines).toHaveLength(2);

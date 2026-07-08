@@ -14,7 +14,9 @@ describe('App', () => {
     expect(
       screen.getByRole('heading', { name: /You will be done at/i }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Open menu/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Open menu/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText(/No tasks yet/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/What's next?/i)).toBeInTheDocument();
   });

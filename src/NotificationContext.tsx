@@ -4,12 +4,15 @@ import { NotificationService } from './utils/notificationService';
 
 const NotificationContext = createContext<NotificationService | null>(null);
 
-export const NotificationProvider: React.FC<{ 
-  service?: NotificationService; 
-  children: ReactNode 
+export const NotificationProvider: React.FC<{
+  service?: NotificationService;
+  children: ReactNode;
 }> = ({ service, children }) => {
-  const notificationService = useMemo(() => service || new NotificationService(), [service]);
-  
+  const notificationService = useMemo(
+    () => service || new NotificationService(),
+    [service],
+  );
+
   return (
     <NotificationContext.Provider value={notificationService}>
       {children}
@@ -21,7 +24,9 @@ export const NotificationProvider: React.FC<{
 export const useNotificationService = () => {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error('useNotificationService must be used within a NotificationProvider');
+    throw new Error(
+      'useNotificationService must be used within a NotificationProvider',
+    );
   }
   return context;
 };

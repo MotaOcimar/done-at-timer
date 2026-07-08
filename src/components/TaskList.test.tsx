@@ -7,14 +7,29 @@ import { useTaskStore } from '../store/useTaskStore';
 // Mock framer-motion to check for LayoutGroup
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, layout, drag, dragConstraints, dragElastic, onDragStart, onDrag, onDragEnd, animate, ...props }: any) => (
+    div: ({
+      children,
+      layout,
+      drag,
+      dragConstraints,
+      dragElastic,
+      onDragStart,
+      onDrag,
+      onDragEnd,
+      animate,
+      ...props
+    }: any) => (
       <div data-testid="motion-div" data-layout={layout?.toString()} {...props}>
         {children}
       </div>
     ),
   },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  LayoutGroup: ({ children }: { children: React.ReactNode }) => <div data-testid="layout-group">{children}</div>,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  LayoutGroup: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="layout-group">{children}</div>
+  ),
   useMotionValue: (initial: any) => ({
     get: () => initial,
     set: vi.fn(),
@@ -29,8 +44,8 @@ vi.mock('@dnd-kit/core', async (importOriginal) => {
   return {
     ...actual,
     DndContext: vi.fn(({ children, onDragStart, onDragEnd }) => (
-      <div 
-        data-testid="dnd-context" 
+      <div
+        data-testid="dnd-context"
         onMouseDown={() => onDragStart && onDragStart({ active: { id: '1' } })}
         onClick={(e: any) => {
           // Access properties from the native event
@@ -51,20 +66,27 @@ vi.mock('@dnd-kit/sortable', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
-    SortableContext: vi.fn(({ children }) => <div data-testid="sortable-context">{children}</div>),
+    SortableContext: vi.fn(({ children }) => (
+      <div data-testid="sortable-context">{children}</div>
+    )),
   };
 });
 
 vi.mock('./TaskItem', () => ({
   TaskItem: vi.fn(({ task, eta, activeSwipeId, onSwipeDismissAll }: any) => (
-    <div 
-      data-testid={`task-item-${task.id}`} 
+    <div
+      data-testid={`task-item-${task.id}`}
       data-active-swipe={activeSwipeId || ''}
       data-trigger-swipe-set={task.id}
       onClick={() => onSwipeDismissAll && onSwipeDismissAll(task.id)}
     >
       <span>{task.title}</span>
-      {eta && <span>{eta.getHours().toString().padStart(2, '0')}:{eta.getMinutes().toString().padStart(2, '0')}</span>}
+      {eta && (
+        <span>
+          {eta.getHours().toString().padStart(2, '0')}:
+          {eta.getMinutes().toString().padStart(2, '0')}
+        </span>
+      )}
     </div>
   )),
 }));
@@ -93,15 +115,17 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     // First, simulate a swipe reveal by clicking the mocked task item
     // which calls onSwipeDismissAll('1')
     act(() => {
       fireEvent.click(screen.getByTestId('task-item-1'));
     });
-    
+
     // Verify it set the active swipe
-    expect(screen.getByTestId('task-item-1').getAttribute('data-active-swipe')).toBe('1');
+    expect(
+      screen.getByTestId('task-item-1').getAttribute('data-active-swipe'),
+    ).toBe('1');
 
     // Trigger onDragStart via DndContext mock (onMouseDown calls onDragStart)
     const dndContext = screen.getByTestId('dnd-context');
@@ -110,18 +134,18 @@ describe('TaskList', () => {
     });
 
     // Check that activeSwipeId was reset to null (empty string in data attribute)
-    expect(screen.getByTestId('task-item-1').getAttribute('data-active-swipe')).toBe('');
+    expect(
+      screen.getByTestId('task-item-1').getAttribute('data-active-swipe'),
+    ).toBe('');
   });
 
   it('computes and passes ETA to TaskItems', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
     useTaskStore.setState({
-      tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-      ],
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
       activeTaskTimeLeft: null,
     });
-    
+
     render(<TaskList />);
     expect(screen.getByText(/10:10/)).toBeInTheDocument();
   });
@@ -129,12 +153,10 @@ describe('TaskList', () => {
   it('updates ETA in real-time when the clock advances', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
     useTaskStore.setState({
-      tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-      ],
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
       activeTaskTimeLeft: null,
     });
-    
+
     render(<TaskList />);
     expect(screen.getByText(/10:10/)).toBeInTheDocument();
 
@@ -166,13 +188,13 @@ describe('TaskList', () => {
 
   it('shows Restart Routine when all tasks are completed', () => {
     useTaskStore.setState({
-      tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'COMPLETED' },
-      ],
+      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'COMPLETED' }],
     });
 
     render(<TaskList />);
-    expect(screen.getByRole('button', { name: /restart routine/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /restart routine/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders sortable tasks within a DndContext and SortableContext', () => {
@@ -181,7 +203,7 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     expect(screen.getByTestId('dnd-context')).toBeInTheDocument();
     expect(screen.getByTestId('sortable-context')).toBeInTheDocument();
   });
@@ -195,12 +217,12 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     // Trigger the mock drag end
     act(() => {
       triggerDragEnd('1', '2');
     });
-    
+
     const { tasks } = useTaskStore.getState();
     expect(tasks[0].id).toBe('2');
     expect(tasks[1].id).toBe('1');
@@ -217,12 +239,12 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     // Move '1' over '2'
     act(() => {
       triggerDragEnd('1', '2');
     });
-    
+
     const { tasks } = useTaskStore.getState();
     // Order should NOT change
     expect(tasks[0].id).toBe('2');
@@ -241,12 +263,12 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     // Try to move 'p2' over 'c1' (completed)
     act(() => {
       triggerDragEnd('p2', 'c1');
     });
-    
+
     let { tasks } = useTaskStore.getState();
     // 'p2' should be clamped to the first pending position (index 2)
     // List should be [c1, i1, p2, p1]
@@ -275,7 +297,7 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     // Initial ETAs: Task 1: 10:10, Task 2: 10:30
     expect(screen.getByText(/10:10/)).toBeInTheDocument();
     expect(screen.getByText(/10:30/)).toBeInTheDocument();
@@ -284,7 +306,7 @@ describe('TaskList', () => {
     act(() => {
       triggerDragEnd('1', '2');
     });
-    
+
     // New Order: Task 2 (20 min), Task 1 (10 min)
     // New ETAs: Task 2: 10:20, Task 1: 10:30
     expect(screen.getByText(/10:20/)).toBeInTheDocument();
@@ -297,7 +319,7 @@ describe('TaskList', () => {
     });
 
     render(<TaskList />);
-    
+
     expect(screen.getByTestId('layout-group')).toBeInTheDocument();
   });
 });

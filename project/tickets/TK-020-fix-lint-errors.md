@@ -9,6 +9,7 @@ specs: []
 # Fix the 25 lint errors breaking `npm run lint`
 
 ## Context
+
 `npm run lint` fails on `main` with 25 errors (found while verifying TK-018, which
 touched none of the affected files). Three groups:
 
@@ -27,6 +28,7 @@ touched none of the affected files). Three groups:
 A broken lint hides new errors, so this rots fast — that's the "why now".
 
 ## Acceptance criteria
+
 - [x] `npm run lint` exits clean (0 errors, 0 warnings).
 - [x] Group 3 is resolved by fixing the render-time ref access (or, if analysis
       shows the pattern is safe and intended, by an explicitly justified disable
@@ -34,10 +36,12 @@ A broken lint hides new errors, so this rots fast — that's the "why now".
 - [x] No behavior change: full test suite passes unchanged.
 
 ## Notes
+
 For groups 1–2, prefer the idiomatic fixes (rest-destructuring with a lint-aware
 pattern, omitting the unused catch binding) over disable comments.
 
 ### Resolution (2026-07-03)
+
 - **Group 1**: tuned `@typescript-eslint/no-unused-vars` with
   `ignoreRestSiblings: true` + `argsIgnorePattern: '^_'` in `eslint.config.js` —
   the standard options for the destructure-to-strip and intentionally-unused-arg

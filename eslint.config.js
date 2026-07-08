@@ -29,7 +29,11 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}', 'src/setupTests.ts', 'src/**/*.test.{ts,tsx}'],
+    files: [
+      '**/*.test.{ts,tsx}',
+      'src/setupTests.ts',
+      'src/**/*.test.{ts,tsx}',
+    ],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
     },
