@@ -22,7 +22,8 @@ The arrival time is the hero of the interface:
 - Below the clock, a progress bar shows estimated minutes completed vs. total, with
   a "N min left" readout (estimates, per [SPEC-005]). While a task is actively
   running (not paused or in overtime), the bar shows continuous forward-flowing
-  motion, signaling live progress.
+  motion, signaling live progress; in overtime it instead gently breathes
+  (pulsing brightness) to signal the task is still live.
 - When **every task is done**, the display becomes a green celebration card
   ("Well Done") and confetti fires once.
 
@@ -34,3 +35,4 @@ The arrival time is the hero of the interface:
 
 - Seeded from code + conductor archive (2026-07-02)
 - TK-015: running arrival progress bar shows forward-flowing motion instead of a pulse (2026-07-08)
+- TK-025: overtime arrival progress bar gently breathes to signal it's still live (2026-07-08)

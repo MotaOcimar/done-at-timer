@@ -18,7 +18,9 @@ Visual states mirror the arrival display's palette:
   actively running, the progress bar shows continuous forward-flowing motion,
   signaling live momentum (only in this state — paused/overtime bars are static).
 - **Paused:** muted gray (pausing is a neutral, intentional act — not a warning).
-- **Overtime:** soft amber, still awaiting the user's confirmation.
+- **Overtime:** soft amber, still awaiting the user's confirmation. The progress
+  bar gently breathes (pulsing brightness) to show the task is still live —
+  distinct from the running bar's forward-flowing sweep.
 - **Done:** subtle green (readable, not washed out), showing the moment it was
   completed and the **real time spent, with the original estimate struck through**
   beside it — the honest comparison between plan and reality.
@@ -33,3 +35,4 @@ Title and duration are editable in place ([SPEC-008]).
 
 - Seeded from code + conductor archive (2026-07-02)
 - TK-015: running progress bar shows forward-flowing motion instead of a pulse (2026-07-08)
+- TK-025: overtime progress bar gently breathes to signal it's still live (2026-07-08)

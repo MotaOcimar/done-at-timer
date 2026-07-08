@@ -26,3 +26,4 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-022 — Make npm run check pass — Prettier the whole repo (done)
 - TK-023 — Refine the active-bar shimmer to a single soft sweep (done)
 - TK-024 — Shimmer polish — constant-width beam and a slightly slower sweep (done)
+- TK-025 — Overtime progress bar gently breathes (sign of life) (done)

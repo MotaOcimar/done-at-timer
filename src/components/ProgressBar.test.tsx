@@ -39,6 +39,23 @@ describe('ProgressBar', () => {
     expect(inactiveBar).not.toHaveClass('shimmer');
   });
 
+  it('breathes when in overtime, but not when running or paused', () => {
+    const { rerender } = render(
+      <ProgressBar progress={0.5} state="overtime" />,
+    );
+    expect(screen.getByRole('progressbar').firstChild).toHaveClass('breathe');
+
+    rerender(<ProgressBar progress={0.5} isActive={true} state="running" />);
+    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass(
+      'breathe',
+    );
+
+    rerender(<ProgressBar progress={0.5} state="paused" />);
+    expect(screen.getByRole('progressbar').firstChild).not.toHaveClass(
+      'breathe',
+    );
+  });
+
   it('applies correct color classes based on state', () => {
     // Default should be running (blue)
     const { rerender } = render(<ProgressBar progress={0.5} />);
