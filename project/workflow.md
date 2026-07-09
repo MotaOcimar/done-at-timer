@@ -69,6 +69,11 @@ if you do only one thing right in this system, do this.
   affected specs.
 - After a ticket is `done`, edit nothing but the `status` field. Corrections happen
   in new tickets.
+- **Commits map to tickets:** every commit belongs to exactly one ticket — never mix
+  changes from different tickets in a single commit. A ticket may span several commits
+  (e.g. the initial implementation, then a follow-up commit for an adjustment surfaced
+  during `in-review`). Name the ticket ID in each commit subject. When several tickets
+  were worked together, split them at commit time by staging per ticket.
 
 ## Planning & handoff
 
