@@ -63,7 +63,8 @@ if you do only one thing right in this system, do this.
 
 - `type:` `feature` | `bug` | `chore` | `idea`. Ideas are allowed to be vague; they
   must graduate (get acceptance criteria and a `specs:` list) before work starts.
-- `status:` `open` | `in-progress` | `done` | `wontfix`.
+- `status:` `open` | `in-progress` | `in-review` | `done` | `wontfix`. See
+  **Acceptance gate** for when `in-review` is required.
 - A ticket should fit in one sitting of review: context, acceptance criteria,
   affected specs.
 - After a ticket is `done`, edit nothing but the `status` field. Corrections happen
@@ -98,6 +99,9 @@ Rules:
 - A ticket moves to `in-progress` only when Design has no open dilemmas and Plan
   exists. Trivial tickets (one-line fixes, chores) may skip both — use judgment;
   planning is proportional to the risk of the change, not a ritual.
+- A **user-facing** ticket moves to `in-review` (not straight to `done`) once code,
+  tests, and specs are complete, and reaches `done` only after manual acceptance on
+  the running app — see **Acceptance gate**.
 - While work is underway, the Plan checkboxes are the **single source of "where we
   are"**. If you stop mid-task, leave a one-line `> State:` note under the plan
   saying what's half-done or surprising.
@@ -109,6 +113,36 @@ Rules:
 the settled decisions, Plan checkboxes and `State:` note for where to continue — and
 the specs it cites. Recent `git log` fills in the rest. Decisions recorded in Design
 are closed — do not reopen them without the user.
+
+## Acceptance gate — user-facing tickets earn `done`, they are not just declared
+
+A second honesty rule, parallel to the spec invariant:
+
+> **A user-facing ticket is not `done` until it has been manually accepted on the
+> running app** — by the user, or another team member acting as reviewer.
+
+- **Status flow:** `in-progress` → **`in-review`** → `done`. When implementation is
+  complete (code + tests + specs), the ticket moves to `in-review`, not straight to
+  `done`; it reaches `done` only after acceptance is recorded.
+- **Who & what:** the reviewer checks the ticket's Acceptance Criteria against the
+  _actual running feature_ — "is this what we meant, and does it look/feel right?" —
+  not just that tests pass. Tests prove behavior; the gate proves fit. Record the
+  sign-off on the ticket under an `## Acceptance` line (who + date) before flipping
+  to `done`.
+- **Scope (proportional, not ritual):** the gate applies to tickets with
+  **observable user-facing behavior** — `feature`/`bug` touching UI, UX, or anything
+  a person can see or feel. Pure `chore`/`refactor`/internal-logic tickets with no
+  observable surface (lint, prettier, comment translation, tick unification) skip
+  `in-review` and may go `in-progress` → `done` on green tests alone. When unsure,
+  gate it.
+- **Implementer self-check before handoff:** before moving a user-facing ticket to
+  `in-review`, the implementer drives the affected flow in the running app and
+  confirms the changed states render correctly (a screenshot is ideal). The reviewer
+  should be looking at something already sanity-checked, never a first render.
+- **Why:** `done` is frozen (see ticket rules). Marking a feature `done` before a
+  human has seen it forces every "actually, not quite" into a fresh correction
+  ticket — the churn this rule exists to stop. Holding at `in-review` lets the
+  original ticket absorb the refinement, then freeze once.
 
 ## Indexes
 
@@ -179,6 +213,11 @@ Resolved dilemmas + decisions with rationale, citing specs by ID. Out of scope l
 - [ ] Unchecked = where to resume.
 
 > State: (optional one-liner when stopping mid-work)
+
+## Acceptance
+
+(user-facing tickets only — who accepted it on the running app, and when. Required
+before `done`; see "Acceptance gate". Omit for exempt chore/refactor tickets.)
 
 ## Notes
 
