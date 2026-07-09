@@ -67,6 +67,39 @@ describe('TaskCard (Pure Visual)', () => {
     expect(screen.queryByLabelText(/Play/i)).not.toBeInTheDocument();
   });
 
+  it('shows an analog clock of the completion time (no second hand) in overtime', () => {
+    render(
+      <TaskCard
+        task={mockTask}
+        isActive={true}
+        isCompleted={false}
+        cardState="overtime"
+        isTimeUp={true}
+        timeLeft={-60} // 1 min over
+        eta={new Date(2026, 0, 1, 9, 20)}
+        onToggle={vi.fn()}
+        onTitleSave={vi.fn()}
+        onDurationSave={vi.fn()}
+        onComplete={vi.fn()}
+      />,
+    );
+
+    const clock = screen.getByLabelText(/overtime/i);
+    // hands reflect the completion time (09:20): hour 9*30+20*0.5=280, minute 20*6=120
+    expect(
+      clock
+        .querySelector('[data-testid="clock-hour-hand"]')
+        ?.getAttribute('transform'),
+    ).toBe('rotate(280 12 12)');
+    expect(
+      clock
+        .querySelector('[data-testid="clock-minute-hand"]')
+        ?.getAttribute('transform'),
+    ).toBe('rotate(120 12 12)');
+    // calm: no second hand in the task list
+    expect(screen.queryByTestId('clock-second-hand')).toBeNull();
+  });
+
   it('applies dragging styles', () => {
     const { container } = render(
       <TaskCard

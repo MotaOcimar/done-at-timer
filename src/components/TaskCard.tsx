@@ -2,9 +2,9 @@ import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
 import { type CardState } from '../utils/cardState';
+import { AnalogClock } from './AnalogClock';
 import {
   CheckCircle2,
-  Clock,
   Play,
   Pause,
   MapPin,
@@ -35,6 +35,7 @@ const StatusIcon = ({
   isPaused,
   isTimeUp,
   cardState,
+  eta,
   onToggle,
 }: {
   isCompleted: boolean;
@@ -42,6 +43,7 @@ const StatusIcon = ({
   isPaused: boolean;
   isTimeUp?: boolean;
   cardState: CardState;
+  eta?: Date;
   onToggle: (e: React.MouseEvent) => void;
 }) => {
   const baseClasses =
@@ -66,9 +68,16 @@ const StatusIcon = ({
 
   if (isActive) {
     if (isTimeUp) {
+      // The predicted completion of an overtime task is "now" (it has overrun), so
+      // its analog clock reads the current time. No second hand — a list of cards
+      // should stay calm (TK-028).
       return (
         <div className={`${baseClasses} bg-amber-100 text-amber-500`}>
-          <Clock size={24} strokeWidth={2} />
+          <AnalogClock
+            time={eta ?? new Date()}
+            aria-label="Task is overtime"
+            className="w-6 h-6"
+          />
         </div>
       );
     }
@@ -187,6 +196,7 @@ const TaskCard = ({
             isPaused={isActuallyPaused}
             isTimeUp={isTimeUp}
             cardState={cardState}
+            eta={eta}
             onToggle={onToggle}
           />
         </div>
