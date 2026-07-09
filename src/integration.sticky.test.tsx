@@ -13,8 +13,8 @@ describe('Sticky Arrival Display Integration', () => {
     useTaskStore.getState().addTask('Task 1', 10);
     render(<App />);
 
-    const arrivalDisplayText = screen.getByText(/You will be done at/i);
-    const stickyContainer = arrivalDisplayText.closest('.sticky');
+    const arrivalStateIcon = screen.getByLabelText(/locked/i);
+    const stickyContainer = arrivalStateIcon.closest('.sticky');
 
     expect(stickyContainer).toBeInTheDocument();
     expect(stickyContainer).toHaveClass('top-0');

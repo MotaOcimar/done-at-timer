@@ -23,8 +23,8 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).toHaveClass('text-gray-900');
     expect(container.firstChild).not.toHaveClass('bg-blue-600');
 
-    // Label should be gray-500
-    const label = screen.getByText(/You will be done at/i);
+    // Locked (pin) icon carries the state color; should be gray-500
+    const label = screen.getByLabelText(/locked/i);
     expect(label).toHaveClass('text-gray-500');
 
     // Progress bar should have good contrast in idle
@@ -46,8 +46,8 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).not.toHaveClass('bg-amber-500');
     expect(container.firstChild).not.toHaveClass('border');
 
-    // Label should be blue-200
-    const label = screen.getByText(/You will be done at/i);
+    // Locked (pin) icon carries the state color; should be blue-200
+    const label = screen.getByLabelText(/locked/i);
     expect(label).toHaveClass('text-blue-200');
 
     // Progress bar in running should be white/90 for maximum contrast against blue
@@ -69,8 +69,8 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).toHaveClass('text-gray-900');
     expect(container.firstChild).not.toHaveClass('bg-amber-500');
 
-    // Label should be gray-500
-    const label = screen.getByText(/Arrival time is drifting/i);
+    // Drifting (clock) icon carries the state color; should be gray-500
+    const label = screen.getByLabelText(/drifting/i);
     expect(label).toHaveClass('text-gray-500');
 
     // Progress bar should have good contrast in paused
@@ -96,8 +96,8 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).toHaveClass('text-amber-900');
     expect(container.firstChild).not.toHaveClass('bg-amber-500');
 
-    // Label should be amber-600
-    const label = screen.getByText(/Arrival time is drifting/i);
+    // Drifting (clock) icon carries the state color; should be amber-600
+    const label = screen.getByLabelText(/drifting/i);
     expect(label).toHaveClass('text-amber-600');
 
     // Progress bar should have good contrast in overtime

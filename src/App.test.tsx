@@ -11,9 +11,7 @@ describe('App', () => {
 
   it('renders main sections', () => {
     render(<App />);
-    expect(
-      screen.getByRole('heading', { name: /You will be done at/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/locked/i)).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /Open menu/i }),
     ).toBeInTheDocument();

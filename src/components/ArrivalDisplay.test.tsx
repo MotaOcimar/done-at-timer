@@ -88,7 +88,7 @@ describe('ArrivalDisplay', () => {
 
     const { container } = render(<ArrivalDisplay />);
 
-    expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/drifting/i)).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('bg-gray-50');
   });
 
@@ -102,7 +102,7 @@ describe('ArrivalDisplay', () => {
 
     const { container } = render(<ArrivalDisplay />);
 
-    expect(screen.getByText(/Arrival time is drifting/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/drifting/i)).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('bg-amber-50');
   });
 
@@ -123,5 +123,54 @@ describe('ArrivalDisplay', () => {
     // T1 is done at 10:05 (Now) + T2 (10 mins) = 10:15
     // BEFORE fix, it would show 10:00 + 1 + 10 = 10:11 (which is in the past relative to 10:05)
     expect(screen.getByText('10:15')).toBeInTheDocument();
+  });
+
+  // TK-005: iconographic locked-vs-drifting state signal (replaces the text label)
+  describe('arrival state icon (TK-005)', () => {
+    it('shows a static locked (pin) icon when idle', () => {
+      useTaskStore.getState().addTask('T1', 30); // added but not started
+
+      render(<ArrivalDisplay />);
+
+      expect(screen.getByLabelText(/locked/i)).toBeInTheDocument();
+      expect(screen.queryByLabelText(/drifting/i)).not.toBeInTheDocument();
+    });
+
+    it('shows a static locked (pin) icon while running', () => {
+      useTaskStore.getState().addTask('T1', 30);
+      const taskId = useTaskStore.getState().tasks[0].id;
+      useTaskStore.getState().startTask(taskId);
+
+      render(<ArrivalDisplay />);
+
+      const locked = screen.getByLabelText(/locked/i);
+      expect(locked).toBeInTheDocument();
+      expect(locked).not.toHaveClass('drift-spin');
+      expect(screen.queryByLabelText(/drifting/i)).not.toBeInTheDocument();
+    });
+
+    it('shows a rotating drifting (clock) icon when paused', () => {
+      useTaskStore.getState().addTask('T1', 30);
+      const taskId = useTaskStore.getState().tasks[0].id;
+      useTaskStore.getState().startTask(taskId);
+      useTaskStore.getState().pauseTask();
+
+      render(<ArrivalDisplay />);
+
+      expect(screen.getByLabelText(/drifting/i)).toHaveClass('drift-spin');
+      expect(screen.queryByLabelText(/locked/i)).not.toBeInTheDocument();
+    });
+
+    it('shows a rotating drifting (clock) icon in overtime', () => {
+      useTaskStore.getState().addTask('T1', 30);
+      const taskId = useTaskStore.getState().tasks[0].id;
+      useTaskStore.getState().startTask(taskId);
+      useTaskStore.getState().onTimeUp();
+
+      render(<ArrivalDisplay />);
+
+      expect(screen.getByLabelText(/drifting/i)).toHaveClass('drift-spin');
+      expect(screen.queryByLabelText(/locked/i)).not.toBeInTheDocument();
+    });
   });
 });

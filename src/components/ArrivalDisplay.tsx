@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Clock, MapPin } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
@@ -143,13 +143,31 @@ const ArrivalDisplay = () => {
         containerClasses[displayState]
       }`}
     >
-      <h2
-        className={`text-sm font-bold uppercase tracking-wide mb-4 transition-colors duration-700 ${
-          labelClasses[displayState]
-        }`}
-      >
-        {isDrifting ? 'Arrival time is drifting' : 'You will be done at'}
-      </h2>
+      <div className="flex justify-center mb-4">
+        {isDrifting ? (
+          <Clock
+            role="img"
+            aria-hidden={false}
+            aria-label="Arrival time is drifting"
+            size={22}
+            strokeWidth={2.5}
+            className={`drift-spin transition-colors duration-700 ${
+              labelClasses[displayState]
+            }`}
+          />
+        ) : (
+          <MapPin
+            role="img"
+            aria-hidden={false}
+            aria-label="Arrival time is locked"
+            size={22}
+            strokeWidth={2.5}
+            className={`transition-colors duration-700 ${
+              labelClasses[displayState]
+            }`}
+          />
+        )}
+      </div>
       <div className="text-7xl sm:text-8xl font-black tabular-nums tracking-tighter mb-8">
         {formatTime(arrivalTime)}
       </div>

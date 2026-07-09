@@ -86,3 +86,20 @@ input[type='number'] {
 .breathe {
   animation: breathe 1.8s ease-in-out infinite;
 }
+
+/* Arrival state icon: the "drifting" clock rotates slowly and steadily to signal
+   the arrival time is sliding forward in real time (paused or overtime). Kept slow
+   (~6s per turn, linear) so it reads as calm drift, not an alarm or loading spinner
+   (TK-005). The "locked" pin is static — no animation. */
+@keyframes drift-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.drift-spin {
+  animation: drift-spin 6s linear infinite;
+}

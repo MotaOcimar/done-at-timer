@@ -6,7 +6,7 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-002 — Remember partial progress per task (open)
 - TK-003 — Routine sharing/sync between devices — viability research (done)
 - TK-004 — Audit specs against the conductor archive (done)
-- TK-005 — Arrival status icons (locked vs drifting) (open)
+- TK-005 — Arrival status icons (locked vs drifting) (done)
 - TK-006 — Media-style notifications with progress and controls (open)
 - TK-007 — Track paused time and show it in the progress bar (open)
 - TK-008 — Mini time timers (circular remaining-time indicators) (open)

@@ -15,10 +15,13 @@ The arrival time is the hero of the interface:
 - The display has four visual states, in the app's calm palette ([SPEC-001]):
   **idle** (neutral, no task running), **running** (blue), **paused** (muted gray),
   **overtime** (soft amber — signal, not alarm).
-- The label above the clock distinguishes a **locked** projection ("You will be done
-  at") from a **drifting** one ("Arrival time is drifting") — drifting whenever no
-  progress is being made while the clock advances: paused, or in overtime awaiting
-  confirmation.
+- Above the clock, an **icon** signals whether the projection is **locked** or
+  **drifting**: a static map-pin when locked (idle, or a task actively running), and
+  a slowly, calmly rotating clock when drifting — drifting whenever no progress is
+  being made while the wall clock advances: paused, or in overtime awaiting
+  confirmation. The icon takes the state color (above) and carries an accessible
+  label ("Arrival time is locked" / "Arrival time is drifting") for screen readers,
+  so the distinction survives without visible text.
 - Below the clock, a progress bar shows estimated minutes completed vs. total, with
   a "N min left" readout (estimates, per [SPEC-005]). While a task is actively
   running (not paused or in overtime), the bar shows continuous forward-flowing
@@ -37,3 +40,4 @@ The arrival time is the hero of the interface:
 - TK-015: running arrival progress bar shows forward-flowing motion instead of a pulse (2026-07-08)
 - TK-025: overtime arrival progress bar gently breathes to signal it's still live (2026-07-08)
 - TK-026: made the running sweep visible on the white arrival fill (blue tint) (2026-07-08)
+- TK-005: locked/drifting now shown by an icon (static pin / rotating clock) instead of text, with an accessible label (2026-07-09)
