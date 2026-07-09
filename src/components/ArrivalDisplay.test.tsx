@@ -145,11 +145,14 @@ describe('ArrivalDisplay', () => {
 
       const locked = screen.getByLabelText(/locked/i);
       expect(locked).toBeInTheDocument();
-      expect(locked).not.toHaveClass('drift-spin');
+      // not the analog drifting clock
+      expect(
+        locked.querySelector('[data-testid="clock-second-hand"]'),
+      ).toBeNull();
       expect(screen.queryByLabelText(/drifting/i)).not.toBeInTheDocument();
     });
 
-    it('shows a rotating drifting (clock) icon when paused', () => {
+    it('shows an analog clock of the ETA when paused (drifting)', () => {
       useTaskStore.getState().addTask('T1', 30);
       const taskId = useTaskStore.getState().tasks[0].id;
       useTaskStore.getState().startTask(taskId);
@@ -157,11 +160,22 @@ describe('ArrivalDisplay', () => {
 
       render(<ArrivalDisplay />);
 
-      expect(screen.getByLabelText(/drifting/i)).toHaveClass('drift-spin');
+      const clock = screen.getByLabelText(/drifting/i);
+      // second hand present (ticks with real time)
+      expect(
+        clock.querySelector('[data-testid="clock-second-hand"]'),
+      ).toBeInTheDocument();
+      // ETA = 10:00 + 30 min left = 10:30 → minute hand at 30*6 = 180deg,
+      // proving the clock's hands are wired to the real arrival time.
+      expect(
+        clock
+          .querySelector('[data-testid="clock-minute-hand"]')
+          ?.getAttribute('transform'),
+      ).toBe('rotate(180 12 12)');
       expect(screen.queryByLabelText(/locked/i)).not.toBeInTheDocument();
     });
 
-    it('shows a rotating drifting (clock) icon in overtime', () => {
+    it('shows the analog drifting clock in overtime', () => {
       useTaskStore.getState().addTask('T1', 30);
       const taskId = useTaskStore.getState().tasks[0].id;
       useTaskStore.getState().startTask(taskId);
@@ -169,8 +183,24 @@ describe('ArrivalDisplay', () => {
 
       render(<ArrivalDisplay />);
 
-      expect(screen.getByLabelText(/drifting/i)).toHaveClass('drift-spin');
+      const clock = screen.getByLabelText(/drifting/i);
+      expect(
+        clock.querySelector('[data-testid="clock-second-hand"]'),
+      ).toBeInTheDocument();
       expect(screen.queryByLabelText(/locked/i)).not.toBeInTheDocument();
+    });
+
+    it('keeps the clock centered with the state icon pinned to its left', () => {
+      useTaskStore.getState().addTask('T1', 30); // idle → locked pin
+
+      render(<ArrivalDisplay />);
+
+      const icon = screen.getByLabelText(/locked/i);
+      const iconWrap = icon.parentElement;
+      // the icon is taken out of flow and pinned to the left of the clock, so the
+      // (centered) time never shifts off-center.
+      expect(iconWrap).toHaveClass('absolute');
+      expect(iconWrap).toHaveClass('right-full');
     });
   });
 });

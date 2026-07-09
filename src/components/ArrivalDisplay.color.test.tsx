@@ -96,9 +96,10 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).toHaveClass('text-amber-900');
     expect(container.firstChild).not.toHaveClass('bg-amber-500');
 
-    // Drifting (clock) icon carries the state color; should be amber-600
+    // Drifting (clock) icon carries the state color; amber-500 to match the task
+    // card's overtime clock (TK-027).
     const label = screen.getByLabelText(/drifting/i);
-    expect(label).toHaveClass('text-amber-600');
+    expect(label).toHaveClass('text-amber-500');
 
     // Progress bar should have good contrast in overtime
     const progressBg = screen.getByRole('progressbar');

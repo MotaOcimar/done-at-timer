@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, Clock, MapPin } from 'lucide-react';
+import { CheckCircle2, MapPin } from 'lucide-react';
+import { AnalogClock } from './AnalogClock';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
@@ -112,7 +113,9 @@ const ArrivalDisplay = () => {
   const labelClasses = {
     running: 'text-blue-200',
     paused: 'text-gray-500',
-    overtime: 'text-amber-600',
+    // amber-500 matches the task card's overtime clock (TaskCard.tsx) so the same
+    // clock reads the same color across the app (TK-027).
+    overtime: 'text-amber-500',
     idle: 'text-gray-500',
   };
 
@@ -143,33 +146,36 @@ const ArrivalDisplay = () => {
         containerClasses[displayState]
       }`}
     >
-      <div className="flex justify-center mb-4">
-        {isDrifting ? (
-          <Clock
-            role="img"
-            aria-hidden={false}
-            aria-label="Arrival time is drifting"
-            size={22}
-            strokeWidth={2.5}
-            className={`drift-spin transition-colors duration-700 ${
-              labelClasses[displayState]
-            }`}
-          />
-        ) : (
-          <MapPin
-            role="img"
-            aria-hidden={false}
-            aria-label="Arrival time is locked"
-            size={22}
-            strokeWidth={2.5}
-            className={`transition-colors duration-700 ${
-              labelClasses[displayState]
-            }`}
-          />
-        )}
-      </div>
-      <div className="text-7xl sm:text-8xl font-black tabular-nums tracking-tighter mb-8">
-        {formatTime(arrivalTime)}
+      {/* The clock stays centered in the card; the state icon hangs to its left,
+          out of flow (absolute), so it never shifts the time off-center (TK-027). */}
+      <div className="flex justify-center mb-8">
+        <div className="relative inline-flex items-center justify-center">
+          <span className="absolute right-full top-1/2 -translate-y-1/2 mr-3 sm:mr-4 flex items-center">
+            {isDrifting ? (
+              <AnalogClock
+                time={arrivalTime}
+                secondHand
+                aria-label="Arrival time is drifting"
+                className={`w-12 h-12 sm:w-16 sm:h-16 transition-colors duration-700 ${
+                  labelClasses[displayState]
+                }`}
+              />
+            ) : (
+              <MapPin
+                role="img"
+                aria-hidden={false}
+                aria-label="Arrival time is locked"
+                strokeWidth={2.5}
+                className={`w-12 h-12 sm:w-16 sm:h-16 transition-colors duration-700 ${
+                  labelClasses[displayState]
+                }`}
+              />
+            )}
+          </span>
+          <div className="text-7xl sm:text-8xl font-black tabular-nums tracking-tighter">
+            {formatTime(arrivalTime)}
+          </div>
+        </div>
       </div>
 
       <div className="mt-8 px-4">

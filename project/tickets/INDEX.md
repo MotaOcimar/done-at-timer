@@ -28,3 +28,5 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-024 — Shimmer polish — constant-width beam and a slightly slower sweep (done)
 - TK-025 — Overtime progress bar gently breathes (sign of life) (done)
 - TK-026 — Arrival-bar shimmer is invisible on the white running fill (done)
+- TK-027 — Arrival icon left of the clock; drifting icon is an analog clock of the ETA (done)
+- TK-028 — Task card's overtime clock becomes an analog clock of the completion time (in-review)
