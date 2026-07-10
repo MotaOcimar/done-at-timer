@@ -15,8 +15,8 @@ describe('Playlist Execution Integration', () => {
 
     render(<App />);
 
-    // Check if Arrival Display is present (idle → locked pin icon)
-    expect(screen.getByLabelText(/locked/i)).toBeInTheDocument();
+    // Check if Arrival Display is present (idle → pin icon)
+    expect(screen.getByTestId('arrival-state-icon')).toBeInTheDocument();
 
     // Deve haver botões de Play para as tarefas
     const playButtons = screen.getAllByRole('button', { name: /Play task/i });

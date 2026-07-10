@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { CheckCircle2, MapPin } from 'lucide-react';
 import { AnalogClock } from './AnalogClock';
+import { IconTooltip } from './IconTooltip';
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimer } from '../hooks/useTimer';
 import { calculateArrivalTime } from '../utils/time';
@@ -101,6 +102,14 @@ const ArrivalDisplay = () => {
         ? 'paused'
         : 'running';
 
+  // Single source of truth for the meaning of the arrival clock: it is the estimated
+  // arrival time, and when no progress is being made that estimate is slipping. Used
+  // both as the visible tooltip text and as the clock group's accessible description
+  // (TK-029). Deliberately neutral wording — no "late" — to avoid alarming the user.
+  const stateLabel = isDrifting
+    ? 'Estimated arrival time — slipping'
+    : 'Estimated arrival time';
+
   const containerClasses = {
     running: 'bg-blue-600 shadow-blue-200 text-white shadow-2xl',
     paused:
@@ -146,25 +155,29 @@ const ArrivalDisplay = () => {
         containerClasses[displayState]
       }`}
     >
-      {/* The clock stays centered in the card; the state icon hangs to its left,
-          out of flow (absolute), so it never shifts the time off-center (TK-027). */}
+      {/* The clock IS the estimated arrival time, so the tooltip is anchored on the
+          whole group (time + icon): tapping/hovering it reveals what the number means
+          — and, when it's slipping, that it's drifting — right on the number it
+          describes (TK-029). The state icon hangs to the left, out of flow (absolute),
+          so it never shifts the time off-center (TK-027); it's decorative here since
+          the group's description already carries the meaning. */}
       <div className="flex justify-center mb-8">
-        <div className="relative inline-flex items-center justify-center">
+        <IconTooltip label={stateLabel}>
           <span className="absolute right-full top-1/2 -translate-y-1/2 mr-3 sm:mr-4 flex items-center">
             {isDrifting ? (
               <AnalogClock
                 time={arrivalTime}
                 secondHand
-                aria-label="Arrival time is drifting"
+                aria-hidden
+                data-testid="arrival-state-icon"
                 className={`w-12 h-12 sm:w-16 sm:h-16 transition-colors duration-700 ${
                   labelClasses[displayState]
                 }`}
               />
             ) : (
               <MapPin
-                role="img"
-                aria-hidden={false}
-                aria-label="Arrival time is locked"
+                aria-hidden
+                data-testid="arrival-state-icon"
                 strokeWidth={2.5}
                 className={`w-12 h-12 sm:w-16 sm:h-16 transition-colors duration-700 ${
                   labelClasses[displayState]
@@ -175,7 +188,7 @@ const ArrivalDisplay = () => {
           <div className="text-7xl sm:text-8xl font-black tabular-nums tracking-tighter">
             {formatTime(arrivalTime)}
           </div>
-        </div>
+        </IconTooltip>
       </div>
 
       <div className="mt-8 px-4">

@@ -8,6 +8,11 @@ interface AnalogClockProps {
   secondHand?: boolean;
   className?: string;
   'aria-label'?: string;
+  /** When true the clock is purely decorative (its meaning is carried elsewhere,
+   *  e.g. the arrival header's tooltip) — drop the img role/label so it's skipped
+   *  by assistive tech. */
+  'aria-hidden'?: boolean;
+  'data-testid'?: string;
 }
 
 /**
@@ -29,6 +34,8 @@ const AnalogClock = ({
   secondHand,
   className,
   'aria-label': ariaLabel,
+  'aria-hidden': ariaHidden,
+  'data-testid': dataTestId,
 }: AnalogClockProps) => {
   const hours = time.getHours() % 12;
   const minutes = time.getMinutes();
@@ -54,9 +61,10 @@ const AnalogClock = ({
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
-      role="img"
-      aria-hidden={false}
-      aria-label={ariaLabel}
+      role={ariaHidden ? undefined : 'img'}
+      aria-hidden={ariaHidden || undefined}
+      aria-label={ariaHidden ? undefined : ariaLabel}
+      data-testid={dataTestId}
       className={className}
     >
       <circle cx="12" cy="12" r="9" />

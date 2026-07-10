@@ -11,7 +11,7 @@ describe('App', () => {
 
   it('renders main sections', () => {
     render(<App />);
-    expect(screen.getByLabelText(/locked/i)).toBeInTheDocument();
+    expect(screen.getByTestId('arrival-state-icon')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /Open menu/i }),
     ).toBeInTheDocument();

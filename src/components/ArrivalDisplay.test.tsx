@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ArrivalDisplay } from './ArrivalDisplay';
 import { useTaskStore } from '../store/useTaskStore';
@@ -80,7 +80,7 @@ describe('ArrivalDisplay', () => {
     expect(screen.getByText(/All tasks finished/i)).toBeInTheDocument();
   });
 
-  it('shows neutral gray color and drifting text when paused', () => {
+  it('shows neutral gray color and a slipping estimate when paused', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
     useTaskStore.getState().startTask(taskId);
@@ -88,11 +88,11 @@ describe('ArrivalDisplay', () => {
 
     const { container } = render(<ArrivalDisplay />);
 
-    expect(screen.getByLabelText(/drifting/i)).toBeInTheDocument();
+    expect(screen.getByText(/slipping/i)).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('bg-gray-50');
   });
 
-  it('shows softer amber color and drifting text when time is up', () => {
+  it('shows softer amber color and a slipping estimate when time is up', () => {
     useTaskStore.getState().addTask('T1', 30);
     const taskId = useTaskStore.getState().tasks[0].id;
     useTaskStore.getState().startTask(taskId);
@@ -102,7 +102,7 @@ describe('ArrivalDisplay', () => {
 
     const { container } = render(<ArrivalDisplay />);
 
-    expect(screen.getByLabelText(/drifting/i)).toBeInTheDocument();
+    expect(screen.getByText(/slipping/i)).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('bg-amber-50');
   });
 
@@ -127,29 +127,34 @@ describe('ArrivalDisplay', () => {
 
   // TK-005: iconographic locked-vs-drifting state signal (replaces the text label)
   describe('arrival state icon (TK-005)', () => {
-    it('shows a static locked (pin) icon when idle', () => {
+    it('shows a static (pin) icon and a steady estimate when idle', () => {
       useTaskStore.getState().addTask('T1', 30); // added but not started
 
       render(<ArrivalDisplay />);
 
-      expect(screen.getByLabelText(/locked/i)).toBeInTheDocument();
-      expect(screen.queryByLabelText(/drifting/i)).not.toBeInTheDocument();
+      const icon = screen.getByTestId('arrival-state-icon');
+      // not the analog drifting clock
+      expect(
+        icon.querySelector('[data-testid="clock-second-hand"]'),
+      ).toBeNull();
+      expect(screen.getByText('Estimated arrival time')).toBeInTheDocument();
+      expect(screen.queryByText(/slipping/i)).not.toBeInTheDocument();
     });
 
-    it('shows a static locked (pin) icon while running', () => {
+    it('shows a static (pin) icon and a steady estimate while running', () => {
       useTaskStore.getState().addTask('T1', 30);
       const taskId = useTaskStore.getState().tasks[0].id;
       useTaskStore.getState().startTask(taskId);
 
       render(<ArrivalDisplay />);
 
-      const locked = screen.getByLabelText(/locked/i);
-      expect(locked).toBeInTheDocument();
+      const icon = screen.getByTestId('arrival-state-icon');
       // not the analog drifting clock
       expect(
-        locked.querySelector('[data-testid="clock-second-hand"]'),
+        icon.querySelector('[data-testid="clock-second-hand"]'),
       ).toBeNull();
-      expect(screen.queryByLabelText(/drifting/i)).not.toBeInTheDocument();
+      expect(screen.getByText('Estimated arrival time')).toBeInTheDocument();
+      expect(screen.queryByText(/slipping/i)).not.toBeInTheDocument();
     });
 
     it('shows an analog clock of the ETA when paused (drifting)', () => {
@@ -160,7 +165,7 @@ describe('ArrivalDisplay', () => {
 
       render(<ArrivalDisplay />);
 
-      const clock = screen.getByLabelText(/drifting/i);
+      const clock = screen.getByTestId('arrival-state-icon');
       // second hand present (ticks with real time)
       expect(
         clock.querySelector('[data-testid="clock-second-hand"]'),
@@ -172,7 +177,7 @@ describe('ArrivalDisplay', () => {
           .querySelector('[data-testid="clock-minute-hand"]')
           ?.getAttribute('transform'),
       ).toBe('rotate(180 12 12)');
-      expect(screen.queryByLabelText(/locked/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/slipping/i)).toBeInTheDocument();
     });
 
     it('shows the analog drifting clock in overtime', () => {
@@ -183,24 +188,50 @@ describe('ArrivalDisplay', () => {
 
       render(<ArrivalDisplay />);
 
-      const clock = screen.getByLabelText(/drifting/i);
+      const clock = screen.getByTestId('arrival-state-icon');
       expect(
         clock.querySelector('[data-testid="clock-second-hand"]'),
       ).toBeInTheDocument();
-      expect(screen.queryByLabelText(/locked/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/slipping/i)).toBeInTheDocument();
     });
 
     it('keeps the clock centered with the state icon pinned to its left', () => {
-      useTaskStore.getState().addTask('T1', 30); // idle → locked pin
+      useTaskStore.getState().addTask('T1', 30); // idle → pin
 
       render(<ArrivalDisplay />);
 
-      const icon = screen.getByLabelText(/locked/i);
-      const iconWrap = icon.parentElement;
+      const icon = screen.getByTestId('arrival-state-icon');
       // the icon is taken out of flow and pinned to the left of the clock, so the
       // (centered) time never shifts off-center.
-      expect(iconWrap).toHaveClass('absolute');
-      expect(iconWrap).toHaveClass('right-full');
+      const positioned = icon.closest('.absolute');
+      expect(positioned).toHaveClass('right-full');
+    });
+
+    it('reveals the estimate description when the clock is tapped (TK-029)', () => {
+      useTaskStore.getState().addTask('T1', 30); // idle
+
+      render(<ArrivalDisplay />);
+
+      const bubble = screen.getByText('Estimated arrival time');
+      expect(bubble).toHaveClass('opacity-0'); // hidden until asked
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(bubble).toHaveClass('opacity-100');
+    });
+
+    it('anchors the tooltip on the whole clock group, described by the state (TK-029)', () => {
+      useTaskStore.getState().addTask('T1', 30); // idle → 10:00 + 30 = 10:30
+
+      render(<ArrivalDisplay />);
+
+      const group = screen.getByRole('button');
+      // the group's accessible value is the arrival time itself...
+      expect(group).toHaveTextContent('10:30');
+      // ...and its meaning rides along as an accessible description (not the name),
+      // so the time is never overridden.
+      const describedBy = group.getAttribute('aria-describedby');
+      expect(describedBy).toBeTruthy();
+      expect(screen.getByText('Estimated arrival time').id).toBe(describedBy);
     });
   });
 });

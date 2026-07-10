@@ -24,7 +24,7 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).not.toHaveClass('bg-blue-600');
 
     // Locked (pin) icon carries the state color; should be gray-500
-    const label = screen.getByLabelText(/locked/i);
+    const label = screen.getByTestId('arrival-state-icon');
     expect(label).toHaveClass('text-gray-500');
 
     // Progress bar should have good contrast in idle
@@ -47,7 +47,7 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).not.toHaveClass('border');
 
     // Locked (pin) icon carries the state color; should be blue-200
-    const label = screen.getByLabelText(/locked/i);
+    const label = screen.getByTestId('arrival-state-icon');
     expect(label).toHaveClass('text-blue-200');
 
     // Progress bar in running should be white/90 for maximum contrast against blue
@@ -70,7 +70,7 @@ describe('ArrivalDisplay Color Refinements', () => {
     expect(container.firstChild).not.toHaveClass('bg-amber-500');
 
     // Drifting (clock) icon carries the state color; should be gray-500
-    const label = screen.getByLabelText(/drifting/i);
+    const label = screen.getByTestId('arrival-state-icon');
     expect(label).toHaveClass('text-gray-500');
 
     // Progress bar should have good contrast in paused
@@ -98,7 +98,7 @@ describe('ArrivalDisplay Color Refinements', () => {
 
     // Drifting (clock) icon carries the state color; amber-500 to match the task
     // card's overtime clock (TK-027).
-    const label = screen.getByLabelText(/drifting/i);
+    const label = screen.getByTestId('arrival-state-icon');
     expect(label).toHaveClass('text-amber-500');
 
     // Progress bar should have good contrast in overtime
