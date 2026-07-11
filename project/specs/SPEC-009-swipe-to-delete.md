@@ -19,13 +19,21 @@ links: [SPEC-002, SPEC-004]
 - **Keyboard fallback:** with a card focused, the Delete key removes the task — the
   feature is not gesture-only.
 - Deleting the running task behaves like skipping it ([SPEC-004]).
+- **Routine rows use the same gesture** ([SPEC-011]): swiping a routine in the
+  Control Center library reveals its delete button, with the same commit
+  threshold, single-reveal rule, haptic pulse, and keyboard Delete fallback.
+  The deliberate reveal-then-tap sequence is the confirmation — routine
+  deletion shows no dialog.
 
 ## Implementation pointers
 
-- `src/hooks/useSwipeToReveal.ts`, `src/components/TaskItem.tsx`
+- `src/hooks/useSwipeToReveal.ts`, `src/components/TaskItem.tsx`,
+  `src/components/RoutineItem.tsx`
 
 ## Log
 
 - Seeded from code + conductor archive (2026-07-02)
 - TK-004: added done-tasks exclusion and keyboard Delete fallback from the
   task_interaction_refinement track, verified in code (2026-07-02)
+- TK-031: routine rows in the library adopt the gesture; the gesture itself is
+  the confirmation (2026-07-11)

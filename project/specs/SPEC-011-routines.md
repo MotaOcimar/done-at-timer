@@ -21,7 +21,11 @@ progress, no completion records: a routine is a template, not a session.
 - **Load** replaces the current list with the routine's tasks, all starting as
   "to do". If the current list is not empty, the user must confirm the replacement
   (it is irreversible).
-- **Delete** removes a saved routine, after confirmation.
+- **Delete** removes a saved routine with the same right-to-left swipe gesture
+  as tasks ([SPEC-009]): the swipe reveals a delete button and a deliberate tap
+  on it completes the deletion immediately — the two-step gesture is the
+  confirmation; there is no dialog. With the row focused, the Delete key is the
+  non-gesture fallback.
 - **Share** produces a link that carries the routine itself (name, tasks,
   estimates) — no account, no server ([SPEC-001]). The user can hand the link to
   the system share sheet or copy it (with visual feedback when copied).
@@ -57,3 +61,5 @@ progress, no completion records: a routine is a template, not a session.
 - TK-021: routines can be shared and imported via URL (2026-07-03)
 - TK-009: tapping a routine now expands an inline preview of its tasks with the
   load action, instead of loading directly (2026-07-11)
+- TK-031: deletion moved from an always-visible button + dialog to the
+  swipe-to-reveal gesture, matching tasks (2026-07-11)

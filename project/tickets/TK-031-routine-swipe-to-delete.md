@@ -2,7 +2,7 @@
 id: TK-031
 title: Delete routines via swipe, like tasks
 type: feature
-status: in-progress
+status: in-review
 specs: [SPEC-009, SPEC-011, SPEC-012]
 ---
 
@@ -34,27 +34,29 @@ row and keeps the interaction consistent with the rest of the app.
 
 ## Plan
 
-- [ ] Red: `RoutineItem` wiring tests (mocked hook — reveal button behind,
+- [x] Red: `RoutineItem` wiring tests (mocked hook — reveal button behind,
       revealed/hidden accessibility states, drag props applied) and updated
       `ControlCenter` tests (delete via revealed button is immediate, no
       confirmation modal, Delete key fallback).
-- [ ] Green: extract `RoutineItem`, wire `useSwipeToReveal` + shared
+- [x] Green: extract `RoutineItem`, wire `useSwipeToReveal` + shared
       `activeSwipeId`, remove the visible delete button and the confirmation
       modal.
-- [ ] Full suite + lint + format.
-- [ ] Update SPEC-009, SPEC-011, SPEC-012.
-- [ ] Self-check on the running app; move to `in-review`. (The drag gesture
-      itself cannot be driven in the frame-less headless environment — verify
-      the keyboard path end-to-end and rely on the hook's existing coverage +
-      manual acceptance for the gesture.)
+- [x] Full suite + lint + format (309 tests green).
+- [x] Update SPEC-009, SPEC-011, SPEC-012.
+- [x] Self-check on the running app; move to `in-review`. 8/8 end-to-end checks
+      passed (hidden-until-revealed button, no visible delete on rows, Delete
+      key removes immediately with no dialog, persistence, TK-009 expansion
+      intact). The drag gesture itself can't be driven in the frame-less
+      headless environment — covered by the hook's existing task-side coverage
+      and left for manual acceptance.
 
 ## Acceptance criteria
 
-- [ ] Swiping a routine row right-to-left reveals a delete button, with the same
+- [x] Swiping a routine row right-to-left reveals a delete button, with the same
       gesture semantics as tasks (commit threshold, quick flick, at most one row
       revealed at a time, haptic pulse where supported).
-- [ ] The always-visible delete button is removed from the routine row.
-- [ ] Deletion is not gesture-only — a keyboard/accessible fallback exists, as with
+- [x] The always-visible delete button is removed from the routine row.
+- [x] Deletion is not gesture-only — a keyboard/accessible fallback exists, as with
       tasks.
-- [ ] SPEC-011 (and SPEC-009 or SPEC-012 as appropriate) updated to cover how
+- [x] SPEC-011 (and SPEC-009 or SPEC-012 as appropriate) updated to cover how
       routines are deleted.

@@ -297,57 +297,22 @@ describe('ControlCenter', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('should show confirmation when trying to delete a routine', () => {
+  it('should delete via the swipe-revealed button immediately, with no confirmation modal', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
     const deleteButton = screen.getByLabelText(/Delete routine/i);
     fireEvent.click(deleteButton);
-
-    expect(screen.getByText(/Delete this routine\?/i)).toBeInTheDocument();
-  });
-
-  it('should call deleteRoutine when confirming delete', () => {
-    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const deleteButton = screen.getByLabelText(/Delete routine/i);
-    fireEvent.click(deleteButton);
-
-    const confirmDeleteButton = screen.getByRole('button', {
-      name: /^Delete$/,
-    });
-    fireEvent.click(confirmDeleteButton);
 
     expect(mockDeleteRoutine).toHaveBeenCalledWith('r1');
-  });
-
-  it('should close the delete confirmation modal when clicking the cancel button', () => {
-    render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const deleteButton = screen.getByLabelText(/Delete routine/i);
-    fireEvent.click(deleteButton);
-
-    const cancelButton = screen.getByRole('button', { name: /Cancel/i });
-    fireEvent.click(cancelButton);
-
     expect(
       screen.queryByText(/Delete this routine\?/i),
     ).not.toBeInTheDocument();
   });
 
-  it('should close the delete confirmation modal when clicking the backdrop', () => {
+  it('should delete the focused routine with the Delete key', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const deleteButton = screen.getByLabelText(/Delete routine/i);
-    fireEvent.click(deleteButton);
+    fireEvent.keyDown(screen.getByTestId('routine-item'), { key: 'Delete' });
 
-    expect(screen.getByText(/Delete this routine\?/i)).toBeInTheDocument();
-
-    // Backdrop for confirmation modal
-    const backdrop = screen
-      .getAllByRole('presentation', { hidden: true })
-      .find((el) => el.className.includes('backdrop-blur-md'));
-    if (backdrop) {
-      fireEvent.click(backdrop);
-      expect(
-        screen.queryByText(/Delete this routine\?/i),
-      ).not.toBeInTheDocument();
-    }
+    expect(mockDeleteRoutine).toHaveBeenCalledWith('r1');
   });
 
   describe('Share', () => {

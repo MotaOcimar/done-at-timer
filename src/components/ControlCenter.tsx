@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   X,
   ChevronRight,
-  Trash2,
   Bell,
   BellOff,
   Save,
@@ -11,8 +10,8 @@ import {
   AlertTriangle,
   Info,
   Ban,
-  Share2,
 } from 'lucide-react';
+import { RoutineItem } from './RoutineItem';
 import { useTaskStore } from '../store/useTaskStore';
 import { useNotification } from '../hooks/useNotification';
 import { useInstallPrompt } from '../hooks/useInstallPrompt';
@@ -58,11 +57,15 @@ const ControlCenter = ({
   const [routineName, setRoutineName] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [activeSwipeId, setActiveSwipeId] = useState<string | null>(null);
   const [shareFeedback, setShareFeedback] = useState<{
     id: string;
     outcome: ShareOutcome;
   } | null>(null);
+
+  const handleSwipeDismissAll = useCallback((newId?: string) => {
+    setActiveSwipeId(newId || null);
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,10 +102,6 @@ const ControlCenter = ({
     }
   };
 
-  const initiateDelete = (id: string) => {
-    setConfirmDeleteId(id);
-  };
-
   const handleShare = async (routine: Routine) => {
     const baseUrl = `${window.location.origin}${window.location.pathname}`;
     const url = buildRoutineShareUrl(routine, baseUrl);
@@ -115,15 +114,7 @@ const ControlCenter = ({
     }
   };
 
-  const confirmDelete = () => {
-    if (confirmDeleteId) {
-      deleteRoutine(confirmDeleteId);
-      setConfirmDeleteId(null);
-    }
-  };
-
-  if (!isOpen && !confirmLoadId && !confirmDeleteId && !isSavingExternal)
-    return null;
+  if (!isOpen && !confirmLoadId && !isSavingExternal) return null;
 
   return (
     <>
@@ -212,108 +203,22 @@ const ControlCenter = ({
               ) : (
                 <div className="space-y-3">
                   {routines.map((routine) => (
-                    <div
+                    <RoutineItem
                       key={routine.id}
-                      className="group bg-gray-50 border border-transparent rounded-2xl hover:border-blue-200 hover:bg-white hover:shadow-md transition-all"
-                    >
-                      <div className="flex items-center justify-between p-4">
-                        <button
-                          type="button"
-                          onClick={() => toggleExpand(routine.id)}
-                          aria-expanded={expandedId === routine.id}
-                          className="flex-1 min-w-0 flex items-center text-left cursor-pointer"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-gray-800 truncate group-hover:text-blue-600 transition-colors">
-                              {routine.name}
-                            </h4>
-                            {shareFeedback?.id === routine.id ? (
-                              <p
-                                className={`text-[10px] font-bold uppercase tracking-tight ${shareFeedback.outcome === 'copied' ? 'text-green-500' : 'text-red-400'}`}
-                              >
-                                {shareFeedback.outcome === 'copied'
-                                  ? 'Link copied!'
-                                  : "Couldn't share"}
-                              </p>
-                            ) : (
-                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
-                                {routine.tasks.length} tasks •{' '}
-                                {routine.tasks.reduce(
-                                  (sum, t) => sum + t.duration,
-                                  0,
-                                )}
-                                m
-                              </p>
-                            )}
-                          </div>
-                          <div className="p-2 text-blue-500 opacity-60">
-                            <ChevronRight
-                              data-testid="routine-chevron"
-                              size={20}
-                              strokeWidth={2}
-                              className={`transition-transform duration-200 ${expandedId === routine.id ? 'rotate-90' : ''}`}
-                            />
-                          </div>
-                        </button>
-                        <div className="flex items-center gap-1">
-                          <button
-                            onClick={() => handleShare(routine)}
-                            className="p-2 text-gray-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
-                            aria-label="Share routine"
-                          >
-                            <Share2 size={20} strokeWidth={2} />
-                          </button>
-                          <button
-                            onClick={() => initiateDelete(routine.id)}
-                            className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                            aria-label="Delete routine"
-                          >
-                            <Trash2 size={20} strokeWidth={2} />
-                          </button>
-                        </div>
-                      </div>
-                      {/* Stays mounted so both expanding and collapsing can
-                          animate (grid-rows 0fr↔1fr); visibility is inline so
-                          the hidden state is real for assistive tech and
-                          computable outside the browser. */}
-                      <div
-                        style={{
-                          visibility:
-                            expandedId === routine.id ? 'visible' : 'hidden',
-                        }}
-                        className={`grid transition-[grid-template-rows,visibility] duration-200 ease-out ${
-                          expandedId === routine.id
-                            ? 'grid-rows-[1fr]'
-                            : 'grid-rows-[0fr]'
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <div className="px-4 pb-4">
-                            <ul className="mb-3 divide-y divide-gray-200">
-                              {routine.tasks.map((task, index) => (
-                                <li
-                                  key={index}
-                                  className="flex items-center justify-between gap-3 py-2 text-sm"
-                                >
-                                  <span className="text-gray-700 truncate">
-                                    {task.title}
-                                  </span>
-                                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight shrink-0">
-                                    {task.duration}m
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                            <button
-                              onClick={() => initiateLoad(routine.id)}
-                              className="w-full bg-blue-500 text-white py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-100"
-                            >
-                              Load routine
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      routine={routine}
+                      isExpanded={expandedId === routine.id}
+                      shareFeedback={
+                        shareFeedback?.id === routine.id
+                          ? shareFeedback.outcome
+                          : null
+                      }
+                      activeSwipeId={activeSwipeId}
+                      onSwipeDismissAll={handleSwipeDismissAll}
+                      onToggleExpand={toggleExpand}
+                      onLoad={initiateLoad}
+                      onShare={handleShare}
+                      onDelete={deleteRoutine}
+                    />
                   ))}
                 </div>
               )}
@@ -518,43 +423,6 @@ const ControlCenter = ({
               </button>
               <button
                 onClick={() => setConfirmLoadId(null)}
-                className="flex-1 bg-gray-50 text-gray-500 py-3 rounded-2xl font-bold hover:bg-gray-100 transition-all"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {confirmDeleteId && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div
-            role="presentation"
-            aria-hidden="true"
-            className="fixed inset-0 bg-black/40 backdrop-blur-md"
-            onClick={() => setConfirmDeleteId(null)}
-          />
-          <div className="bg-white rounded-3xl p-6 shadow-2xl border-2 border-red-100 max-w-sm w-full relative z-[70]">
-            <div className="bg-red-50 w-12 h-12 rounded-xl flex items-center justify-center text-red-500 mb-4">
-              <Trash2 size={24} strokeWidth={2} />
-            </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">
-              Delete this routine?
-            </h3>
-            <p className="text-gray-500 text-sm mb-6">
-              Are you sure you want to remove this routine? This action cannot
-              be undone.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={confirmDelete}
-                className="flex-1 bg-red-500 text-white py-3 rounded-2xl font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-100"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setConfirmDeleteId(null)}
                 className="flex-1 bg-gray-50 text-gray-500 py-3 rounded-2xl font-bold hover:bg-gray-100 transition-all"
               >
                 Cancel
