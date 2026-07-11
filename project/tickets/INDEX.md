@@ -32,3 +32,5 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-028 — Task card's overtime clock becomes an analog clock of the completion time (done)
 - TK-029 — Reveal each state icon's meaning to sighted users via an accessible tooltip (done)
 - TK-030 — Fix task staying blue instead of turning amber when it overruns after a re-run (done)
+- TK-031 — Delete routines via swipe, like tasks (open)
+- TK-032 — Show the time a routine would finish if started now (open)
