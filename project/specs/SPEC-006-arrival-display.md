@@ -23,7 +23,7 @@ The arrival time is the hero of the interface:
   forward the hands follow it, and a second hand sweeps continuously — smoothly and in
   sync with real time — as a calm sign of life. The icon takes the state color (above).
 - The clock **names itself** on demand. Because that big time is only ever an
-  *estimate* of arrival, tapping the whole clock group (or hovering / keyboard-focusing
+  _estimate_ of arrival, tapping the whole clock group (or hovering / keyboard-focusing
   it) reveals a small text bubble reading **"Estimated arrival time"** — and, when the
   estimate is slipping, **"Estimated arrival time — slipping"**. The wording is
   deliberately neutral (never "late") so it informs without alarming a user with time

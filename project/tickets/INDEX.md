@@ -34,3 +34,4 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-030 — Fix task staying blue instead of turning amber when it overruns after a re-run (done)
 - TK-031 — Delete routines via swipe, like tasks (open)
 - TK-032 — Show the time a routine would finish if started now (open)
+- TK-033 — Make npm run check pass again — Prettier two doc files (done)

@@ -58,13 +58,13 @@ together):
 
 - **Copy**: "Arrival time is locked / drifting" was too metaphorical, and "late"-type
   wording risks anxiety for the time-blindness audience. The clock is really an
-  *estimate*, so the text now **names it**: `Estimated arrival time`, and
+  _estimate_, so the text now **names it**: `Estimated arrival time`, and
   `Estimated arrival time — slipping` when drifting. Neutral verbs only, no "late".
 - **Anchor**: since the text names the number (not the icon's shape), the tooltip moved
   from the small state icon to the **whole clock group** (time + icon). The state icon
   is now decorative (`aria-hidden`) reinforcement.
 - **A11y**: the bubble is the group's `aria-describedby`, so the time stays the
-  accessible *value* and the meaning rides along as a *description* (never overriding
+  accessible _value_ and the meaning rides along as a _description_ (never overriding
   the number). `IconTooltip` and `AnalogClock` updated accordingly (the clock gained an
   `aria-hidden` decorative mode).
 
