@@ -75,10 +75,13 @@ const RoutineItem = ({
           </button>
         </motion.div>
 
-        {/* Swipeable row (header + preview slide together) */}
+        {/* Swipeable row (header + preview slide together). Rounded like
+            TaskCard so its trailing corners stay curved as it slides over the
+            red reveal — the container clips the leading corners to match. */}
         <motion.div
           {...dragProps}
-          className="relative bg-gray-50 group-hover:bg-white transition-colors"
+          data-testid="routine-swipeable"
+          className="relative rounded-2xl bg-gray-50 group-hover:bg-white transition-colors"
         >
           <div className="flex items-center justify-between p-4">
             <button

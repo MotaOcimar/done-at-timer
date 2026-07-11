@@ -125,9 +125,16 @@ describe('RoutineItem swipe-to-delete', () => {
   it('should make the row draggable on the x axis', () => {
     render(<RoutineItem {...baseProps} />);
 
-    const draggable = screen
-      .getAllByTestId('motion-div')
-      .find((el) => el.getAttribute('data-drag') === 'x');
-    expect(draggable).toBeTruthy();
+    expect(
+      screen.getByTestId('routine-swipeable').getAttribute('data-drag'),
+    ).toBe('x');
+  });
+
+  it('should keep the swiping row rounded so its corners stay curved mid-swipe', () => {
+    render(<RoutineItem {...baseProps} />);
+
+    expect(screen.getByTestId('routine-swipeable').className).toContain(
+      'rounded-2xl',
+    );
   });
 });

@@ -2,7 +2,7 @@
 id: TK-032
 title: Show the time a routine would finish if started now
 type: feature
-status: in-progress
+status: open
 specs: [SPEC-011, SPEC-012]
 ---
 
@@ -47,6 +47,9 @@ carries the same "when will I be done" information the running list has.
   while the drawer is open.
 
 ## Plan
+
+(Design settled; not started — held until TK-031 is accepted, one ticket at a
+time.)
 
 - [ ] Red: `RoutineItem` forecast tests — row shows pin + now+total time with
       sr-only meaning; expanded preview shows the IconTooltip'd forecast with
