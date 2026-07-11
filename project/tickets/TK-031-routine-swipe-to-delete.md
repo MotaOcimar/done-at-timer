@@ -16,9 +16,14 @@ deleted through an always-visible delete button on each row. User request
 (2026-07-11): make routine deletion the same swipe gesture — it frees space on the
 row and keeps the interaction consistent with the rest of the app.
 
-Open dilemma for planning: whether the confirmation dialog routine deletion has
-today survives the move to swipe (task swipe-delete has none), or the deliberate
-gesture is treated as the confirmation.
+## Design
+
+- **No confirmation dialog after the swipe** (decided with the user, 2026-07-11).
+  The gesture is already a two-step deletion: the swipe reveals the button —
+  signalling the user is entering a delete action — and the deliberate tap on it
+  confirms the intent, with a natural moment to reconsider in between. This is the
+  widespread mobile pattern and matches task deletion ([SPEC-009]), which has no
+  dialog either. The current routine-delete confirmation modal is removed.
 
 ## Acceptance criteria
 
