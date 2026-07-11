@@ -2,7 +2,7 @@
 id: TK-031
 title: Delete routines via swipe, like tasks
 type: feature
-status: in-review
+status: done
 specs: [SPEC-009, SPEC-011, SPEC-012]
 ---
 
@@ -60,3 +60,9 @@ row and keeps the interaction consistent with the rest of the app.
       tasks.
 - [x] SPEC-011 (and SPEC-009 or SPEC-012 as appropriate) updated to cover how
       routines are deleted.
+
+## Acceptance
+
+Accepted by the user on the running app, 2026-07-11 — after an in-review fix so
+the swiping row keeps its rounded corners (matching tasks), the swipe-to-delete
+was approved.
