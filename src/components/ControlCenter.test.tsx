@@ -108,12 +108,14 @@ describe('ControlCenter', () => {
   describe('Preview expansion', () => {
     it('should expand a routine on tap, showing its tasks without loading it', () => {
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      expect(screen.getByText('Task 1')).not.toBeVisible();
+
       fireEvent.click(screen.getByText(/Morning Routine/i));
 
-      expect(screen.getByText('Task 1')).toBeInTheDocument();
-      expect(screen.getByText('10m')).toBeInTheDocument();
-      expect(screen.getByText('Task 2')).toBeInTheDocument();
-      expect(screen.getByText('15m')).toBeInTheDocument();
+      expect(screen.getByText('Task 1')).toBeVisible();
+      expect(screen.getByText('10m')).toBeVisible();
+      expect(screen.getByText('Task 2')).toBeVisible();
+      expect(screen.getByText('15m')).toBeVisible();
       expect(mockLoadRoutine).not.toHaveBeenCalled();
       expect(
         screen.queryByText(/Replace current tasks\?/i),
@@ -125,10 +127,10 @@ describe('ControlCenter', () => {
       const routineItem = screen.getByText(/Morning Routine/i);
 
       fireEvent.click(routineItem);
-      expect(screen.getByText('Task 1')).toBeInTheDocument();
+      expect(screen.getByText('Task 1')).toBeVisible();
 
       fireEvent.click(routineItem);
-      expect(screen.queryByText('Task 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Task 1')).not.toBeVisible();
       expect(
         screen.queryByRole('button', { name: /Load routine/i }),
       ).not.toBeInTheDocument();
@@ -170,11 +172,11 @@ describe('ControlCenter', () => {
       render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
 
       fireEvent.click(screen.getByText(/Morning Routine/i));
-      expect(screen.getByText('Task 1')).toBeInTheDocument();
+      expect(screen.getByText('Task 1')).toBeVisible();
 
       fireEvent.click(screen.getByText(/Evening Routine/i));
-      expect(screen.getByText('Task 3')).toBeInTheDocument();
-      expect(screen.queryByText('Task 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Task 3')).toBeVisible();
+      expect(screen.getByText('Task 1')).not.toBeVisible();
     });
   });
 

@@ -272,31 +272,47 @@ const ControlCenter = ({
                           </button>
                         </div>
                       </div>
-                      {expandedId === routine.id && (
-                        <div className="px-4 pb-4">
-                          <ul className="mb-3 space-y-1.5">
-                            {routine.tasks.map((task, index) => (
-                              <li
-                                key={index}
-                                className="flex items-center justify-between gap-3 text-sm"
-                              >
-                                <span className="text-gray-600 truncate">
-                                  {task.title}
-                                </span>
-                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight shrink-0">
-                                  {task.duration}m
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                          <button
-                            onClick={() => initiateLoad(routine.id)}
-                            className="w-full bg-blue-500 text-white py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-100"
-                          >
-                            Load routine
-                          </button>
+                      {/* Stays mounted so both expanding and collapsing can
+                          animate (grid-rows 0fr↔1fr); visibility is inline so
+                          the hidden state is real for assistive tech and
+                          computable outside the browser. */}
+                      <div
+                        style={{
+                          visibility:
+                            expandedId === routine.id ? 'visible' : 'hidden',
+                        }}
+                        className={`grid transition-[grid-template-rows,visibility] duration-200 ease-out ${
+                          expandedId === routine.id
+                            ? 'grid-rows-[1fr]'
+                            : 'grid-rows-[0fr]'
+                        }`}
+                      >
+                        <div className="overflow-hidden">
+                          <div className="px-4 pb-4">
+                            <ul className="mb-3 divide-y divide-gray-200">
+                              {routine.tasks.map((task, index) => (
+                                <li
+                                  key={index}
+                                  className="flex items-center justify-between gap-3 py-2 text-sm"
+                                >
+                                  <span className="text-gray-700 truncate">
+                                    {task.title}
+                                  </span>
+                                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight shrink-0">
+                                    {task.duration}m
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                            <button
+                              onClick={() => initiateLoad(routine.id)}
+                              className="w-full bg-blue-500 text-white py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-100"
+                            >
+                              Load routine
+                            </button>
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   ))}
                 </div>

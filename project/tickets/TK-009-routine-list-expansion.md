@@ -53,6 +53,17 @@ proposed directly (single obvious answers, open to veto):
 - Out of scope: routine deletion changes (TK-031), the finish-time forecast
   (TK-032 adds it to this expanded view later).
 
+Refinements from `in-review` feedback (2026-07-11):
+
+- **The expansion animates** — a ~200ms ease-out slide open/closed. The preview
+  stays mounted while collapsed (hidden from view and assistive tech) so the
+  collapse can animate too. Note: the app has no `prefers-reduced-motion`
+  handling anywhere; none introduced here for consistency.
+- **Clearer separation between preview tasks** — thin dividers between rows
+  (chosen by the user over pill rows, dotted leaders, and zebra striping) plus
+  slightly darker names and taller rows, so short names don't leave the
+  estimate visually stranded on the right.
+
 ## Plan
 
 - [x] Write the failing tests: tap expands (no load, no confirmation), tap again
@@ -68,3 +79,7 @@ proposed directly (single obvious answers, open to veto):
       DOM-evidence checks passed (expand/collapse, accordion, rotated chevron,
       aria-expanded, load-with-confirmation replacing the list). Screenshots are
       not renderable in this environment; DOM evidence per the verify skill.
+- [x] in-review follow-up: expansion animation + divider-separated preview rows;
+      full suite green again and the 13 end-state checks re-passed (transitions
+      disabled in the harness — CSS transitions don't progress there; the motion
+      itself is for the reviewer's eyes).
