@@ -2,7 +2,7 @@
 id: TK-009
 title: Expand routine in the library to preview its tasks
 type: feature
-status: in-review
+status: done
 specs: [SPEC-011, SPEC-012]
 ---
 
@@ -83,3 +83,9 @@ Refinements from `in-review` feedback (2026-07-11):
       full suite green again and the 13 end-state checks re-passed (transitions
       disabled in the harness — CSS transitions don't progress there; the motion
       itself is for the reviewer's eyes).
+
+## Acceptance
+
+Accepted by the user on the running app, 2026-07-11 — first pass reviewed
+("ficou legal") with two refinements requested (animation, task separation);
+final pass with both applied confirmed good.

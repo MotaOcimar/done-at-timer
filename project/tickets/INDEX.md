@@ -10,7 +10,7 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-006 — Media-style notifications with progress and controls (open)
 - TK-007 — Track paused time and show it in the progress bar (open)
 - TK-008 — Mini time timers (circular remaining-time indicators) (open)
-- TK-009 — Expand routine in the library to preview its tasks (in-review)
+- TK-009 — Expand routine in the library to preview its tasks (done)
 - TK-010 — Dark mode with manual toggle (open)
 - TK-011 — Unify entry/exit animations for menus and modals (open)
 - TK-012 — Quick-complete a task without starting it (open)
