@@ -2,7 +2,7 @@
 id: TK-031
 title: Delete routines via swipe, like tasks
 type: feature
-status: open
+status: in-progress
 specs: [SPEC-009, SPEC-011, SPEC-012]
 ---
 
@@ -24,6 +24,29 @@ row and keeps the interaction consistent with the rest of the app.
   confirms the intent, with a natural moment to reconsider in between. This is the
   widespread mobile pattern and matches task deletion ([SPEC-009]), which has no
   dialog either. The current routine-delete confirmation modal is removed.
+- **Structure:** the routine row moves into its own `RoutineItem` component
+  (mirroring `TaskItem`) because the swipe hook (`useSwipeToReveal`) is
+  per-item. Reuses the hook and the reveal-area pattern as-is; no dnd-kit
+  complications (routines aren't reorderable).
+- **Keyboard fallback:** Delete key with the routine row focused, same as tasks
+  ([SPEC-009]).
+- Out of scope: any change to the expansion preview (TK-009) or share.
+
+## Plan
+
+- [ ] Red: `RoutineItem` wiring tests (mocked hook — reveal button behind,
+      revealed/hidden accessibility states, drag props applied) and updated
+      `ControlCenter` tests (delete via revealed button is immediate, no
+      confirmation modal, Delete key fallback).
+- [ ] Green: extract `RoutineItem`, wire `useSwipeToReveal` + shared
+      `activeSwipeId`, remove the visible delete button and the confirmation
+      modal.
+- [ ] Full suite + lint + format.
+- [ ] Update SPEC-009, SPEC-011, SPEC-012.
+- [ ] Self-check on the running app; move to `in-review`. (The drag gesture
+      itself cannot be driven in the frame-less headless environment — verify
+      the keyboard path end-to-end and rely on the hook's existing coverage +
+      manual acceptance for the gesture.)
 
 ## Acceptance criteria
 
