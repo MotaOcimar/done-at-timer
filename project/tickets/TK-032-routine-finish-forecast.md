@@ -2,7 +2,7 @@
 id: TK-032
 title: Show the time a routine would finish if started now
 type: feature
-status: open
+status: in-review
 specs: [SPEC-011, SPEC-012]
 ---
 
@@ -48,16 +48,23 @@ carries the same "when will I be done" information the running list has.
 
 ## Plan
 
-(Design settled; not started — held until TK-031 is accepted, one ticket at a
-time.)
+(Design settled; TK-031 accepted, so the hold is lifted.)
 
-- [ ] Red: `RoutineItem` forecast tests — row shows pin + now+total time with
-      sr-only meaning; expanded preview shows the IconTooltip'd forecast with
-      the agreed label; the display advances when the clock does.
-- [ ] Green: wire `useClock` into `RoutineItem`, render both placements.
-- [ ] Full suite + lint + format.
-- [ ] Update SPEC-011 and SPEC-012.
-- [ ] Self-check on the running app; move to `in-review`.
+- [x] Red: `RoutineItem` forecast tests (`RoutineItem.forecast.test.tsx`) — row
+      shows pin + now+total time with sr-only meaning; expanded preview shows the
+      IconTooltip'd forecast with the agreed label; the display advances when the
+      clock does.
+- [x] Green: wire `useClock` into `RoutineItem`, render both placements (module
+      `timeFormatter` reused from the task-ETA form).
+- [x] Full suite + lint + format (310 tests green; the lone App.test.tsx worker
+      timeout is the known PRoot flake — re-ran it alone, 3/3 pass).
+- [x] Update SPEC-011 and SPEC-012.
+- [x] Self-check on the running app; move to `in-review`. 7/7 end-to-end checks
+      passed (collapsed row shows pin + now+40m time with sr-only meaning; the
+      expanded preview repeats it as the interactive IconTooltip carrying the
+      "Estimated arrival time if started now" description; the row time equals a
+      freshly computed now+total). Live ticking wasn't watched for a full minute
+      on the app — covered by the unit test's fake-clock advance.
 
 ## Acceptance criteria
 

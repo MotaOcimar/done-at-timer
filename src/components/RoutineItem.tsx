@@ -1,8 +1,19 @@
-import { ChevronRight, Trash2, Share2 } from 'lucide-react';
+import { ChevronRight, Trash2, Share2, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSwipeToReveal } from '../hooks/useSwipeToReveal';
+import { useClock } from '../hooks/useClock';
+import { IconTooltip } from './IconTooltip';
 import type { Routine } from '../types';
 import type { ShareOutcome } from '../utils/shareService';
+
+/** 24h HH:MM, matching task ETAs (SPEC-010) and the arrival header (SPEC-006). */
+const timeFormatter = new Intl.DateTimeFormat('default', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+
+const FORECAST_LABEL = 'Estimated arrival time if started now';
 
 interface RoutineItemProps {
   routine: Routine;
@@ -40,6 +51,15 @@ const RoutineItem = ({
     activeSwipeId,
     onSwipeDismissAll,
   });
+
+  // The routine's finish time if started right now (SPEC-001/SPEC-005): now +
+  // sum of estimates, recomputed from the shared per-second clock so it never
+  // goes stale while the drawer is open (TK-032).
+  const now = useClock();
+  const totalMinutes = routine.tasks.reduce((sum, t) => sum + t.duration, 0);
+  const forecast = timeFormatter.format(
+    new Date(now.getTime() + totalMinutes * 60_000),
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Delete' && e.target === e.currentTarget) {
@@ -103,9 +123,30 @@ const RoutineItem = ({
                       : "Couldn't share"}
                   </p>
                 ) : (
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
-                    {routine.tasks.length} tasks •{' '}
-                    {routine.tasks.reduce((sum, t) => sum + t.duration, 0)}m
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight flex items-center gap-1.5">
+                    <span>
+                      {routine.tasks.length} tasks • {totalMinutes}m
+                    </span>
+                    {/* The pin + finish time, informative here (not the
+                        interactive TK-029 tooltip): the row's metadata line is
+                        already inside the expand-toggle button, and nesting a
+                        button is invalid HTML. The meaning rides along as
+                        screen-reader-only text; tapping the row still just
+                        expands it. The interactive tooltip lives in the
+                        expanded preview below. */}
+                    <span
+                      data-testid="routine-forecast"
+                      className="inline-flex items-center gap-0.5 text-gray-500"
+                    >
+                      <MapPin
+                        aria-hidden
+                        size={11}
+                        strokeWidth={2.5}
+                        className="opacity-70 shrink-0"
+                      />
+                      <span className="sr-only">{FORECAST_LABEL}: </span>
+                      {forecast}
+                    </span>
                   </p>
                 )}
               </div>
@@ -156,6 +197,25 @@ const RoutineItem = ({
                     </li>
                   ))}
                 </ul>
+                {/* Same forecast, repeated for interface consistency — here it
+                    can be the interactive TK-029 tooltip (legal nesting, no
+                    enclosing button). The pin is decorative; the time carries
+                    the accessible name and the label rides along as its
+                    description. */}
+                <div className="mb-3 flex justify-end">
+                  <IconTooltip
+                    label={FORECAST_LABEL}
+                    className="gap-1 text-xs font-bold tabular-nums text-gray-500"
+                  >
+                    <MapPin
+                      aria-hidden
+                      size={14}
+                      strokeWidth={2.5}
+                      className="opacity-70"
+                    />
+                    {forecast}
+                  </IconTooltip>
+                </div>
                 <button
                   onClick={() => onLoad(routine.id)}
                   className="w-full bg-blue-500 text-white py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-100"
