@@ -56,6 +56,7 @@ const ControlCenter = ({
   } = useInstallPrompt();
 
   const [routineName, setRoutineName] = useState('');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [confirmLoadId, setConfirmLoadId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [shareFeedback, setShareFeedback] = useState<{
@@ -77,6 +78,10 @@ const ControlCenter = ({
     if (onSaveComplete) onSaveComplete();
   };
 
+  const toggleExpand = (id: string) => {
+    setExpandedId((current) => (current === id ? null : id));
+  };
+
   const initiateLoad = (id: string) => {
     if (tasks.length > 0) {
       setConfirmLoadId(id);
@@ -94,13 +99,11 @@ const ControlCenter = ({
     }
   };
 
-  const initiateDelete = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
+  const initiateDelete = (id: string) => {
     setConfirmDeleteId(id);
   };
 
-  const handleShare = async (e: React.MouseEvent, routine: Routine) => {
-    e.stopPropagation();
+  const handleShare = async (routine: Routine) => {
     const baseUrl = `${window.location.origin}${window.location.pathname}`;
     const url = buildRoutineShareUrl(routine, baseUrl);
 
@@ -211,51 +214,89 @@ const ControlCenter = ({
                   {routines.map((routine) => (
                     <div
                       key={routine.id}
-                      onClick={() => initiateLoad(routine.id)}
-                      className="group flex items-center justify-between p-4 bg-gray-50 border border-transparent rounded-2xl hover:border-blue-200 hover:bg-white hover:shadow-md transition-all cursor-pointer"
+                      className="group bg-gray-50 border border-transparent rounded-2xl hover:border-blue-200 hover:bg-white hover:shadow-md transition-all"
                     >
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-gray-800 truncate group-hover:text-blue-600 transition-colors">
-                          {routine.name}
-                        </h4>
-                        {shareFeedback?.id === routine.id ? (
-                          <p
-                            className={`text-[10px] font-bold uppercase tracking-tight ${shareFeedback.outcome === 'copied' ? 'text-green-500' : 'text-red-400'}`}
-                          >
-                            {shareFeedback.outcome === 'copied'
-                              ? 'Link copied!'
-                              : "Couldn't share"}
-                          </p>
-                        ) : (
-                          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
-                            {routine.tasks.length} tasks •{' '}
-                            {routine.tasks.reduce(
-                              (sum, t) => sum + t.duration,
-                              0,
+                      <div className="flex items-center justify-between p-4">
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(routine.id)}
+                          aria-expanded={expandedId === routine.id}
+                          className="flex-1 min-w-0 flex items-center text-left cursor-pointer"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-gray-800 truncate group-hover:text-blue-600 transition-colors">
+                              {routine.name}
+                            </h4>
+                            {shareFeedback?.id === routine.id ? (
+                              <p
+                                className={`text-[10px] font-bold uppercase tracking-tight ${shareFeedback.outcome === 'copied' ? 'text-green-500' : 'text-red-400'}`}
+                              >
+                                {shareFeedback.outcome === 'copied'
+                                  ? 'Link copied!'
+                                  : "Couldn't share"}
+                              </p>
+                            ) : (
+                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+                                {routine.tasks.length} tasks •{' '}
+                                {routine.tasks.reduce(
+                                  (sum, t) => sum + t.duration,
+                                  0,
+                                )}
+                                m
+                              </p>
                             )}
-                            m
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <div className="p-2 text-blue-500 opacity-60">
-                          <ChevronRight size={20} strokeWidth={2} />
+                          </div>
+                          <div className="p-2 text-blue-500 opacity-60">
+                            <ChevronRight
+                              data-testid="routine-chevron"
+                              size={20}
+                              strokeWidth={2}
+                              className={`transition-transform duration-200 ${expandedId === routine.id ? 'rotate-90' : ''}`}
+                            />
+                          </div>
+                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleShare(routine)}
+                            className="p-2 text-gray-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                            aria-label="Share routine"
+                          >
+                            <Share2 size={20} strokeWidth={2} />
+                          </button>
+                          <button
+                            onClick={() => initiateDelete(routine.id)}
+                            className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                            aria-label="Delete routine"
+                          >
+                            <Trash2 size={20} strokeWidth={2} />
+                          </button>
                         </div>
-                        <button
-                          onClick={(e) => handleShare(e, routine)}
-                          className="p-2 text-gray-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
-                          aria-label="Share routine"
-                        >
-                          <Share2 size={20} strokeWidth={2} />
-                        </button>
-                        <button
-                          onClick={(e) => initiateDelete(e, routine.id)}
-                          className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                          aria-label="Delete routine"
-                        >
-                          <Trash2 size={20} strokeWidth={2} />
-                        </button>
                       </div>
+                      {expandedId === routine.id && (
+                        <div className="px-4 pb-4">
+                          <ul className="mb-3 space-y-1.5">
+                            {routine.tasks.map((task, index) => (
+                              <li
+                                key={index}
+                                className="flex items-center justify-between gap-3 text-sm"
+                              >
+                                <span className="text-gray-600 truncate">
+                                  {task.title}
+                                </span>
+                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight shrink-0">
+                                  {task.duration}m
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                          <button
+                            onClick={() => initiateLoad(routine.id)}
+                            className="w-full bg-blue-500 text-white py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-100"
+                          >
+                            Load routine
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

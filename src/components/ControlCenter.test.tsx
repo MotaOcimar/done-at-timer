@@ -35,7 +35,10 @@ describe('ControlCenter', () => {
     {
       id: 'r1',
       name: 'Morning Routine',
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', duration: 15, status: 'PENDING' },
+      ],
     },
   ];
 
@@ -95,11 +98,84 @@ describe('ControlCenter', () => {
     );
     const mockOnClose = vi.fn();
     render(<ControlCenter isOpen={true} onClose={mockOnClose} />);
-    const routineItem = screen.getByText(/Morning Routine/i);
-    fireEvent.click(routineItem);
+    fireEvent.click(screen.getByText(/Morning Routine/i));
+    fireEvent.click(screen.getByRole('button', { name: /Load routine/i }));
 
     expect(mockLoadRoutine).toHaveBeenCalledWith('r1');
     expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  describe('Preview expansion', () => {
+    it('should expand a routine on tap, showing its tasks without loading it', () => {
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      fireEvent.click(screen.getByText(/Morning Routine/i));
+
+      expect(screen.getByText('Task 1')).toBeInTheDocument();
+      expect(screen.getByText('10m')).toBeInTheDocument();
+      expect(screen.getByText('Task 2')).toBeInTheDocument();
+      expect(screen.getByText('15m')).toBeInTheDocument();
+      expect(mockLoadRoutine).not.toHaveBeenCalled();
+      expect(
+        screen.queryByText(/Replace current tasks\?/i),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should collapse an expanded routine on a second tap', () => {
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      const routineItem = screen.getByText(/Morning Routine/i);
+
+      fireEvent.click(routineItem);
+      expect(screen.getByText('Task 1')).toBeInTheDocument();
+
+      fireEvent.click(routineItem);
+      expect(screen.queryByText('Task 1')).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /Load routine/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should expose the state on the toggle: aria-expanded and rotated chevron', () => {
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+      const toggle = screen.getByRole('button', { name: /Morning Routine/i });
+      const chevron = screen.getByTestId('routine-chevron');
+
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+      expect(chevron.getAttribute('class') ?? '').not.toContain('rotate-90');
+
+      fireEvent.click(toggle);
+
+      expect(toggle).toHaveAttribute('aria-expanded', 'true');
+      expect(chevron.getAttribute('class')).toContain('rotate-90');
+    });
+
+    it('should keep at most one routine expanded at a time', () => {
+      (useTaskStore as any).mockImplementation((selector: any) =>
+        selector({
+          tasks: mockTasks,
+          routines: [
+            ...mockRoutines,
+            {
+              id: 'r2',
+              name: 'Evening Routine',
+              tasks: [
+                { id: '3', title: 'Task 3', duration: 20, status: 'PENDING' },
+              ],
+            },
+          ],
+          saveRoutine: mockSaveRoutine,
+          loadRoutine: mockLoadRoutine,
+          deleteRoutine: mockDeleteRoutine,
+        }),
+      );
+      render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
+
+      fireEvent.click(screen.getByText(/Morning Routine/i));
+      expect(screen.getByText('Task 1')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByText(/Evening Routine/i));
+      expect(screen.getByText('Task 3')).toBeInTheDocument();
+      expect(screen.queryByText('Task 1')).not.toBeInTheDocument();
+    });
   });
 
   it('should call onClose when clicking the main backdrop', () => {
@@ -167,18 +243,21 @@ describe('ControlCenter', () => {
     expect(mockSaveRoutine).toHaveBeenCalledWith('New Routine');
   });
 
+  const expandAndLoad = () => {
+    fireEvent.click(screen.getByText(/Morning Routine/i));
+    fireEvent.click(screen.getByRole('button', { name: /Load routine/i }));
+  };
+
   it('should show confirmation when trying to load a routine with existing tasks', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const routineItem = screen.getByText(/Morning Routine/i);
-    fireEvent.click(routineItem);
+    expandAndLoad();
 
     expect(screen.getByText(/Replace current tasks\?/i)).toBeInTheDocument();
   });
 
   it('should call loadRoutine when confirming load', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const routineItem = screen.getByText(/Morning Routine/i);
-    fireEvent.click(routineItem);
+    expandAndLoad();
 
     const loadButton = screen.getByRole('button', { name: /Yes, Load/i });
     fireEvent.click(loadButton);
@@ -188,8 +267,7 @@ describe('ControlCenter', () => {
 
   it('should close the load confirmation modal when clicking the backdrop', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const routineItem = screen.getByText(/Morning Routine/i);
-    fireEvent.click(routineItem);
+    expandAndLoad();
 
     expect(screen.getByText(/Replace current tasks\?/i)).toBeInTheDocument();
 
@@ -207,8 +285,7 @@ describe('ControlCenter', () => {
 
   it('should close the load confirmation modal when clicking the cancel button', () => {
     render(<ControlCenter isOpen={true} onClose={vi.fn()} />);
-    const routineItem = screen.getByText(/Morning Routine/i);
-    fireEvent.click(routineItem);
+    expandAndLoad();
 
     const cancelButton = screen.getByRole('button', { name: /Cancel/i });
     fireEvent.click(cancelButton);

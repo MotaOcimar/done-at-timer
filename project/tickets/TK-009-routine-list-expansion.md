@@ -2,7 +2,7 @@
 id: TK-009
 title: Expand routine in the library to preview its tasks
 type: feature
-status: in-progress
+status: in-review
 specs: [SPEC-011, SPEC-012]
 ---
 
@@ -24,13 +24,13 @@ out of scope — routine deletion becomes a swipe gesture in TK-031.
 
 ## Acceptance criteria
 
-- [ ] Tapping a routine (or its chevron) expands it in place, showing its tasks
+- [x] Tapping a routine (or its chevron) expands it in place, showing its tasks
       (names and durations) without loading it; tapping again collapses it.
-- [ ] The chevron rotates to reflect the expanded/collapsed state.
-- [ ] The expanded view offers the load action; the existing confirmation when the
+- [x] The chevron rotates to reflect the expanded/collapsed state.
+- [x] The expanded view offers the load action; the existing confirmation when the
       current list is non-empty is preserved.
-- [ ] No modal is involved in previewing.
-- [ ] SPEC-011 (and SPEC-012 if the Control Center layout changes) are updated.
+- [x] No modal is involved in previewing.
+- [x] SPEC-011 (and SPEC-012 if the Control Center layout changes) are updated.
 
 ## Design
 
@@ -55,12 +55,16 @@ proposed directly (single obvious answers, open to veto):
 
 ## Plan
 
-- [ ] Write the failing tests: tap expands (no load, no confirmation), tap again
+- [x] Write the failing tests: tap expands (no load, no confirmation), tap again
       collapses, accordion, chevron rotation + `aria-expanded`, load button
       behavior (empty list → immediate; non-empty → confirmation); adapt the
       existing load-by-tap tests to the new flow.
-- [ ] Implement the inline expansion in `ControlCenter.tsx` until green.
-- [ ] Full test run + lint + format.
-- [ ] Update SPEC-011 and SPEC-012.
-- [ ] Self-check on the running app (drive the flow, screenshot) and move to
-      `in-review`.
+- [x] Implement the inline expansion in `ControlCenter.tsx` until green.
+- [x] Full test run + lint + format (305 tests green; `npm run check` still
+      flags two doc files formatted before this ticket — untouched, out of
+      scope).
+- [x] Update SPEC-011 and SPEC-012.
+- [x] Self-check on the running app: headless-browser drive of the flow, 13/13
+      DOM-evidence checks passed (expand/collapse, accordion, rotated chevron,
+      aria-expanded, load-with-confirmation replacing the list). Screenshots are
+      not renderable in this environment; DOM evidence per the verify skill.

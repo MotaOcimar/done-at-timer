@@ -13,7 +13,9 @@ tasks and the arrival time.
 
 Sections:
 
-1. **Saved Libraries** — the routine list: load (tap) and delete ([SPEC-011]).
+1. **Saved Libraries** — the routine list: tap expands an inline preview of the
+   routine's tasks with the load action; share and delete sit on each row
+   ([SPEC-011]).
 2. **Preferences** — notification permission and toggle ([SPEC-014]); the section is
    hidden entirely on browsers without notification support.
 3. **App** — installation status and install action ([SPEC-015]).
@@ -28,3 +30,5 @@ delete routine) always ask for confirmation in a modal.
 ## Log
 
 - Seeded from code + conductor archive (2026-07-02)
+- TK-009: Saved Libraries rows now expand in place to preview tasks; loading
+  moved inside the preview (2026-07-11)

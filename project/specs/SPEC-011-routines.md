@@ -13,6 +13,11 @@ progress, no completion records: a routine is a template, not a session.
 - **Save** captures the current list under a name chosen by the user. Saving
   requires a non-empty list. Saving **always creates a new routine**, even if the
   list was loaded from an existing one.
+- **Preview**: tapping a routine in the library expands it in place — no modal —
+  listing its tasks in order with their estimates, without loading anything. At
+  most one routine is expanded at a time; the chevron on the row rotates to
+  signal the expanded state, and tapping again collapses it. The load action
+  lives inside the expanded preview.
 - **Load** replaces the current list with the routine's tasks, all starting as
   "to do". If the current list is not empty, the user must confirm the replacement
   (it is irreversible).
@@ -50,3 +55,5 @@ progress, no completion records: a routine is a template, not a session.
 - TK-001: pointed the edit-in-place limitation at TK-017 (2026-07-02)
 - TK-003: sharing research concluded — URL sharing planned as TK-021 (2026-07-03)
 - TK-021: routines can be shared and imported via URL (2026-07-03)
+- TK-009: tapping a routine now expands an inline preview of its tasks with the
+  load action, instead of loading directly (2026-07-11)
