@@ -17,9 +17,25 @@ product's core promise is converting durations into arrival times ([SPEC-001],
 finish if started at that moment (now + sum of estimates), so choosing a routine
 carries the same "when will I be done" information the running list has.
 
-Open dilemmas for planning: where the forecast lives (collapsed row, expanded
-preview from TK-009, or both), and its exact copy — it must read as a projection,
-in the app's calm tone, never as a deadline.
+## Design
+
+- **Placement: both the collapsed row and the expanded preview (TK-009)** —
+  decided with the user, 2026-07-11. On the row it gives an immediate sense of
+  when each routine would end without expanding it; repeating it in the expanded
+  view preserves interface consistency.
+- **Presentation: the map-pin + the time, tooltip on tap** — decided with the
+  user, 2026-07-11. The pin already means "estimated arrival time" across the app
+  (arrival header holding state [SPEC-006], per-task times on cards [SPEC-010]),
+  so the routine forecast reuses it rather than inventing a symbol: `MapPin` +
+  wall-clock time on the row and in the expanded preview, with the TK-029 tooltip
+  pattern naming it on demand. Tooltip copy extends the established neutral
+  wording: **"Estimated arrival time if started now"**.
+- **Considered and rejected: swapping the pin for a flag app-wide.** A flag reads
+  as finish line/goal — closer to a deadline than an arrival, against the app's
+  calm tone — while the pin belongs to the GPS metaphor the copy already uses
+  ("estimated arrival time"), has a learned vocabulary with variants
+  (`MapPinCheckInside` for arrived/done), and a structural swap would touch
+  SPEC-006/SPEC-010 surfaces for no clarity gain.
 
 ## Acceptance criteria
 
