@@ -2,7 +2,7 @@
 id: TK-030
 title: Fix task staying blue instead of turning amber when it overruns after a re-run
 type: bug
-status: in-review
+status: done
 specs: [SPEC-003]
 ---
 
@@ -81,7 +81,8 @@ mechanics); TK-002 (per-task partial progress); notification content/behavior.
 
 ## Acceptance
 
-(pending — user-facing bug; requires manual acceptance on the running app)
+Accepted by the user on 2026-07-11 ("Aqui deu certo também") on the running app —
+a task that had overrun before turns amber again when it overruns on a later run.
 
 ## Notes
 
