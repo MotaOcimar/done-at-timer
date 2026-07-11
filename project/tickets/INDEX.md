@@ -31,3 +31,4 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-027 — Arrival icon left of the clock; drifting icon is an analog clock of the ETA (done)
 - TK-028 — Task card's overtime clock becomes an analog clock of the completion time (done)
 - TK-029 — Reveal each state icon's meaning to sighted users via an accessible tooltip (done)
+- TK-030 — Fix task staying blue instead of turning amber when it overruns after a re-run (in-review)
