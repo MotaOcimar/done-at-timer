@@ -2,7 +2,7 @@
 id: TK-032
 title: Show the time a routine would finish if started now
 type: feature
-status: open
+status: in-progress
 specs: [SPEC-011, SPEC-012]
 ---
 
@@ -36,6 +36,25 @@ carries the same "when will I be done" information the running list has.
   ("estimated arrival time"), has a learned vocabulary with variants
   (`MapPinCheckInside` for arrived/done), and a structural swap would touch
   SPEC-006/SPEC-010 surfaces for no clarity gain.
+- **Tooltip placement detail** (surfaced during planning): the row's metadata
+  line lives inside the expand-toggle `<button>`, and `IconTooltip` is itself a
+  button — nesting is invalid HTML. Resolution: on the row the pin + time is
+  informative (with screen-reader-only text carrying the meaning); the
+  interactive TK-029 tooltip lives in the expanded preview, where nesting is
+  legal. Tapping the row keeps its single meaning: expand.
+- The forecast is `now + sum of estimates`, formatted like task ETAs (24h
+  HH:MM), recomputed from the shared per-second clock so it never goes stale
+  while the drawer is open.
+
+## Plan
+
+- [ ] Red: `RoutineItem` forecast tests — row shows pin + now+total time with
+      sr-only meaning; expanded preview shows the IconTooltip'd forecast with
+      the agreed label; the display advances when the clock does.
+- [ ] Green: wire `useClock` into `RoutineItem`, render both placements.
+- [ ] Full suite + lint + format.
+- [ ] Update SPEC-011 and SPEC-012.
+- [ ] Self-check on the running app; move to `in-review`.
 
 ## Acceptance criteria
 
