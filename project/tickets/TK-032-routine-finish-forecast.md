@@ -2,7 +2,7 @@
 id: TK-032
 title: Show the time a routine would finish if started now
 type: feature
-status: in-review
+status: done
 specs: [SPEC-011, SPEC-012]
 ---
 
@@ -45,6 +45,16 @@ carries the same "when will I be done" information the running list has.
 - The forecast is `now + sum of estimates`, formatted like task ETAs (24h
   HH:MM), recomputed from the shared per-second clock so it never goes stale
   while the drawer is open.
+- **Tooltip fit on narrow screens** (surfaced in review, 2026-07-15): the bubble
+  is centred on its trigger, which sits against the right edge of a card that
+  clips (`overflow-hidden` is load-bearing there — it keeps the swipe reveal
+  rounded for TK-031 and drives TK-009's grid-rows expand animation). With the
+  longest label in the app, 35% of it was cut off at every phone width, with no
+  scroll to reach the rest. Decided with the user: `IconTooltip` gains an
+  optional `align="end"` that anchors the bubble to the trigger's right edge and
+  wraps it within a set width. The default stays centred, so [SPEC-006]'s arrival
+  header is untouched. Rejected: shortening the agreed copy, and moving the
+  forecast to the left (still tight at 320px).
 
 ## Plan
 
@@ -66,11 +76,28 @@ carries the same "when will I be done" information the running list has.
       freshly computed now+total). Live ticking wasn't watched for a full minute
       on the app — covered by the unit test's fake-clock advance.
 
+### Review round 1 (2026-07-15)
+
+- [x] Reviewed end-to-end on the running app, 12/12 checks. Closes the gap left
+      above: the live minute rollover was watched on the real clock (row and
+      preview both advanced to the recomputed now+total). Also confirmed each
+      routine forecasts its own total, not a shared one.
+- [x] Red/Green: `IconTooltip` `align="end"` — bubble anchors right and wraps
+      within a set width; default stays centred (`ArrivalDisplay` unchanged).
+- [x] Green: `RoutineItem`'s preview forecast passes `align="end"`.
+- [x] Full suite + lint + format (316 tests green; no App.test.tsx flake this
+      run).
+- [x] Re-measured in the browser at 320/360/390/414: bubble 208px, 2 lines,
+      16px clearance from the clipping edge and 24px below — was 286px with
+      100px cut off. Arrival header byte-identical (178px, centred).
+
+- [x] Accepted by the user on the running app (2026-07-15).
+
 ## Acceptance criteria
 
-- [ ] Each routine displays the wall-clock time it would finish if started at that
+- [x] Each routine displays the wall-clock time it would finish if started at that
       moment.
-- [ ] The displayed time stays current while visible (it advances with the clock).
-- [ ] The label makes clear it is a projection of starting now, phrased calmly and
+- [x] The displayed time stays current while visible (it advances with the clock).
+- [x] The label makes clear it is a projection of starting now, phrased calmly and
       unambiguously.
-- [ ] SPEC-011 (and SPEC-012 if the layout changes) are updated.
+- [x] SPEC-011 (and SPEC-012 if the layout changes) are updated.
