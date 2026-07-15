@@ -205,6 +205,7 @@ const RoutineItem = ({
                 <div className="mb-3 flex justify-end">
                   <IconTooltip
                     label={FORECAST_LABEL}
+                    align="end"
                     className="gap-1 text-xs font-bold tabular-nums text-gray-500"
                   >
                     <MapPin
