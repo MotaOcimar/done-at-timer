@@ -21,14 +21,16 @@ progress, no completion records: a routine is a template, not a session.
 - **Finish forecast**: each routine shows the wall-clock time it would finish if
   started at that moment — the current time plus the sum of its estimates — so
   choosing a routine carries the same "when will I be done" information the
-  running list has ([SPEC-001], [SPEC-005]). It is shown in the same 24-hour form
-  as task arrival times and marked with the same map-pin symbol
-  ([SPEC-006], [SPEC-010]). It appears on the collapsed row and, repeated for
-  consistency, in the expanded preview, and it stays current while visible
-  (advancing with the clock). Its meaning — "estimated arrival time if started
-  now" — is available to assistive tech on the row and, in the expanded preview,
-  revealed on tap/hover/focus as a tooltip (the pattern established in
-  [SPEC-006]). Tapping the row itself keeps its single meaning: expand.
+  running list has ([SPEC-001], [SPEC-005]). It is shown as a full journey in
+  the route vocabulary ([SPEC-010]): a circle-dot departure reading the word
+  **"now"** (the departure is always the advancing present, so it is never a
+  numeric time) joined to the map-pin finish time — `◉ now ┄ ⌖ 18:40`. It
+  appears on the collapsed row and, repeated for consistency, in the expanded
+  preview, and it stays current while visible (advancing with the clock). Its
+  meaning — "Leaving now · estimated arrival" — is available to assistive tech
+  on the row and, in the expanded preview, revealed on tap/hover/focus as a
+  tooltip (the pattern established in [SPEC-006]). Tapping the row itself keeps
+  its single meaning: expand.
 - **Load** replaces the current list with the routine's tasks, all starting as
   "to do". If the current list is not empty, the user must confirm the replacement
   (it is irreversible).
@@ -77,3 +79,6 @@ progress, no completion records: a routine is a template, not a session.
 - TK-032: each routine now shows its now+total finish time (map-pin + 24h time)
   on the row and in the expanded preview, live-updating with the clock
   (2026-07-11)
+- TK-034: the forecast became an explicit departure–arrival pair (◉ now ┄ ⌖
+  finish); the tooltip label reworded to "Leaving now · estimated arrival"
+  (2026-07-16)

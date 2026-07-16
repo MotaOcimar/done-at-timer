@@ -2,7 +2,7 @@
 id: TK-034
 title: Show start/departure times alongside every arrival time
 type: feature
-status: in-progress
+status: in-review
 specs: [SPEC-002, SPEC-006, SPEC-010, SPEC-011, SPEC-012]
 ---
 
@@ -91,23 +91,34 @@ endpoint** — when the thing started, or is predicted to start:
 `startedAt` recording/persistence already exists — TK-037 laid it as part of
 the sources-of-truth reshape, so this ticket is UI + projection only.)
 
-- [ ] Red/Green: shared `RoutePair` component — circle-dot origin + dashed
+- [x] Red/Green: shared `RoutePair` component — circle-dot origin + dashed
       connector + pin arrival; renders a live origin as the word "now";
-      origin omissible (legacy done tasks); completed-pin variant.
-- [ ] Red/Green: task cards — done shows actual start (◉ omitted when
+      origin omissible (legacy done tasks); completed-pin variant. (dc5c1a2)
+- [x] Red/Green: task cards — done shows actual start (◉ omitted when
       absent), running shows actual start under the progress bar, to-do
       shows predicted start (= ETA − own estimate; the word "now" when the
-      predicted start is not in the future).
-- [ ] Red/Green: arrival header — start endpoint paired with the big clock:
+      predicted start is not in the future). (dc5c1a2)
+- [x] Red/Green: arrival header — start endpoint paired with the big clock:
       live "now" before anything starts, fixed at the first task's actual
-      start (earliest recorded start) once underway.
-- [ ] Red/Green: routine rows — pair the forecast as `◉ now ┄ ⌖ HH:MM`;
-      tooltip copy becomes "Leaving now · estimated arrival".
-- [ ] Specs: update SPEC-006, SPEC-010, SPEC-011; review SPEC-002 (start
-      moment likely already there via TK-037) and SPEC-012 for touches.
-- [ ] Full suite + lint + format; self-check on the running app (verify
-      skill), then `in-review` for the user's acceptance (header
-      micro-placement explicitly open to veto there).
+      start (earliest recorded start) once underway. Placed at the left of
+      the progress footer, opposite "N min left". (dc5c1a2)
+- [x] Red/Green: routine rows — pair the forecast as `◉ now ┄ ⌖ HH:MM`;
+      tooltip copy becomes "Leaving now · estimated arrival". (dc5c1a2)
+- [x] Specs: SPEC-006, SPEC-010 (defines the route-pair vocabulary),
+      SPEC-011 updated. Reviewed with no text change needed: SPEC-002 (the
+      start moment was already modeled there by TK-037) and SPEC-012 (row
+      presentation details live in SPEC-011, which it references).
+- [x] Full suite + lint + format (353 tests green, build passes);
+      self-check on the running app (verify skill, headless browser) —
+      10/10 checks: to-do chain predicts starts ("now" → first ETA), actual
+      starts on running/done cards, header start fixed through pause and
+      auto-advance. Moved to `in-review`.
+
+> State: implementation complete, awaiting the user's manual acceptance on
+> the running app. Open to veto there: header start placement (left of the
+> progress footer) and the lowercase "now" styling inside uppercase label
+> rows. TK-036 is also at `in-review`. Next: TK-035 (design still to close
+> with the user).
 
 ## Notes
 

@@ -35,7 +35,7 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-031 — Delete routines via swipe, like tasks (done)
 - TK-032 — Show the time a routine would finish if started now (done)
 - TK-033 — Make npm run check pass again — Prettier two doc files (done)
-- TK-034 — Show start/departure times alongside every arrival time (in-progress)
+- TK-034 — Show start/departure times alongside every arrival time (in-review)
 - TK-035 — Save a departure time on a routine (example forecast) (open)
 - TK-036 — Arrival clock flickers between two consecutive minutes (in-review)
 - TK-037 — Reshape persisted state — store sources of truth, derive the rest (done)

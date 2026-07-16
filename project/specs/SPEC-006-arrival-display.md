@@ -36,6 +36,13 @@ The arrival time is the hero of the interface:
   running (not paused or in overtime), the bar shows continuous forward-flowing
   motion, signaling live progress; in overtime it instead gently breathes
   (pulsing brightness) to signal the task is still live.
+- On the same line as "N min left", at the left, the **routine's start endpoint**
+  in the route vocabulary ([SPEC-010]): a circle-dot with the moment the **first
+  task actually started**, fixed once the session is underway (pauses don't move
+  it; resetting the list clears it). Before anything starts it reads the word
+  **"now"** — the advancing present, "if you leave now" — so the journey's two
+  endpoints (◉ start, the big pinned clock as arrival) are always both visible.
+  With an empty list there is no journey and no start endpoint.
 - When **every task is done**, the display becomes a green celebration card
   ("Well Done") and confetti fires once.
 
@@ -48,6 +55,8 @@ The arrival time is the hero of the interface:
 ## Log
 
 - Seeded from code + conductor archive (2026-07-02)
+- TK-034: the progress footer gained the routine's start endpoint — circle-dot,
+  first task's actual start, the word "now" before anything starts (2026-07-16)
 - TK-015: running arrival progress bar shows forward-flowing motion instead of a pulse (2026-07-08)
 - TK-025: overtime arrival progress bar gently breathes to signal it's still live (2026-07-08)
 - TK-026: made the running sweep visible on the white arrival fill (blue tint) (2026-07-08)
