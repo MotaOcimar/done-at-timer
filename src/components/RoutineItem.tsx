@@ -139,7 +139,7 @@ const RoutineItem = ({
                       className="inline-flex items-center gap-1 text-gray-500"
                     >
                       <span className="sr-only">{FORECAST_LABEL}: </span>
-                      <RoutePair start="now" end={forecast} iconSize={11} />
+                      <RoutePair start="now" end={forecast} />
                     </span>
                   </p>
                 )}
@@ -202,7 +202,7 @@ const RoutineItem = ({
                     align="end"
                     className="gap-1 text-xs font-bold text-gray-500"
                   >
-                    <RoutePair start="now" end={forecast} iconSize={14} />
+                    <RoutePair start="now" end={forecast} />
                   </IconTooltip>
                 </div>
                 <button

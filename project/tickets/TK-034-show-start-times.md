@@ -118,6 +118,10 @@ the sources-of-truth reshape, so this ticket is UI + projection only.)
       **vertically** — origin above, arrival below, dashed segment between
       the glyphs — instead of the inline form. Header and routine rows stay
       horizontal.
+- [x] Review refinement (user, 2026-07-16): the route glyphs were reading
+      slightly bigger than the numbers — now sized relative to the host
+      text (0.75em), slightly under the digit height, everywhere the pair
+      or the header ◉ appears.
 
 > State: implementation complete, awaiting the user's manual acceptance on
 > the running app. Open to veto there: header start placement (left of the

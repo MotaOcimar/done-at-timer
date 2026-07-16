@@ -235,11 +235,12 @@ const ArrivalDisplay = () => {
               reads as the journey's context under the big arrival clock. */}
           {tasks.length > 0 ? (
             <span className="inline-flex items-center gap-1">
+              {/* Same relative sizing as RoutePair's glyphs: slightly under
+                  the digit height, never bigger than the numbers. */}
               <CircleDot
                 aria-hidden
-                size={12}
                 strokeWidth={2.5}
-                className="opacity-70 shrink-0"
+                className="opacity-70 shrink-0 w-[0.75em] h-[0.75em]"
               />
               <span className="sr-only">Start time: </span>
               <span

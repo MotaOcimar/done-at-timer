@@ -16,6 +16,14 @@ describe('RoutePair', () => {
     expect(container.querySelector('.lucide-circle-dot')).not.toBeNull();
     expect(screen.getByTestId('route-connector')).toBeInTheDocument();
     expect(container.querySelector('.lucide-map-pin')).not.toBeNull();
+    // Glyphs are sized relative to the text and slightly under the digit
+    // height, so they never read bigger than the numbers (user feedback).
+    expect(container.querySelector('.lucide-circle-dot')).toHaveClass(
+      'w-[0.75em]',
+    );
+    expect(container.querySelector('.lucide-map-pin')).toHaveClass(
+      'w-[0.75em]',
+    );
   });
 
   it('renders a live origin as the word "now", never a numeric time', () => {

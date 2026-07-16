@@ -293,7 +293,6 @@ const TaskCard = ({
               <RoutePair
                 start={routeStart}
                 end={eta}
-                iconSize={14}
                 vertical
                 className={`text-sm font-bold tracking-tight ${
                   timeDisplayClasses[cardState]

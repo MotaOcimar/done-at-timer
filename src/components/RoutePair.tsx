@@ -18,8 +18,6 @@ interface RoutePairProps {
   end: Date;
   /** Arrival already reached — uses the checked pin (matches done cards). */
   completed?: boolean;
-  /** Icon size in px, to blend into the host's type scale. */
-  iconSize?: number;
   /**
    * Stack the endpoints as a vertical itinerary (origin above, arrival
    * below, dashed segment between the glyphs) — the task cards' layout.
@@ -34,11 +32,15 @@ interface RoutePairProps {
  * route, map-pin arrival — `◉ 14:10 ┄┄ ⌖ 14:25`. Colors and type come from
  * the host via className/currentColor so the pair blends into any card state.
  */
+// Sized against the host text, slightly under the digits' visual height, so
+// the glyphs never read bigger than the numbers they accompany (user
+// feedback at TK-034 review).
+const GLYPH_CLASSES = 'opacity-70 shrink-0 w-[0.75em] h-[0.75em]';
+
 const RoutePair = ({
   start,
   end,
   completed = false,
-  iconSize = 10,
   vertical = false,
   className = '',
 }: RoutePairProps) => {
@@ -46,12 +48,7 @@ const RoutePair = ({
 
   const origin = start != null && (
     <span className="inline-flex items-center gap-1">
-      <CircleDot
-        aria-hidden
-        size={iconSize}
-        strokeWidth={2.5}
-        className="opacity-70 shrink-0"
-      />
+      <CircleDot aria-hidden strokeWidth={2.5} className={GLYPH_CLASSES} />
       {/* normal-case so the word "now" stays lowercase (calm, not NOW)
           even inside the app's uppercase label rows */}
       <span data-testid="route-start" className="normal-case">
@@ -62,12 +59,7 @@ const RoutePair = ({
 
   const arrival = (
     <span className="inline-flex items-center gap-1">
-      <EndPin
-        aria-hidden
-        size={iconSize}
-        strokeWidth={2.5}
-        className="opacity-70 shrink-0"
-      />
+      <EndPin aria-hidden strokeWidth={2.5} className={GLYPH_CLASSES} />
       <span data-testid="route-end">{timeFormatter.format(end)}</span>
     </span>
   );
@@ -86,10 +78,9 @@ const RoutePair = ({
           aria-hidden
           data-testid="route-connector"
           className={`shrink-0 border-dashed border-current opacity-50 ${
-            vertical ? 'h-2 border-l my-0.5' : 'w-3 border-t'
+            // ml centers the vertical segment under the 0.75em origin glyph.
+            vertical ? 'h-2 border-l my-0.5 ml-[0.375em]' : 'w-3 border-t'
           }`}
-          // Centered under the origin glyph in vertical mode.
-          style={vertical ? { marginLeft: iconSize / 2 } : undefined}
         />
       )}
       {arrival}
