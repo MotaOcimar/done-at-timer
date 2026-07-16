@@ -71,7 +71,11 @@ export const useTaskStore = create<TaskState>()(
           if (nextTask) {
             const finalTasks = newTasks.map((t) =>
               t.id === nextTask.id
-                ? { ...t, status: 'IN_PROGRESS' as const }
+                ? {
+                    ...t,
+                    status: 'IN_PROGRESS' as const,
+                    startedAt: Date.now(),
+                  }
                 : t,
             );
             set({
@@ -130,12 +134,13 @@ export const useTaskStore = create<TaskState>()(
               isTimeUp = false;
 
               // Reorder: newly active task moves after all COMPLETED tasks
-              // Ensure other tasks are not IN_PROGRESS
+              // Ensure other tasks are not IN_PROGRESS. The started task gets
+              // its run anchor; a demoted task's aborted run loses its anchor.
               const tasksWithCorrectStatus = newTasks.map((t) =>
                 t.id === id
-                  ? t
+                  ? { ...t, startedAt: Date.now() }
                   : t.status === 'IN_PROGRESS'
-                    ? { ...t, status: 'PENDING' as const }
+                    ? { ...t, status: 'PENDING' as const, startedAt: undefined }
                     : t,
               );
 
@@ -247,7 +252,9 @@ export const useTaskStore = create<TaskState>()(
         if (nextTask) {
           // 3. Start next task
           const finalTasks = newTasks.map((t) =>
-            t.id === nextTask.id ? { ...t, status: 'IN_PROGRESS' as const } : t,
+            t.id === nextTask.id
+              ? { ...t, status: 'IN_PROGRESS' as const, startedAt: Date.now() }
+              : t,
           );
           set({
             tasks: finalTasks,
@@ -274,6 +281,7 @@ export const useTaskStore = create<TaskState>()(
           tasks: state.tasks.map((task) => ({
             ...task,
             status: 'PENDING',
+            startedAt: undefined,
             completedAt: undefined,
             actualDuration: undefined,
           })),

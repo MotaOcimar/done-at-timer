@@ -5,6 +5,7 @@ export interface Task {
   title: string;
   duration: number; // in minutes
   actualDuration?: number; // in minutes
+  startedAt?: number; // timestamp of the current/last run's start
   completedAt?: number; // timestamp
   status: TaskStatus;
 }
