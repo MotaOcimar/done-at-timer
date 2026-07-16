@@ -13,8 +13,10 @@ checkpoint" for that step.
 
 **The route pair.** Both endpoints render in the app's maps vocabulary: a
 **circle-dot** (route origin) for the start, joined by a **dashed path** to the
-**map-pin** (arrival) for the finish — `◉ 14:10 ┄ ⌖ 14:25`. Times are 24-hour
-HH:MM. An origin that tracks the advancing present reads as the word **"now"**
+**map-pin** (arrival) for the finish. On task cards the pair stacks
+**vertically** — origin above, arrival below, like an itinerary; elsewhere
+(arrival header, routine rows) it reads inline — `◉ 14:10 ┄ ⌖ 14:25`. Times
+are 24-hour HH:MM. An origin that tracks the advancing present reads as the word **"now"**
 (lowercase, calm) — a numeric origin always means a fixed moment, actual or
 predicted, so the user never has to compare a number against the clock to tell
 "current" from "scheduled". This vocabulary is shared with the arrival header
@@ -59,4 +61,5 @@ Title and duration are editable in place ([SPEC-008]).
 - TK-028: overtime status icon is now an analog clock of the task's completion time, no second hand (2026-07-09)
 - TK-034: every ETA became a route pair — circle-dot start joined to the map-pin
   arrival; actual starts on running/done cards, predicted starts on to-do cards,
-  live starts read as the word "now" (2026-07-16)
+  live starts read as the word "now"; review refinement: on cards the pair
+  stacks vertically (2026-07-16)
