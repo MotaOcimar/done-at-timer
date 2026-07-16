@@ -18,12 +18,15 @@ describe('RoutePair', () => {
     expect(container.querySelector('.lucide-map-pin')).not.toBeNull();
     // Glyphs are sized relative to the text and slightly under the digit
     // height, so they never read bigger than the numbers (user feedback).
-    expect(container.querySelector('.lucide-circle-dot')).toHaveClass(
-      'w-[0.75em]',
-    );
-    expect(container.querySelector('.lucide-map-pin')).toHaveClass(
-      'w-[0.75em]',
-    );
+    // They also nudge up to the digits' optical center: flex centering uses
+    // the whole line box (which includes descender space below the
+    // baseline), which would leave them sitting visibly lower.
+    for (const selector of ['.lucide-circle-dot', '.lucide-map-pin']) {
+      expect(container.querySelector(selector)).toHaveClass('w-[0.75em]');
+      expect(container.querySelector(selector)).toHaveClass(
+        '-translate-y-[0.07em]',
+      );
+    }
   });
 
   it('renders a live origin as the word "now", never a numeric time', () => {

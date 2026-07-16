@@ -33,9 +33,12 @@ interface RoutePairProps {
  * the host via className/currentColor so the pair blends into any card state.
  */
 // Sized against the host text, slightly under the digits' visual height, so
-// the glyphs never read bigger than the numbers they accompany (user
-// feedback at TK-034 review).
-const GLYPH_CLASSES = 'opacity-70 shrink-0 w-[0.75em] h-[0.75em]';
+// the glyphs never read bigger than the numbers they accompany; nudged up to
+// the digits' optical center, because flex centering works on the full line
+// box — descender space included — which parks an icon visibly below digits
+// that only exist above the baseline (user feedback at TK-034 review).
+const GLYPH_CLASSES =
+  'opacity-70 shrink-0 w-[0.75em] h-[0.75em] -translate-y-[0.07em]';
 
 const RoutePair = ({
   start,
