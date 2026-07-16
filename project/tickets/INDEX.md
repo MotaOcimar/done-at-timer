@@ -38,4 +38,4 @@ One line per ticket: `ID — title (status)`. Content lives in the files, never 
 - TK-034 — Show start/departure times alongside every arrival time (open)
 - TK-035 — Save a departure time on a routine (example forecast) (open)
 - TK-036 — Arrival clock flickers between two consecutive minutes (open)
-- TK-037 — Reshape persisted state — store sources of truth, derive the rest (open)
+- TK-037 — Reshape persisted state — store sources of truth, derive the rest (done)

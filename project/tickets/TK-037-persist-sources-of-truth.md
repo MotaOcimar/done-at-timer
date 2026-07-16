@@ -2,7 +2,7 @@
 id: TK-037
 title: Reshape persisted state — store sources of truth, derive the rest
 type: chore
-status: in-progress
+status: done
 specs: [SPEC-002, SPEC-003, SPEC-013]
 ---
 
@@ -108,10 +108,18 @@ Proposed shape (from the user's note):
       `startedAt`, dropped fields; routines untouched beyond the rename).
       (e3722e3)
 - [x] Full suite + lint + format (332 tests green, tsc clean).
-- [ ] Update SPEC-002 and SPEC-013 (stored-model descriptions only).
-- [ ] Manual check on the running app: a pre-change localStorage snapshot
-      loads with tasks, routines, running timer and notification preference
-      intact (reload mid-run and mid-pause).
+- [x] Update SPEC-002 and SPEC-013 (stored-model descriptions only; SPEC-003
+      needed no change — the behavior it describes was preserved). (c93163d)
+- [x] Manual check on the running app: a same-origin seed page wrote a
+      realistic v0 snapshot (generic titles) into localStorage of the built
+      app; the user drove both scenarios on their device — mid-run (done +
+      running + pending tasks, routine, notifications off) and mid-pause
+      (6 of 10 min left) — everything intact.
+
+## Acceptance
+
+Chore, normally exempt — gated anyway because a migration can lose data.
+Accepted by the user on the built app (preview + v0 seed page), 2026-07-16.
 
 ## Notes
 
