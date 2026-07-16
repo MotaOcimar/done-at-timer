@@ -268,6 +268,7 @@ const TaskCard = ({
               start={routeStart}
               end={eta}
               completed={isCompleted}
+              vertical
               className={`text-xs font-bold pr-1 ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}
             />
           )}
@@ -293,6 +294,7 @@ const TaskCard = ({
                 start={routeStart}
                 end={eta}
                 iconSize={14}
+                vertical
                 className={`text-sm font-bold tracking-tight ${
                   timeDisplayClasses[cardState]
                 }`}

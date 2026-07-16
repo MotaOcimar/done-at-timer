@@ -20,6 +20,12 @@ interface RoutePairProps {
   completed?: boolean;
   /** Icon size in px, to blend into the host's type scale. */
   iconSize?: number;
+  /**
+   * Stack the endpoints as a vertical itinerary (origin above, arrival
+   * below, dashed segment between the glyphs) — the task cards' layout.
+   * Default is the inline horizontal form.
+   */
+  vertical?: boolean;
   className?: string;
 }
 
@@ -33,35 +39,29 @@ const RoutePair = ({
   end,
   completed = false,
   iconSize = 10,
+  vertical = false,
   className = '',
 }: RoutePairProps) => {
   const EndPin = completed ? MapPinCheckInside : MapPin;
 
-  return (
-    <span
-      data-testid="route-pair"
-      className={`inline-flex items-center gap-1 tabular-nums whitespace-nowrap ${className}`}
-    >
-      {start != null && (
-        <>
-          <CircleDot
-            aria-hidden
-            size={iconSize}
-            strokeWidth={2.5}
-            className="opacity-70 shrink-0"
-          />
-          {/* normal-case so the word "now" stays lowercase (calm, not NOW)
-              even inside the app's uppercase label rows */}
-          <span data-testid="route-start" className="normal-case">
-            {start === 'now' ? 'now' : timeFormatter.format(start)}
-          </span>
-          <span
-            aria-hidden
-            data-testid="route-connector"
-            className="w-3 shrink-0 border-t border-dashed border-current opacity-50"
-          />
-        </>
-      )}
+  const origin = start != null && (
+    <span className="inline-flex items-center gap-1">
+      <CircleDot
+        aria-hidden
+        size={iconSize}
+        strokeWidth={2.5}
+        className="opacity-70 shrink-0"
+      />
+      {/* normal-case so the word "now" stays lowercase (calm, not NOW)
+          even inside the app's uppercase label rows */}
+      <span data-testid="route-start" className="normal-case">
+        {start === 'now' ? 'now' : timeFormatter.format(start)}
+      </span>
+    </span>
+  );
+
+  const arrival = (
+    <span className="inline-flex items-center gap-1">
       <EndPin
         aria-hidden
         size={iconSize}
@@ -69,6 +69,30 @@ const RoutePair = ({
         className="opacity-70 shrink-0"
       />
       <span data-testid="route-end">{timeFormatter.format(end)}</span>
+    </span>
+  );
+
+  return (
+    <span
+      data-testid="route-pair"
+      data-orientation={vertical ? 'vertical' : 'horizontal'}
+      className={`inline-flex tabular-nums whitespace-nowrap ${
+        vertical ? 'flex-col items-start' : 'items-center gap-1'
+      } ${className}`}
+    >
+      {origin}
+      {start != null && (
+        <span
+          aria-hidden
+          data-testid="route-connector"
+          className={`shrink-0 border-dashed border-current opacity-50 ${
+            vertical ? 'h-2 border-l my-0.5' : 'w-3 border-t'
+          }`}
+          // Centered under the origin glyph in vertical mode.
+          style={vertical ? { marginLeft: iconSize / 2 } : undefined}
+        />
+      )}
+      {arrival}
     </span>
   );
 };

@@ -34,6 +34,26 @@ describe('RoutePair', () => {
     expect(screen.getByTestId('route-end')).toHaveTextContent('14:25');
   });
 
+  it('stacks the endpoints vertically when asked (task cards)', () => {
+    render(<RoutePair start={start} end={end} vertical />);
+
+    const pair = screen.getByTestId('route-pair');
+    expect(pair).toHaveAttribute('data-orientation', 'vertical');
+    expect(pair).toHaveClass('flex-col');
+    // The connector becomes a vertical dashed segment under the origin glyph.
+    expect(screen.getByTestId('route-connector')).toHaveClass('border-l');
+    expect(screen.getByTestId('route-start')).toHaveTextContent('14:10');
+    expect(screen.getByTestId('route-end')).toHaveTextContent('14:25');
+  });
+
+  it('omits origin and connector in vertical mode too when there is no start', () => {
+    render(<RoutePair end={end} vertical />);
+
+    expect(screen.queryByTestId('route-start')).toBeNull();
+    expect(screen.queryByTestId('route-connector')).toBeNull();
+    expect(screen.getByTestId('route-end')).toHaveTextContent('14:25');
+  });
+
   it('uses the checked pin for completed arrivals', () => {
     const { container } = render(
       <RoutePair start={start} end={end} completed />,

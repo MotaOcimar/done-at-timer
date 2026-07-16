@@ -114,11 +114,15 @@ the sources-of-truth reshape, so this ticket is UI + projection only.)
       starts on running/done cards, header start fixed through pause and
       auto-advance. Moved to `in-review`.
 
+- [x] Review refinement (user, 2026-07-16): on task cards the pair stacks
+      **vertically** — origin above, arrival below, dashed segment between
+      the glyphs — instead of the inline form. Header and routine rows stay
+      horizontal.
+
 > State: implementation complete, awaiting the user's manual acceptance on
 > the running app. Open to veto there: header start placement (left of the
 > progress footer) and the lowercase "now" styling inside uppercase label
-> rows. TK-036 is also at `in-review`. Next: TK-035 (design still to close
-> with the user).
+> rows. TK-036 is also at `in-review`.
 
 ## Notes
 

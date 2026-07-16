@@ -101,6 +101,49 @@ describe('TaskCard route pair (TK-034)', () => {
     expect(screen.getByTestId('route-end')).toHaveTextContent('08:32');
   });
 
+  it('stacks the pair vertically on cards (user feedback at TK-034 review)', () => {
+    const now = new Date('2026-01-01T13:00:00Z');
+    const eta = new Date('2026-01-01T13:30:00Z');
+
+    const { rerender } = render(
+      <TaskCard
+        task={baseTask}
+        isActive={false}
+        isCompleted={false}
+        cardState="idle"
+        eta={eta}
+        now={now}
+        {...noop()}
+      />,
+    );
+    expect(screen.getByTestId('route-pair')).toHaveAttribute(
+      'data-orientation',
+      'vertical',
+    );
+
+    rerender(
+      <TaskCard
+        task={{
+          ...baseTask,
+          status: 'IN_PROGRESS',
+          startedAt: now.getTime(),
+        }}
+        isActive={true}
+        isCompleted={false}
+        cardState="running"
+        timeLeft={300}
+        progress={0.5}
+        eta={eta}
+        now={now}
+        {...noop()}
+      />,
+    );
+    expect(screen.getByTestId('route-pair')).toHaveAttribute(
+      'data-orientation',
+      'vertical',
+    );
+  });
+
   it('running card pairs its actual start with the ETA in the footer', () => {
     const startedAt = new Date('2026-01-01T08:25:00Z').getTime();
     const runningTask: Task = {
