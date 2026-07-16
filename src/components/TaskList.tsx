@@ -38,6 +38,7 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
   const resetTasks = useTaskStore((state) => state.resetTasks);
   const reorderTasks = useTaskStore((state) => state.reorderTasks);
   const activeTaskTimeLeft = useTaskStore((state) => state.activeTaskTimeLeft);
+  const targetEndTime = useTaskStore((state) => state.targetEndTime);
   const activeTaskIdFromStore = useTaskStore((state) => state.activeTaskId);
   const isTimeUpGlobal = useTaskStore((state) => state.isTimeUp);
 
@@ -68,8 +69,14 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
 
   // Calculate intermediate ETAs based on current time
   const etas = useMemo(
-    () => calculateIntermediateETAs(tasks, activeTaskTimeLeft, currentTime),
-    [tasks, activeTaskTimeLeft, currentTime],
+    () =>
+      calculateIntermediateETAs(
+        tasks,
+        activeTaskTimeLeft,
+        currentTime,
+        targetEndTime,
+      ),
+    [tasks, activeTaskTimeLeft, currentTime, targetEndTime],
   );
 
   const handleSwipeDismissAll = useCallback((newId?: string) => {

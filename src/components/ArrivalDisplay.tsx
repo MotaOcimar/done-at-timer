@@ -65,7 +65,12 @@ const ArrivalDisplay = () => {
   // IMPORTANT: if time is up (timeLeft <= 0), we use 0 for the ETA calculation,
   // since the next tasks will start from "Now".
   const effectiveTimeLeft = activeTaskId ? Math.max(0, timeLeft) : null;
-  const arrivalTime = calculateArrivalTime(tasks, effectiveTimeLeft, now);
+  const arrivalTime = calculateArrivalTime(
+    tasks,
+    effectiveTimeLeft,
+    now,
+    targetEndTime,
+  );
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], {

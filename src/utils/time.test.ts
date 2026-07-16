@@ -83,6 +83,70 @@ describe('calculateArrivalTime', () => {
   });
 });
 
+describe('anchored active ETA (TK-036)', () => {
+  const tasks: Task[] = [
+    { id: '1', title: 'T1', expectedDuration: 10, status: 'IN_PROGRESS' },
+    { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
+  ];
+
+  it('uses the stored target itself as the active ETA while running', () => {
+    // now's sub-second phase would push ceil(remaining) into the next minute
+    const now = new Date('2026-01-01T10:00:00.400Z');
+    const target = new Date('2026-01-01T10:05:59.700Z').getTime();
+
+    const etas = calculateIntermediateETAs(tasks, 360, now, target);
+
+    expect(etas.get('1')?.getTime()).toBe(target);
+    expect(etas.get('2')?.getTime()).toBe(target + 20 * 60 * 1000);
+  });
+
+  it('yields the same arrival across ticks with different sub-second phases', () => {
+    const target = new Date('2026-01-01T10:05:59.700Z').getTime();
+
+    const first = calculateArrivalTime(
+      tasks,
+      360,
+      new Date('2026-01-01T10:00:00.400Z'),
+      target,
+    );
+    const second = calculateArrivalTime(
+      tasks,
+      359,
+      new Date('2026-01-01T10:00:01.350Z'),
+      target,
+    );
+
+    expect(first.getTime()).toBe(second.getTime());
+    expect(first.getTime()).toBe(target + 20 * 60 * 1000);
+  });
+
+  it('falls back to now when the target is in the past (overtime)', () => {
+    const now = new Date('2026-01-01T10:10:00Z');
+    const target = new Date('2026-01-01T10:05:00Z').getTime();
+
+    const etas = calculateIntermediateETAs(tasks, -300, now, target);
+
+    // Overtime never projects into the past: everything starts from now
+    expect(etas.get('1')?.toISOString()).toBe(now.toISOString());
+    expect(etas.get('2')?.toISOString()).toBe(
+      new Date('2026-01-01T10:30:00Z').toISOString(),
+    );
+  });
+
+  it('keeps now + remaining when there is no target (paused)', () => {
+    const now = new Date('2026-01-01T10:00:00Z');
+
+    const etas = calculateIntermediateETAs(tasks, 600, now, null);
+
+    expect(etas.get('1')?.toISOString()).toBe(
+      new Date('2026-01-01T10:10:00Z').toISOString(),
+    );
+    expect(etas.get('2')?.toISOString()).toBe(
+      new Date('2026-01-01T10:30:00Z').toISOString(),
+    );
+  });
+});
+
 describe('calculateIntermediateETAs', () => {
   it('all-pending, no active task', () => {
     const tasks: Task[] = [

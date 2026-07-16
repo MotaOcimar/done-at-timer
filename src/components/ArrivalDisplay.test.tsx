@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ArrivalDisplay } from './ArrivalDisplay';
 import { useTaskStore } from '../store/useTaskStore';
@@ -33,6 +33,28 @@ describe('ArrivalDisplay', () => {
     // Total duration was 30 mins. 10 passed. 20 left.
     // 10:10 (current time) + 20 mins = 10:30
     expect(screen.getByText('10:30')).toBeInTheDocument();
+  });
+
+  it('shows the anchored minute, stable across ticks, near a minute boundary (TK-036)', () => {
+    // Task started just under a minute boundary: target = 10:30:59.800.
+    vi.setSystemTime(new Date('2026-01-01T10:00:59.800Z'));
+    useTaskStore.getState().addTask('T1', 30);
+    const taskId = useTaskStore.getState().tasks[0].id;
+    useTaskStore.getState().startTask(taskId);
+
+    // A tick lands at a sub-second phase past the boundary (now = 10:01:00.100):
+    // now + ceil(remaining) would round into 10:31 — the anchored value is 10:30.
+    vi.advanceTimersByTime(300);
+    render(<ArrivalDisplay />);
+    expect(screen.getByText('10:30')).toBeInTheDocument();
+
+    // And it holds still on subsequent ticks — no minute flicker.
+    for (let i = 0; i < 5; i++) {
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+      expect(screen.getByText('10:30')).toBeInTheDocument();
+    }
   });
 
   it('uses a visible (blue-tinted) shimmer on the white running fill', () => {
