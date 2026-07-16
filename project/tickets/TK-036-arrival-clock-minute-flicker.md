@@ -2,7 +2,7 @@
 id: TK-036
 title: Arrival clock flickers between two consecutive minutes
 type: bug
-status: open
+status: in-progress
 specs: [SPEC-005, SPEC-006]
 ---
 
@@ -52,13 +52,40 @@ bug and may be fixed narrowly or ride those refactors — decided at planning.
 
 ## Design
 
-(direction, to finalize at planning)
+(finalized 2026-07-16 — carries out the direction recorded above; single
+obvious shape given the codebase, recorded for review)
 
-- While running, anchor the display to the stored `targetEndTime` (+ pending
-  sum) instead of deriving it from `now + timeLeft` sampled from independent
-  intervals. `now` remains the base only in drifting/idle states, where the
-  arrival genuinely moves with the clock.
+- **Fix at the ETA-calculation seam.** `calculateIntermediateETAs` (and
+  `calculateArrivalTime` above it) learns the stored anchor: the active
+  task's ETA becomes `max(now, targetEndTime)` when a target exists, and
+  stays `now + remaining` only when it doesn't (paused). The `max` keeps
+  SPEC-005's overtime rule for free: a future target is the stable anchor;
+  a past target degrades to "everything starts from now", which genuinely
+  drifts — exactly SPEC-006's slipping states.
+- Both consumers pass the store's `targetEndTime` through: the header
+  (`ArrivalDisplay`) and the task-card ETAs (`TaskList`). One fix covers
+  both surfaces named in the acceptance criteria.
+- **Observable rounding nuance:** while running, the displayed HH:MM becomes
+  the target's own minute. The old `now + ceil(remaining)` could land up to
+  1s later and show the _next_ minute near a boundary (the flicker's other
+  half). Showing the anchored moment's minute is the correct value.
+- **No spec text change expected:** while running, `now + remaining` and
+  `targetEndTime` are the same instant by construction; stability is what
+  SPEC-005/SPEC-006 already describe.
+- Out of scope: removing `ArrivalDisplay`'s `useTimer` (still feeds the
+  progress bar and the paused arrival); TK-037's broader state reshaping;
+  any change to drifting behavior.
 
 ## Plan
 
-(to be written when work starts)
+- [ ] Red: unit tests (`time.test.ts`) — with a target, the active ETA is
+      the target itself regardless of `now`'s sub-second phase; past target
+      falls back to now; no target (paused) keeps `now + remaining`.
+- [ ] Red: component test (`ArrivalDisplay.test.tsx`) — running with a
+      target just under a minute boundary shows the target's minute, stable
+      across ticks.
+- [ ] Green: thread `targetEndTime` through `calculateIntermediateETAs` /
+      `calculateArrivalTime` and both call sites.
+- [ ] Full suite + lint + format.
+- [ ] Self-check on the built app (verify skill), then move to `in-review`
+      for the user's acceptance.
