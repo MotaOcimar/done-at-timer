@@ -30,3 +30,6 @@ immediately in all ETAs.
 ## Log
 
 - Seeded from code + conductor archive (2026-07-02)
+- TK-036: running task's ETA now computed from the fixed due moment rather than
+  re-derived from the moving clock each second — same instant, but it can no longer
+  wobble between adjacent minutes; no behavior text changed (2026-07-16)

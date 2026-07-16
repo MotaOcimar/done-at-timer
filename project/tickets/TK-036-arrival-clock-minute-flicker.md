@@ -2,7 +2,7 @@
 id: TK-036
 title: Arrival clock flickers between two consecutive minutes
 type: bug
-status: in-progress
+status: in-review
 specs: [SPEC-005, SPEC-006]
 ---
 
@@ -78,14 +78,20 @@ obvious shape given the codebase, recorded for review)
 
 ## Plan
 
-- [ ] Red: unit tests (`time.test.ts`) — with a target, the active ETA is
+- [x] Red: unit tests (`time.test.ts`) — with a target, the active ETA is
       the target itself regardless of `now`'s sub-second phase; past target
-      falls back to now; no target (paused) keeps `now + remaining`.
-- [ ] Red: component test (`ArrivalDisplay.test.tsx`) — running with a
+      falls back to now; no target (paused) keeps `now + remaining`. (1e51b79)
+- [x] Red: component test (`ArrivalDisplay.test.tsx`) — running with a
       target just under a minute boundary shows the target's minute, stable
-      across ticks.
-- [ ] Green: thread `targetEndTime` through `calculateIntermediateETAs` /
-      `calculateArrivalTime` and both call sites.
-- [ ] Full suite + lint + format.
-- [ ] Self-check on the built app (verify skill), then move to `in-review`
-      for the user's acceptance.
+      across ticks. (1e51b79)
+- [x] Green: thread `targetEndTime` through `calculateIntermediateETAs` /
+      `calculateArrivalTime` and both call sites. (1e51b79)
+- [x] Full suite + lint + format. (340 tests green)
+- [x] Self-check on the running app (verify skill, headless browser): anchored
+      arrival correct and stable across ~8s of ticks, card ETAs stable, static
+      pin while running, paused arrival drifts to the next minute, resume
+      stable again — 6/6 checks passed. Moved to `in-review`.
+
+> State: implementation complete, awaiting the user's manual acceptance on
+> the running app (acceptance gate). Next per the agreed order: TK-034 →
+> TK-035 — but those need design closed with the user before work starts.

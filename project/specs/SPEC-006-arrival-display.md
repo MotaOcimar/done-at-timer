@@ -53,4 +53,7 @@ The arrival time is the hero of the interface:
 - TK-026: made the running sweep visible on the white arrival fill (blue tint) (2026-07-08)
 - TK-005: locked/drifting now shown by an icon (static pin / rotating clock) instead of text, with an accessible label (2026-07-09)
 - TK-027: icon moved to the left of the clock (same line); drifting icon is now an analog clock whose hands point to the ETA, with a second hand sweeping continuously in sync with real time; overtime clock color aligned to amber-500 (2026-07-09)
+- TK-036: fixed the big clock (and card ETAs) flickering between two adjacent
+  minutes while running — the display now shows the anchored arrival ([SPEC-005]);
+  no behavior text changed (2026-07-16)
 - TK-029: the arrival clock names itself on demand — tap/hover/focus the whole clock group reveals "Estimated arrival time" (and "— slipping" when drifting) as a bubble; that neutral, non-alarming text is the clock's accessible description while the time stays the value; the state icon became decorative reinforcement (2026-07-10)
