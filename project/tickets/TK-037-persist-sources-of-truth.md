@@ -100,13 +100,14 @@ Proposed shape (from the user's note):
 - [x] Refactor: rename `duration` → `expectedDuration` across types, store,
       components, tests; wire-format test pins `duration` as the link key.
       Mapping lives entirely in `routineShare.ts`; prose (test names,
-      comments, the "Task duration" aria-label) untouched.
-- [ ] Red/Green: persistence shape — `partialize` excludes
+      comments, the "Task duration" aria-label) untouched. (021beb4)
+- [x] Red/Green: persistence shape — `partialize` excludes
       `activeTaskTimeLeft`/`isTimeUp`; rehydrate re-derives them from
-      `targetEndTime`.
-- [ ] Red/Green: `migrate` v0 → v1 (renames, running task's back-computed
+      `targetEndTime` (or the pause record) via a `merge` hook. (e3722e3)
+- [x] Red/Green: `migrate` v0 → v1 (renames, running task's back-computed
       `startedAt`, dropped fields; routines untouched beyond the rename).
-- [ ] Full suite + lint + format.
+      (e3722e3)
+- [x] Full suite + lint + format (332 tests green, tsc clean).
 - [ ] Update SPEC-002 and SPEC-013 (stored-model descriptions only).
 - [ ] Manual check on the running app: a pre-change localStorage snapshot
       loads with tasks, routines, running timer and notification preference

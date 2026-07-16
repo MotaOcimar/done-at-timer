@@ -23,6 +23,9 @@ Boundaries the user should understand:
   erases everything; another browser or device starts empty. The one sanctioned
   way to move a routine across devices is a share link ([SPEC-011]) — a one-shot
   copy, not sync.
+- **Updating the app never loses data**: snapshots written by an older version
+  are migrated forward on load — tasks, their states and records, a running or
+  paused timer, routines, and preferences all survive the upgrade.
 
 ## Implementation pointers
 
@@ -33,3 +36,6 @@ Boundaries the user should understand:
 - Seeded from code + conductor archive (2026-07-02)
 - TK-003: sharing research concluded — URL sharing planned as TK-021 (2026-07-03)
 - TK-021: the on-device boundary gained the share-link exception (2026-07-03)
+- TK-037: only sources of truth are stored (moment-derived values are recomputed
+  on load); versioned migration added, guaranteeing upgrades keep all data
+  (2026-07-16)
