@@ -46,6 +46,64 @@ describe('buildRoutineShareUrl', () => {
   });
 });
 
+describe('departure time on the wire (TK-035)', () => {
+  it('round-trips a routine with a saved departure', () => {
+    const withDeparture: SharedRoutine = { ...routine, departureTime: '07:00' };
+
+    const result = decodeRoutinePayload(encodeRoutinePayload(withDeparture));
+
+    expect(result).toEqual({ ok: true, routine: withDeparture });
+  });
+
+  it('omits the wire key entirely when there is no departure', () => {
+    const payload = encodeRoutinePayload(routine);
+    const json = Buffer.from(
+      payload.replace(/-/g, '+').replace(/_/g, '/'),
+      'base64',
+    ).toString('utf-8');
+
+    expect(JSON.parse(json)).not.toHaveProperty('departure');
+  });
+
+  it('decodes links created before the field existed (no departure)', () => {
+    // A pre-TK-035 payload: same v1 JSON, no "departure" key.
+    const legacyJson = JSON.stringify({
+      v: 1,
+      name: 'Old link',
+      tasks: [{ title: 'Shower', duration: 10 }],
+    });
+    const payload = Buffer.from(legacyJson, 'utf-8')
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+    const result = decodeRoutinePayload(payload);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.routine.departureTime).toBeUndefined();
+  });
+
+  it('rejects a malformed departure as corrupted', () => {
+    const badJson = JSON.stringify({
+      v: 1,
+      name: 'Bad',
+      departure: '25:99',
+      tasks: [{ title: 'Shower', duration: 10 }],
+    });
+    const payload = Buffer.from(badJson, 'utf-8')
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+    expect(decodeRoutinePayload(payload)).toEqual({
+      ok: false,
+      error: 'INVALID',
+    });
+  });
+});
+
 describe('decodeRoutinePayload', () => {
   it('round-trips a routine', () => {
     const result = decodeRoutinePayload(encodeRoutinePayload(routine));

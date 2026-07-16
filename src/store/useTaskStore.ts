@@ -31,9 +31,14 @@ interface TaskState {
   resetTasks: () => void;
   clearTasks: () => void;
   saveRoutine: (name: string) => void;
-  importRoutine: (name: string, tasks: Routine['tasks']) => void;
+  importRoutine: (
+    name: string,
+    tasks: Routine['tasks'],
+    departureTime?: string,
+  ) => void;
   loadRoutine: (id: string) => void;
   deleteRoutine: (id: string) => void;
+  setRoutineDeparture: (id: string, departureTime: string | undefined) => void;
   reorderTasks: (activeId: string, overId: string) => void;
   toggleNotifications: () => void;
 }
@@ -381,7 +386,7 @@ export const useTaskStore = create<TaskState>()(
 
         set({ routines: [...state.routines, newRoutine] });
       },
-      importRoutine: (name, tasks) => {
+      importRoutine: (name, tasks, departureTime) => {
         const newRoutine: Routine = {
           id: generateId(),
           name,
@@ -389,6 +394,7 @@ export const useTaskStore = create<TaskState>()(
             title,
             expectedDuration,
           })),
+          departureTime,
         };
 
         set((state) => ({ routines: [...state.routines, newRoutine] }));
@@ -418,6 +424,14 @@ export const useTaskStore = create<TaskState>()(
           routines: state.routines.filter((r) => r.id !== id),
         }));
       },
+      // The one in-place routine edit (TK-035): a single metadata field.
+      // Structural edit-in-place (name/tasks) remains TK-017's problem.
+      setRoutineDeparture: (id, departureTime) =>
+        set((state) => ({
+          routines: state.routines.map((r) =>
+            r.id === id ? { ...r, departureTime } : r,
+          ),
+        })),
       reorderTasks: (activeId, overId) => {
         set((state) => {
           const oldIndex = state.tasks.findIndex((t) => t.id === activeId);

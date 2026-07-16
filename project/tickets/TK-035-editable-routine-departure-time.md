@@ -81,11 +81,11 @@ Depends on TK-034 (the departure endpoint and route visual must exist first).
 (written 2026-07-16; design above was closed with the user on 2026-07-15.
 TK-034 — the dependency — is implemented, at `in-review`.)
 
-- [ ] Red/Green: `Routine.departureTime?: string` ("HH:MM", 24h) + store
+- [x] Red/Green: `Routine.departureTime?: string` ("HH:MM", 24h) + store
       action `setRoutineDeparture(id, time | undefined)` — the scoped
       in-place edit; persists with the routine (rides the existing
       persisted `routines` array).
-- [ ] Red/Green: share link — optional `departure` wire key (same payload
+- [x] Red/Green: share link — optional `departure` wire key (same payload
       version: old links lack it and import cleanly; old apps ignore the
       extra key); present-but-malformed rejects as corrupted; import
       carries it into the new routine.
@@ -102,3 +102,9 @@ TK-034 — the dependency — is implemented, at `in-review`.)
       share field); review SPEC-012/SPEC-013 for touches.
 - [ ] Full suite + lint + format; self-check on the running app (verify
       skill), then `in-review` for the user's acceptance.
+
+> State: PAUSED by agreement (2026-07-16) after the data layer (first two
+> steps) landed green — no UI exists yet, so nothing user-visible changed.
+> Resuming waits for TK-034's acceptance, since the routine-row UI here
+> builds on TK-034's route-pair visuals (which just absorbed a review
+> refinement: vertical pairs on task cards).

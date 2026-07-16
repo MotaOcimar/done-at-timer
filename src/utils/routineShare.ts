@@ -4,6 +4,7 @@ export interface SharedRoutine {
     title: string;
     expectedDuration: number; // in minutes
   }[];
+  departureTime?: string; // "HH:MM" 24h — the saved example departure (TK-035)
 }
 
 export type DecodeError = 'INVALID' | 'UNSUPPORTED_VERSION';
@@ -38,6 +39,9 @@ export const encodeRoutinePayload = (routine: SharedRoutine): string => {
   const json = JSON.stringify({
     v: PAYLOAD_VERSION,
     name: routine.name,
+    // Optional within v1: links without it stay valid, and pre-TK-035
+    // builds ignore the extra key — no version bump needed.
+    ...(routine.departureTime ? { departure: routine.departureTime } : {}),
     // The v1 wire key is "duration" — frozen for link compatibility,
     // whatever the field is called inside the app.
     tasks: routine.tasks.map(({ title, expectedDuration }) => ({
@@ -66,6 +70,10 @@ const parseTask = (value: unknown): SharedRoutine['tasks'][number] | null => {
   return { title, expectedDuration: duration };
 };
 
+// A time of day on the wire: strict "HH:MM", 24h.
+const isValidDeparture = (value: unknown): value is string =>
+  typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+
 export const decodeRoutinePayload = (payload: string): DecodeResult => {
   let parsed: unknown;
   try {
@@ -79,7 +87,7 @@ export const decodeRoutinePayload = (payload: string): DecodeResult => {
 
   if (typeof parsed !== 'object' || parsed === null)
     return { ok: false, error: 'INVALID' };
-  const { v, name, tasks } = parsed as Record<string, unknown>;
+  const { v, name, tasks, departure } = parsed as Record<string, unknown>;
 
   if (typeof v !== 'number') return { ok: false, error: 'INVALID' };
   if (v !== PAYLOAD_VERSION) return { ok: false, error: 'UNSUPPORTED_VERSION' };
@@ -89,6 +97,11 @@ export const decodeRoutinePayload = (payload: string): DecodeResult => {
   if (!Array.isArray(tasks) || tasks.length === 0)
     return { ok: false, error: 'INVALID' };
 
+  // Optional field (TK-035): absent on older links; if present it must be a
+  // valid time of day, else the link is corrupted.
+  if (departure !== undefined && !isValidDeparture(departure))
+    return { ok: false, error: 'INVALID' };
+
   const parsedTasks: SharedRoutine['tasks'] = [];
   for (const task of tasks) {
     const parsedTask = parseTask(task);
@@ -96,5 +109,12 @@ export const decodeRoutinePayload = (payload: string): DecodeResult => {
     parsedTasks.push(parsedTask);
   }
 
-  return { ok: true, routine: { name, tasks: parsedTasks } };
+  return {
+    ok: true,
+    routine: {
+      name,
+      tasks: parsedTasks,
+      ...(departure !== undefined ? { departureTime: departure } : {}),
+    },
+  };
 };
