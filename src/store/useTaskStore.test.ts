@@ -13,7 +13,7 @@ describe('useTaskStore', () => {
     const { tasks } = useTaskStore.getState();
     expect(tasks).toHaveLength(1);
     expect(tasks[0].title).toBe('Test Task');
-    expect(tasks[0].duration).toBe(30);
+    expect(tasks[0].expectedDuration).toBe(30);
     expect(tasks[0].status).toBe('PENDING');
   });
 
@@ -30,8 +30,8 @@ describe('useTaskStore', () => {
   it('should reset progress of all tasks', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'T1', duration: 10, status: 'COMPLETED' },
-        { id: '2', title: 'T2', duration: 10, status: 'IN_PROGRESS' },
+        { id: '1', title: 'T1', expectedDuration: 10, status: 'COMPLETED' },
+        { id: '2', title: 'T2', expectedDuration: 10, status: 'IN_PROGRESS' },
       ],
     });
 
@@ -44,8 +44,13 @@ describe('useTaskStore', () => {
   it('should set completedAt timestamp when completing the active task', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
-        { id: '2', title: 'Task 2', duration: 10, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Task 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        { id: '2', title: 'Task 2', expectedDuration: 10, status: 'PENDING' },
       ],
       activeTaskId: '1',
     });
@@ -63,7 +68,9 @@ describe('useTaskStore', () => {
 
   it('should clear all tasks', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'T1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'T1', expectedDuration: 10, status: 'PENDING' },
+      ],
     });
 
     useTaskStore.getState().clearTasks();
@@ -73,9 +80,9 @@ describe('useTaskStore', () => {
   it('should reorder tasks', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
-        { id: '3', title: 'Task 3', duration: 30, status: 'PENDING' },
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
+        { id: '3', title: 'Task 3', expectedDuration: 30, status: 'PENDING' },
       ],
     });
 
@@ -90,9 +97,14 @@ describe('useTaskStore', () => {
   it('should move a task to the top of the active section when started', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Completed Task', duration: 10, status: 'COMPLETED' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
-        { id: '3', title: 'Task 3', duration: 30, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Completed Task',
+          expectedDuration: 10,
+          status: 'COMPLETED',
+        },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
+        { id: '3', title: 'Task 3', expectedDuration: 30, status: 'PENDING' },
       ],
     });
 
@@ -110,8 +122,18 @@ describe('useTaskStore', () => {
   it('should move the previously active task down when another is started', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Active Task', duration: 10, status: 'IN_PROGRESS' },
-        { id: '2', title: 'Pending Task', duration: 20, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Active Task',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        {
+          id: '2',
+          title: 'Pending Task',
+          expectedDuration: 20,
+          status: 'PENDING',
+        },
       ],
       activeTaskId: '1',
     });
@@ -129,8 +151,13 @@ describe('useTaskStore', () => {
   it('should auto-advance to next pending task when active task is removed', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Task 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
       activeTaskId: '1',
       targetEndTime: Date.now() + 10 * 60 * 1000,

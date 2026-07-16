@@ -56,7 +56,10 @@ const RoutineItem = ({
   // sum of estimates, recomputed from the shared per-second clock so it never
   // goes stale while the drawer is open (TK-032).
   const now = useClock();
-  const totalMinutes = routine.tasks.reduce((sum, t) => sum + t.duration, 0);
+  const totalMinutes = routine.tasks.reduce(
+    (sum, t) => sum + t.expectedDuration,
+    0,
+  );
   const forecast = timeFormatter.format(
     new Date(now.getTime() + totalMinutes * 60_000),
   );
@@ -192,7 +195,7 @@ const RoutineItem = ({
                         {task.title}
                       </span>
                       <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight shrink-0">
-                        {task.duration}m
+                        {task.expectedDuration}m
                       </span>
                     </li>
                   ))}

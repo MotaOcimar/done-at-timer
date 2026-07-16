@@ -19,8 +19,8 @@ describe('RoutineImport', () => {
   const routine = {
     name: 'Morning Focus',
     tasks: [
-      { title: 'Shower', duration: 10 },
-      { title: 'Breakfast', duration: 20 },
+      { title: 'Shower', expectedDuration: 10 },
+      { title: 'Breakfast', expectedDuration: 20 },
     ],
   };
 

@@ -2,7 +2,7 @@ export interface SharedRoutine {
   name: string;
   tasks: {
     title: string;
-    duration: number; // in minutes
+    expectedDuration: number; // in minutes
   }[];
 }
 
@@ -38,7 +38,12 @@ export const encodeRoutinePayload = (routine: SharedRoutine): string => {
   const json = JSON.stringify({
     v: PAYLOAD_VERSION,
     name: routine.name,
-    tasks: routine.tasks.map(({ title, duration }) => ({ title, duration })),
+    // The v1 wire key is "duration" — frozen for link compatibility,
+    // whatever the field is called inside the app.
+    tasks: routine.tasks.map(({ title, expectedDuration }) => ({
+      title,
+      duration: expectedDuration,
+    })),
   });
   return toBase64Url(new TextEncoder().encode(json));
 };
@@ -58,7 +63,7 @@ const parseTask = (value: unknown): SharedRoutine['tasks'][number] | null => {
     duration <= 0
   )
     return null;
-  return { title, duration };
+  return { title, expectedDuration: duration };
 };
 
 export const decodeRoutinePayload = (payload: string): DecodeResult => {

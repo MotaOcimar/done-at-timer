@@ -60,7 +60,7 @@ const RoutineImport = () => {
 
   const { routine } = decoded;
   const totalMinutes = routine.tasks.reduce(
-    (sum, task) => sum + task.duration,
+    (sum, task) => sum + task.expectedDuration,
     0,
   );
 
@@ -91,7 +91,7 @@ const RoutineImport = () => {
             >
               <span className="text-gray-700 truncate">{task.title}</span>
               <span className="text-gray-400 font-bold ml-3 shrink-0">
-                {task.duration}m
+                {task.expectedDuration}m
               </span>
             </li>
           ))}

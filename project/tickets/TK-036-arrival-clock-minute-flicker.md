@@ -26,7 +26,7 @@ arrival is a constant: `targetEndTime + sum of pending estimates`, and
   `ArrivalDisplay`'s own `useTimer` instance, as
   `ceil((targetEndTime − Date.now()) / 1000)`;
 - a third private interval (`TaskItem`'s `useTimer`) writes
-  `activeTaskTimeLeft` into the store each of *its* ticks, feeding the task
+  `activeTaskTimeLeft` into the store each of _its_ ticks, feeding the task
   cards' ETAs the same way (`TaskList.tsx:71`).
 
 Each interval fires at a different sub-second phase and each triggers a

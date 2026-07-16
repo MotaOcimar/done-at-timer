@@ -43,8 +43,8 @@ describe('useTaskStore Routines', () => {
           id: 'routine-1',
           name: 'Saved Routine',
           tasks: [
-            { title: 'Routine Task 1', duration: 15 },
-            { title: 'Routine Task 2', duration: 25 },
+            { title: 'Routine Task 1', expectedDuration: 15 },
+            { title: 'Routine Task 2', expectedDuration: 25 },
           ],
         },
       ],
@@ -68,8 +68,8 @@ describe('useTaskStore Routines', () => {
     store.addTask('Current Task', 5);
 
     store.importRoutine('Shared Routine', [
-      { title: 'Imported Task 1', duration: 15 },
-      { title: 'Imported Task 2', duration: 25 },
+      { title: 'Imported Task 1', expectedDuration: 15 },
+      { title: 'Imported Task 2', expectedDuration: 25 },
     ]);
 
     const state = useTaskStore.getState();
@@ -77,8 +77,8 @@ describe('useTaskStore Routines', () => {
     expect(state.routines[0].id).toBeDefined();
     expect(state.routines[0].name).toBe('Shared Routine');
     expect(state.routines[0].tasks).toEqual([
-      { title: 'Imported Task 1', duration: 15 },
-      { title: 'Imported Task 2', duration: 25 },
+      { title: 'Imported Task 1', expectedDuration: 15 },
+      { title: 'Imported Task 2', expectedDuration: 25 },
     ]);
     expect(state.tasks).toHaveLength(1);
     expect(state.tasks[0].title).toBe('Current Task');
@@ -90,14 +90,14 @@ describe('useTaskStore Routines', () => {
         {
           id: 'existing',
           name: 'Morning',
-          tasks: [{ title: 'Old', duration: 10 }],
+          tasks: [{ title: 'Old', expectedDuration: 10 }],
         },
       ],
     });
 
     useTaskStore
       .getState()
-      .importRoutine('Morning', [{ title: 'New', duration: 20 }]);
+      .importRoutine('Morning', [{ title: 'New', expectedDuration: 20 }]);
 
     const state = useTaskStore.getState();
     expect(state.routines).toHaveLength(2);

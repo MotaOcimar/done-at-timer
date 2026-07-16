@@ -5,9 +5,9 @@ import type { Task } from '../types';
 
 describe('calculateArrivalTime', () => {
   const tasks: Task[] = [
-    { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
-    { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
-    { id: '3', title: 'T3', duration: 5, status: 'COMPLETED' },
+    { id: '1', title: 'T1', expectedDuration: 10, status: 'IN_PROGRESS' },
+    { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
+    { id: '3', title: 'T3', expectedDuration: 5, status: 'COMPLETED' },
   ];
 
   it('calculates arrival time when a task is in progress', () => {
@@ -37,8 +37,8 @@ describe('calculateArrivalTime', () => {
 
   it('calculates arrival time when no task is in progress', () => {
     const pendingTasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'PENDING' },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'PENDING' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 
@@ -52,8 +52,8 @@ describe('calculateArrivalTime', () => {
 
   it('is consistent with the last task ETA in calculateIntermediateETAs', () => {
     const tasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
     const timeLeft = 300; // 5 min
@@ -66,8 +66,8 @@ describe('calculateArrivalTime', () => {
 
   it('handles overtime consistently between both functions', () => {
     const tasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
     const timeLeft = -300; // 5 min overtime
@@ -86,8 +86,8 @@ describe('calculateArrivalTime', () => {
 describe('calculateIntermediateETAs', () => {
   it('all-pending, no active task', () => {
     const tasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'PENDING' },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'PENDING' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 
@@ -103,8 +103,8 @@ describe('calculateIntermediateETAs', () => {
 
   it('active + pending', () => {
     const tasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 
@@ -123,12 +123,12 @@ describe('calculateIntermediateETAs', () => {
       {
         id: '1',
         title: 'T1',
-        duration: 10,
+        expectedDuration: 10,
         status: 'COMPLETED',
         completedAt: new Date('2026-01-01T09:50:00Z').getTime(),
       },
-      { id: '2', title: 'T2', duration: 20, status: 'IN_PROGRESS' },
-      { id: '3', title: 'T3', duration: 15, status: 'PENDING' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'IN_PROGRESS' },
+      { id: '3', title: 'T3', expectedDuration: 15, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 
@@ -147,8 +147,8 @@ describe('calculateIntermediateETAs', () => {
 
   it('overtime (active timeLeft <= 0)', () => {
     const tasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'IN_PROGRESS' },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'IN_PROGRESS' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 
@@ -167,14 +167,14 @@ describe('calculateIntermediateETAs', () => {
       {
         id: '1',
         title: 'T1',
-        duration: 10,
+        expectedDuration: 10,
         status: 'COMPLETED',
         completedAt: new Date('2026-01-01T09:50:00Z').getTime(),
       },
       {
         id: '2',
         title: 'T2',
-        duration: 20,
+        expectedDuration: 20,
         status: 'COMPLETED',
         completedAt: new Date('2026-01-01T10:10:00Z').getTime(),
       },
@@ -196,11 +196,11 @@ describe('calculateIntermediateETAs', () => {
       {
         id: '1',
         title: 'T1',
-        duration: 10,
+        expectedDuration: 10,
         status: 'COMPLETED',
         completedAt: new Date('2026-01-01T09:50:00Z').getTime(),
       },
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 
@@ -217,8 +217,8 @@ describe('calculateIntermediateETAs', () => {
 
   it('completed without completedAt is ignored and pending chains from now', () => {
     const tasks: Task[] = [
-      { id: '1', title: 'T1', duration: 10, status: 'COMPLETED' }, // Legacy task without completedAt
-      { id: '2', title: 'T2', duration: 20, status: 'PENDING' },
+      { id: '1', title: 'T1', expectedDuration: 10, status: 'COMPLETED' }, // Legacy task without completedAt
+      { id: '2', title: 'T2', expectedDuration: 20, status: 'PENDING' },
     ];
     const now = new Date('2026-01-01T10:00:00Z');
 

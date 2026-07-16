@@ -23,6 +23,6 @@ describe('TaskInput', () => {
     const tasks = useTaskStore.getState().tasks;
     expect(tasks).toHaveLength(1);
     expect(tasks[0].title).toBe('New Task');
-    expect(tasks[0].duration).toBe(15);
+    expect(tasks[0].expectedDuration).toBe(15);
   });
 });

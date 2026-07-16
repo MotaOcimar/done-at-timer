@@ -19,11 +19,11 @@ describe('useTaskStore - Edit Task', () => {
 
     useTaskStore
       .getState()
-      .updateTask(taskId, { title: 'Updated Task', duration: 45 });
+      .updateTask(taskId, { title: 'Updated Task', expectedDuration: 45 });
 
     const updatedTasks = useTaskStore.getState().tasks;
     expect(updatedTasks[0].title).toBe('Updated Task');
-    expect(updatedTasks[0].duration).toBe(45);
+    expect(updatedTasks[0].expectedDuration).toBe(45);
   });
 
   it('should adjust targetEndTime when active task duration is increased', () => {
@@ -43,7 +43,7 @@ describe('useTaskStore - Edit Task', () => {
     expect(oldTarget).toBeDefined();
 
     // Update duration to 30 mins (increase by 10m)
-    useTaskStore.getState().updateTask(taskId, { duration: 30 });
+    useTaskStore.getState().updateTask(taskId, { expectedDuration: 30 });
 
     const newTarget = useTaskStore.getState().targetEndTime!;
 
@@ -68,7 +68,7 @@ describe('useTaskStore - Edit Task', () => {
     const oldTarget = useTaskStore.getState().targetEndTime!;
 
     // Decrease duration to 15 mins (decrease by 5m)
-    useTaskStore.getState().updateTask(taskId, { duration: 15 });
+    useTaskStore.getState().updateTask(taskId, { expectedDuration: 15 });
 
     const newTarget = useTaskStore.getState().targetEndTime!;
 

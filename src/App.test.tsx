@@ -32,7 +32,7 @@ describe('App', () => {
   it('shows the shared-routine import preview when the URL carries a share fragment', () => {
     location.hash = `#r=${encodeRoutinePayload({
       name: 'Shared Routine',
-      tasks: [{ title: 'Stretch', duration: 5 }],
+      tasks: [{ title: 'Stretch', expectedDuration: 5 }],
     })}`;
 
     render(<App />);

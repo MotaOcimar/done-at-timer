@@ -192,7 +192,7 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
                 const isTimeUp = isActive && isTimeUpGlobal;
                 const timeLeft = isActive ? (activeTaskTimeLeft ?? 0) : 0;
                 const progress = isActive
-                  ? 1 - timeLeft / (activeTask.duration * 60)
+                  ? 1 - timeLeft / (activeTask.expectedDuration * 60)
                   : 0;
                 const cardState = getCardState(
                   activeTask,

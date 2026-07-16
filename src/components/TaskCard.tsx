@@ -217,7 +217,7 @@ const TaskCard = ({
           >
             <div>
               <InlineEdit
-                value={task.duration}
+                value={task.expectedDuration}
                 onSave={onDurationSave}
                 type="number"
                 ariaLabel="Task duration"

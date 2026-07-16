@@ -9,7 +9,9 @@ describe('useTaskStore startedAt', () => {
 
   it('records startedAt when a task is started', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
     });
 
     const before = Date.now();
@@ -23,8 +25,13 @@ describe('useTaskStore startedAt', () => {
   it('records startedAt on the next task when auto-advancing after completion', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Task 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
       activeTaskId: '1',
     });
@@ -41,8 +48,13 @@ describe('useTaskStore startedAt', () => {
   it('records startedAt on the next task when the active task is removed', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Task 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
       activeTaskId: '1',
       targetEndTime: Date.now() + 10 * 60 * 1000,
@@ -59,7 +71,9 @@ describe('useTaskStore startedAt', () => {
 
   it('keeps the original startedAt across pause and resume', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
     });
     useTaskStore.getState().startTask('1');
     const startedAt = useTaskStore
@@ -76,8 +90,8 @@ describe('useTaskStore startedAt', () => {
   it('stamps a fresh startedAt when a demoted task is started again', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
     });
     useTaskStore.getState().startTask('1');
@@ -104,7 +118,7 @@ describe('useTaskStore startedAt', () => {
         {
           id: '1',
           title: 'T1',
-          duration: 10,
+          expectedDuration: 10,
           status: 'COMPLETED',
           startedAt: Date.now(),
           completedAt: Date.now(),
@@ -112,7 +126,7 @@ describe('useTaskStore startedAt', () => {
         {
           id: '2',
           title: 'T2',
-          duration: 10,
+          expectedDuration: 10,
           status: 'IN_PROGRESS',
           startedAt: Date.now(),
         },
@@ -131,7 +145,7 @@ describe('useTaskStore startedAt', () => {
         {
           id: 'r1',
           name: 'Routine',
-          tasks: [{ title: 'A', duration: 5 }],
+          tasks: [{ title: 'A', expectedDuration: 5 }],
         },
       ],
     });

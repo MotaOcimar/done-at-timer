@@ -111,7 +111,9 @@ describe('TaskList', () => {
 
   it('dismisses all swipes when a drag-to-reorder starts', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
     });
 
     render(<TaskList />);
@@ -142,7 +144,9 @@ describe('TaskList', () => {
   it('computes and passes ETA to TaskItems', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
       activeTaskTimeLeft: null,
     });
 
@@ -153,7 +157,9 @@ describe('TaskList', () => {
   it('updates ETA in real-time when the clock advances', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
       activeTaskTimeLeft: null,
     });
 
@@ -171,8 +177,8 @@ describe('TaskList', () => {
   it('renders list of tasks', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
     });
 
@@ -188,7 +194,9 @@ describe('TaskList', () => {
 
   it('shows Restart Routine when all tasks are completed', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'COMPLETED' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'COMPLETED' },
+      ],
     });
 
     render(<TaskList />);
@@ -199,7 +207,9 @@ describe('TaskList', () => {
 
   it('renders sortable tasks within a DndContext and SortableContext', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
     });
 
     render(<TaskList />);
@@ -211,8 +221,8 @@ describe('TaskList', () => {
   it('updates store on drag end', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
     });
 
@@ -232,8 +242,18 @@ describe('TaskList', () => {
     // Task 1 (ACTIVE), Task 2 (PENDING)
     useTaskStore.setState({
       tasks: [
-        { id: '2', title: 'Active Task', duration: 10, status: 'IN_PROGRESS' },
-        { id: '1', title: 'Pending Task', duration: 20, status: 'PENDING' },
+        {
+          id: '2',
+          title: 'Active Task',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        {
+          id: '1',
+          title: 'Pending Task',
+          expectedDuration: 20,
+          status: 'PENDING',
+        },
       ],
       activeTaskId: '2',
     });
@@ -254,10 +274,30 @@ describe('TaskList', () => {
   it('clamps reordering of PENDING tasks to be after COMPLETED tasks', () => {
     useTaskStore.setState({
       tasks: [
-        { id: 'c1', title: 'Completed 1', duration: 10, status: 'COMPLETED' },
-        { id: 'i1', title: 'Active 1', duration: 10, status: 'IN_PROGRESS' },
-        { id: 'p1', title: 'Pending 1', duration: 10, status: 'PENDING' },
-        { id: 'p2', title: 'Pending 2', duration: 10, status: 'PENDING' },
+        {
+          id: 'c1',
+          title: 'Completed 1',
+          expectedDuration: 10,
+          status: 'COMPLETED',
+        },
+        {
+          id: 'i1',
+          title: 'Active 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        {
+          id: 'p1',
+          title: 'Pending 1',
+          expectedDuration: 10,
+          status: 'PENDING',
+        },
+        {
+          id: 'p2',
+          title: 'Pending 2',
+          expectedDuration: 10,
+          status: 'PENDING',
+        },
       ],
       activeTaskId: 'i1',
     });
@@ -291,8 +331,8 @@ describe('TaskList', () => {
     vi.setSystemTime(new Date('2026-01-01T10:00:00Z'));
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
     });
 
@@ -315,7 +355,9 @@ describe('TaskList', () => {
 
   it('wraps the sortable items in a LayoutGroup for smooth reordering', () => {
     useTaskStore.setState({
-      tasks: [{ id: '1', title: 'Task 1', duration: 10, status: 'PENDING' }],
+      tasks: [
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+      ],
     });
 
     render(<TaskList />);

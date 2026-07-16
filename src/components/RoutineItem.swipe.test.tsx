@@ -36,7 +36,7 @@ describe('RoutineItem swipe-to-delete', () => {
   const routine: Routine = {
     id: 'r1',
     name: 'Morning Routine',
-    tasks: [{ title: 'Task 1', duration: 10 }],
+    tasks: [{ title: 'Task 1', expectedDuration: 10 }],
   } as Routine;
 
   const baseProps = {

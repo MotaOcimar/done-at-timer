@@ -38,8 +38,8 @@ describe('RoutineItem finish forecast (TK-032)', () => {
     id: 'r1',
     name: 'Morning Routine',
     tasks: [
-      { title: 'Task 1', duration: 10 },
-      { title: 'Task 2', duration: 30 },
+      { title: 'Task 1', expectedDuration: 10 },
+      { title: 'Task 2', expectedDuration: 30 },
     ],
   } as Routine;
 

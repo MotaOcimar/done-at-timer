@@ -21,8 +21,13 @@ describe('useTaskStore: Manual Completion', () => {
   it('should mark active task as COMPLETED and start next PENDING task when completeActiveTask is called', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
-        { id: '2', title: 'Task 2', duration: 20, status: 'PENDING' },
+        {
+          id: '1',
+          title: 'Task 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
+        { id: '2', title: 'Task 2', expectedDuration: 20, status: 'PENDING' },
       ],
       activeTaskId: '1',
       isTimeUp: true,
@@ -49,7 +54,12 @@ describe('useTaskStore: Manual Completion', () => {
   it('should calculate actualDuration correctly for overtime', () => {
     useTaskStore.setState({
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'IN_PROGRESS' },
+        {
+          id: '1',
+          title: 'Task 1',
+          expectedDuration: 10,
+          status: 'IN_PROGRESS',
+        },
       ],
       activeTaskId: '1',
       isTimeUp: true,

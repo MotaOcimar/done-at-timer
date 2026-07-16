@@ -87,7 +87,7 @@ const TaskItem = ({
   }, [isDragging, x]);
 
   const { timeLeft } = useTimer(
-    isActive ? task.duration * 60 - totalElapsedBeforePause : 0,
+    isActive ? task.expectedDuration * 60 - totalElapsedBeforePause : 0,
     onTimeUpAction,
     isActive ? targetEndTime : null,
   );
@@ -137,9 +137,13 @@ const TaskItem = ({
   };
 
   const handleDurationSave = (newDuration: string) => {
-    const duration = parseInt(newDuration, 10);
-    if (!isNaN(duration) && duration > 0 && duration !== task.duration) {
-      updateTask(task.id, { duration });
+    const expectedDuration = parseInt(newDuration, 10);
+    if (
+      !isNaN(expectedDuration) &&
+      expectedDuration > 0 &&
+      expectedDuration !== task.expectedDuration
+    ) {
+      updateTask(task.id, { expectedDuration });
     }
   };
 
@@ -151,7 +155,7 @@ const TaskItem = ({
 
   const isActuallyPaused = isActive && !targetEndTime;
   const cardState = getCardState(task, isActive, isTimeUp, isActuallyPaused);
-  const totalDurationSecs = task.duration * 60;
+  const totalDurationSecs = task.expectedDuration * 60;
   const progress = Math.max(0, Math.min(1, 1 - timeLeft / totalDurationSecs));
 
   return (

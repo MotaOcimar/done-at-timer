@@ -11,7 +11,7 @@ specs: [SPEC-011, SPEC-012, SPEC-013]
 ## Context
 
 The routine finish forecast (TK-032, [SPEC-011]) always assumes departure
-*now*, and TK-034 makes that departure explicit on the row (`◉ now ┄┄ ⌖
+_now_, and TK-034 makes that departure explicit on the row (`◉ now ┄┄ ⌖
 arrival`). User request (2026-07-15, refined during ticket design): let the
 user attach a **departure time to the routine itself**, saved with it, so the
 row shows a stored example forecast — "Ex.: ◉ 07:00 ┄┄ ⌖ 07:40". This answers

@@ -10,8 +10,8 @@ import type { SharedRoutine } from './routineShare';
 const routine: SharedRoutine = {
   name: 'Morning Focus',
   tasks: [
-    { title: 'Shower', duration: 10 },
-    { title: 'Breakfast', duration: 20 },
+    { title: 'Shower', expectedDuration: 10 },
+    { title: 'Breakfast', expectedDuration: 20 },
   ],
 };
 
@@ -26,7 +26,7 @@ describe('encodeRoutinePayload', () => {
     // '?>>' → 'Pz4+' and '~~~' → 'fn5+' in plain base64; base64url must use - and _
     const payload = encodeRoutinePayload({
       name: '?>>~~~',
-      tasks: [{ title: '???>>>~~~', duration: 5 }],
+      tasks: [{ title: '???>>>~~~', expectedDuration: 5 }],
     });
 
     expect(payload).toMatch(/^[A-Za-z0-9_-]+$/);
@@ -57,8 +57,8 @@ describe('decodeRoutinePayload', () => {
     const unicode: SharedRoutine = {
       name: 'Café da manhã ☕',
       tasks: [
-        { title: 'Meditação 🧘', duration: 15 },
-        { title: 'Ação & revisão', duration: 5 },
+        { title: 'Meditação 🧘', expectedDuration: 15 },
+        { title: 'Ação & revisão', expectedDuration: 5 },
       ],
     };
 
@@ -150,7 +150,33 @@ describe('decodeRoutinePayload', () => {
 
     expect(result).toEqual({
       ok: true,
-      routine: { name: 'X', tasks: [{ title: 'T', duration: 5 }] },
+      routine: { name: 'X', tasks: [{ title: 'T', expectedDuration: 5 }] },
     });
+  });
+});
+
+// The v1 wire format is frozen: tasks carry the key "duration" on the wire
+// regardless of what the field is called inside the app. These tests pin the
+// boundary so an internal rename can never silently break existing links.
+describe('wire format (v1 links stay valid)', () => {
+  const decodeRaw = (payload: string): unknown =>
+    JSON.parse(Buffer.from(payload, 'base64url').toString('utf-8'));
+
+  it('writes the v1 key "duration" on the wire', () => {
+    const payload = encodeRoutinePayload(routine);
+
+    const raw = decodeRaw(payload) as {
+      tasks: Record<string, unknown>[];
+    };
+    for (const task of raw.tasks) {
+      expect(Object.keys(task).sort()).toEqual(['duration', 'title']);
+      expect(typeof task.duration).toBe('number');
+    }
+  });
+
+  it('round-trips through the frozen v1 shape', () => {
+    const result = decodeRoutinePayload(encodeRoutinePayload(routine));
+
+    expect(result).toEqual({ ok: true, routine });
   });
 });

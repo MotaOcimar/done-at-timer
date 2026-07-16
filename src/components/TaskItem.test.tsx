@@ -64,13 +64,13 @@ describe('TaskItem', () => {
   const task: Task = {
     id: '1',
     title: 'Test Task',
-    duration: 30,
+    expectedDuration: 30,
     status: 'PENDING',
   };
 
   beforeEach(() => {
     useTaskStore.getState().clearTasks();
-    useTaskStore.getState().addTask(task.title, task.duration);
+    useTaskStore.getState().addTask(task.title, task.expectedDuration);
   });
 
   it('renders task details', () => {
@@ -186,7 +186,7 @@ describe('TaskItem', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
 
     const updatedTask = useTaskStore.getState().tasks[0];
-    expect(updatedTask.duration).toBe(45);
+    expect(updatedTask.expectedDuration).toBe(45);
   });
 
   it('reverts changes on escape', () => {

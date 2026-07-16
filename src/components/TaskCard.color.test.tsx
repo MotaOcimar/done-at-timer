@@ -8,7 +8,7 @@ describe('TaskCard Color Refinements', () => {
   const mockTask: Task = {
     id: '1',
     title: 'Test Task',
-    duration: 10,
+    expectedDuration: 10,
     status: 'PENDING',
   };
 

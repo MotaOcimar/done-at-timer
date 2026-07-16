@@ -60,7 +60,7 @@ describe('TaskItem Swipe (Phase 2 RED)', () => {
   const task = {
     id: '1',
     title: 'Test Task',
-    duration: 30,
+    expectedDuration: 30,
     status: 'PENDING',
   } as any;
 

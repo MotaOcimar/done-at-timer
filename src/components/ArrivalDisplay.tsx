@@ -21,7 +21,7 @@ const ArrivalDisplay = () => {
   const activeTask = tasks.find((t) => t.id === activeTaskId);
 
   const { timeLeft } = useTimer(
-    activeTask ? activeTask.duration * 60 - totalElapsedBeforePause : 0,
+    activeTask ? activeTask.expectedDuration * 60 - totalElapsedBeforePause : 0,
     undefined,
     targetEndTime,
   );
@@ -75,14 +75,14 @@ const ArrivalDisplay = () => {
     });
   };
 
-  const totalDuration = tasks.reduce((acc, t) => acc + t.duration, 0);
+  const totalDuration = tasks.reduce((acc, t) => acc + t.expectedDuration, 0);
   const completedDuration = tasks
     .filter((t) => t.status === 'COMPLETED')
-    .reduce((acc, t) => acc + t.duration, 0);
+    .reduce((acc, t) => acc + t.expectedDuration, 0);
 
   let activeElapsed = 0;
   if (activeTask) {
-    const activeTotalSecs = activeTask.duration * 60;
+    const activeTotalSecs = activeTask.expectedDuration * 60;
     activeElapsed = Math.max(0, (activeTotalSecs - Math.max(0, timeLeft)) / 60);
   }
 

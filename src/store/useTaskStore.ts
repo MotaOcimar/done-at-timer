@@ -19,7 +19,7 @@ interface TaskState {
   isTimeUp: boolean;
   isNotificationsEnabled: boolean;
   routines: Routine[];
-  addTask: (title: string, duration: number) => void;
+  addTask: (title: string, expectedDuration: number) => void;
   removeTask: (id: string) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
   setActiveTaskTimeLeft: (seconds: number | null) => void;
@@ -49,14 +49,14 @@ export const useTaskStore = create<TaskState>()(
       isTimeUp: false,
       isNotificationsEnabled: true,
       routines: [],
-      addTask: (title, duration) =>
+      addTask: (title, expectedDuration) =>
         set((state) => ({
           tasks: [
             ...state.tasks,
             {
               id: generateId(),
               title,
-              duration,
+              expectedDuration,
               status: 'PENDING',
             },
           ],
@@ -81,10 +81,10 @@ export const useTaskStore = create<TaskState>()(
             set({
               tasks: finalTasks,
               activeTaskId: nextTask.id,
-              targetEndTime: Date.now() + nextTask.duration * 60 * 1000,
+              targetEndTime: Date.now() + nextTask.expectedDuration * 60 * 1000,
               totalElapsedBeforePause: 0,
               isTimeUp: false,
-              activeTaskTimeLeft: nextTask.duration * 60,
+              activeTaskTimeLeft: nextTask.expectedDuration * 60,
             });
           } else {
             set({
@@ -108,15 +108,16 @@ export const useTaskStore = create<TaskState>()(
           let isTimeUp = state.isTimeUp;
           const tasks = state.tasks;
 
-          // If updating duration of the currently active task, adjust the target end time
+          // If updating expectedDuration of the currently active task, adjust the target end time
           if (
             id === activeTaskId &&
-            typeof updates.duration === 'number' &&
+            typeof updates.expectedDuration === 'number' &&
             targetEndTime
           ) {
             const oldTask = tasks.find((t) => t.id === id);
             if (oldTask) {
-              const durationDiff = updates.duration - oldTask.duration;
+              const durationDiff =
+                updates.expectedDuration - oldTask.expectedDuration;
               targetEndTime += durationDiff * 60 * 1000;
             }
           }
@@ -129,7 +130,7 @@ export const useTaskStore = create<TaskState>()(
             activeTaskId = id;
             const task = newTasks.find((t) => t.id === id);
             if (task) {
-              targetEndTime = Date.now() + task.duration * 60 * 1000;
+              targetEndTime = Date.now() + task.expectedDuration * 60 * 1000;
               totalElapsedBeforePause = 0;
               isTimeUp = false;
 
@@ -189,12 +190,12 @@ export const useTaskStore = create<TaskState>()(
         const state = get();
         if (!state.targetEndTime) return;
 
-        // Simplest approach: compute how much time REMAINS and subtract it from the total duration
+        // Simplest approach: compute how much time REMAINS and subtract it from the total expectedDuration
         const task = state.tasks.find((t) => t.id === state.activeTaskId);
         if (!task) return;
 
         const remainingMs = Math.max(0, state.targetEndTime - Date.now());
-        const elapsedMs = task.duration * 60 * 1000 - remainingMs;
+        const elapsedMs = task.expectedDuration * 60 * 1000 - remainingMs;
 
         set({
           targetEndTime: null,
@@ -209,7 +210,7 @@ export const useTaskStore = create<TaskState>()(
         if (!task) return;
 
         const remainingSeconds =
-          task.duration * 60 - state.totalElapsedBeforePause;
+          task.expectedDuration * 60 - state.totalElapsedBeforePause;
 
         set({
           targetEndTime: Date.now() + remainingSeconds * 1000,
@@ -226,10 +227,10 @@ export const useTaskStore = create<TaskState>()(
         const activeTaskOriginal = tasks.find((t) => t.id === activeTaskId);
         if (!activeTaskOriginal) return;
 
-        // Calculate actual duration in minutes
+        // Calculate actual expectedDuration in minutes
         // actualSeconds = originalDurationSeconds - timeLeftSeconds (timeLeft is negative if overtime)
         const actualSeconds =
-          activeTaskOriginal.duration * 60 - timeLeftSeconds;
+          activeTaskOriginal.expectedDuration * 60 - timeLeftSeconds;
         const actualDurationMinutes = Math.ceil(
           Math.max(0, actualSeconds) / 60,
         );
@@ -259,10 +260,10 @@ export const useTaskStore = create<TaskState>()(
           set({
             tasks: finalTasks,
             activeTaskId: nextTask.id,
-            targetEndTime: Date.now() + nextTask.duration * 60 * 1000,
+            targetEndTime: Date.now() + nextTask.expectedDuration * 60 * 1000,
             totalElapsedBeforePause: 0,
             isTimeUp: false,
-            activeTaskTimeLeft: nextTask.duration * 60,
+            activeTaskTimeLeft: nextTask.expectedDuration * 60,
           });
         } else {
           // No more tasks
@@ -307,9 +308,9 @@ export const useTaskStore = create<TaskState>()(
         const newRoutine: Routine = {
           id: generateId(),
           name,
-          tasks: state.tasks.map(({ title, duration }) => ({
+          tasks: state.tasks.map(({ title, expectedDuration }) => ({
             title,
-            duration,
+            expectedDuration,
           })),
         };
 
@@ -319,7 +320,10 @@ export const useTaskStore = create<TaskState>()(
         const newRoutine: Routine = {
           id: generateId(),
           name,
-          tasks: tasks.map(({ title, duration }) => ({ title, duration })),
+          tasks: tasks.map(({ title, expectedDuration }) => ({
+            title,
+            expectedDuration,
+          })),
         };
 
         set((state) => ({ routines: [...state.routines, newRoutine] }));

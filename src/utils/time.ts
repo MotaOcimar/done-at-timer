@@ -18,7 +18,7 @@ export const calculateIntermediateETAs = (
       currentAccumulatedTime += timeLeft * 1000;
       etas.set(task.id, new Date(currentAccumulatedTime));
     } else if (task.status === 'PENDING') {
-      currentAccumulatedTime += task.duration * 60 * 1000;
+      currentAccumulatedTime += task.expectedDuration * 60 * 1000;
       etas.set(task.id, new Date(currentAccumulatedTime));
     }
   }

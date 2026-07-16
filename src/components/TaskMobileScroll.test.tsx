@@ -23,7 +23,7 @@ describe('Task Mobile Scroll Fix', () => {
   const task: Task = {
     id: '1',
     title: 'Test Task',
-    duration: 30,
+    expectedDuration: 30,
     status: 'PENDING',
   };
 

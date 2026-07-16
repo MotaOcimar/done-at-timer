@@ -29,15 +29,15 @@ vi.mock('../hooks/useInstallPrompt', () => ({
 
 describe('ControlCenter', () => {
   const mockTasks = [
-    { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
+    { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
   ];
   const mockRoutines = [
     {
       id: 'r1',
       name: 'Morning Routine',
       tasks: [
-        { id: '1', title: 'Task 1', duration: 10, status: 'PENDING' },
-        { id: '2', title: 'Task 2', duration: 15, status: 'PENDING' },
+        { id: '1', title: 'Task 1', expectedDuration: 10, status: 'PENDING' },
+        { id: '2', title: 'Task 2', expectedDuration: 15, status: 'PENDING' },
       ],
     },
   ];
@@ -160,7 +160,12 @@ describe('ControlCenter', () => {
               id: 'r2',
               name: 'Evening Routine',
               tasks: [
-                { id: '3', title: 'Task 3', duration: 20, status: 'PENDING' },
+                {
+                  id: '3',
+                  title: 'Task 3',
+                  expectedDuration: 20,
+                  status: 'PENDING',
+                },
               ],
             },
           ],
