@@ -38,6 +38,71 @@ interface TaskState {
   toggleNotifications: () => void;
 }
 
+// Derives the runtime-only fields (never persisted) from the stored anchors:
+// targetEndTime while running, the pause record while paused.
+const deriveRuntimeState = (
+  state: Pick<
+    TaskState,
+    'tasks' | 'activeTaskId' | 'targetEndTime' | 'totalElapsedBeforePause'
+  >,
+): Pick<TaskState, 'activeTaskTimeLeft' | 'isTimeUp'> => {
+  const task = state.tasks.find((t) => t.id === state.activeTaskId);
+  if (!task) return { activeTaskTimeLeft: null, isTimeUp: false };
+
+  const remaining = state.targetEndTime
+    ? Math.ceil((state.targetEndTime - Date.now()) / 1000)
+    : Math.round(task.expectedDuration * 60 - state.totalElapsedBeforePause);
+
+  return { activeTaskTimeLeft: remaining, isTimeUp: remaining <= 0 };
+};
+
+// The v0 snapshot shape: tasks/routines still name the estimate "duration",
+// no startedAt, and the derived fields were persisted along.
+interface PersistedV0 {
+  tasks?: (Omit<Task, 'expectedDuration' | 'startedAt'> & {
+    duration: number;
+  })[];
+  routines?: {
+    id: string;
+    name: string;
+    tasks: { title: string; duration: number }[];
+  }[];
+  activeTaskId?: string | null;
+  targetEndTime?: number | null;
+  totalElapsedBeforePause?: number;
+  isNotificationsEnabled?: boolean;
+  activeTaskTimeLeft?: number | null;
+  isTimeUp?: boolean;
+}
+
+const migrateV0 = (persisted: PersistedV0): Partial<TaskState> => {
+  const { activeTaskTimeLeft: _timeLeft, isTimeUp: _up, ...rest } = persisted;
+
+  const tasks: Task[] = (persisted.tasks ?? []).map(
+    ({ duration, ...task }) => ({
+      ...task,
+      expectedDuration: duration,
+      // The running task's anchor can be recovered exactly from the target it
+      // was counting toward; a mid-pause snapshot has no target, so its
+      // aborted anchor stays unknown (the field is display-only).
+      startedAt:
+        task.id === persisted.activeTaskId && persisted.targetEndTime
+          ? persisted.targetEndTime - duration * 60 * 1000
+          : undefined,
+    }),
+  );
+
+  const routines: Routine[] = (persisted.routines ?? []).map((routine) => ({
+    ...routine,
+    tasks: routine.tasks.map(({ title, duration }) => ({
+      title,
+      expectedDuration: duration,
+    })),
+  }));
+
+  return { ...rest, tasks, routines };
+};
+
 export const useTaskStore = create<TaskState>()(
   persist(
     (set, get) => ({
@@ -399,6 +464,23 @@ export const useTaskStore = create<TaskState>()(
     {
       name: 'done-at-timer-storage',
       storage: createJSONStorage(() => localStorage),
+      version: 1,
+      // Only sources of truth are persisted; activeTaskTimeLeft and isTimeUp
+      // are derived from targetEndTime (or the pause record) on rehydrate.
+      partialize: (state) => {
+        const { activeTaskTimeLeft: _timeLeft, isTimeUp: _up, ...rest } = state;
+        return rest;
+      },
+      merge: (persisted, current) => {
+        const merged = { ...current, ...(persisted as Partial<TaskState>) };
+        return { ...merged, ...deriveRuntimeState(merged) };
+      },
+      migrate: (persisted, version) => {
+        if (version === 0) {
+          return migrateV0(persisted as PersistedV0);
+        }
+        return persisted;
+      },
     },
   ),
 );
