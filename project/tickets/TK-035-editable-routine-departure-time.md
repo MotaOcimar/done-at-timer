@@ -2,7 +2,7 @@
 id: TK-035
 title: Save a departure time on a routine (example forecast)
 type: feature
-status: open
+status: in-progress
 specs: [SPEC-011, SPEC-012, SPEC-013]
 ---
 
@@ -78,4 +78,27 @@ Depends on TK-034 (the departure endpoint and route visual must exist first).
 
 ## Plan
 
-(to be written when work starts)
+(written 2026-07-16; design above was closed with the user on 2026-07-15.
+TK-034 — the dependency — is implemented, at `in-review`.)
+
+- [ ] Red/Green: `Routine.departureTime?: string` ("HH:MM", 24h) + store
+      action `setRoutineDeparture(id, time | undefined)` — the scoped
+      in-place edit; persists with the routine (rides the existing
+      persisted `routines` array).
+- [ ] Red/Green: share link — optional `departure` wire key (same payload
+      version: old links lack it and import cleanly; old apps ignore the
+      extra key); present-but-malformed rejects as corrupted; import
+      carries it into the new routine.
+- [ ] Red/Green: routine row + expanded preview — saved departure shows
+      the example pair, numeric and prefixed "e.g." (never the word
+      "now"); without one, the live TK-034 forecast is unchanged.
+- [ ] Red/Green: editing — tapping the departure endpoint (◉) in the
+      expanded preview opens the native time picker (label wrapping a
+      visually-hidden `input type="time"`); a small clear control returns
+      the routine to the live forecast.
+- [ ] Red/Green: import preview shows the incoming saved departure as the
+      same example pair.
+- [ ] Specs: update SPEC-011 (departure attribute, example pair, editing,
+      share field); review SPEC-012/SPEC-013 for touches.
+- [ ] Full suite + lint + format; self-check on the running app (verify
+      skill), then `in-review` for the user's acceptance.
