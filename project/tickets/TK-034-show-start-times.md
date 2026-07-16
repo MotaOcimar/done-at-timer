@@ -2,7 +2,7 @@
 id: TK-034
 title: Show start/departure times alongside every arrival time
 type: feature
-status: open
+status: in-progress
 specs: [SPEC-002, SPEC-006, SPEC-010, SPEC-011, SPEC-012]
 ---
 
@@ -87,7 +87,27 @@ endpoint** — when the thing started, or is predicted to start:
 
 ## Plan
 
-(to be written when work starts)
+(written 2026-07-16; design above was closed with the user on 2026-07-15.
+`startedAt` recording/persistence already exists — TK-037 laid it as part of
+the sources-of-truth reshape, so this ticket is UI + projection only.)
+
+- [ ] Red/Green: shared `RoutePair` component — circle-dot origin + dashed
+      connector + pin arrival; renders a live origin as the word "now";
+      origin omissible (legacy done tasks); completed-pin variant.
+- [ ] Red/Green: task cards — done shows actual start (◉ omitted when
+      absent), running shows actual start under the progress bar, to-do
+      shows predicted start (= ETA − own estimate; the word "now" when the
+      predicted start is not in the future).
+- [ ] Red/Green: arrival header — start endpoint paired with the big clock:
+      live "now" before anything starts, fixed at the first task's actual
+      start (earliest recorded start) once underway.
+- [ ] Red/Green: routine rows — pair the forecast as `◉ now ┄ ⌖ HH:MM`;
+      tooltip copy becomes "Leaving now · estimated arrival".
+- [ ] Specs: update SPEC-006, SPEC-010, SPEC-011; review SPEC-002 (start
+      moment likely already there via TK-037) and SPEC-012 for touches.
+- [ ] Full suite + lint + format; self-check on the running app (verify
+      skill), then `in-review` for the user's acceptance (header
+      micro-placement explicitly open to veto there).
 
 ## Notes
 
