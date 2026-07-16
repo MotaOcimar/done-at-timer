@@ -40,3 +40,5 @@ links: [SPEC-002, SPEC-004]
 - TK-030: fixed overtime not re-engaging when a task overruns on a later run of the
   same list — no behavior text changed; the spec was right, the code was wrong
   (2026-07-10)
+- TK-019: unified all timers onto one shared tick source — internal refactor, no
+  behavior text changed (2026-07-16)

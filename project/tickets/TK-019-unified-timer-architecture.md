@@ -2,7 +2,7 @@
 id: TK-019
 title: Unify timer ticks — useTimer consumes useClock's now
 type: chore
-status: in-progress
+status: done
 specs: [SPEC-003]
 ---
 
@@ -18,8 +18,8 @@ Migrated from `conductor/backlog.md` (TK-001).
 
 ## Acceptance criteria
 
-- [ ] A single tick source drives all time-based calculations.
-- [ ] All existing timer tests pass unchanged — no observable behavior change, so
+- [x] A single tick source drives all time-based calculations.
+- [x] All existing timer tests pass unchanged — no observable behavior change, so
       SPEC-003 stays accurate as written.
 
 ## Design
@@ -42,12 +42,26 @@ Migrated from `conductor/backlog.md` (TK-001).
 
 ## Plan
 
-- [ ] Red: pin test — multiple `useTimer`s + `useClock` consumers share one
-      interval.
-- [ ] Green: refactor `useTimer` onto `useClock`; all existing timer tests
-      pass unchanged.
-- [ ] Full suite + lint + format.
+- [x] Red: pin test — multiple `useTimer`s + `useClock` consumers share one
+      interval. (fc3a2a8)
+- [x] Green: refactor `useTimer` onto `useClock`; all existing timer tests
+      pass unchanged. (fc3a2a8)
+- [x] Full suite + lint + format. (335 tests green, lint & prettier clean,
+      build passes)
 
-> State: Design settled, no code written yet — next step is the Red pin test
-> (a new `useTimer.unified.test.ts` counting `setInterval` calls). The order
-> agreed with the user: TK-019 → TK-036 → TK-034 → TK-035.
+## Notes
+
+Two implementation details surfaced while going Green, both within the
+settled Design:
+
+- **Batched ticks:** React batches several shared-clock ticks fired inside one
+  task into a single render, so legacy mode counts the whole seconds elapsed
+  between consumed ticks instead of "one render = one second".
+- **Derived, not stored:** the `react-hooks/set-state-in-effect` lint rule
+  rejected recomputing the anchored value inside an effect, so anchored
+  `timeLeft` is derived at render (TK-037 spirit). State keeps a copy in sync
+  via React's "adjusting state during render" pattern, preserving the old
+  behavior of consumers that clear `targetEndTime` on pause and expect the
+  last value to hold still.
+
+Next per the agreed order: TK-036 → TK-034 → TK-035.
