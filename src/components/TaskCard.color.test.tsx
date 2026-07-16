@@ -228,7 +228,9 @@ describe('TaskCard Color Refinements', () => {
 
       // Actual duration and ETA should be more visible green
       expect(actualDurationElement).toHaveClass('text-green-700/50');
-      const etaElement = screen.getByText(/12:00/i).closest('span');
+      const etaElement = screen
+        .getByText(/12:00/i)
+        .closest('[data-testid="route-pair"]');
       expect(etaElement).toHaveClass('text-green-700/60');
     });
   });

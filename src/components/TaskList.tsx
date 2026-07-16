@@ -185,6 +185,7 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
                 task={task}
                 onDelete={removeTask}
                 eta={etas.get(task.id)}
+                now={currentTime}
                 activeSwipeId={activeSwipeId}
                 onSwipeDismissAll={handleSwipeDismissAll}
               />
@@ -220,6 +221,7 @@ const TaskList = ({ onSaveRoutine, children }: TaskListProps) => {
                       timeLeft={timeLeft}
                       progress={progress}
                       eta={etas.get(activeTask.id)}
+                      now={currentTime}
                       onToggle={() => {}}
                       onTitleSave={() => {}}
                       onDurationSave={() => {}}

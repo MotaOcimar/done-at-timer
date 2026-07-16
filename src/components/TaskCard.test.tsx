@@ -291,7 +291,9 @@ describe('TaskCard (Pure Visual)', () => {
       minute: '2-digit',
       hour12: false,
     }).format(eta);
-    const activeEta = screen.getByText(new RegExp(expectedTime));
+    const activeEta = screen
+      .getByText(new RegExp(expectedTime))
+      .closest('[data-testid="route-pair"]');
     expect(activeEta).toHaveClass('text-sm');
     expect(activeEta).toHaveClass('font-bold');
     expect(activeEta).not.toHaveClass('font-black');
@@ -310,7 +312,9 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />,
     );
-    const pendingEta = screen.getByText(new RegExp(expectedTime));
+    const pendingEta = screen
+      .getByText(new RegExp(expectedTime))
+      .closest('[data-testid="route-pair"]');
     expect(pendingEta).toHaveClass('text-xs');
     expect(pendingEta).toHaveClass('font-bold');
     expect(pendingEta).not.toHaveClass('text-[10px]');
@@ -329,7 +333,9 @@ describe('TaskCard (Pure Visual)', () => {
         onComplete={vi.fn()}
       />,
     );
-    const completedEta = screen.getByText(new RegExp(expectedTime));
+    const completedEta = screen
+      .getByText(new RegExp(expectedTime))
+      .closest('[data-testid="route-pair"]');
     expect(completedEta).toHaveClass('text-xs');
     expect(completedEta).toHaveClass('font-bold');
     expect(completedEta).not.toHaveClass('text-[10px]');

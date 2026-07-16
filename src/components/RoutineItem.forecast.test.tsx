@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { RoutineItem } from './RoutineItem';
 import * as swipeHook from '../hooks/useSwipeToReveal';
@@ -81,22 +81,29 @@ describe('RoutineItem finish forecast (TK-032)', () => {
     vi.useRealTimers();
   });
 
-  it('shows the now+total finish time on the collapsed row, with a pin and screen-reader meaning', () => {
+  it('shows the departure–arrival pair on the collapsed row, departure as the word "now" (TK-034)', () => {
     render(<RoutineItem {...baseProps} isExpanded={false} />);
 
     const forecast = screen.getByTestId('routine-forecast');
-    expect(forecast).toHaveTextContent('10:40');
-    expect(forecast).toHaveTextContent('Estimated arrival time if started now');
-    // The pin icon rides along as the app-wide "arrival time" symbol.
-    expect(forecast.querySelector('svg')).toBeTruthy();
+    // The row reads as a journey: ◉ now ┄ ⌖ 10:40.
+    expect(within(forecast).getByTestId('route-start')).toHaveTextContent(
+      /^now$/,
+    );
+    expect(within(forecast).getByTestId('route-end')).toHaveTextContent(
+      '10:40',
+    );
+    expect(forecast).toHaveTextContent('Leaving now · estimated arrival');
+    expect(forecast.querySelector('.lucide-circle-dot')).toBeTruthy();
+    expect(forecast.querySelector('.lucide-map-pin')).toBeTruthy();
   });
 
-  it('repeats the forecast in the expanded preview as an interactive tooltip with the agreed label', () => {
+  it('repeats the pair in the expanded preview as an interactive tooltip with the reworded label', () => {
     render(<RoutineItem {...baseProps} isExpanded={true} />);
 
     const tooltip = screen.getByRole('button', {
-      description: 'Estimated arrival time if started now',
+      description: 'Leaving now · estimated arrival',
     });
+    expect(tooltip).toHaveTextContent('now');
     expect(tooltip).toHaveTextContent('10:40');
   });
 

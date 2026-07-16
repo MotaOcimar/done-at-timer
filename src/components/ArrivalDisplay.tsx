@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, MapPin } from 'lucide-react';
+import { CheckCircle2, CircleDot, MapPin } from 'lucide-react';
 import { AnalogClock } from './AnalogClock';
 import { IconTooltip } from './IconTooltip';
 import { useTaskStore } from '../store/useTaskStore';
@@ -79,6 +79,19 @@ const ArrivalDisplay = () => {
       hour12: false,
     });
   };
+
+  // The routine's start endpoint (TK-034): fixed at the first task's actual
+  // start once the session is underway; before anything starts it is the
+  // advancing present, rendered as the word "now" (a numeric time always
+  // means a fixed moment). startedAt survives pause/resume, so the session
+  // start holds steady through them; resetting the routine clears it.
+  const sessionStartTs = tasks.reduce<number | null>(
+    (min, t) =>
+      t.startedAt !== undefined && (min === null || t.startedAt < min)
+        ? t.startedAt
+        : min,
+    null,
+  );
 
   const totalDuration = tasks.reduce((acc, t) => acc + t.expectedDuration, 0);
   const completedDuration = tasks
@@ -214,10 +227,31 @@ const ArrivalDisplay = () => {
           ></div>
         </div>
         <div
-          className={`flex justify-end text-xs font-bold uppercase tracking-wide opacity-80 transition-colors duration-700 ${
+          className={`flex items-center justify-between text-xs font-bold uppercase tracking-wide opacity-80 transition-colors duration-700 ${
             progressRemainingClasses[displayState]
           }`}
         >
+          {/* Start endpoint on the left, remaining on the right: the footer
+              reads as the journey's context under the big arrival clock. */}
+          {tasks.length > 0 ? (
+            <span className="inline-flex items-center gap-1">
+              <CircleDot
+                aria-hidden
+                size={12}
+                strokeWidth={2.5}
+                className="opacity-70 shrink-0"
+              />
+              <span className="sr-only">Start time: </span>
+              <span
+                data-testid="arrival-start"
+                className="tabular-nums normal-case"
+              >
+                {sessionStartTs ? formatTime(new Date(sessionStartTs)) : 'now'}
+              </span>
+            </span>
+          ) : (
+            <span />
+          )}
           <span>{remainingMinutes} min left</span>
         </div>
       </div>

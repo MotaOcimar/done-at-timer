@@ -1,19 +1,17 @@
-import { ChevronRight, Trash2, Share2, MapPin } from 'lucide-react';
+import { ChevronRight, Trash2, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSwipeToReveal } from '../hooks/useSwipeToReveal';
 import { useClock } from '../hooks/useClock';
 import { IconTooltip } from './IconTooltip';
+import { RoutePair } from './RoutePair';
 import type { Routine } from '../types';
 import type { ShareOutcome } from '../utils/shareService';
 
-/** 24h HH:MM, matching task ETAs (SPEC-010) and the arrival header (SPEC-006). */
-const timeFormatter = new Intl.DateTimeFormat('default', {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-});
-
-const FORECAST_LABEL = 'Estimated arrival time if started now';
+/**
+ * Names the departure–arrival pair (TK-029 pattern, reworded by TK-034 when
+ * the departure "now" became explicit). Calm, neutral wording.
+ */
+const FORECAST_LABEL = 'Leaving now · estimated arrival';
 
 interface RoutineItemProps {
   routine: Routine;
@@ -54,15 +52,14 @@ const RoutineItem = ({
 
   // The routine's finish time if started right now (SPEC-001/SPEC-005): now +
   // sum of estimates, recomputed from the shared per-second clock so it never
-  // goes stale while the drawer is open (TK-032).
+  // goes stale while the drawer is open (TK-032). Shown as a full journey —
+  // ◉ now ┄ ⌖ finish — with the live departure as the word "now" (TK-034).
   const now = useClock();
   const totalMinutes = routine.tasks.reduce(
     (sum, t) => sum + t.expectedDuration,
     0,
   );
-  const forecast = timeFormatter.format(
-    new Date(now.getTime() + totalMinutes * 60_000),
-  );
+  const forecast = new Date(now.getTime() + totalMinutes * 60_000);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Delete' && e.target === e.currentTarget) {
@@ -130,7 +127,7 @@ const RoutineItem = ({
                     <span>
                       {routine.tasks.length} tasks • {totalMinutes}m
                     </span>
-                    {/* The pin + finish time, informative here (not the
+                    {/* The journey pair, informative here (not the
                         interactive TK-029 tooltip): the row's metadata line is
                         already inside the expand-toggle button, and nesting a
                         button is invalid HTML. The meaning rides along as
@@ -139,16 +136,10 @@ const RoutineItem = ({
                         expanded preview below. */}
                     <span
                       data-testid="routine-forecast"
-                      className="inline-flex items-center gap-0.5 text-gray-500"
+                      className="inline-flex items-center gap-1 text-gray-500"
                     >
-                      <MapPin
-                        aria-hidden
-                        size={11}
-                        strokeWidth={2.5}
-                        className="opacity-70 shrink-0"
-                      />
                       <span className="sr-only">{FORECAST_LABEL}: </span>
-                      {forecast}
+                      <RoutePair start="now" end={forecast} iconSize={11} />
                     </span>
                   </p>
                 )}
@@ -200,24 +191,18 @@ const RoutineItem = ({
                     </li>
                   ))}
                 </ul>
-                {/* Same forecast, repeated for interface consistency — here it
-                    can be the interactive TK-029 tooltip (legal nesting, no
-                    enclosing button). The pin is decorative; the time carries
-                    the accessible name and the label rides along as its
-                    description. */}
+                {/* Same journey pair, repeated for interface consistency —
+                    here it can be the interactive TK-029 tooltip (legal
+                    nesting, no enclosing button). The glyphs are decorative;
+                    the times carry the accessible name and the label rides
+                    along as its description. */}
                 <div className="mb-3 flex justify-end">
                   <IconTooltip
                     label={FORECAST_LABEL}
                     align="end"
-                    className="gap-1 text-xs font-bold tabular-nums text-gray-500"
+                    className="gap-1 text-xs font-bold text-gray-500"
                   >
-                    <MapPin
-                      aria-hidden
-                      size={14}
-                      strokeWidth={2.5}
-                      className="opacity-70"
-                    />
-                    {forecast}
+                    <RoutePair start="now" end={forecast} iconSize={14} />
                   </IconTooltip>
                 </div>
                 <button

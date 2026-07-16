@@ -16,6 +16,7 @@ interface TaskItemProps {
   activeSwipeId: string | null;
   onSwipeDismissAll: (id?: string) => void;
   eta?: Date;
+  now?: Date;
 }
 
 const TaskItem = ({
@@ -24,6 +25,7 @@ const TaskItem = ({
   activeSwipeId,
   onSwipeDismissAll,
   eta,
+  now,
 }: TaskItemProps) => {
   const startTask = useTaskStore((state) => state.startTask);
   const activeTaskId = useTaskStore((state) => state.activeTaskId);
@@ -227,6 +229,7 @@ const TaskItem = ({
             progress={progress}
             isActuallyPaused={isActuallyPaused}
             eta={eta}
+            now={now}
             onToggle={handleToggle}
             onTitleSave={handleTitleSave}
             onDurationSave={handleDurationSave}

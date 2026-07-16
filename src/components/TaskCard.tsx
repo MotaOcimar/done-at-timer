@@ -1,15 +1,10 @@
 import type { Task } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { InlineEdit } from './InlineEdit';
+import { RoutePair } from './RoutePair';
 import { type CardState } from '../utils/cardState';
 import { AnalogClock } from './AnalogClock';
-import {
-  CheckCircle2,
-  Play,
-  Pause,
-  MapPin,
-  MapPinCheckInside,
-} from 'lucide-react';
+import { CheckCircle2, Play, Pause } from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
@@ -22,6 +17,8 @@ interface TaskCardProps {
   progress?: number;
   isActuallyPaused?: boolean;
   eta?: Date;
+  /** Current tick, to tell a live "now" origin from a fixed moment (TK-034). */
+  now?: Date;
   // Callbacks
   onToggle: (e: React.MouseEvent) => void;
   onTitleSave: (newTitle: string) => void;
@@ -116,12 +113,6 @@ const StatusIcon = ({
   );
 };
 
-const timeFormatter = new Intl.DateTimeFormat('default', {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-});
-
 const cardClasses: Record<CardState, string> = {
   completed: 'bg-green-50/50',
   idle: 'bg-white',
@@ -165,6 +156,7 @@ const TaskCard = ({
   progress = 0,
   isActuallyPaused = false,
   eta,
+  now,
   onToggle,
   onTitleSave,
   onDurationSave,
@@ -179,6 +171,22 @@ const TaskCard = ({
     : mins > 0
       ? `${mins} min left`
       : '< 1 min left';
+
+  // The card's start endpoint (TK-034): done/running tasks show the moment
+  // they actually started (omitted for records predating startedAt); a to-do
+  // task shows its predicted start — its ETA minus its own estimate, the same
+  // projection chain that produced the ETA (SPEC-005). A predicted start that
+  // isn't in the future reads as the word "now": a numeric origin always
+  // means a fixed moment, never the advancing present.
+  let routeStart: Date | 'now' | undefined;
+  if (isCompleted || isActive) {
+    routeStart = task.startedAt ? new Date(task.startedAt) : undefined;
+  } else if (eta) {
+    const predictedStart = new Date(
+      eta.getTime() - task.expectedDuration * 60_000,
+    );
+    routeStart = now && predictedStart <= now ? 'now' : predictedStart;
+  }
 
   return (
     <div
@@ -256,20 +264,12 @@ const TaskCard = ({
             )}
           </div>
           {!isActive && eta && (
-            <span
-              className={`text-xs font-bold tabular-nums flex items-center gap-1 pr-1 whitespace-nowrap ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}
-            >
-              {isCompleted ? (
-                <MapPinCheckInside
-                  size={10}
-                  strokeWidth={2.5}
-                  className="opacity-60"
-                />
-              ) : (
-                <MapPin size={10} strokeWidth={2.5} className="opacity-70" />
-              )}
-              {timeFormatter.format(eta)}
-            </span>
+            <RoutePair
+              start={routeStart}
+              end={eta}
+              completed={isCompleted}
+              className={`text-xs font-bold pr-1 ${isCompleted ? 'text-green-700/60' : labelClasses[cardState]}`}
+            />
           )}
         </div>
       </div>
@@ -289,14 +289,14 @@ const TaskCard = ({
           />
           {eta && (
             <div className="flex justify-end mt-2">
-              <span
-                className={`text-sm font-bold tabular-nums tracking-tight flex items-center gap-1.5 whitespace-nowrap ${
+              <RoutePair
+                start={routeStart}
+                end={eta}
+                iconSize={14}
+                className={`text-sm font-bold tracking-tight ${
                   timeDisplayClasses[cardState]
                 }`}
-              >
-                <MapPin size={14} strokeWidth={2.5} className="opacity-70" />
-                {timeFormatter.format(eta)}
-              </span>
+              />
             </div>
           )}
         </div>
