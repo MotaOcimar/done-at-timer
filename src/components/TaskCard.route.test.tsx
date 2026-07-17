@@ -101,7 +101,7 @@ describe('TaskCard route pair (TK-034)', () => {
     expect(screen.getByTestId('route-end')).toHaveTextContent('08:32');
   });
 
-  it('stacks the pair vertically on cards (user feedback at TK-034 review)', () => {
+  it('stacks to-do cards vertically but spreads the active card horizontally (user feedback at TK-034 review)', () => {
     const now = new Date('2026-01-01T13:00:00Z');
     const eta = new Date('2026-01-01T13:30:00Z');
 
@@ -138,10 +138,42 @@ describe('TaskCard route pair (TK-034)', () => {
         {...noop()}
       />,
     );
+    // The active card reads horizontally instead: start left, ETA right, no
+    // connecting path — mirroring the arrival header, and no longer growing
+    // the card's height (user feedback).
     expect(screen.getByTestId('route-pair')).toHaveAttribute(
       'data-orientation',
-      'vertical',
+      'horizontal',
     );
+    expect(screen.queryByTestId('route-connector')).toBeNull();
+    expect(screen.getByTestId('route-pair')).toHaveClass('justify-between');
+  });
+
+  it('overtime pulses the advancing arrival but leaves the fixed start still (user feedback)', () => {
+    const startedAt = new Date('2026-01-01T08:00:00Z').getTime();
+
+    render(
+      <TaskCard
+        task={{ ...baseTask, status: 'IN_PROGRESS', startedAt }}
+        isActive={true}
+        isCompleted={false}
+        cardState="overtime"
+        isTimeUp={true}
+        timeLeft={-60}
+        progress={1}
+        eta={new Date('2026-01-01T08:30:00Z')}
+        now={new Date('2026-01-01T08:30:00Z')}
+        {...noop()}
+      />,
+    );
+
+    expect(screen.getByTestId('route-end').parentElement).toHaveClass(
+      'animate-pulse',
+    );
+    expect(screen.getByTestId('route-start').parentElement).not.toHaveClass(
+      'animate-pulse',
+    );
+    expect(screen.getByTestId('route-pair')).not.toHaveClass('animate-pulse');
   });
 
   it('running card pairs its actual start with the ETA in the footer', () => {

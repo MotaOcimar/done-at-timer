@@ -20,10 +20,24 @@ interface RoutePairProps {
   completed?: boolean;
   /**
    * Stack the endpoints as a vertical itinerary (origin above, arrival
-   * below, dashed segment between the glyphs) — the task cards' layout.
+   * below, dashed segment between the glyphs) — the to-do/done cards' layout.
    * Default is the inline horizontal form.
    */
   vertical?: boolean;
+  /**
+   * Horizontal, but with the endpoints pushed to opposite edges (origin
+   * left, arrival right) and no connecting path between them — the active
+   * task card's footer, mirroring the arrival header's start/remaining row.
+   * Spans the full width; ignored when `vertical`.
+   */
+  spread?: boolean;
+  /**
+   * Pulse only the arrival endpoint (the map-pin + its time), leaving the
+   * origin still. For the overtime card, where the arrival advances with the
+   * clock and deserves a live signal, but the start is a fixed past moment
+   * that should not draw attention.
+   */
+  pulseArrival?: boolean;
   className?: string;
 }
 
@@ -33,18 +47,24 @@ interface RoutePairProps {
  * the host via className/currentColor so the pair blends into any card state.
  */
 // Sized against the host text, slightly under the digits' visual height, so
-// the glyphs never read bigger than the numbers they accompany; nudged up to
-// the digits' optical center, because flex centering works on the full line
-// box — descender space included — which parks an icon visibly below digits
-// that only exist above the baseline (user feedback at TK-034 review).
-const GLYPH_CLASSES =
-  'opacity-70 shrink-0 w-[0.75em] h-[0.75em] -translate-y-[0.07em]';
+// the glyphs never read bigger than the numbers they accompany (user
+// feedback at TK-034 review).
+const GLYPH_CLASSES = 'opacity-70 shrink-0 w-[0.75em] h-[0.75em]';
+
+// Digits sit high in the line box (they exist only above the baseline, while
+// flex centering counts the descender space below it), so numeric times
+// shift down to the glyph's center. The word "now" — lowercase, x-height —
+// already sits there and must not move: the times take the nudge, never the
+// icons (user feedback at TK-034 review).
+const TIME_NUDGE = 'translate-y-[0.03em]';
 
 const RoutePair = ({
   start,
   end,
   completed = false,
   vertical = false,
+  spread = false,
+  pulseArrival = false,
   className = '',
 }: RoutePairProps) => {
   const EndPin = completed ? MapPinCheckInside : MapPin;
@@ -54,29 +74,44 @@ const RoutePair = ({
       <CircleDot aria-hidden strokeWidth={2.5} className={GLYPH_CLASSES} />
       {/* normal-case so the word "now" stays lowercase (calm, not NOW)
           even inside the app's uppercase label rows */}
-      <span data-testid="route-start" className="normal-case">
+      <span
+        data-testid="route-start"
+        className={`normal-case ${start === 'now' ? '' : TIME_NUDGE}`}
+      >
         {start === 'now' ? 'now' : timeFormatter.format(start)}
       </span>
     </span>
   );
 
   const arrival = (
-    <span className="inline-flex items-center gap-1">
+    <span
+      className={`inline-flex items-center gap-1 ${
+        pulseArrival ? 'animate-pulse' : ''
+      }`}
+    >
       <EndPin aria-hidden strokeWidth={2.5} className={GLYPH_CLASSES} />
-      <span data-testid="route-end">{timeFormatter.format(end)}</span>
+      <span data-testid="route-end" className={TIME_NUDGE}>
+        {timeFormatter.format(end)}
+      </span>
     </span>
   );
+
+  // vertical: an itinerary stack; spread: endpoints pushed to opposite edges
+  // with no joining path; default: inline, glyphs close with a dashed link.
+  const layoutClasses = vertical
+    ? 'inline-flex flex-col items-start'
+    : spread
+      ? 'flex w-full items-center justify-between'
+      : 'inline-flex items-center gap-1';
 
   return (
     <span
       data-testid="route-pair"
       data-orientation={vertical ? 'vertical' : 'horizontal'}
-      className={`inline-flex tabular-nums whitespace-nowrap ${
-        vertical ? 'flex-col items-start' : 'items-center gap-1'
-      } ${className}`}
+      className={`tabular-nums whitespace-nowrap ${layoutClasses} ${className}`}
     >
       {origin}
-      {start != null && (
+      {start != null && !spread && (
         <span
           aria-hidden
           data-testid="route-connector"

@@ -235,18 +235,20 @@ const ArrivalDisplay = () => {
               reads as the journey's context under the big arrival clock. */}
           {tasks.length > 0 ? (
             <span className="inline-flex items-center gap-1">
-              {/* Same relative sizing and optical alignment as RoutePair's
-                  glyphs: slightly under the digit height, nudged up to the
-                  digits' optical center. */}
+              {/* Same relative sizing and optical alignment as RoutePair:
+                  the glyph holds the line-box center and a numeric time
+                  nudges down to it ("now" already sits there). */}
               <CircleDot
                 aria-hidden
                 strokeWidth={2.5}
-                className="opacity-70 shrink-0 w-[0.75em] h-[0.75em] -translate-y-[0.07em]"
+                className="opacity-70 shrink-0 w-[0.75em] h-[0.75em]"
               />
               <span className="sr-only">Start time: </span>
               <span
                 data-testid="arrival-start"
-                className="tabular-nums normal-case"
+                className={`tabular-nums normal-case ${
+                  sessionStartTs ? 'translate-y-[0.03em]' : ''
+                }`}
               >
                 {sessionStartTs ? formatTime(new Date(sessionStartTs)) : 'now'}
               </span>

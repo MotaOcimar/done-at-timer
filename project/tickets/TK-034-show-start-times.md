@@ -122,6 +122,26 @@ the sources-of-truth reshape, so this ticket is UI + projection only.)
       slightly bigger than the numbers — now sized relative to the host
       text (0.75em), slightly under the digit height, everywhere the pair
       or the header ◉ appears.
+- [x] Review refinement (user, 2026-07-17): optical alignment inverted — the
+      glyphs hold the line-box center and the numeric times take a small
+      downward nudge to meet them; the word "now" (lowercase, x-height)
+      already sits there and stays put. Retuned by eye to translate-y 0.03em,
+      applied wherever the pair or the header ◉ appears.
+- [x] Review refinement (user, 2026-07-17): the routine-row forecast now
+      inherits the row's gray, matching the "N tasks · total" metadata beside
+      it (dropped its own darker `text-gray-500` override).
+- [x] Review refinement (user, 2026-07-17): the **active** card
+      (running/paused/overtime) reads **horizontally** instead of stacking —
+      start left, ETA right, no connecting path — mirroring the arrival
+      header's start/remaining row, so the running card no longer grows
+      taller than it needs to. To-do and done cards keep the vertical
+      itinerary. New `spread` variant on `RoutePair`; SPEC-010 updated.
+- [x] Review refinement (user, 2026-07-17): in overtime, only the **arrival**
+      endpoint pulses — it advances with the clock (target is in the past, so
+      the ETA is "now"), so it reads as the live endpoint. The **start** stays
+      still: a fixed past moment shouldn't draw attention to a time that won't
+      change. New `pulseArrival` variant on `RoutePair`; the whole time
+      display no longer pulses. SPEC-010 updated.
 
 > State: implementation complete, awaiting the user's manual acceptance on
 > the running app. Open to veto there: header start placement (left of the

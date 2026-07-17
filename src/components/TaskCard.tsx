@@ -140,7 +140,7 @@ const labelClasses: Record<CardState, string> = {
 const timeDisplayClasses: Record<CardState, string> = {
   completed: 'text-green-700/30',
   idle: 'text-gray-400',
-  overtime: 'text-amber-500 animate-pulse',
+  overtime: 'text-amber-500',
   paused: 'text-gray-500',
   running: 'text-blue-600',
 };
@@ -289,11 +289,12 @@ const TaskCard = ({
             }
           />
           {eta && (
-            <div className="flex justify-end mt-2">
+            <div className="mt-2">
               <RoutePair
                 start={routeStart}
                 end={eta}
-                vertical
+                spread
+                pulseArrival={cardState === 'overtime'}
                 className={`text-sm font-bold tracking-tight ${
                   timeDisplayClasses[cardState]
                 }`}

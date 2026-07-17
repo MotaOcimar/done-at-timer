@@ -13,8 +13,12 @@ checkpoint" for that step.
 
 **The route pair.** Both endpoints render in the app's maps vocabulary: a
 **circle-dot** (route origin) for the start, joined by a **dashed path** to the
-**map-pin** (arrival) for the finish. On task cards the pair stacks
-**vertically** — origin above, arrival below, like an itinerary; elsewhere
+**map-pin** (arrival) for the finish. On to-do and done cards the pair stacks
+**vertically** — origin above, arrival below, like an itinerary. On the
+**active** card (running/paused/overtime) it reads **horizontally**, the
+endpoints pushed to opposite edges — start on the left, arrival on the right,
+with **no connecting path** — mirroring the arrival header's start/remaining
+row, so a running card does not grow taller than it needs to. Elsewhere
 (arrival header, routine rows) it reads inline — `◉ 14:10 ┄ ⌖ 14:25`. Times
 are 24-hour HH:MM. An origin that tracks the advancing present reads as the word **"now"**
 (lowercase, calm) — a numeric origin always means a fixed moment, actual or
@@ -33,13 +37,17 @@ Visual states mirror the arrival display's palette:
   actively running, the progress bar shows continuous forward-flowing motion,
   signaling live momentum (only in this state — paused/overtime bars are static).
   Under the bar, the route pair shows the moment the task **actually started**
-  ([SPEC-002]) beside its live ETA.
+  ([SPEC-002]) on the left, its live ETA on the right — spread across the
+  footer with no connecting path.
 - **Paused:** muted gray (pausing is a neutral, intentional act — not a warning).
 - **Overtime:** soft amber, still awaiting the user's confirmation. The progress
   bar gently breathes (pulsing brightness) to show the task is still live —
   distinct from the running bar's forward-flowing sweep. Its status icon is a small
   analog clock reading the task's projected completion time — which, having overrun,
   is the current time; it has no second hand, keeping a list of cards calm.
+  In the footer pair, only the **arrival** pulses — having overrun, it advances
+  with the clock and reads as the live endpoint; the **start** stays still, a
+  fixed past moment that should draw no attention to a time that will not change.
 - **Done:** subtle green (readable, not washed out), showing when the task
   **actually started and was completed** (its route pair, checked pin) and the
   **real time spent, with the original estimate struck through** beside it —
@@ -63,3 +71,9 @@ Title and duration are editable in place ([SPEC-008]).
   arrival; actual starts on running/done cards, predicted starts on to-do cards,
   live starts read as the word "now"; review refinement: on cards the pair
   stacks vertically (2026-07-16)
+- TK-034 review: the active card's pair reads horizontally instead — start
+  left, ETA right, no connecting path, mirroring the arrival header — so the
+  running card stops growing taller; to-do and done cards keep the vertical
+  stack (2026-07-17)
+- TK-034 review: in overtime only the arrival endpoint pulses (it advances
+  with the clock); the fixed start no longer pulses (2026-07-17)
