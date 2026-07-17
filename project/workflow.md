@@ -74,6 +74,14 @@ if you do only one thing right in this system, do this.
   (e.g. the initial implementation, then a follow-up commit for an adjustment surfaced
   during `in-review`). Name the ticket ID in each commit subject. When several tickets
   were worked together, split them at commit time by staging per ticket.
+- **One commit per functionality, even within a ticket.** Prefer a separate commit for
+  each discrete, self-contained change — in particular, every review refinement lands
+  as its own commit — so history stays granular and each behavior change is traceable
+  on its own line. Commit each refinement right after it is built and green, rather
+  than batching several at the end (batching is what forces unrelated changes to
+  interleave in the same files and become impossible to separate cleanly later). Group
+  changes into one commit only when they genuinely interleave in the same files; when
+  that happens, say so in the commit body.
 
 ## Planning & handoff
 
@@ -144,6 +152,13 @@ A second honesty rule, parallel to the spec invariant:
   `in-review`, the implementer drives the affected flow in the running app and
   confirms the changed states render correctly (a screenshot is ideal). The reviewer
   should be looking at something already sanity-checked, never a first render.
+- **Log refinements as they land:** every feedback adjustment made while a ticket is
+  `in-review` is recorded at the time it is applied, not batched at the end —
+  appended to the ticket's Plan as a dated `Review refinement (user, YYYY-MM-DD)`
+  line, and, when it changes spec'd behavior, written into the affected spec's body
+  and its `## Log`. The Plan is the running record of what review surfaced and how it
+  was resolved; pair it with the per-refinement commit above so the code change and
+  its rationale are traceable together.
 - **Why:** `done` is frozen (see ticket rules). Marking a feature `done` before a
   human has seen it forces every "actually, not quite" into a fresh correction
   ticket — the churn this rule exists to stop. Holding at `in-review` lets the
