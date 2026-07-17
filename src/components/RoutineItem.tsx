@@ -136,7 +136,7 @@ const RoutineItem = ({
                         expanded preview below. */}
                     <span
                       data-testid="routine-forecast"
-                      className="inline-flex items-center gap-1 text-gray-500"
+                      className="inline-flex items-center gap-1"
                     >
                       <span className="sr-only">{FORECAST_LABEL}: </span>
                       <RoutePair start="now" end={forecast} />

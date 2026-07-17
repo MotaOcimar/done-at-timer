@@ -95,6 +95,9 @@ describe('RoutineItem finish forecast (TK-032)', () => {
     expect(forecast).toHaveTextContent('Leaving now · estimated arrival');
     expect(forecast.querySelector('.lucide-circle-dot')).toBeTruthy();
     expect(forecast.querySelector('.lucide-map-pin')).toBeTruthy();
+    // Same ink as the row's other metadata (task count · total): the forecast
+    // carries no color of its own, inheriting the row's gray (user feedback).
+    expect(forecast).not.toHaveClass('text-gray-500');
   });
 
   it('repeats the pair in the expanded preview as an interactive tooltip with the reworded label', () => {
